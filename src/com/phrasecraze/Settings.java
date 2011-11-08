@@ -41,7 +41,7 @@ public class Settings extends PreferenceActivity {
 
   private boolean mContinueMusic = false; // Flag to continue music across
                                           // Activities
-
+  
   /**
    * Watch the settings to update any changes (like start up music, reset
    * subtext, etc.)
