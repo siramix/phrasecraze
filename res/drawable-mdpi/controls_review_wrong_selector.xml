@@ -6,6 +6,4 @@
     <item
         android:drawable="@drawable/controls_wrong_onclick"
         android:state_pressed="true" />
-    <item
-        android:drawable="@drawable/controls_wrong_desaturated" />
 </selector>

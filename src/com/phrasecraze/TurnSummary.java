@@ -92,28 +92,6 @@ public class TurnSummary extends Activity {
   }; // End NextTurnListener
 
   /**
-   * Deal with changing the right-wrong-skip state of cards from the previous
-   * turn by clicking on the status indicating icon
-   */
-  private final OnClickListener mCardIconListener = new OnClickListener() {
-    public void onClick(View v) {
-      int cardIndex = mCardLineList.indexOf(v);
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, Integer.toString(cardIndex));
-      }
-
-      Card curCard = mCardList.get(cardIndex);
-
-      Intent cardReviewIntent = new Intent(
-          getString(R.string.IntentCardReview), getIntent().getData());
-      cardReviewIntent.putExtra(getString(R.string.cardIndexBundleKey),
-          cardIndex);
-      cardReviewIntent.putExtra(getString(R.string.cardBundleKey), curCard);
-      startActivityForResult(cardReviewIntent, CARDREVIEW_REQUEST_CODE);
-    }
-  };
-
-  /**
    * Initializes the activity to display the results of the turn.
    */
   @Override
@@ -166,7 +144,6 @@ public class TurnSummary extends Activity {
       cardIcon.setImageResource(card.getRowEndDrawableId());
       mCardViewList.add(cardIcon);
       mCardLineList.add(realLine);
-      realLine.setOnClickListener(mCardIconListener);
       count++;
     }
     list.addView(layout);
