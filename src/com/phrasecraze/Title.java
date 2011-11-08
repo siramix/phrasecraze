@@ -130,19 +130,6 @@ public class Title extends Activity {
             R.color.teamB_primary));
       }
       break;
-    case R.id.Title_BuzzDelegate:
-      button = (ImageButton) Title.this.findViewById(R.id.Title_BuzzButton);
-      label = (TextView) Title.this.findViewById(R.id.Title_BuzzText);
-      if (on) {
-        button.setBackgroundResource(R.drawable.title_buzzer_onclick);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamC_highlight));
-      } else {
-        button.setBackgroundResource(R.drawable.title_buzzer);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamC_primary));
-      }
-      break;
     case R.id.Title_SettingsDelegate:
       button = (ImageButton) Title.this.findViewById(R.id.Title_SettingsButton);
       label = (TextView) Title.this.findViewById(R.id.Title_SettingsText);
@@ -194,26 +181,6 @@ public class Title extends Activity {
 
       startActivity(new Intent(Title.this.getApplication().getString(
           R.string.IntentGameSetup), getIntent().getData()));
-    }
-  };
-
-  /**
-   * BuzzerListener plays an animation on the view that will result in launching
-   * Buzz Mode
-   */
-  private OnClickListener mBuzzerListener = new OnClickListener() {
-    public void onClick(View v) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "PlayGameListener OnClick()");
-      }
-      mContinueMusic = false;
-
-      // play confirm sound
-      SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.CONFIRM);
-
-      startActivity(new Intent(getApplication()
-          .getString(R.string.IntentBuzzer), getIntent().getData()));
     }
   };
 
@@ -378,10 +345,6 @@ public class Title extends Activity {
     delegate.setOnTouchListener(mTouchPlayListener);
     delegate.setOnClickListener(mPlayGameListener);
 
-    delegate = (View) this.findViewById(R.id.Title_BuzzDelegate);
-    delegate.setOnTouchListener(mTouchPlayListener);
-    delegate.setOnClickListener(mBuzzerListener);
-
     delegate = (View) this.findViewById(R.id.Title_SettingsDelegate);
     delegate.setOnTouchListener(mTouchPlayListener);
     delegate.setOnClickListener(mSettingsListener);
@@ -394,17 +357,11 @@ public class Title extends Activity {
         .findViewById(R.id.Title_RulesButton);
     rulesButton.setOnClickListener(mRulesListener);
 
-    ImageButton buzzerButton = (ImageButton) this
-        .findViewById(R.id.Title_BuzzButton);
-    buzzerButton.setOnClickListener(mBuzzerListener);
-
     ImageButton aboutusButton = (ImageButton) this
         .findViewById(R.id.Title_AboutUs);
     aboutusButton.setOnClickListener(mAboutUsListener);
 
     View button = (View) this.findViewById(R.id.Title_PlayButton);
-    button.startAnimation(this.translateButtons(4));
-    button = (View) this.findViewById(R.id.Title_BuzzButton);
     button.startAnimation(this.translateButtons(3));
     button = (View) this.findViewById(R.id.Title_SettingsButton);
     button.startAnimation(this.translateButtons(2));
@@ -416,9 +373,6 @@ public class Title extends Activity {
         "fonts/Anton.ttf");
 
     TextView label = (TextView) this.findViewById(R.id.Title_PlayText);
-    label.startAnimation(this.translateLabels(4));
-    label.setTypeface(antonFont);
-    label = (TextView) this.findViewById(R.id.Title_BuzzText);
     label.startAnimation(this.translateLabels(3));
     label.setTypeface(antonFont);
     label = (TextView) this.findViewById(R.id.Title_SettingsText);

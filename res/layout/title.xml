@@ -106,39 +106,6 @@
 
 		</RelativeLayout>
 		
-		<RelativeLayout android:id="@+id/Title_Menu_2"
-			android:clipChildren="false" 
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent" 
-			android:layout_weight="1"
-			android:layout_marginLeft="30dp">
-			
-			<TextView android:id="@+id/Title_BuzzText"
-				android:textSize="42dp" 
-				android:text="Buzz"
-				android:textColor="@color/teamC_primary" 
-				android:gravity="center_vertical" 
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content" 
-				android:layout_marginLeft="80dp"
-				android:layout_marginTop="10dp" 
-				android:layout_centerVertical="true"
-				/>
-				
-			<ImageButton android:id="@+id/Title_BuzzButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" 
-				android:background="@drawable/title_buzzer"
-				android:layout_centerVertical="true"
-				/>
-
-			<View android:id="@+id/Title_BuzzDelegate"
-				android:layout_height="fill_parent" 
-				android:layout_width="200dp"
-				/>
-
-		</RelativeLayout>
-		
 		<RelativeLayout android:id="@+id/Title_Menu_3"
 			android:layout_width="fill_parent" 
 			android:layout_height="fill_parent"
