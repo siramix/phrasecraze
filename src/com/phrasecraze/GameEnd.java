@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,15 +41,15 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.buzzwords.R;
-import com.buzzwords.BuzzWordsApplication;
+import com.phrasecraze.R;
+import com.phrasecraze.PhraseCrazeApplication;
 
 /**
  * The GameEnd class is the final screen of the application, called when either
  * the number of turns is up, the time is up, the end game button is clicked, or
  * any other number of ways to end a game.
  * 
- * @author BuzzWords team
+ * @author PhraseCraze team
  * 
  */
 public class GameEnd extends Activity {
@@ -214,7 +214,7 @@ public class GameEnd extends Activity {
    */
   private final OnClickListener mMainMenuListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "MainMenuListener onClick()");
       }
       // Play confirm sound
@@ -233,11 +233,11 @@ public class GameEnd extends Activity {
    */
   private final OnClickListener mRematchListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "RematchListener onClick()");
       }
 
-      BuzzWordsApplication application = (BuzzWordsApplication) getApplication();
+      PhraseCrazeApplication application = (PhraseCrazeApplication) getApplication();
 
       GameManager curgm = application.getGameManager();
       GameManager newgm = new GameManager(GameEnd.this);
@@ -257,7 +257,7 @@ public class GameEnd extends Activity {
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
@@ -268,7 +268,7 @@ public class GameEnd extends Activity {
     this.setContentView(R.layout.gameend);
     mResources = this.getResources();
 
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     mGameManager = application.getGameManager();
 
@@ -389,7 +389,7 @@ public class GameEnd extends Activity {
   @Override
   public void onStop() {
     super.onStop();
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onStop()");
     }
   }
@@ -400,7 +400,7 @@ public class GameEnd extends Activity {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onDestroy()");
     }
   }

@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,29 +15,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 /**
  * Interface definition for a callback to be invoked when the TeamSelectLayout
- * detects a team edited event.
+ * detects a team added or removed event.
  * 
  * @author Siramix Labs
  * 
  */
-public abstract class OnTeamEditedListener {
+public abstract class OnTeamAddedListener {
 
   /*
    * Empty Constructor
    */
-  OnTeamEditedListener() {
+  OnTeamAddedListener() {
 
   }
 
   /*
-   * Override to handle when a team is edited from a TeamSelectLayout
+   * Override to handle when a team is added or removed from a TeamSelectLayout
    * 
-   * @param t team that was edited
+   * @param t team that was added
+   * 
+   * @param teamAdded true if the team was added, false if it was removed
    */
-  public abstract void onTeamEdited(Team t);
+  public abstract void onTeamAdded(Team t, boolean isTeamAdded);
 
 }

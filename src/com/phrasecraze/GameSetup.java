@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,11 +15,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.util.LinkedList;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -89,7 +89,7 @@ public class GameSetup extends Activity {
    * @return the animation that fades in the helper text
    */
   private Animation fadeInHelpText(long delay) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "FadeInHelpText()");
     }
     Animation fade = new AlphaAnimation(0.0f, 1.0f);
@@ -103,7 +103,7 @@ public class GameSetup extends Activity {
    */
   private final OnClickListener mStartGameListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "StartGameListener onClick()");
       }
 
@@ -121,7 +121,7 @@ public class GameSetup extends Activity {
       // Create a GameManager to manage attributes about the current game.
       // the while loop around the try-catch block makes sure the database
       // has loaded before actually starting the game.
-      BuzzWordsApplication application = (BuzzWordsApplication) GameSetup.this
+      PhraseCrazeApplication application = (PhraseCrazeApplication) GameSetup.this
           .getApplication();
       boolean keepLooping = true;
       while (keepLooping) {
@@ -237,7 +237,7 @@ public class GameSetup extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
@@ -319,7 +319,7 @@ public class GameSetup extends Activity {
    * @return index of the checked radio button (-1 if none found)
    */
   private int getCheckedRadioIndex() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getCheckedRadioValue()");
     }
 
@@ -344,7 +344,7 @@ public class GameSetup extends Activity {
    */
   @Override
   protected Dialog onCreateDialog(int id) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateDialog(" + id + ")");
     }
     Dialog dialog = null;
@@ -377,7 +377,7 @@ public class GameSetup extends Activity {
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
         && !event.isCanceled()) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "BackKeyUp()");
       }
       // Flag to keep music playing
@@ -393,8 +393,8 @@ public class GameSetup extends Activity {
    */
   @Override
   public void onPause() {
-    if (BuzzWordsApplication.DEBUG) {
-      if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "onPause()");
       }
     }
@@ -402,7 +402,7 @@ public class GameSetup extends Activity {
 
     // Pause the music unless going to an Activity where it is supposed to
     // continue through
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.getMusicPlayer();
     if (!mContinueMusic && mp.isPlaying()) {
@@ -422,13 +422,13 @@ public class GameSetup extends Activity {
    */
   @Override
   public void onResume() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onResume()");
     }
     super.onResume();
 
     // Resume Title Music
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.getMusicPlayer();
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this

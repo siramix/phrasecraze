@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,7 +45,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 
 /**
- * This is the activity class that kicks off BuzzWords and displays a nice title
+ * This is the activity class that kicks off PhraseCraze and displays a nice title
  * with basic menu options
  * 
  * @author Siramix Labs
@@ -183,7 +183,7 @@ public class Title extends Activity {
    */
   private OnClickListener mPlayGameListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "PlayGameListener OnClick()");
       }
       mContinueMusic = true;
@@ -203,7 +203,7 @@ public class Title extends Activity {
    */
   private OnClickListener mBuzzerListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "PlayGameListener OnClick()");
       }
       mContinueMusic = false;
@@ -223,7 +223,7 @@ public class Title extends Activity {
    */
   private OnClickListener mSettingsListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "SettingsListener OnClick()");
       }
       mContinueMusic = true;
@@ -243,7 +243,7 @@ public class Title extends Activity {
    */
   private OnClickListener mRulesListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "RulesListener OnClick()");
       }
       mContinueMusic = true;
@@ -265,7 +265,7 @@ public class Title extends Activity {
    */
   private OnClickListener mAboutUsListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "AboutUsListener OnClick()");
       }
       mContinueMusic = false;
@@ -287,7 +287,7 @@ public class Title extends Activity {
    * @return The animation that brings in the buttons screen
    */
   private Animation translateButtons(int buttonNum) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "TranslateButtons()");
     }
 
@@ -308,7 +308,7 @@ public class Title extends Activity {
    * @return The animation that brings in labels screen
    */
   private AnimationSet translateLabels(int labelNum) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "TranslateLabels()");
     }
 
@@ -335,14 +335,14 @@ public class Title extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.createMusicPlayer(this.getBaseContext(),
         R.raw.mus_title);
@@ -436,12 +436,12 @@ public class Title extends Activity {
    */
   @Override
   public void onPause() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onPause()");
     }
     super.onPause();
     if (!mContinueMusic) {
-      BuzzWordsApplication application = (BuzzWordsApplication) this
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
           .getApplication();
       MediaPlayer mp = application.getMusicPlayer();
       SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
@@ -457,13 +457,13 @@ public class Title extends Activity {
    */
   @Override
   public void onResume() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onResume()");
     }
     super.onResume();
 
     // Resume Title Music
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.getMusicPlayer();
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
@@ -482,11 +482,11 @@ public class Title extends Activity {
    */
   private void delayRateReminder()
   {
-	if (BuzzWordsApplication.DEBUG) {
+	if (PhraseCrazeApplication.DEBUG) {
 		Log.d(TAG, "muteRateReminder()");
 	}
     // Prepare to edit preference for mute reminder bool
-    BuzzWordsApplication application = (BuzzWordsApplication) getApplication();    
+    PhraseCrazeApplication application = (PhraseCrazeApplication) getApplication();    
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(application.getBaseContext());
     SharedPreferences.Editor prefEditor = sp.edit();   
     
@@ -499,11 +499,11 @@ public class Title extends Activity {
    */
   private void muteRateReminder()
   {
-	if (BuzzWordsApplication.DEBUG) {
+	if (PhraseCrazeApplication.DEBUG) {
 		Log.d(TAG, "muteRateReminder()");
 	}
     // Prepare to edit preference for mute reminder bool
-    BuzzWordsApplication application = (BuzzWordsApplication) getApplication();    
+    PhraseCrazeApplication application = (PhraseCrazeApplication) getApplication();    
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(application.getBaseContext());
     SharedPreferences.Editor prefEditor = sp.edit();   
     
@@ -519,7 +519,7 @@ public class Title extends Activity {
    */
   @Override
   protected Dialog onCreateDialog(int id) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateDialog(" + id + ")");
     }
     Dialog dialog = null;

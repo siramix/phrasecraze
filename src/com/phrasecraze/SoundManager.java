@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -72,7 +72,7 @@ public class SoundManager {
    * @param baseContext
    */
   private void initSoundManager(Context baseContext) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "initSoundManager()");
     }
     mContext = baseContext;
@@ -85,7 +85,7 @@ public class SoundManager {
    * Load all the sounds for the game
    */
   private void loadSounds() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "loadSounds()");
     }
     mSoundIds = new int[Sound.values().length];

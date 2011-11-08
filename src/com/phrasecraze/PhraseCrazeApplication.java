@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import android.app.Application;
 import android.content.Context;
@@ -24,11 +24,11 @@ import android.util.Log;
 
 /**
  * Class extending the standard android application. This allows us to refer to
- * one GameManager from every activity within BuzzWords.
+ * one GameManager from every activity within PhraseCraze.
  * 
  * @author Siramix Labs
  */
-public class BuzzWordsApplication extends Application {
+public class PhraseCrazeApplication extends Application {
   /**
    * Global Debug constant
    */
@@ -38,10 +38,10 @@ public class BuzzWordsApplication extends Application {
   /**
    * logging tag
    */
-  public static String TAG = "BuzzWordsApplication";
+  public static String TAG = "PhraseCrazeApplication";
 
   /**
-   * The GameManager for all of BuzzWords
+   * The GameManager for all of PhraseCraze
    */
   private GameManager mGameManager;
 
@@ -53,10 +53,10 @@ public class BuzzWordsApplication extends Application {
   /**
    * Default constructor
    */
-  public BuzzWordsApplication() {
+  public PhraseCrazeApplication() {
     super();
-    if (BuzzWordsApplication.DEBUG) {
-      Log.d(TAG, "BuzzWordsApplication()");
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "PhraseCrazeApplication()");
 
     }
   }
@@ -65,7 +65,7 @@ public class BuzzWordsApplication extends Application {
    * @return a reference to the game manager
    */
   public GameManager getGameManager() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetGameManager()");
     }
     return this.mGameManager;
@@ -76,7 +76,7 @@ public class BuzzWordsApplication extends Application {
    *          - a reference to the game manager
    */
   public void setGameManager(GameManager gm) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "SetGameManager()");
     }
     this.mGameManager = gm;
@@ -90,7 +90,7 @@ public class BuzzWordsApplication extends Application {
    * @return a reference to the media player
    */
   public MediaPlayer createMusicPlayer(Context context, int id) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "CreateMusicPlayer(" + context + "," + id + ")");
     }
     // Clean up resources. This fixed a leak issue caused by starting many games
@@ -106,7 +106,7 @@ public class BuzzWordsApplication extends Application {
    * @return a reference to the current media player
    */
   public MediaPlayer getMusicPlayer() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetMusicPlayer()");
     }
     return mMediaPlayer;

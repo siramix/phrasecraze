@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.util.List;
 
@@ -62,12 +62,12 @@ public class SplashScreen extends Activity {
    *          Bundle of saved state used for re-creation
    */
   public void onCreate(Bundle savedInstanceState) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
     super.onCreate(savedInstanceState);
 
-    // Do workaround for people who launch Buzzwords from the installation
+    // Do workaround for people who launch PhraseCraze from the installation
     // prompt
     if (shouldApplicationLaunch()) {
       setContentView(R.layout.splashscreen);
@@ -129,12 +129,12 @@ public class SplashScreen extends Activity {
    * @return true if the event was consumed
    */
   public boolean onTouchEvent(MotionEvent event) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onTouchEvent()");
     }
 
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "onTouchEvent->ActionDown()");
       }
       // Clearing the animations causes animEnd event to fire
@@ -162,7 +162,7 @@ public class SplashScreen extends Activity {
   private final AnimationListener mFadeListener = new AnimationListener() {
 
     public void onAnimationEnd(Animation animation) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "onAnimEnd()");
       }
       SplashScreen.this.exitSplash();
@@ -180,7 +180,7 @@ public class SplashScreen extends Activity {
    * images and then calls the title activity.
    */
   synchronized private void exitSplash() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "exitSplash()");
     }
 
@@ -207,7 +207,7 @@ public class SplashScreen extends Activity {
    * Retrieves the logo images and fades them in using AlphaAnimation.
    */
   private void fadeIn() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "fadeIn()");
     }
 

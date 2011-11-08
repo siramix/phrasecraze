@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -109,7 +109,7 @@ public class GameManager {
    *          required for game to instantiate the database
    */
   public GameManager(Context context) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GameManager()");
     }
 
@@ -125,7 +125,7 @@ public class GameManager {
 
     mTurnTime = Integer.parseInt(sp.getString("turn_timer", "60")) * 1000;
 
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Turn time is " + mTurnTime);
     }
     mRwsValueRules = new int[3];
@@ -145,7 +145,7 @@ public class GameManager {
    * @return the card we want
    */
   public Card getNextCard() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getNextCard()");
     }
     ++mCardPosition;
@@ -165,7 +165,7 @@ public class GameManager {
    * @return the previous card in the deck
    */
   public Card getPreviousCard() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getPreviousCard()");
     }
 
@@ -187,7 +187,7 @@ public class GameManager {
    *          the number of rounds to play
    */
   public void startGame(List<Team> teams, int rounds) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "StartGame()");
     }
     mTeams = teams;
@@ -208,7 +208,7 @@ public class GameManager {
    * This function also empties the collection of active cards.
    */
   public void nextTurn() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "NextTurn()");
     }
     this.incrementActiveTeamIndex();
@@ -256,7 +256,7 @@ public class GameManager {
    * Write turn and game relevant data to the database.
    */
   public void endGame() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "EndGame()");
     }
     mTeamIterator = mTeams.iterator();
@@ -272,7 +272,7 @@ public class GameManager {
    *          the right, wrong, skip status
    */
   public void processCard(int rws) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "ProcessCard(" + rws + ")");
     }
     mCurrentCard.setRws(rws);
@@ -284,7 +284,7 @@ public class GameManager {
    * @return the card currently in play
    */
   public Card getCurrentCard() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetCurrentCard()");
     }
     return mCurrentCard;
@@ -296,7 +296,7 @@ public class GameManager {
    * @return list of all cards from the current turn
    */
   public LinkedList<Card> getCurrentCards() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetCurrentCards()");
     }
     return mCurrentCards;
@@ -309,7 +309,7 @@ public class GameManager {
    * @return score for the round
    */
   public int getTurnScore() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetTurnScore()");
     }
     int ret = 0;
@@ -333,7 +333,7 @@ public class GameManager {
    * @return a list of the currently playing team objects
    */
   public List<Team> getTeams() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetTeams()");
     }
     return mTeams;
@@ -345,7 +345,7 @@ public class GameManager {
    * @return a reference to the team currently playing
    */
   public Team getActiveTeam() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetActiveTeamIndex()");
     }
     return mCurrentTeam;
@@ -358,7 +358,7 @@ public class GameManager {
    *         teamIds[]
    */
   public int getNumTeams() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetNumTeams()");
     }
     return mTeams.size();
@@ -371,7 +371,7 @@ public class GameManager {
    * @return int representing the number of rounds thus far in a game
    */
   public int getCurrentRound() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetCurrentRound()");
     }
     return mCurrentRound + 1;
@@ -383,7 +383,7 @@ public class GameManager {
    * @return the maximum number of rounds in this game
    */
   public int getNumRounds() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetNumRounds()");
     }
     return mNumRounds;
@@ -395,7 +395,7 @@ public class GameManager {
    * @return integer representing the number of miliseconds in each turn.
    */
   public int getTurnTime() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetTurnTime()");
     }
     return mTurnTime;

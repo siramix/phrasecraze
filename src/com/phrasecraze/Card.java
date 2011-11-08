@@ -1,10 +1,10 @@
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.util.Log;
 
@@ -63,7 +63,7 @@ public class Card implements Serializable {
    * @return an array list of the substrings
    */
   public static ArrayList<String> bustString(String commaSeparated) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "BustString()");
     }
     ArrayList<String> ret = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class Card implements Serializable {
    * user hits back). These IDs must differ from those on Turn Result Screen.
    */
   public static int getCardMarkDrawableId(int cardRWS) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getDrawableId()");
     }
     switch (cardRWS) {
@@ -100,7 +100,7 @@ public class Card implements Serializable {
    * Default constructor
    */
   public Card() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card()");
     }
     this.init(NOTSET, NOTSET, "", new ArrayList<String>());
@@ -110,7 +110,7 @@ public class Card implements Serializable {
    * Copy Constructor
    */
   public Card(Card rhs) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card( Card )");
     }
     ArrayList<String> bws = new ArrayList<String>(rhs.getBadWords());
@@ -165,7 +165,7 @@ public class Card implements Serializable {
    * Function for initializing card state
    */
   private void init(int id, int rws, String title, ArrayList<String> badWords) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "init()");
     }
     mId = id;
@@ -180,7 +180,7 @@ public class Card implements Serializable {
    * @return
    */
   public int getRws() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getRws()");
     }
     return mRws;
@@ -192,7 +192,7 @@ public class Card implements Serializable {
    * @param rws
    */
   public void setRws(int rws) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setRws()");
     }
     mRws = rws;
@@ -204,7 +204,7 @@ public class Card implements Serializable {
    * @return
    */
   public String getTitle() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getTitle()");
     }
     return mTitle;
@@ -216,7 +216,7 @@ public class Card implements Serializable {
    * @param title
    */
   public void setTitle(String title) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setTitle()");
     }
     mTitle = title;
@@ -228,7 +228,7 @@ public class Card implements Serializable {
    * @return an array list of bad words
    */
   public ArrayList<String> getBadWords() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getBadWords()");
     }
     return mBadWords;
@@ -240,7 +240,7 @@ public class Card implements Serializable {
    * @param badWords
    */
   public void setBadWords(ArrayList<String> badWords) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setBadWords(ArrayList<String>)");
     }
     mBadWords = badWords;
@@ -252,7 +252,7 @@ public class Card implements Serializable {
    * @param commaSeparated
    */
   public void setBadWords(String commaSeparated) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setBadWords(String)");
     }
     mBadWords = Card.bustString(commaSeparated);
@@ -262,7 +262,7 @@ public class Card implements Serializable {
    * Get the resource ID for this card's right wrong skip icon
    */
   public int getRowEndDrawableId() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getRowEndDrawableId()");
     }
     switch (mRws) {
@@ -281,7 +281,7 @@ public class Card implements Serializable {
    * Cycle right/wrong/skip for the turn summary
    */
   public void cycleRws() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "cycleRws()");
     }
     mRws++;

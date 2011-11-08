@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -47,7 +47,7 @@ public abstract class PauseTimer {
 
     public InternalTimer(long millisInFuture, long countDownInterval) {
       super(millisInFuture, countDownInterval);
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "InternalTimer(" + millisInFuture + "," + countDownInterval
           + ")");
       }
@@ -55,7 +55,7 @@ public abstract class PauseTimer {
 
     @Override
     public void onFinish() {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "onFinish()");
       }
       PauseTimer.this.onFinish();
@@ -64,7 +64,7 @@ public abstract class PauseTimer {
 
     @Override
     public void onTick(long millisUntilFinished) {
-      if (BuzzWordsApplication.DEBUG_TIMERTICKS) {
+      if (PhraseCrazeApplication.DEBUG_TIMERTICKS) {
         Log.d(TAG, "onTick(" + millisUntilFinished + ")");
       }
       PauseTimer.this.mTimeRemaining = millisUntilFinished;
@@ -77,7 +77,7 @@ public abstract class PauseTimer {
    * .start()
    */
   public PauseTimer(long timeToCount) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "PauseTimer(" + timeToCount + ")");
     }
     this.mTimer = new InternalTimer(timeToCount, TICK);
@@ -98,7 +98,7 @@ public abstract class PauseTimer {
    * Start the timer countdown from the initialized time
    */
   public void start() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "start()");
     }
     this.mTimer.start();
@@ -109,7 +109,7 @@ public abstract class PauseTimer {
    * Pause an active timer. Use resume() to resume.
    */
   public void pause() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "pause()");
     }
     if (this.mTimerActive) {
@@ -122,7 +122,7 @@ public abstract class PauseTimer {
    * Resume the timer from the time when last paused.
    */
   public void resume() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "resume()");
     }
     if (!this.mTimerActive) {
@@ -139,7 +139,7 @@ public abstract class PauseTimer {
    * already expired
    */
   public boolean isActive() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "isActive()");
     }
     return this.mTimerActive;

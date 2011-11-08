@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +49,7 @@ import android.util.Log;
  * The Deck represents the stack of all cards in the game. We interact with a
  * SQLite database that stores the cards and intelligently caches them at the
  * beginning of the game and replenishes the cache at the beginning of each
- * turn. Each instance of Buzzwords contains the same database; however the
+ * turn. Each instance of PhraseCraze contains the same database; however the
  * sorted order is determined using a pseudo-random variable. This variable is
  * determined on the first run of the game using the Java Random class and has a
  * something to do with cpuid, system time, etc. The variable, called mSeed, is
@@ -64,7 +64,7 @@ public class Deck {
 
   private static final String TAG = "Deck";
 
-  private static final String DATABASE_NAME = "buzzwords";
+  private static final String DATABASE_NAME = "phrasecraze";
   private static final String CARD_TABLE_NAME = "cards";
   private static final String CACHE_TABLE_NAME = "cache";
   private static final int DATABASE_VERSION = 2;
@@ -157,7 +157,7 @@ public class Deck {
    * @return a card reference
    */
   public Card getCard() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getCard()");
     }
     if (mCache.isEmpty()) {
@@ -203,7 +203,7 @@ public class Deck {
      * @return the number of cards in the deck
      */
     public int countCards() {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "countCards()");
       }
       mDatabase = getWritableDatabase();
@@ -217,7 +217,7 @@ public class Deck {
      * @return the number of cache entries
      */
     public int countCaches() {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "countCaches()");
       }
       mDatabase = getWritableDatabase();
@@ -232,7 +232,7 @@ public class Deck {
      *          from the installing context
      */
     private void loadWords(SQLiteDatabase db) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Loading words...");
       }
 
@@ -243,7 +243,7 @@ public class Deck {
       DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
           .newInstance();
 
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Building DocBuilderFactory for card pack parsing from "
             + R.class.toString());
       }
@@ -291,7 +291,7 @@ public class Deck {
         mDatabase.endTransaction();
       }
 
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "DONE loading words.");
       }
     }
@@ -302,7 +302,7 @@ public class Deck {
      * @return rowId or -1 if failed
      */
     public long addWord(int id, String title, String badWords, SQLiteDatabase db) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "addWord()");
       }
       ContentValues initialValues = new ContentValues();
@@ -321,7 +321,7 @@ public class Deck {
      */
     public LinkedList<Card> getCards(String args) {
       mDatabase = getWritableDatabase();
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "getCards()");
       }
       Cursor res = mDatabase.query(CARD_TABLE_NAME, CARD_COLUMNS, "id in ("
@@ -329,7 +329,7 @@ public class Deck {
       res.moveToFirst();
       LinkedList<Card> ret = new LinkedList<Card>();
       while (!res.isAfterLast()) {
-        if (BuzzWordsApplication.DEBUG) {
+        if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, res.getString(1));
         }
         ret.add(new Card(res.getInt(0), res.getString(1), res.getString(2)));
@@ -347,7 +347,7 @@ public class Deck {
      */
     public void saveCache(LinkedList<Card> cache) {
       mDatabase = getWritableDatabase();
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "saveCache()");
       }
       String cacheString = "";
@@ -374,7 +374,7 @@ public class Deck {
      */
     public LinkedList<Card> loadCache() {
       mDatabase = getWritableDatabase();
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "loadCache()");
       }
       Cursor res = mDatabase.query(CACHE_TABLE_NAME, CACHE_COLUMNS, "id in (0)", null,

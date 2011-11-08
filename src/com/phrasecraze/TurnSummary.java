@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,13 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -69,10 +69,10 @@ public class TurnSummary extends Activity {
    */
   private final OnClickListener mNextTurnListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "NextTurnListener OnClick()");
       }
-      BuzzWordsApplication application = (BuzzWordsApplication) TurnSummary.this
+      PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
           .getApplication();
       GameManager gm = application.getGameManager();
 
@@ -98,7 +98,7 @@ public class TurnSummary extends Activity {
   private final OnClickListener mCardIconListener = new OnClickListener() {
     public void onClick(View v) {
       int cardIndex = mCardLineList.indexOf(v);
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, Integer.toString(cardIndex));
       }
 
@@ -119,7 +119,7 @@ public class TurnSummary extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
@@ -129,7 +129,7 @@ public class TurnSummary extends Activity {
     // Setup the view
     this.setContentView(R.layout.turnsummary);
 
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     GameManager game = application.getGameManager();
 
@@ -219,7 +219,7 @@ public class TurnSummary extends Activity {
    */
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateOptionsMenu()");
     }
     menu.add(0, R.string.menu_EndGame, 0, "End Game");
@@ -233,7 +233,7 @@ public class TurnSummary extends Activity {
    */
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onOptionsItemSelected()");
     }
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
@@ -261,7 +261,7 @@ public class TurnSummary extends Activity {
    */
   @Override
   protected Dialog onCreateDialog(int id) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateDialog(" + id + ")");
     }
     Dialog dialog = null;
@@ -277,7 +277,7 @@ public class TurnSummary extends Activity {
               SoundManager sm = SoundManager.getInstance(TurnSummary.this
                   .getBaseContext());
               sm.playSound(SoundManager.Sound.CONFIRM);
-              BuzzWordsApplication application = (BuzzWordsApplication) TurnSummary.this
+              PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
                   .getApplication();
               GameManager gm = application.getGameManager();
               gm.endGame();
@@ -306,10 +306,10 @@ public class TurnSummary extends Activity {
    * Update the views to display the proper scores for the current round
    */
   private void updateScoreViews() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "UpdateScoreViews()");
     }
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     GameManager game = application.getGameManager();
     List<Team> teams = game.getTeams();
@@ -345,10 +345,10 @@ public class TurnSummary extends Activity {
    * Updates the widget group for turn order display
    */
   private void updateTurnOrderDisplay() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "UpdateTurnOrderDisplay()");
     }
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     GameManager game = application.getGameManager();
     List<Team> teams = game.getTeams();
@@ -431,7 +431,7 @@ public class TurnSummary extends Activity {
           .getInt(getString(R.string.cardStateBundleKey));
 
       // Ammend the card
-      BuzzWordsApplication application = (BuzzWordsApplication) TurnSummary.this
+      PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
           .getApplication();
       GameManager gm = application.getGameManager();
       gm.ammendCard(curCardIndex, curCardState);

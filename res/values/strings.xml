@@ -2,24 +2,24 @@
 <resources>
 
   <!-- Application Name -->
-  <string name="AppName">Buzzwords</string>
+  <string name="AppName">PhraseCraze</string>
 
   <!-- Intent Designations -->
-  <string name="IntentTitle">com.buzzwords.intent.action.TITLE</string>
-  <string name="IntentSettings">com.buzzwords.intent.action.SETTINGS</string>
-  <string name="IntentRules">com.buzzwords.intent.action.RULES</string>
-  <string name="IntentBuzzer">com.buzzwords.intent.action.BUZZER</string>
-  <string name="IntentAboutUs">com.buzzwords.intent.action.ABOUTUS</string>
-  <string name="IntentGameSetup">com.buzzwords.intent.action.GAMESETUP</string>
-  <string name="IntentTurn">com.buzzwords.intent.action.TURN</string>
-  <string name="IntentTurnSummary">com.buzzwords.intent.action.TURNSUMMARY</string>
-  <string name="IntentEndGame">com.buzzwords.intent.action.GAMEEND</string>
-  <string name="IntentCardReview">com.buzzwords.intent.action.CARDREVIEW</string>
-  <string name="IntentEditTeamName">com.buzzwords.intent.action.EDITTEAMNAME</string>
+  <string name="IntentTitle">com.phrasecraze.intent.action.TITLE</string>
+  <string name="IntentSettings">com.phrasecraze.intent.action.SETTINGS</string>
+  <string name="IntentRules">com.phrasecraze.intent.action.RULES</string>
+  <string name="IntentBuzzer">com.phrasecraze.intent.action.BUZZER</string>
+  <string name="IntentAboutUs">com.phrasecraze.intent.action.ABOUTUS</string>
+  <string name="IntentGameSetup">com.phrasecraze.intent.action.GAMESETUP</string>
+  <string name="IntentTurn">com.phrasecraze.intent.action.TURN</string>
+  <string name="IntentTurnSummary">com.phrasecraze.intent.action.TURNSUMMARY</string>
+  <string name="IntentEndGame">com.phrasecraze.intent.action.GAMEEND</string>
+  <string name="IntentCardReview">com.phrasecraze.intent.action.CARDREVIEW</string>
+  <string name="IntentEditTeamName">com.phrasecraze.intent.action.EDITTEAMNAME</string>
 
   <!-- Global Prefkey IDs -->
-  <string name="PREFKEY_SHOWREMINDER">com.buzzwords.prefkey.SHOWREMINDER</string>
-  <string name="PREFKEY_PLAYCOUNT">com.buzzwords.prefkey.PREFKEY_PLAYCOUNT</string>
+  <string name="PREFKEY_SHOWREMINDER">com.phrasecraze.prefkey.SHOWREMINDER</string>
+  <string name="PREFKEY_PLAYCOUNT">com.phrasecraze.prefkey.PREFKEY_PLAYCOUNT</string>
 
   <!-- Menu Designations -->
   <string name="menu_EndGame">MENU_ENDGAME</string>
@@ -32,13 +32,13 @@
   <string name="teamnameD">Yellow</string>
 
   <!-- Bundle Keys -->
-  <string name="cardBundleKey">com.buzzwords.card</string>
-  <string name="cardIndexBundleKey">com.buzzwords.cardIndex</string>
-  <string name="cardStateBundleKey">com.buzzwords.cardState</string>
-  <string name="scrollXBundleKey">com.buzzwords.scrollY</string>
-  <string name="scrollYBundleKey">com.buzzwords.scrollY</string>
-  <string name="teamBundleKey">com.buzzwords.team</string>
-  <string name="teamNameBundleKey">com.buzzwords.teamName</string>
+  <string name="cardBundleKey">com.phrasecraze.card</string>
+  <string name="cardIndexBundleKey">com.phrasecraze.cardIndex</string>
+  <string name="cardStateBundleKey">com.phrasecraze.cardState</string>
+  <string name="scrollXBundleKey">com.phrasecraze.scrollY</string>
+  <string name="scrollYBundleKey">com.phrasecraze.scrollY</string>
+  <string name="teamBundleKey">com.phrasecraze.team</string>
+  <string name="teamNameBundleKey">com.phrasecraze.teamName</string>
   
   <!-- For EditTeamName dialog -->
   <string name="editTeamName_hint">Choose a new name for %s team.</string>
@@ -65,6 +65,6 @@
   <string name="rateUsDialog_negativeBtn">Never</string>
   
   <!--  Rate Us URI for app store -->
-  <string name="rateUs_URI">http://www.siramix.com/buzzwordsappstore</string>
+  <string name="rateUs_URI">http://www.siramix.com/phrasecrazeappstore</string>
 
 </resources>

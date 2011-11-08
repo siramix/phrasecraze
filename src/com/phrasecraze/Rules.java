@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -30,7 +30,7 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 /**
- * This activity class is responsible for displaying the rules of buzzwords to
+ * This activity class is responsible for displaying the rules of phrasecraze to
  * the user.
  * 
  * @author Siramix Labs
@@ -50,7 +50,7 @@ public class Rules extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
@@ -90,7 +90,7 @@ public class Rules extends Activity {
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
         && !event.isCanceled()) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "BackKeyUp()");
       }
       // Flag to keep music playing
@@ -106,11 +106,11 @@ public class Rules extends Activity {
    */
   @Override
   public void onPause() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onPause()");
     }
     super.onPause();
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.getMusicPlayer();
     // If music is playing, we must pause it and flag to resume it onResume().
@@ -128,14 +128,14 @@ public class Rules extends Activity {
    */
   @Override
   public void onResume() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onResume()");
     }
     super.onResume();
 
     // Resume Title Music -- Only do this if we paused DURING rules
     if (mIsMusicPaused) {
-      BuzzWordsApplication application = (BuzzWordsApplication) this
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
           .getApplication();
       MediaPlayer mp = application.getMusicPlayer();
       SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this

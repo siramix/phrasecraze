@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -35,7 +35,7 @@ import android.widget.RelativeLayout;
  * OnClick events on its various elements, and passes them to the appropriate
  * listeners.
  * 
- * @author The Buzzwords Team
+ * @author The PhraseCraze Team
  * 
  */
 public class TeamSelectLayout extends RelativeLayout {
@@ -244,7 +244,7 @@ public class TeamSelectLayout extends RelativeLayout {
    */
   private final OnClickListener mEditTeamListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "AddTeamListener onClick()");
       }
       // Send event to any listeners
@@ -259,7 +259,7 @@ public class TeamSelectLayout extends RelativeLayout {
    */
   private final OnClickListener mAddTeamListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "AddTeamListener onClick()");
       }
       // Toggle the view's display status

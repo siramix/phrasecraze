@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,21 +15,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.io.Serializable;
 import java.util.Comparator;
 
 import android.util.Log;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 /**
- * Team is a data representation of a Team in buzzwords. It mainly consists of
+ * Team is a data representation of a Team in phrasecraze. It mainly consists of
  * getters and setters, and contains the ids of various team specific attributes
  * like colors.
  * 
- * @author BuzzWords team
+ * @author PhraseCraze team
  * 
  */
 public enum Team implements Serializable {
@@ -88,7 +88,7 @@ public enum Team implements Serializable {
    * @return the name
    */
   public String getName() {
-	if (BuzzWordsApplication.DEBUG) {
+	if (PhraseCrazeApplication.DEBUG) {
 	   Log.d("Team:", "getName(): " + mName);
 	}
     return mName;

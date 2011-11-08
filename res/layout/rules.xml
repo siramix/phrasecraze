@@ -95,7 +95,7 @@
 					android:layout_width="wrap_content" 
 					android:layout_height="wrap_content"
 					android:padding="8dp" 
-					android:text="At its core, Buzzwords is a team game that pits friends against friends in cutthroat wordplay action. Here are the basics:"
+					android:text="At its core, PhraseCraze is a team game that pits friends against friends in cutthroat wordplay action. Here are the basics:"
 					/>
 
 				<RelativeLayout android:id="@+id/Rules_BullettedList"
@@ -374,7 +374,7 @@
 				<TextView android:id="@+id/Rules_GameplayTextPausing"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content" 
-					android:text="The game can be paused by either hitting the Menu button or tapping the timer at the top.  And don't worry, it will pause if anyone calls and interrupts your intense game of Buzzwords."
+					android:text="The game can be paused by either hitting the Menu button or tapping the timer at the top.  And don't worry, it will pause if anyone calls and interrupts your intense game of PhraseCraze."
 					android:padding="8dp"
 					android:layout_below="@id/Rules_GameplayTextGestures"
 					/>
@@ -786,7 +786,7 @@
 						android:paddingLeft="10dp"
 						android:paddingRight="10dp"
 						android:paddingBottom="10dp"
-						android:text="Sally and three of her close friends are out camping and realize they forgot to bring any games.   But Sally comes to the rescue and pulls out her Android phone with Buzzwords!   The group praises her foresight and excitedly divides up into two teams of two."
+						android:text="Sally and three of her close friends are out camping and realize they forgot to bring any games.   But Sally comes to the rescue and pulls out her Android phone with PhraseCraze!   The group praises her foresight and excitedly divides up into two teams of two."
 						/>
 						
 					<View android:id="@+id/Rules_ExampleBullet02" 
@@ -1039,7 +1039,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_below="@id/Rules_SubHeader_FinalThoughts"
-					android:text="We hope you enjoy playing Buzzwords!"
+					android:text="We hope you enjoy playing PhraseCraze!"
 					/>
 					
 				<TextView android:id="@+id/Rules_FinalThoughts_Text02"

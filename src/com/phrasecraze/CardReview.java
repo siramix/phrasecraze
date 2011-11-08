@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -63,7 +63,7 @@ public class CardReview extends Activity {
    */
   private final OnClickListener mCorrectClickListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "CorrectClickListener OnClick()");
       }
       setCardState(Card.RIGHT);
@@ -79,7 +79,7 @@ public class CardReview extends Activity {
    */
   private final OnClickListener mWrongClickListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "WrongClickListener OnClick()");
       }
       setCardState(Card.WRONG);
@@ -95,7 +95,7 @@ public class CardReview extends Activity {
    */
   private final OnClickListener mSkipClickListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "SkipClickListener OnClick()");
       }
       setCardState(Card.SKIP);
@@ -205,7 +205,7 @@ public class CardReview extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 

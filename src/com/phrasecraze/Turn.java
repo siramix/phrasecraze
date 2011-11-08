@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,11 +15,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import java.util.ArrayList;
 
-import com.buzzwords.R;
+import com.phrasecraze.R;
 
 import android.app.*;
 import android.content.DialogInterface;
@@ -213,7 +213,7 @@ public class Turn extends Activity {
    * Starts the turn timer and the animations that go along with that
    */
   private void startTimer() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "startTimer()");
     }
 
@@ -225,14 +225,14 @@ public class Turn extends Activity {
    * Stops the turn timer and the animations that go along with that
    */
   private void stopTurnTimer() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "stopTimer()");
     }
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, Long.toString(mCounter.getTimeRemaining()));
     }
     if (!mTurnIsOver && mCounter.isActive()) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Do the Pause.");
       }
       mCounter.pause();
@@ -244,14 +244,14 @@ public class Turn extends Activity {
    * Resumes the turn timer and the animations that go along with that
    */
   private void resumeTurnTimer() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "resumeTimer()");
     }
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, Long.toString(mCounter.getTimeRemaining()));
     }
     if (!mTurnIsOver && !mCounter.isActive()) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Do the Resume.");
       }
       mCounter.resume();
@@ -264,7 +264,7 @@ public class Turn extends Activity {
    */
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateOptionsMenu()");
     }
 
@@ -279,7 +279,7 @@ public class Turn extends Activity {
    */
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onOptionsItemSelected()");
     }
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
@@ -306,7 +306,7 @@ public class Turn extends Activity {
    */
   private final OnClickListener mTimerClickListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "TimerClickListener OnClick()");
       }
       Turn.this.pauseGame();
@@ -318,7 +318,7 @@ public class Turn extends Activity {
    */
   private final OnClickListener mCorrectListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "CorrectListener OnClick()");
       }
 
@@ -331,7 +331,7 @@ public class Turn extends Activity {
    */
   private final OnClickListener mWrongListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "WrongListener OnClick()");
       }
 
@@ -355,7 +355,7 @@ public class Turn extends Activity {
    */
   private final OnClickListener mPauseListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "PauseListener OnClick()");
       }
 
@@ -366,11 +366,11 @@ public class Turn extends Activity {
         // resume music
         Turn.this.resumeGame();
       } else if (mMusicEnabled || mIsTicking) {
-        if (BuzzWordsApplication.DEBUG) {
+        if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, "unpause_OnClick ()");
         }
         // Resume must wait for music to seek back to the correct elapsed time
-        BuzzWordsApplication application = (BuzzWordsApplication) Turn.this
+        PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
             .getApplication();
         MediaPlayer mp = application.getMusicPlayer();
         int elapsedtime;
@@ -379,7 +379,7 @@ public class Turn extends Activity {
               - (int) mCounter.getTimeRemaining();
         } else {
           elapsedtime = 10000 - (int) mCounter.getTimeRemaining();
-          if (BuzzWordsApplication.DEBUG) {
+          if (PhraseCrazeApplication.DEBUG) {
             Log.d(TAG, "Resume ticking at " + elapsedtime);
           }
         }
@@ -402,7 +402,7 @@ public class Turn extends Activity {
    * @return Animation that brings cards into view from the right of the screen
    */
   private Animation inFromRightAnimation() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "InFromRightAnimation()");
     }
     Animation inFromRight = new TranslateAnimation(
@@ -418,7 +418,7 @@ public class Turn extends Activity {
    * @return Animation that tosses the cards from the view out to the left
    */
   private Animation outToLeftAnimation() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "OutToLeftAnimation()");
     }
     Animation outToLeft = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,
@@ -435,7 +435,7 @@ public class Turn extends Activity {
    * @return Animation that moves the card back in from the left
    */
   private Animation backInFromLeftAnimation() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "BackInFromLeftAnimation()");
     }
     Animation outToLeft = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,
@@ -451,7 +451,7 @@ public class Turn extends Activity {
    * @return Animation that moves the card out to the right
    */
   private Animation backOutToRightAnimation() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "BackOutToRightAnimation()");
     }
     Animation inFromRight = new TranslateAnimation(
@@ -530,7 +530,7 @@ public class Turn extends Activity {
    * @return The animation that scales the timer as the time depletes
    */
   private Animation timerAnimation(int timerCommand) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "TimerAnimation()");
     }
 
@@ -560,7 +560,7 @@ public class Turn extends Activity {
    * handled in this method.
    */
   protected void doCorrect() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "doCorrect()");
     }
 
@@ -588,7 +588,7 @@ public class Turn extends Activity {
    * buzzer.
    */
   protected void doWrong() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "doWrong()");
     }
 
@@ -616,7 +616,7 @@ public class Turn extends Activity {
    * button clicks) play the sound.
    */
   protected void doSkip() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "doSkip()");
     }
 
@@ -641,7 +641,7 @@ public class Turn extends Activity {
    * at this time.
    */
   protected void doBack() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "doBack()");
     }
     if (mIsBack) {
@@ -680,7 +680,7 @@ public class Turn extends Activity {
    * Updates references to reflect the A or B status of the current card
    */
   protected void setActiveCard() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setActiveCard()");
     }
     int curTitle;
@@ -707,7 +707,7 @@ public class Turn extends Activity {
    * checking.
    */
   protected void showCard() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "ShowCard()");
     }
 
@@ -746,7 +746,7 @@ public class Turn extends Activity {
    * OnTimeExpired defines what happens when the player's turn timer runs out
    */
   protected void onTimeExpired() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onTimeExpired()");
     }
     mResultsDelay = new PauseTimer(1500) {
@@ -799,10 +799,10 @@ public class Turn extends Activity {
    * Hands off the intent to the next turn summary activity.
    */
   protected void onTurnEnd() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onTurnEnd()");
     }
-    BuzzWordsApplication application = (BuzzWordsApplication) Turn.this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
             .getApplication();
     GameManager gm = application.getGameManager();
     gm.addTurnScore();
@@ -816,11 +816,11 @@ public class Turn extends Activity {
    * the activity creation
    */
   protected void setupViewReferences() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setupViewReferences()");
     }
 
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     mGameManager = application.getGameManager();
 
@@ -845,7 +845,7 @@ public class Turn extends Activity {
    * Set the initial properties for UI elements
    */
   protected void setupUIProperties() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setupUIProperties()");
     }
     mPauseOverlay.setVisibility(View.INVISIBLE);
@@ -925,7 +925,7 @@ public class Turn extends Activity {
 
       @Override
       public void onTick() {
-        if (BuzzWordsApplication.DEBUG_TIMERTICKS) {
+        if (PhraseCrazeApplication.DEBUG_TIMERTICKS) {
           Log.d(TAG, Long.toString(mCounter.getTimeRemaining()));
         }
         // Update our text each second
@@ -935,11 +935,11 @@ public class Turn extends Activity {
         // When music is not enabled, use the ticking sound
         if (!mMusicEnabled && !mIsTicking) {
           if (shownTime == 10) {
-            if (BuzzWordsApplication.DEBUG) {
+            if (PhraseCrazeApplication.DEBUG) {
               Log.d(TAG, "Queue tick 'music' ");
             }
             mIsTicking = true;
-            BuzzWordsApplication application = (BuzzWordsApplication) Turn.this
+            PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
                 .getApplication();
             MediaPlayer mp = application.getMusicPlayer();
             mp.start();
@@ -958,7 +958,7 @@ public class Turn extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
@@ -1014,7 +1014,7 @@ public class Turn extends Activity {
   @Override
   public void onPause() {
     super.onPause();
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onPause()");
     }
     if (!mIsPaused && !mTurnIsOver) {
@@ -1027,7 +1027,7 @@ public class Turn extends Activity {
    */
   @Override
   protected Dialog onCreateDialog(int id) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateDialog(" + id + ")");
     }
     Dialog dialog = null;
@@ -1044,7 +1044,7 @@ public class Turn extends Activity {
                   .getBaseContext());
               sm.playSound(SoundManager.Sound.CONFIRM);
 
-              BuzzWordsApplication application = (BuzzWordsApplication) Turn.this
+              PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
                   .getApplication();
               GameManager gm = application.getGameManager();
               // Add whatever score they've gotten in this turn
@@ -1088,7 +1088,7 @@ public class Turn extends Activity {
               sm.playSound(SoundManager.Sound.BACK);
 
               // Start the turn music
-              BuzzWordsApplication application = (BuzzWordsApplication) Turn.this
+              PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
                   .getApplication();
               GameManager gm = application.getGameManager();
 
@@ -1144,7 +1144,7 @@ public class Turn extends Activity {
   private class TurnMusicListener implements OnSeekCompleteListener {
     public void onSeekComplete(MediaPlayer mp) {
 
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "onSeekComplete");
       }
       // Resume the game on seek complete
@@ -1162,7 +1162,7 @@ public class Turn extends Activity {
    * the turn timer.
    */
   protected void resumeGame() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "resumeGameTurn()");
     }
     mIsPaused = false;
@@ -1197,7 +1197,7 @@ public class Turn extends Activity {
    * we pause the game through whatever pausing method.
    */
   protected void pauseGame() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "pauseGameTurn()");
     }
     mIsPaused = true;
@@ -1208,7 +1208,7 @@ public class Turn extends Activity {
     mPauseTextLayout.setVisibility(View.VISIBLE);
 
     // Stop music
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.getMusicPlayer();
     if (mp.isPlaying()) {
@@ -1259,7 +1259,7 @@ public class Turn extends Activity {
    */
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onKeyDown()");
     }
 
@@ -1278,7 +1278,7 @@ public class Turn extends Activity {
    */
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onKeyUp()");
     }
 

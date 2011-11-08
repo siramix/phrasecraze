@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  Buzzwords is a family friendly word game for mobile phones.
+ *  PhraseCraze is a family friendly word game for mobile phones.
  *  Copyright (C) 2011 Siramix Team
  *  
  *  This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.buzzwords;
+package com.phrasecraze;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -75,7 +75,7 @@ public class EditTeamName extends Activity {
    */
   private final OnClickListener mCancelListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Cancel onClick()");
       }
       // Keep music playing
@@ -90,7 +90,7 @@ public class EditTeamName extends Activity {
    */
   private final OnClickListener mAcceptListener = new OnClickListener() {
     public void onClick(View v) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Cancel onClick()");
       }
 
@@ -115,7 +115,7 @@ public class EditTeamName extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
 
@@ -157,7 +157,7 @@ public class EditTeamName extends Activity {
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
         && !event.isCanceled()) {
-      if (BuzzWordsApplication.DEBUG) {
+      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "BackKeyUp()");
       }
       // Keep music playing
@@ -171,12 +171,12 @@ public class EditTeamName extends Activity {
    */
   @Override
   public void onPause() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onPause()");
     }
     super.onPause();
     if (!mContinueMusic) {
-      BuzzWordsApplication application = (BuzzWordsApplication) this
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
           .getApplication();
       MediaPlayer mp = application.getMusicPlayer();
       SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
@@ -192,13 +192,13 @@ public class EditTeamName extends Activity {
    */
   @Override
   public void onResume() {
-    if (BuzzWordsApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onResume()");
     }
     super.onResume();
 
     // Resume Title Music
-    BuzzWordsApplication application = (BuzzWordsApplication) this
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     MediaPlayer mp = application.getMusicPlayer();
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
