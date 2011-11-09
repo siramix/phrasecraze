@@ -15,13 +15,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.phrasecraze;
+package com.siramix.phrasecraze;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.phrasecraze.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

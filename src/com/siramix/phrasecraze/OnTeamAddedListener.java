@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.phrasecraze;
+package com.siramix.phrasecraze;
 
 /**
  * Interface definition for a callback to be invoked when the TeamSelectLayout

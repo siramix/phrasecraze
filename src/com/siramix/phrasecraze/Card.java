@@ -1,10 +1,8 @@
-package com.phrasecraze;
+package com.siramix.phrasecraze;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
-import com.phrasecraze.R;
 
 import android.util.Log;
 

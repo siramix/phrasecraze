@@ -15,14 +15,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-package com.phrasecraze;
+package com.siramix.phrasecraze;
 
 import java.io.Serializable;
 import java.util.Comparator;
 
 import android.util.Log;
-
-import com.phrasecraze.R;
 
 /**
  * Team is a data representation of a Team in phrasecraze. It mainly consists of

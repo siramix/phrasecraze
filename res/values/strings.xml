@@ -5,21 +5,21 @@
   <string name="AppName">PhraseCraze</string>
 
   <!-- Intent Designations -->
-  <string name="IntentTitle">com.phrasecraze.intent.action.TITLE</string>
-  <string name="IntentSettings">com.phrasecraze.intent.action.SETTINGS</string>
-  <string name="IntentRules">com.phrasecraze.intent.action.RULES</string>
-  <string name="IntentBuzzer">com.phrasecraze.intent.action.BUZZER</string>
-  <string name="IntentAboutUs">com.phrasecraze.intent.action.ABOUTUS</string>
-  <string name="IntentGameSetup">com.phrasecraze.intent.action.GAMESETUP</string>
-  <string name="IntentTurn">com.phrasecraze.intent.action.TURN</string>
-  <string name="IntentTurnSummary">com.phrasecraze.intent.action.TURNSUMMARY</string>
-  <string name="IntentEndGame">com.phrasecraze.intent.action.GAMEEND</string>
-  <string name="IntentCardReview">com.phrasecraze.intent.action.CARDREVIEW</string>
-  <string name="IntentEditTeamName">com.phrasecraze.intent.action.EDITTEAMNAME</string>
+  <string name="IntentTitle">com.siramix.phrasecraze.intent.action.TITLE</string>
+  <string name="IntentSettings">com.siramix.phrasecraze.intent.action.SETTINGS</string>
+  <string name="IntentRules">com.siramix.phrasecraze.intent.action.RULES</string>
+  <string name="IntentBuzzer">com.siramix.phrasecraze.intent.action.BUZZER</string>
+  <string name="IntentAboutUs">com.siramix.phrasecraze.intent.action.ABOUTUS</string>
+  <string name="IntentGameSetup">com.siramix.phrasecraze.intent.action.GAMESETUP</string>
+  <string name="IntentTurn">com.siramix.phrasecraze.intent.action.TURN</string>
+  <string name="IntentTurnSummary">com.siramix.phrasecraze.intent.action.TURNSUMMARY</string>
+  <string name="IntentEndGame">com.siramix.phrasecraze.intent.action.GAMEEND</string>
+  <string name="IntentCardReview">com.siramix.phrasecraze.intent.action.CARDREVIEW</string>
+  <string name="IntentEditTeamName">com.siramix.phrasecraze.intent.action.EDITTEAMNAME</string>
 
   <!-- Global Prefkey IDs -->
-  <string name="PREFKEY_SHOWREMINDER">com.phrasecraze.prefkey.SHOWREMINDER</string>
-  <string name="PREFKEY_PLAYCOUNT">com.phrasecraze.prefkey.PREFKEY_PLAYCOUNT</string>
+  <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>
+  <string name="PREFKEY_PLAYCOUNT">com.siramix.phrasecraze.prefkey.PREFKEY_PLAYCOUNT</string>
 
   <!-- Menu Designations -->
   <string name="menu_EndGame">MENU_ENDGAME</string>
@@ -32,13 +32,13 @@
   <string name="teamnameD">Yellow</string>
 
   <!-- Bundle Keys -->
-  <string name="cardBundleKey">com.phrasecraze.card</string>
-  <string name="cardIndexBundleKey">com.phrasecraze.cardIndex</string>
-  <string name="cardStateBundleKey">com.phrasecraze.cardState</string>
-  <string name="scrollXBundleKey">com.phrasecraze.scrollY</string>
-  <string name="scrollYBundleKey">com.phrasecraze.scrollY</string>
-  <string name="teamBundleKey">com.phrasecraze.team</string>
-  <string name="teamNameBundleKey">com.phrasecraze.teamName</string>
+  <string name="cardBundleKey">com.siramix.phrasecraze.card</string>
+  <string name="cardIndexBundleKey">com.siramix.phrasecraze.cardIndex</string>
+  <string name="cardStateBundleKey">com.siramix.phrasecraze.cardState</string>
+  <string name="scrollXBundleKey">com.siramix.phrasecraze.scrollY</string>
+  <string name="scrollYBundleKey">com.siramix.phrasecraze.scrollY</string>
+  <string name="teamBundleKey">com.siramix.phrasecraze.team</string>
+  <string name="teamNameBundleKey">com.siramix.phrasecraze.teamName</string>
   
   <!-- For EditTeamName dialog -->
   <string name="editTeamName_hint">Choose a new name for %s team.</string>
