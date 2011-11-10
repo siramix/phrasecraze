@@ -133,29 +133,6 @@
                     
                     <TextView android:id="@+id/Turn_CardTitleA"
                         style="@style/CardTitle"/>
-                        
-                    <LinearLayout android:id="@+id/Turn_CardA_BadWords"
-                        android:layout_width="fill_parent"
-                        android:orientation="vertical"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/Turn_CardTitleA">
-                        
-                        <TextView android:id="@+id/Turn_CardA_BadWord0"
-                            style="@style/BadWordText"/>
-                            
-                        <TextView android:id="@+id/Turn_CardA_BadWord1"
-                            style="@style/BadWordText"/>
-                            
-                        <TextView android:id="@+id/Turn_CardA_BadWord2"
-                            style="@style/BadWordText"/>
-                            
-                        <TextView android:id="@+id/Turn_CardA_BadWord3"
-                            style="@style/BadWordText"/>
-                            
-                        <TextView android:id="@+id/Turn_CardA_BadWord4"
-                            style="@style/BadWordText"/>
-                            
-                    </LinearLayout>
                     
                 </LinearLayout>
                 
@@ -182,34 +159,6 @@
                     <TextView android:id="@+id/Turn_CardTitleB"
                         style="@style/CardTitle"
                     	/>
-                        
-                    <LinearLayout android:id="@+id/Turn_CardB_BadWords"
-                        android:layout_width="fill_parent"
-                        android:orientation="vertical"
-                        android:layout_gravity="center"
-                        android:layout_height="wrap_content">
-                        
-                        <TextView android:id="@+id/Turn_CardB_BadWord0"
-                            style="@style/BadWordText"
-                            />
-                            
-                        <TextView android:id="@+id/Turn_CardB_BadWord1"
-                            style="@style/BadWordText"
-                            />
-                            
-                        <TextView android:id="@+id/Turn_CardB_BadWord2"
-                            style="@style/BadWordText"
-                            />
-                            
-                        <TextView android:id="@+id/Turn_CardB_BadWord3"
-                            style="@style/BadWordText"
-                            />
-                            
-                        <TextView android:id="@+id/Turn_CardB_BadWord4"
-                            style="@style/BadWordText"
-                            />
-                            
-                    </LinearLayout>
                     
                 </LinearLayout>
                 
@@ -241,27 +190,13 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:background="@drawable/controls_skip_selector"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                />
-                
-            <ImageButton android:id="@+id/Turn_ButtonWrong"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="99dp"
-                android:layout_alignRight="@id/Turn_ButtonSkip"
-                android:background="@drawable/controls_wrong_selector"
-                />
+                android:layout_alignParentLeft="true" android:layout_marginLeft="10dp"/>
                 
             <ImageButton android:id="@+id/Turn_ButtonCorrect"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
                 android:background="@drawable/controls_right_selector"
-                android:layout_alignLeft="@id/Turn_ButtonSkip"
-                android:layout_marginLeft="99dp"
-                />
+                android:layout_alignParentRight="true" android:layout_marginRight="10dp"/>
                 
         </RelativeLayout>
         

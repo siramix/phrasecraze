@@ -17,8 +17,6 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
-import java.util.ArrayList;
-
 import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -81,7 +79,6 @@ public class Turn extends Activity {
   private int mGestureVelocityThreshold;
 
   private View mPauseOverlay;
-  private ImageButton mBuzzerButton;
   private ImageButton mNextButton;
   private ImageButton mSkipButton;
   private TextView mCountdownText;
@@ -92,7 +89,6 @@ public class Turn extends Activity {
   private ImageView mTimerfill;
 
   private TextView mCardTitle;
-  private LinearLayout mCardBadWords;
   private ImageView mCardStatus;
 
   private RelativeLayout mTimerGroup;
@@ -323,19 +319,6 @@ public class Turn extends Activity {
       Turn.this.doCorrect();
     }
   }; // End CorrectListener
-
-  /**
-   * Listener for the 'Wrong' button. It deals with the flip to the next card.
-   */
-  private final OnClickListener mWrongListener = new OnClickListener() {
-    public void onClick(View v) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "WrongListener OnClick()");
-      }
-
-      Turn.this.doWrong();
-    }
-  }; // End WrongListener
 
   /**
    * Listener for the 'Skip' button. This deals with moving to the next card via
@@ -648,7 +631,7 @@ public class Turn extends Activity {
 
     mAIsActive = !mAIsActive;
 
-    // Reassign view to animate backwords
+    // Reassign view to animate backwards
     mViewFlipper.setInAnimation(backInFromLeftAnimation());
     mViewFlipper.setOutAnimation(backOutToRightAnimation());
 
@@ -658,8 +641,6 @@ public class Turn extends Activity {
     mGameManager.processCard(Card.SKIP);
     Card curCard = mGameManager.getPreviousCard();
     mCardTitle.setText(curCard.getTitle());
-    // Update bad words
-    this.setBadWords(mCardBadWords, curCard, mGameManager.getActiveTeam());
     mIsBack = true;
 
     // Restore animations for future actions
@@ -682,20 +663,16 @@ public class Turn extends Activity {
       Log.d(TAG, "setActiveCard()");
     }
     int curTitle;
-    int curWords;
     int curStatus;
     if (mAIsActive) {
       curTitle = R.id.Turn_CardTitleA;
-      curWords = R.id.Turn_CardA_BadWords;
       curStatus = R.id.Turn_StatusImageA;
     } else {
       curTitle = R.id.Turn_CardTitleB;
-      curWords = R.id.Turn_CardB_BadWords;
       curStatus = R.id.Turn_StatusImageB;
     }
 
     mCardTitle = (TextView) this.findViewById(curTitle);
-    mCardBadWords = (LinearLayout) this.findViewById(curWords);
     mCardStatus = (ImageView) this.findViewById(curStatus);
 
   }
@@ -713,31 +690,9 @@ public class Turn extends Activity {
 
     Card curCard = mGameManager.getNextCard();
     mCardTitle.setText(curCard.getTitle());
-    // Update the badwords
-    this.setBadWords(mCardBadWords, curCard, mGameManager.getActiveTeam());
     // Hide the card status until marked
     mCardStatus.setVisibility(View.INVISIBLE);
     mIsBack = false;
-  }
-
-  /**
-   * Sets the text in a layout to match a supplied StringArray of badWords.
-   * 
-   * @param wordLayout
-   *          LinearLayout of textViews
-   * @param curCard
-   *          Card object to set badWords from
-   */
-  private void setBadWords(LinearLayout wordLayout, Card curCard, Team curTeam) {
-    TextView text;
-    int color = this.getResources().getColor(curTeam.getSecondaryColor());
-    ArrayList<String> badwords = curCard.getBadWords();
-
-    for (int i = 0; i < wordLayout.getChildCount(); ++i) {
-      text = (TextView) wordLayout.getChildAt(i);
-      text.setText(badwords.get(i));
-      text.setTextColor(color);
-    }
   }
 
   /**
@@ -785,7 +740,6 @@ public class Turn extends Activity {
     mViewFlipper.setVisibility(View.INVISIBLE);
 
     // turn off buttons
-    mBuzzerButton.setEnabled(false);
     mSkipButton.setEnabled(false);
     mNextButton.setEnabled(false);
 
@@ -827,7 +781,6 @@ public class Turn extends Activity {
     mViewFlipper = (ViewFlipper) this.findViewById(R.id.Turn_ViewFlipper);
     mTimesUpText = (TextView) this.findViewById(R.id.Turn_TimesUp);
 
-    mBuzzerButton = (ImageButton) this.findViewById(R.id.Turn_ButtonWrong);
     mNextButton = (ImageButton) this.findViewById(R.id.Turn_ButtonCorrect);
     mSkipButton = (ImageButton) this.findViewById(R.id.Turn_ButtonSkip);
 
@@ -854,8 +807,6 @@ public class Turn extends Activity {
     mViewFlipper.setInAnimation(inFromRightAnimation());
     mViewFlipper.setOutAnimation(outToLeftAnimation());
 
-    // this.buzzerButton.setOnTouchListener( BuzzListener );
-    mBuzzerButton.setOnClickListener(mWrongListener);
     mNextButton.setOnClickListener(mCorrectListener);
 
     // Set visibility and control of Skip Button
@@ -881,12 +832,8 @@ public class Turn extends Activity {
     // Setup the "card" views to allow for skip gesture to be performed on top
     this.findViewById(R.id.Turn_CardTitleA)
         .setOnTouchListener(mGestureListener);
-    this.findViewById(R.id.Turn_CardA_BadWords).setOnTouchListener(
-        mGestureListener);
     this.findViewById(R.id.Turn_CardTitleB)
         .setOnTouchListener(mGestureListener);
-    this.findViewById(R.id.Turn_CardB_BadWords).setOnTouchListener(
-        mGestureListener);
     this.findViewById(R.id.Turn_Root).setOnTouchListener(mGestureListener);
     this.findViewById(R.id.Turn_ViewFlipper).setOnTouchListener(
         mGestureListener);
@@ -1176,7 +1123,6 @@ public class Turn extends Activity {
 
       mViewFlipper.setVisibility(View.VISIBLE);
 
-      mBuzzerButton.setEnabled(true);
       mSkipButton.setEnabled(true);
       mNextButton.setEnabled(true);
 
@@ -1224,7 +1170,6 @@ public class Turn extends Activity {
       this.setActiveCard();
 
       mViewFlipper.setVisibility(View.INVISIBLE);
-      mBuzzerButton.setEnabled(false);
       mSkipButton.setEnabled(false);
       mNextButton.setEnabled(false);
 

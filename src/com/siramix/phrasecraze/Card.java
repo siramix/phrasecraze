@@ -47,11 +47,6 @@ public class Card implements Serializable {
   private String mTitle;
 
   /**
-   * An array list of the words you cannot say
-   */
-  private ArrayList<String> mBadWords;
-
-  /**
    * Function for breaking a string into an array list of strings based on the
    * presence of commas. The bad words are stored in the database as a comma
    * separated list for each card.
@@ -101,7 +96,7 @@ public class Card implements Serializable {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card()");
     }
-    this.init(NOTSET, NOTSET, "", new ArrayList<String>());
+    this.init(NOTSET, NOTSET, "");
   }
 
   /**
@@ -111,8 +106,7 @@ public class Card implements Serializable {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card( Card )");
     }
-    ArrayList<String> bws = new ArrayList<String>(rhs.getBadWords());
-    this.init(rhs.getId(), rhs.getRws(), rhs.getTitle(), bws);
+    this.init(rhs.getId(), rhs.getRws(), rhs.getTitle());
   }
 
   /**
@@ -123,19 +117,8 @@ public class Card implements Serializable {
    * @param title
    * @param badWords
    */
-  public Card(int id, int rws, String title, ArrayList<String> badWords) {
-    this.init(id, rws, title, badWords);
-  }
-
-  /**
-   * Shortcut constructor for comma-separated bad word entry
-   * 
-   * @param id
-   * @param title
-   * @param badWords
-   */
-  public Card(int id, String title, String badWords) {
-    this.init(id, NOTSET, title, Card.bustString(badWords));
+  public Card(int id, int rws, String title) {
+    this.init(id, rws, title);
   }
 
   /**
@@ -155,21 +138,19 @@ public class Card implements Serializable {
       return false;
     }
     Card rhs = (Card) compareObj;
-    return mBadWords.equals(rhs.getBadWords()) && mRws == rhs.getRws()
-        && mTitle.equals(rhs.getTitle());
+    return mRws == rhs.getRws() && mTitle.equals(rhs.getTitle());
   }
 
   /**
    * Function for initializing card state
    */
-  private void init(int id, int rws, String title, ArrayList<String> badWords) {
+  private void init(int id, int rws, String title) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "init()");
     }
     mId = id;
     mRws = rws;
     mTitle = title;
-    mBadWords = badWords;
   }
 
   /**
@@ -218,42 +199,6 @@ public class Card implements Serializable {
       Log.d(TAG, "setTitle()");
     }
     mTitle = title;
-  }
-
-  /**
-   * Get the bad words as an ArrayList reference
-   * 
-   * @return an array list of bad words
-   */
-  public ArrayList<String> getBadWords() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getBadWords()");
-    }
-    return mBadWords;
-  }
-
-  /**
-   * Set the bad words as an array list of strings
-   * 
-   * @param badWords
-   */
-  public void setBadWords(ArrayList<String> badWords) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "setBadWords(ArrayList<String>)");
-    }
-    mBadWords = badWords;
-  }
-
-  /**
-   * Override setter for a comma-separated string
-   * 
-   * @param commaSeparated
-   */
-  public void setBadWords(String commaSeparated) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "setBadWords(String)");
-    }
-    mBadWords = Card.bustString(commaSeparated);
   }
 
   /**
