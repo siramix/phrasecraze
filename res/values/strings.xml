@@ -31,6 +31,14 @@
   <string name="teamnameC">Red</string>
   <string name="teamnameD">Yellow</string>
 
+  <!-- Game Setup strings -->  
+  <string name="gamesetup_title">Game Setup</string>
+  <string name="gamesetup_teams">Teams</string>
+  <string name="gamesetup_teamshint">Tap to choose two teams to compete.</string>
+  <string name="gamesetup_endgamerule">Turns</string>
+  <string name="gamesetup_endgamerulehint">Choose the number of turns each team will take.</string>
+  <string name="gamesetup_button_startgame">Start Game</string>
+
   <!-- Bundle Keys -->
   <string name="cardBundleKey">com.siramix.phrasecraze.card</string>
   <string name="cardIndexBundleKey">com.siramix.phrasecraze.cardIndex</string>

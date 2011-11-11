@@ -106,7 +106,7 @@ public class GameSetup extends Activity {
       }
 
       // Validate team numbers
-      if (GameSetup.this.mTeamList.size() <= 1) {
+      if (GameSetup.this.mTeamList.size() != 2) {
         GameSetup.this.showDialog(DIALOG_TEAMERROR);
         return;
       }
@@ -351,8 +351,8 @@ public class GameSetup extends Activity {
     switch (id) {
     case DIALOG_TEAMERROR:
       builder = new AlertDialog.Builder(this);
-      builder.setMessage("You must have at least two teams to start the game.")
-          .setCancelable(false).setTitle("Need more teams!").setPositiveButton(
+      builder.setMessage("You must have exactly two teams to start the game.")
+          .setCancelable(false).setTitle("Incorrect Teams!").setPositiveButton(
               "Okay", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                   dialog.cancel();
