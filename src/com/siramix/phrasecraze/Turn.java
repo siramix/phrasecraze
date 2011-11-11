@@ -185,10 +185,6 @@ public class Turn extends Activity {
             && Math.abs(velocityY) > mGestureVelocityThreshold) {
           Turn.this.doCorrect();
           return true;
-        } else if (e2.getY() - e1.getY() > mGestureThreshold
-            && Math.abs(velocityY) > mGestureVelocityThreshold) {
-          Turn.this.doWrong();
-          return true;
         }
       }
 
@@ -564,34 +560,6 @@ public class Turn extends Activity {
   }
 
   /**
-   * Works with GameManager to perform the back end processing of a card wrong.
-   * Also handles playing of a durative incorrect sound, as opposed to the
-   * buzzer.
-   */
-  protected void doWrong() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "doWrong()");
-    }
-
-    mAIsActive = !mAIsActive;
-    ViewFlipper flipper = (ViewFlipper) findViewById(R.id.Turn_ViewFlipper);
-    flipper.showNext();
-
-    mGameManager.processCard(Card.WRONG);
-
-    // Mark the card with an icon
-    mCardStatus.setBackgroundResource(Card.getCardMarkDrawableId(Card.WRONG));
-    mCardStatus.setVisibility(View.VISIBLE);
-
-    // Only play sound once card has been processed so we don't confuse the user
-    SoundManager sm = SoundManager.getInstance(this.getBaseContext());
-    sm.playSound(SoundManager.Sound.WRONG);
-
-    // Show the next card
-    showCard();
-  }
-
-  /**
    * Works with GameManager to perform the back end processing of a card skip.
    * Also handles the sound for skipping so that all forms of skips (swipes or
    * button clicks) play the sound.
@@ -754,10 +722,7 @@ public class Turn extends Activity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onTurnEnd()");
     }
-    PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
-            .getApplication();
-    GameManager gm = application.getGameManager();
-    gm.addTurnScore();
+    mGameManager.processCard(Card.WRONG);
     
     startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
         .getData()));

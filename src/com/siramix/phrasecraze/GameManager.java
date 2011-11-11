@@ -226,21 +226,6 @@ public class GameManager {
 	  int score = mCurrentTeam.getScore() + getTurnScore();
 	  mCurrentTeam.setScore(score);
   }
-  
-  /*
-   * Ammend turn score by the result of a given card.  This is used when a card 
-   * is reviewed.
-   */
-  public void ammendCard(int changedCardIndex, int rws)
-  {
-	  int prevTurnScore = getTurnScore();
-      Card curCard = mCurrentCards.get(changedCardIndex);
-      curCard.setRws(rws);
-      // new score is current score (which included previous turn score) plus
-      // the difference
-      int newScore = mCurrentTeam.getScore() + (getTurnScore() - prevTurnScore);
-	  mCurrentTeam.setScore(newScore);
-  }
 
   public void incrementActiveTeamIndex() {
     if (mTeamIterator.hasNext()) {
@@ -253,7 +238,7 @@ public class GameManager {
   }
 
   /**
-   * Write turn and game relevant data to the database.
+   * Call to clean up game data at the end of a game.
    */
   public void endGame() {
     if (PhraseCrazeApplication.DEBUG) {
@@ -266,7 +251,7 @@ public class GameManager {
   }
 
   /**
-   * Adds the current card to the active cards
+   * Adds the current card to the active cards, attributing it to the current team
    * 
    * @param rws
    *          the right, wrong, skip status
@@ -275,7 +260,7 @@ public class GameManager {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "ProcessCard(" + rws + ")");
     }
-    mCurrentCard.setRws(rws);
+    mCurrentCard.setRws(rws, mCurrentTeam);
   }
 
   /**
@@ -303,8 +288,7 @@ public class GameManager {
   }
 
   /**
-   * Iterate through through all cards for the current turn and return the total
-   * score
+   * For now, just give -1 point to the current team
    * 
    * @return score for the round
    */
@@ -312,19 +296,8 @@ public class GameManager {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetTurnScore()");
     }
-    int ret = 0;
-    for (Iterator<Card> it = mCurrentCards.iterator(); it.hasNext();) {
-      Card card = it.next();
 
-      // If the card's rws value is not set we default it to SKIP
-      if(card.getRws() == Card.NOTSET)
-      {
-        card.setRws(Card.SKIP);
-      }
-
-      ret += mRwsValueRules[card.getRws()];
-    }
-    return ret;
+    return -1;
   }
 
   /**

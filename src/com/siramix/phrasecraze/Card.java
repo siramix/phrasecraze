@@ -40,6 +40,8 @@ public class Card implements Serializable {
    * The right,wrong,skip {0,1,2} state of the card
    */
   private int mRws;
+  
+  private Team mTeamCredited;
 
   /**
    * The title of the card, the word to be guessed
@@ -96,7 +98,7 @@ public class Card implements Serializable {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card()");
     }
-    this.init(NOTSET, NOTSET, "");
+    this.init(NOTSET, NOTSET, "", null);
   }
 
   /**
@@ -106,10 +108,11 @@ public class Card implements Serializable {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card( Card )");
     }
-    this.init(rhs.getId(), rhs.getRws(), rhs.getTitle());
+    this.init(rhs.getId(), rhs.getRws(), rhs.getTitle(), rhs.getCreditedTeam());
   }
 
-  /**
+
+/**
    * Standard constructor accepting all members as their native types
    * 
    * @param id
@@ -117,8 +120,8 @@ public class Card implements Serializable {
    * @param title
    * @param badWords
    */
-  public Card(int id, int rws, String title) {
-    this.init(id, rws, title);
+  public Card(int id, String title) {
+    this.init(id, Card.NOTSET, title, null);
   }
 
   /**
@@ -144,13 +147,14 @@ public class Card implements Serializable {
   /**
    * Function for initializing card state
    */
-  private void init(int id, int rws, String title) {
+  private void init(int id, int rws, String title, Team team) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "init()");
     }
     mId = id;
     mRws = rws;
     mTitle = title;
+    mTeamCredited = team;
   }
 
   /**
@@ -166,15 +170,24 @@ public class Card implements Serializable {
   }
 
   /**
+   * Gets the team credited with the RWS status on this card
+   * @return Team credited with the RWS status on this card
+   */
+  private Team getCreditedTeam() {
+	  return mTeamCredited;
+  }
+
+  /**
    * Set the right/wrong/skip state as an integer
    * 
    * @param rws
    */
-  public void setRws(int rws) {
+  public void setRws(int rws, Team team) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "setRws()");
     }
     mRws = rws;
+    mTeamCredited = team;
   }
 
   /**
@@ -221,19 +234,6 @@ public class Card implements Serializable {
   }
 
   /**
-   * Cycle right/wrong/skip for the turn summary
-   */
-  public void cycleRws() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "cycleRws()");
-    }
-    mRws++;
-    if (mRws == 3) {
-      mRws = 0;
-    }
-  }
-
-  /**
    * Sets a card's id (from DB)
    * 
    * @param id
@@ -248,5 +248,6 @@ public class Card implements Serializable {
   public int getId() {
     return mId;
   }
+
 
 }

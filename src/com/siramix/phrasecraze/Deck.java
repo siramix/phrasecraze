@@ -332,7 +332,7 @@ public class Deck {
         if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, res.getString(1));
         }
-        ret.add(new Card(res.getInt(0), Card.NOTSET, res.getString(1)));
+        ret.add(new Card(res.getInt(0), res.getString(1)));
         res.moveToNext();
       }
       res.close();

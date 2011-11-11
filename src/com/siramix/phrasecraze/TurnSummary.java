@@ -56,8 +56,6 @@ public class TurnSummary extends Activity {
 
   static final int DIALOG_GAMEOVER_ID = 0;
 
-  static final int CARDREVIEW_REQUEST_CODE = 1;
-
   private List<Card> mCardList;
   private List<ImageView> mCardViewList;
   private List<View> mCardLineList;
@@ -109,6 +107,15 @@ public class TurnSummary extends Activity {
         .getApplication();
     GameManager game = application.getGameManager();
 
+    // TODO: Automatically add in scores only in automatic scoring, otherwise show the dialog
+    // to find a scoring team.
+    game.addTurnScore();
+    
+    // Update scoring team display
+    TextView scoringTeam = (TextView) this
+        .findViewById(R.id.TurnSummary_TurnScore);
+    scoringTeam.setText(getString(R.string.turnsummary_scoringteam, game.getActiveTeam().getDefaultName()));
+    
     // Populate and display list of cards
     ScrollView list = (ScrollView) findViewById(R.id.TurnSummary_CardList);
     LinearLayout layout = new LinearLayout(this.getBaseContext());
@@ -309,11 +316,6 @@ public class TurnSummary extends Activity {
         row.setActiveness(true);
       }
     }
-
-    // Update Turn score total
-    TextView turnTotal = (TextView) this
-        .findViewById(R.id.TurnSummary_TurnScore);
-    turnTotal.setText("Total: " + Integer.toString(game.getTurnScore()));
   }
 
   /**
@@ -383,43 +385,6 @@ public class TurnSummary extends Activity {
 
     super.onResume();
 
-  }
-
-  /**
-   * When the card review activity finishes, this function is called. Well,
-   * actually, any activity called with a request code will invoke this
-   * function. If the card review activity returns, we use the result to change
-   * the card state indicated by the result intent stored in data.
-   */
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Bundle curBundle = null;
-    if (data != null) {
-      curBundle = data.getExtras();
-    }
-    if (requestCode == CARDREVIEW_REQUEST_CODE && curBundle != null
-        && curBundle.containsKey(getString(R.string.cardIndexBundleKey))
-        && curBundle.containsKey(getString(R.string.cardStateBundleKey))) {
-      int curCardIndex = curBundle
-          .getInt(getString(R.string.cardIndexBundleKey));
-      int curCardState = curBundle
-          .getInt(getString(R.string.cardStateBundleKey));
-
-      // Ammend the card
-      PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
-          .getApplication();
-      GameManager gm = application.getGameManager();
-      gm.ammendCard(curCardIndex, curCardState);
-
-      // Update the individual card's UI in the list
-      Card curCard = mCardList.get(curCardIndex);
-      ImageView curImageView = mCardViewList.get(curCardIndex);
-      curImageView.setImageResource(curCard.getRowEndDrawableId());
-
-      TurnSummary.this.updateScoreViews();
-    }
-
-    super.onActivityResult(requestCode, resultCode, data);
   }
 
   /**
