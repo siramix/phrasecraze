@@ -44,12 +44,13 @@
   <string name="gamesetup_title">Game Setup</string>
   <string name="gamesetup_teams">Teams</string>
   <string name="gamesetup_teamshint">Tap to choose two teams to compete.</string>
-  <string name="gamesetup_endgamerule">Turns</string>
-  <string name="gamesetup_endgamerulehint">Choose the number of turns each team will take.</string>
+  <string name="gamesetup_endgamerule">Score Limit</string>
+  <string name="gamesetup_endgamerulehint">Choose the number of points required to win.</string>
   <string name="gamesetup_button_startgame">Start Game</string>
   
   <!-- Turn Summary dialog strings -->
   <string name="turnsummary_scoringteam">Buzzed Team: %s</string>
+  <string name="turnsummary_nextbutton">Next Round</string>
 
   <!-- For EditTeamName dialog -->
   <string name="editTeamName_hint">Choose a new name for %s team.</string>

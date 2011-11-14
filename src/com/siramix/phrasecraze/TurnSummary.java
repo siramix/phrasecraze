@@ -63,7 +63,7 @@ public class TurnSummary extends Activity {
   /**
    * Watches the button that handles hand-off to the next turn activity.
    */
-  private final OnClickListener mNextTurnListener = new OnClickListener() {
+  private final OnClickListener mNextRoundListener = new OnClickListener() {
     public void onClick(View v) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "NextTurnListener OnClick()");
@@ -72,12 +72,12 @@ public class TurnSummary extends Activity {
           .getApplication();
       GameManager gm = application.getGameManager();
 
-      if (gm.getNumberOfTurnsRemaining() == 0) {
+      if (gm.isGameOver()) {
         gm.endGame();
         startActivity(new Intent(getApplication().getString(
             R.string.IntentEndGame), getIntent().getData()));
       } else {
-        gm.nextTurn();
+        gm.nextRound();
         Intent clearStackIntent = new Intent(getApplication().getString(
             R.string.IntentTurn), getIntent().getData());
         clearStackIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -109,12 +109,13 @@ public class TurnSummary extends Activity {
 
     // TODO: Automatically add in scores only in automatic scoring, otherwise show the dialog
     // to find a scoring team.
+    game.setRoundScores();
     game.addTurnScore();
     
     // Update scoring team display
     TextView scoringTeam = (TextView) this
         .findViewById(R.id.TurnSummary_TurnScore);
-    scoringTeam.setText(getString(R.string.turnsummary_scoringteam, game.getActiveTeam().getDefaultName()));
+    scoringTeam.setText(getString(R.string.turnsummary_scoringteam, game.getBuzzedTeam().getDefaultName()));
     
     // Populate and display list of cards
     ScrollView list = (ScrollView) findViewById(R.id.TurnSummary_CardList);
@@ -167,25 +168,15 @@ public class TurnSummary extends Activity {
     // Update the scoreboard views
     updateScoreViews();
 
-    // Update numRounds
-    TextView rounds = (TextView) this.findViewById(R.id.TurnSummary_Rounds);
-    rounds.setText("Round: " + game.getCurrentRound() + "/"
-        + game.getNumRounds());
-
-    // Update Turn Order display
-    updateTurnOrderDisplay();
-
     // Bind Next button
     Button playGameButton = (Button) this
         .findViewById(R.id.TurnSummary_NextTurn);
-    playGameButton.setOnClickListener(mNextTurnListener);
+    playGameButton.setOnClickListener(mNextRoundListener);
 
     // Handle activity changes for final turn
-    if (game.getNumberOfTurnsRemaining() == 0) {
+    if ( game.isGameOver() ) {
       // Change "Next Team" button
       playGameButton.setText("Game Results");
-      // Change round display
-      rounds.setText("Game Over");
       // Hide scoreboard for suspense
       LinearLayout scores = (LinearLayout) this
           .findViewById(R.id.TurnSummary_ScoreGroup);
@@ -314,63 +305,6 @@ public class TurnSummary extends Activity {
         // Show teams that played, and set their rank
         row.setTeam(teams.get(i));
         row.setActiveness(true);
-      }
-    }
-  }
-
-  /**
-   * Updates the widget group for turn order display
-   */
-  private void updateTurnOrderDisplay() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "UpdateTurnOrderDisplay()");
-    }
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    GameManager game = application.getGameManager();
-    List<Team> teams = game.getTeams();
-
-    // References to Scoreboard team Groups
-    final int[] TURNORDER_GROUPS = new int[] {
-        R.id.TurnSummary_TurnOrder_TeamA, R.id.TurnSummary_TurnOrder_TeamB,
-        R.id.TurnSummary_TurnOrder_TeamC, R.id.TurnSummary_TurnOrder_TeamD };
-    // References to Scoreboard team Groups
-    final int[] TURNORDER_ICONS = new int[] {
-        R.id.TurnSummary_TurnOrder_TeamAc, R.id.TurnSummary_TurnOrder_TeamBc,
-        R.id.TurnSummary_TurnOrder_TeamCc, R.id.TurnSummary_TurnOrder_TeamDc };
-    // References to Scoreboard separators
-    final int[] TURNORDER_SEPARATORS = new int[] {
-        R.id.TurnSummary_TurnOrder_Separator1,
-        R.id.TurnSummary_TurnOrder_Separator2,
-        R.id.TurnSummary_TurnOrder_Separator3 };
-    // References to Scoreboard team Groups
-    final int[] TURNORDER_MARKERS = new int[] {
-        R.id.TurnSummary_TurnOrder_TeamAmark,
-        R.id.TurnSummary_TurnOrder_TeamBmark,
-        R.id.TurnSummary_TurnOrder_TeamCmark,
-        R.id.TurnSummary_TurnOrder_TeamDmark };
-
-    // Iterate through Turn Order elements, setting attributes to match the
-    // current Turn order, including active team marker
-    for (int i = 0; i < TURNORDER_GROUPS.length; i++) {
-      if (i >= teams.size()) {
-        // Hide groups for teams that aren't playing
-        LinearLayout turnGroup = (LinearLayout) findViewById(TURNORDER_GROUPS[i]);
-        turnGroup.setVisibility(View.GONE);
-        View separator = (View) findViewById(TURNORDER_SEPARATORS[i - 1]);
-        separator.setVisibility(View.GONE);
-      } else {
-        View turnView = (View) findViewById(TURNORDER_ICONS[i]);
-        turnView.setBackgroundColor(this.getResources().getColor(
-            teams.get(i).getPrimaryColor()));
-      }
-
-      // Update Marker position
-      ImageView marker = (ImageView) findViewById(TURNORDER_MARKERS[i]);
-      if (teams.indexOf(game.getActiveTeam()) == i) {
-        marker.setVisibility(View.VISIBLE);
-      } else {
-        marker.setVisibility(View.GONE);
       }
     }
   }

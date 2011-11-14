@@ -56,11 +56,7 @@ public class GameManager {
   private List<Team> mTeams;
   private Iterator<Team> mTeamIterator;
   private Team mCurrentTeam;
-
-  /**
-   * The maximum number of rounds for this game
-   */
-  private int mNumRounds;
+  private Team mBuzzedTeam;
 
   /**
    * The index of the round being played
@@ -68,19 +64,14 @@ public class GameManager {
   private int mCurrentRound;
 
   /**
-   * Number of turns to play
-   */
-  private int mNumTurns;
-
-  /**
-   * Index of the current turn
-   */
-  private int mCurrentTurn;
-
-  /**
    * The card in play
    */
   private Card mCurrentCard;
+  
+  /**
+   * Tracks the number of points needed to win
+   */
+  private int mScoreLimit;
 
   /**
    * The set of cards that have been activated in the latest turn
@@ -116,9 +107,9 @@ public class GameManager {
     SharedPreferences sp = PreferenceManager
         .getDefaultSharedPreferences(context);
 
-    mCurrentRound = 0;
-    mCurrentTurn = 0;
+    mCurrentRound = -1;
     mCardPosition = -1;
+    mScoreLimit = -1;
     mCurrentCards = new LinkedList<Card>();
     mRwsResourceIds = new int[] { R.drawable.right, R.drawable.wrong,
         R.drawable.skip };
@@ -184,38 +175,64 @@ public class GameManager {
    * @param teams
    *          a string array of team names
    * @param rounds
-   *          the number of rounds to play
+   *          the number of points to play to
    */
-  public void startGame(List<Team> teams, int rounds) {
+  public void startGame(List<Team> teams, int score) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "StartGame()");
     }
     mTeams = teams;
     Iterator<Team> itr = teams.iterator();
+	Team teamAtItr;
     for (itr = teams.iterator(); itr.hasNext();) {
-      itr.next().setScore(0);
+      teamAtItr = itr.next();
+      teamAtItr.setScore(0);
+      teamAtItr.setRoundScore(0);
     }
     mTeamIterator = teams.iterator();
     mCurrentTeam = mTeamIterator.next();
-    mNumRounds = rounds;
-    mNumTurns = mTeams.size() * mNumRounds;
-    mCurrentTurn++;
+    mCurrentRound = 0;
+    mScoreLimit = score;
     mDeck.prepareForRound();
   }
 
   /**
+   * Starts a new round. A round is defined as a sequence of turns for a random time limit.
+   */
+  public void nextRound() {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "NextRound()");
+    }
+    // The same team who was buzzed will start the next round
+    mCurrentCards.clear();
+    mCardPosition = -1;
+    mDeck.prepareForRound();
+    
+    // Clear round scores
+    Iterator<Team> itr = mTeams.iterator();
+    for (itr = mTeams.iterator(); itr.hasNext();) {
+      itr.next().setRoundScore(0);
+    }
+    mCurrentRound++;
+  }
+
+  /**
+   * Sets the team that got buzzed in the current round.
+   * @param team
+   */
+  public void setBuzzedTeam(Team team)
+  {
+	  mBuzzedTeam = team;
+  }
+  
+  /**
    * Starts a new turn incrementing the round and/or team index as necessary.
-   * This function also empties the collection of active cards.
    */
   public void nextTurn() {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "NextTurn()");
     }
     this.incrementActiveTeamIndex();
-    mCurrentCards.clear();
-    mCardPosition = -1;
-    mCurrentTurn++;
-    mDeck.prepareForRound();
   }
   
   /*
@@ -223,17 +240,35 @@ public class GameManager {
    */
   public void addTurnScore()
   {
-	  int score = mCurrentTeam.getScore() + getTurnScore();
-	  mCurrentTeam.setScore(score);
+	  Iterator<Team> itr = mTeams.iterator();
+	  Team teamAtItr;
+	  for (itr = mTeams.iterator(); itr.hasNext();) {
+		  teamAtItr = itr.next();
+		  int score = teamAtItr.getScore() + teamAtItr.getRoundScore();
+		  teamAtItr.setScore(score);
+	  }
+  }
+  
+  /*
+   * For now, simply give a point to all the teams that were not buzzed.
+   */
+  public void setRoundScores()
+  {
+	  Iterator<Team> itr = mTeams.iterator();
+	  Team teamAtItr;
+	  for (itr = mTeams.iterator(); itr.hasNext();) {
+		  teamAtItr = itr.next();
+		  if (!teamAtItr.equals(mBuzzedTeam))
+			  teamAtItr.setRoundScore(1);
+	  }
   }
 
-  public void incrementActiveTeamIndex() {
+  private void incrementActiveTeamIndex() {
     if (mTeamIterator.hasNext()) {
       mCurrentTeam = mTeamIterator.next();
     } else {
       mTeamIterator = mTeams.iterator();
       mCurrentTeam = mTeamIterator.next();
-      mCurrentRound++;
     }
   }
 
@@ -261,6 +296,10 @@ public class GameManager {
       Log.d(TAG, "ProcessCard(" + rws + ")");
     }
     mCurrentCard.setRws(rws, mCurrentTeam);
+    if(rws == Card.RIGHT)
+    {
+    	this.nextTurn();
+    }
   }
 
   /**
@@ -288,19 +327,6 @@ public class GameManager {
   }
 
   /**
-   * For now, just give -1 point to the current team
-   * 
-   * @return score for the round
-   */
-  public int getTurnScore() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "GetTurnScore()");
-    }
-
-    return -1;
-  }
-
-  /**
    * Return a list of the currently playing team objects
    * 
    * @return a list of the currently playing team objects
@@ -313,7 +339,7 @@ public class GameManager {
   }
 
   /**
-   * Return a reference to the team currently playing
+   * Return a reference to the team currently playing.
    * 
    * @return a reference to the team currently playing
    */
@@ -322,6 +348,14 @@ public class GameManager {
       Log.d(TAG, "GetActiveTeamIndex()");
     }
     return mCurrentTeam;
+  }
+  
+  /**
+   * Returns the team that was buzzed during this round.
+   * @return
+   */
+  public Team getBuzzedTeam() {
+	  return mBuzzedTeam;
   }
 
   /**
@@ -338,28 +372,16 @@ public class GameManager {
   }
 
   /**
-   * Return the number of rounds that have fully taken place. We add one since
-   * we, like good computer scientists, start counting at zero
+   * Return the current round number. Add one because we, like good computer scientists, start counting
+   * at 0.
    * 
-   * @return int representing the number of rounds thus far in a game
+   * @return int representing the number of rounds thus far in a game, counting the current round
    */
   public int getCurrentRound() {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetCurrentRound()");
     }
     return mCurrentRound + 1;
-  }
-
-  /**
-   * Return the maximum number of rounds in this game
-   * 
-   * @return the maximum number of rounds in this game
-   */
-  public int getNumRounds() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "GetNumRounds()");
-    }
-    return mNumRounds;
   }
 
   /**
@@ -373,8 +395,31 @@ public class GameManager {
     }
     return mTurnTime;
   }
+  
+  /**
+   * Returns the number of points a team needs to win.
+   * @return the number of points a team needs to win.
+   */
+  public int getScoreLimit()
+  {
+	  return mScoreLimit;
+  }
 
-  public int getNumberOfTurnsRemaining() {
-    return mNumTurns - mCurrentTurn;
+  /**
+   * Returns true if the game end condition is true.
+   * 
+   * @return true if a team has reached the score limit
+   */
+  public boolean isGameOver()
+  {
+	  // For now the only condition is score limit. Check if any teams
+	  // have reached the score limit.
+	  Iterator<Team> itr = mTeams.iterator();
+	  for (itr = mTeams.iterator(); itr.hasNext();) {
+		  if ( itr.next().getScore() >= mScoreLimit ) {
+			  return true;
+		  }
+	  }
+	  return false;
   }
 }

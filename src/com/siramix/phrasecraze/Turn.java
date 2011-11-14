@@ -661,6 +661,13 @@ public class Turn extends Activity {
     // Hide the card status until marked
     mCardStatus.setVisibility(View.INVISIBLE);
     mIsBack = false;
+
+    // Change views to appropriate team color
+    Team curTeam = mGameManager.getActiveTeam();
+    ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
+    barFill.setImageResource(curTeam.getBackground());
+    this.findViewById(R.id.Turn_Root).setBackgroundResource(
+        curTeam.getGradient());
   }
 
   /**
@@ -723,6 +730,7 @@ public class Turn extends Activity {
       Log.d(TAG, "onTurnEnd()");
     }
     mGameManager.processCard(Card.WRONG);
+    mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
     
     startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
         .getData()));

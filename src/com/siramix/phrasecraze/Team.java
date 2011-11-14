@@ -55,6 +55,8 @@ public enum Team implements Serializable {
   private final int mGameEndBackground;
   // The team's running score
   private int mScore;
+  // The team's score for a round
+  private int mRoundScore;
   // The team's preference key
   private final String mPrefKey;
 
@@ -78,6 +80,7 @@ public enum Team implements Serializable {
     mGameEndBackground = gameend_bg;
     mPrefKey = key;
     this.setScore(0);
+    this.setRoundScore(0);
   }
 
   /**
@@ -166,6 +169,15 @@ public enum Team implements Serializable {
     this.mScore = score;
   }
   
+  /**
+   * Set the Team's score for a current round
+   * 
+   * @param score
+   */
+  public void setRoundScore(int score) {
+    this.mRoundScore = score;
+  }
+  
 
   /**
    * Set the Team's new name.  Original name can still be accessed with
@@ -187,6 +199,15 @@ public enum Team implements Serializable {
    */
   public int getScore() {
     return mScore;
+  }
+  
+  /**
+   * Returns the Team's score for a round
+   * 
+   * @return score
+   */
+  public int getRoundScore() {
+    return mRoundScore;
   }
 
   /**
