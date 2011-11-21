@@ -108,6 +108,13 @@ public class AssignPoints extends Activity {
 
     TextView label = (TextView) this.findViewById(R.id.AssignPoints_Title);
     label.setTypeface(antonFont);
+    
+    // Set fonts on scores
+    TextView score = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
+    score.setTypeface(antonFont);
+    score = (TextView) this.findViewById(R.id.AssignPoints_Team2_Score);
+    score.setTypeface(antonFont);
+    
 /*
     // Get the team from the passed in Bundle
     Intent curIntent = this.getIntent();
