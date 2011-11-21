@@ -65,6 +65,7 @@ public class Turn extends Activity {
   static final int DIALOG_PAUSED_ID = 0;
   static final int DIALOG_GAMEOVER_ID = 1;
   static final int DIALOG_READY_ID = 2;
+  static final int DIALOG_ENDROUND_ID = 3;
 
   static final int TIMERANIM_PAUSE_ID = 0;
   static final int TIMERANIM_RESUME_ID = 1;
@@ -258,6 +259,7 @@ public class Turn extends Activity {
       Log.d(TAG, "onCreateOptionsMenu()");
     }
 
+    menu.add(0, R.string.menu_EndRound, 0, "Forfeit Round");
     menu.add(0, R.string.menu_EndGame, 0, "End Game");
     menu.add(0, R.string.menu_Rules, 0, "Rules");
 
@@ -275,6 +277,11 @@ public class Turn extends Activity {
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
     // Handle item selection
     switch (item.getItemId()) {
+    case R.string.menu_EndRound:
+      // Play confirmation sound
+	  sm.playSound(SoundManager.Sound.CONFIRM);
+	  this.showDialog(DIALOG_ENDROUND_ID);
+	  return true;
     case R.string.menu_EndGame:
       // Play confirmation sound
       sm.playSound(SoundManager.Sound.CONFIRM);
@@ -680,7 +687,7 @@ public class Turn extends Activity {
     mResultsDelay = new PauseTimer(1500) {
       @Override
       public void onFinish() {
-        Turn.this.onTurnEnd();
+        Turn.this.endTurn();
       }
 
       @Override
@@ -725,7 +732,7 @@ public class Turn extends Activity {
   /**
    * Hands off the intent to the next turn summary activity.
    */
-  protected void onTurnEnd() {
+  protected void endTurn() {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onTurnEnd()");
     }
@@ -963,6 +970,8 @@ public class Turn extends Activity {
               sm.playSound(SoundManager.Sound.CONFIRM);
 
               // Set the current team as the buzzed team and auto assign points
+              // We auto assign points so that some score exists, though 
+              // we could end in tie.
               mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
               mGameManager.setAutoAssignedRoundScores();
               mGameManager.endGame();
@@ -975,13 +984,37 @@ public class Turn extends Activity {
               // Play confirmation sound
               SoundManager sm = SoundManager.getInstance(Turn.this
                   .getBaseContext());
-              sm.playSound(SoundManager.Sound.CONFIRM);
+              sm.playSound(SoundManager.Sound.BACK);
 
               dialog.cancel();
             }
           });
       dialog = builder.create();
       break;
+    case DIALOG_ENDROUND_ID:
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to forfeit the round?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                // Play confirmation sound
+                SoundManager sm = SoundManager.getInstance(Turn.this
+                    .getBaseContext());
+                sm.playSound(SoundManager.Sound.CONFIRM);
+
+                Turn.this.endTurn();
+              }
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                // Play confirmation sound
+                SoundManager sm = SoundManager.getInstance(Turn.this
+                    .getBaseContext());
+                sm.playSound(SoundManager.Sound.BACK);
+
+                dialog.cancel();
+              }
+            });
+        dialog = builder.create();
+        break;
     case DIALOG_READY_ID:
       // Play team ready sound
       SoundManager sm = SoundManager.getInstance(Turn.this.getBaseContext());

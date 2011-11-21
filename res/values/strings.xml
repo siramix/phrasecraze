@@ -25,6 +25,7 @@
   <!-- Menu Designations -->
   <string name="menu_EndGame">MENU_ENDGAME</string>
   <string name="menu_Rules">MENU_RULES</string>
+  <string name="menu_EndRound">MENU_ENDROUND</string>
 
   <!-- Team names -->
   <string name="teamnameA">Blue</string>
