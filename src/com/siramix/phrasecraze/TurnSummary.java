@@ -141,7 +141,7 @@ public class TurnSummary extends Activity {
     LinearLayout layout = new LinearLayout(this.getBaseContext());
     layout.setOrientation(LinearLayout.VERTICAL);
 
-    // iterate through all completed cards and set layout accordingly
+    // Iterate through all completed cards and set layout accordingly
     mCardViewList = new LinkedList<ImageView>();
     mCardLineList = new LinkedList<View>();
     mCardList = game.getCurrentCards();
@@ -199,6 +199,10 @@ public class TurnSummary extends Activity {
 
     // Handle Activity changes for final turn
     refreshButtons();
+    
+    // Set the score limit display
+    TextView scoreLimit = (TextView) findViewById(R.id.TurnSummary_ScoreLimit);
+    scoreLimit.setText(getString(R.string.turnsummary_scorelimit, game.getScoreLimit()));
   }
   
   /**

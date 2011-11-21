@@ -47,16 +47,17 @@
 
     </LinearLayout>
     
-    <RelativeLayout android:id="@+id/TurnSummary_BottomGroup"
+    <LinearLayout android:id="@+id/TurnSummary_BottomGroup"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
-        <Button android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:layout_width="wrap_content" android:id="@+id/TurnSummary_AssignPoints"></Button>
+        <Button android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:layout_width="wrap_content" android:id="@+id/TurnSummary_AssignPoints"></Button>
+        <TextView android:layout_width="fill_parent" android:layout_weight="1" android:id="@+id/TurnSummary_ScoreLimit" android:text="@string/turnsummary_scorelimit" android:gravity="top|center_horizontal" android:maxLines="2" android:minLines="2" android:layout_height="fill_parent" android:textSize="20dp"></TextView>
         
-        <Button android:layout_alignParentRight="true" android:layout_alignBaseline="@+id/TurnSummary_EditPoints" android:layout_alignParentTop="true" android:id="@+id/TurnSummary_NextTurn"
+        <Button android:id="@+id/TurnSummary_NextTurn"
             android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="wrap_content">
             
         </Button>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

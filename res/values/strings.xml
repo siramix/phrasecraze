@@ -55,6 +55,7 @@
   <string name="turnsummary_nextbutton">Next Round</string>
   <string name="turnsummary_results">Game Results</string>
   <string name="turnsummary_assignpointsbutton">Assign Points</string>
+  <string name="turnsummary_scorelimit">Score Limit: %d</string>
     
   <!-- Assign Points dialog strings -->
   <string name="assignpoints_title">Assign Points</string>
