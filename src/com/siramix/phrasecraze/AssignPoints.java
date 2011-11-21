@@ -79,6 +79,11 @@ public class AssignPoints extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Cancel onClick()");
       }
+      
+      // play back sound
+      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.BACK);
+      
       finish();
     }
   };
@@ -98,6 +103,10 @@ public class AssignPoints extends Activity {
       curIntent.putExtra(getString(R.string.assignedPointsBundleKey), mScores);
       AssignPoints.this.setResult(Activity.RESULT_OK, curIntent);
       
+      // play confirm sound
+      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.CONFIRM);
+      
       finish();
     }
   };
@@ -116,6 +125,11 @@ public class AssignPoints extends Activity {
       mScores[0] += 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
       score.setText(Integer.toString(mScores[0]));
+      
+      // play confirm sound when points are added
+      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.CONFIRM);
+
     }
   };
   
@@ -132,6 +146,11 @@ public class AssignPoints extends Activity {
       mScores[1] += 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
       score.setText(Integer.toString(mScores[1]));
+      
+      // play confirm sound when points are added
+      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.CONFIRM);
+
     }
   };
   
@@ -148,6 +167,11 @@ public class AssignPoints extends Activity {
       mScores[0] -= 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
       score.setText(Integer.toString(mScores[0]));
+      
+      // play back sound when points are subtracted
+      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.BACK);
+
     }
   };
   
@@ -164,6 +188,10 @@ public class AssignPoints extends Activity {
       mScores[1] -= 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
       score.setText(Integer.toString(mScores[1]));
+      
+      // play back sound when points are subtracted
+      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.BACK);
     }
   };
 
