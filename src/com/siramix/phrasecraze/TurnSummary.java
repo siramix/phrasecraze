@@ -197,18 +197,30 @@ public class TurnSummary extends Activity {
         .findViewById(R.id.TurnSummary_AssignPoints);
     assignPointsButton.setOnClickListener(mAssignPointsListener);
 
-    // Handle activity changes for final turn
-    if ( game.isGameOver() ) {
-      // Change "Next Team" button
-      playGameButton.setText("Game Results");
-      // Hide scoreboard for suspense
-      LinearLayout scores = (LinearLayout) this
-          .findViewById(R.id.TurnSummary_ScoreGroup);
-      scores.setVisibility(View.INVISIBLE);
-      RelativeLayout scoreHeader = (RelativeLayout) this
-          .findViewById(R.id.TurnSummary_ScoreboardTitle_Group);
-      scoreHeader.setVisibility(View.INVISIBLE);
-    }
+    // Handle Activity changes for final turn
+    refreshButtons();
+  }
+  
+  /**
+   * Refreshes the buttons to reflect new behaviors based on 
+   * team scores.
+   */
+  private void refreshButtons()
+  {
+	  PhraseCrazeApplication application = (PhraseCrazeApplication) this
+			  .getApplication();
+	  GameManager game = application.getGameManager();
+
+	  Button playGameButton = (Button) this
+			  .findViewById(R.id.TurnSummary_NextTurn);
+
+	  // Handle activity changes for final turn
+	  if ( game.isGameOver() ) {
+		  // Indicate the game is going to end
+		  playGameButton.setText(this.getString(R.string.turnsummary_results));
+	  }
+	  else
+		  playGameButton.setText(this.getString(R.string.turnsummary_nextbutton));
   }
   
   /**
@@ -231,6 +243,9 @@ public class TurnSummary extends Activity {
       game.setNewRoundScores(teamScores);
       
       this.updateScoreViews();
+      
+      // Buttons could change based on new scores
+      refreshButtons();
     }
     super.onActivityResult(requestCode, resultCode, data);
   }
@@ -320,7 +335,6 @@ public class TurnSummary extends Activity {
       dialog = null;
     }
     return dialog;
-
   }
 
   /**
@@ -398,5 +412,4 @@ public class TurnSummary extends Activity {
 
     return super.onKeyUp(keyCode, event);
   }
-
 }

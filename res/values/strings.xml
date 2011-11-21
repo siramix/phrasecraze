@@ -53,6 +53,7 @@
   <!-- Turn Summary dialog strings -->
   <string name="turnsummary_scoringteam">Buzzed Team: %s</string>
   <string name="turnsummary_nextbutton">Next Round</string>
+  <string name="turnsummary_results">Game Results</string>
   <string name="turnsummary_assignpointsbutton">Assign Points</string>
     
   <!-- Assign Points dialog strings -->
