@@ -236,9 +236,9 @@ public class GameManager {
   }
   
   /*
-   * Add the results of the current turn into the current team's score.
+   * Add the results of the current round into the all team scores.
    */
-  public void addTurnScore()
+  private void setNewTotalScores()
   {
 	  Iterator<Team> itr = mTeams.iterator();
 	  Team teamAtItr;
@@ -250,9 +250,9 @@ public class GameManager {
   }
   
   /*
-   * For now, simply give a point to all the teams that were not buzzed.
+   * When no scores are supplied, simply give a point to all the teams that were not buzzed.
    */
-  public void setRoundScores()
+  public void setAutoAssignedRoundScores()
   {
 	  Iterator<Team> itr = mTeams.iterator();
 	  Team teamAtItr;
@@ -260,7 +260,32 @@ public class GameManager {
 		  teamAtItr = itr.next();
 		  if (!teamAtItr.equals(mBuzzedTeam))
 			  teamAtItr.setRoundScore(1);
+		  else
+			  teamAtItr.setRoundScore(0);
 	  }
+	  
+	  this.setNewTotalScores();
+  }
+  
+  /*
+   * Set the round scores to the supplied array of scores
+   */
+  public void setNewRoundScores(int[] newScores)
+  {
+	  // Since team displays only show a team's total score,
+	  // we must subtract old round scores before adding new ones.
+	  Iterator<Team> itr = mTeams.iterator();
+	  Team teamAtItr;
+	  int i = 0;
+	  for (itr = mTeams.iterator(); itr.hasNext();) {
+		  teamAtItr = itr.next();
+		  teamAtItr.setScore(teamAtItr.getScore()-teamAtItr.getRoundScore());
+		  // Set new round scores
+		  teamAtItr.setRoundScore(newScores[i]);
+		  ++i;
+	  }
+
+	  this.setNewTotalScores();
   }
 
   private void incrementActiveTeamIndex() {

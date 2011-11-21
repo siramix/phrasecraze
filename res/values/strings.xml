@@ -40,6 +40,7 @@
   <string name="scrollYBundleKey">com.siramix.phrasecraze.scrollY</string>
   <string name="teamBundleKey">com.siramix.phrasecraze.team</string>
   <string name="teamNameBundleKey">com.siramix.phrasecraze.teamName</string>
+  <string name="assignedPointsBundleKey">com.siramix.phrasecraze.assignedPoints</string>
 
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>

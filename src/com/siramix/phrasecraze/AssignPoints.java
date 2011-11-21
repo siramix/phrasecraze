@@ -17,7 +17,10 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,8 +54,7 @@ public class AssignPoints extends Activity {
   /*
    * Members that track desired changes to scores
    */
-  private int mScoreTeam1;
-  private int mScoreTeam2;
+  private int[] mScores;
 
   /**
    * Set the references to the elements from the layout file
@@ -91,13 +93,11 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "Confirm onClick()");
       }
 
-      // Pass back the team and the name
-      /*
+      // Pass back the new team scores
       Intent curIntent = new Intent();
-      curIntent.putExtra(getString(R.string.teamBundleKey), mTeam);
-      curIntent.putExtra(getString(R.string.teamNameBundleKey), teamName);
+      curIntent.putExtra(getString(R.string.assignedPointsBundleKey), mScores);
       AssignPoints.this.setResult(Activity.RESULT_OK, curIntent);
-      */
+      
       finish();
     }
   };
@@ -113,9 +113,9 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScoreTeam1 += 1;
+      mScores[0] += 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
-      score.setText(Integer.toString(mScoreTeam1));
+      score.setText(Integer.toString(mScores[0]));
     }
   };
   
@@ -129,9 +129,9 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScoreTeam2 += 1;
+      mScores[1] += 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
-      score.setText(Integer.toString(mScoreTeam2));
+      score.setText(Integer.toString(mScores[1]));
     }
   };
   
@@ -145,9 +145,9 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScoreTeam1 -= 1;
+      mScores[0] -= 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
-      score.setText(Integer.toString(mScoreTeam1));
+      score.setText(Integer.toString(mScores[0]));
     }
   };
   
@@ -161,9 +161,9 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScoreTeam2 -= 1;
+      mScores[1] -= 1;
       TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
-      score.setText(Integer.toString(mScoreTeam2));
+      score.setText(Integer.toString(mScores[1]));
     }
   };
 
@@ -178,19 +178,8 @@ public class AssignPoints extends Activity {
     }
 
     this.setContentView(R.layout.assignpoints);
-
-    // Todo: Scores should initialize to the round scores of each team.
-    mScoreTeam1 = 0;
-    mScoreTeam2 = 0;
     
     setupViewReferences();
-    
-    // Set initial values of each element based on its corresponding team
-    TextView score = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
-    score.setText(Integer.toString(mScoreTeam1));
-    score = (TextView) this.findViewById(R.id.AssignPoints_Team2_Score);
-    score.setText(Integer.toString(mScoreTeam2));
-    
 
     // Set fonts on titles
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
@@ -200,10 +189,11 @@ public class AssignPoints extends Activity {
     label.setTypeface(antonFont);
     
     // Set fonts on scores
-    score = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
-    score.setTypeface(antonFont);
-    score = (TextView) this.findViewById(R.id.AssignPoints_Team2_Score);
-    score.setTypeface(antonFont);
+    TextView scoreView;
+    scoreView = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
+    scoreView.setTypeface(antonFont);
+    scoreView = (TextView) this.findViewById(R.id.AssignPoints_Team2_Score);
+    scoreView.setTypeface(antonFont);
     
 /*
     // Get the team from the passed in Bundle
@@ -212,6 +202,29 @@ public class AssignPoints extends Activity {
     mTeam = (Team) teamBundle
         .getSerializable(getString(R.string.teamBundleKey));
 */
+    
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
+    		.getApplication();
+    GameManager game = application.getGameManager();
+    List<Team> teams = game.getTeams();
+    
+    // Initialize scores to the round score of each team
+    mScores = new int[teams.size()];
+    mScores[0] = teams.get(0).getRoundScore();
+    mScores[1] = teams.get(1).getRoundScore();
+    
+    // Set initial values of each element based on its corresponding team
+    TextView score = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
+    score.setText(Integer.toString(mScores[0]));
+    score = (TextView) this.findViewById(R.id.AssignPoints_Team2_Score);
+    score.setText(Integer.toString(mScores[1]));
+    
+    // Color backgrounds based on the two teams represented
+    View bgTeam1 = this.findViewById(R.id.AssignPoints_Team1);
+    bgTeam1.setBackgroundResource(teams.get(0).getPrimaryColor());
+    View bgTeam2 = this.findViewById(R.id.AssignPoints_Team2);
+    bgTeam2.setBackgroundResource(teams.get(1).getPrimaryColor());
+    
 
     // Set listeners for buttons
     mButtonCancel.setOnClickListener(mCancelListener);

@@ -962,12 +962,11 @@ public class Turn extends Activity {
                   .getBaseContext());
               sm.playSound(SoundManager.Sound.CONFIRM);
 
-              PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
-                  .getApplication();
-              GameManager gm = application.getGameManager();
-              // Add whatever score they've gotten in this turn
-              gm.addTurnScore();
-              gm.endGame();
+              // Set the current team as the buzzed team and auto assign points
+              mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
+              mGameManager.setAutoAssignedRoundScores();
+              mGameManager.endGame();
+              
               startActivity(new Intent(getString(R.string.IntentEndGame),
                   getIntent().getData()));
             }

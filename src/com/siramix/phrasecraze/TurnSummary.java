@@ -55,6 +55,10 @@ public class TurnSummary extends Activity {
   public static String TAG = "TurnSummary";
 
   static final int DIALOG_GAMEOVER_ID = 0;
+  
+  // Request code for AssignPoints activity result
+  static final int ASSIGNPOINTS_REQUEST_CODE = 1;
+
 
   private List<Card> mCardList;
   private List<ImageView> mCardViewList;
@@ -97,10 +101,10 @@ public class TurnSummary extends Activity {
       }
       Intent intent = new Intent(getApplication().getString(
               R.string.IntentAssignPoints), getIntent().getData());
-          startActivity(intent);
 
+      startActivityForResult(intent, ASSIGNPOINTS_REQUEST_CODE);
     }
-  }; // End NextTurnListener
+  };
 
 
   /**
@@ -125,8 +129,7 @@ public class TurnSummary extends Activity {
 
     // TODO: Automatically add in scores only in automatic scoring, otherwise show the dialog
     // to find a scoring team.
-    game.setRoundScores();
-    game.addTurnScore();
+    game.setAutoAssignedRoundScores();
     
     // Update scoring team display
     TextView scoringTeam = (TextView) this
@@ -207,6 +210,30 @@ public class TurnSummary extends Activity {
       scoreHeader.setVisibility(View.INVISIBLE);
     }
   }
+  
+  /**
+   * This function is called when the AssignPoints activity finishes.
+   * It adds in the supplied points to each team's total score.
+   */
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == ASSIGNPOINTS_REQUEST_CODE &&
+        resultCode == Activity.RESULT_OK &&
+        data.getExtras() != null) {
+      
+      // Get team scores from the dialog
+      int[] teamScores = data.getIntArrayExtra(getString(R.string.assignedPointsBundleKey));
+
+      // Assign scores to teams
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
+          .getApplication();
+      GameManager game = application.getGameManager();
+      game.setNewRoundScores(teamScores);
+      
+      this.updateScoreViews();
+    }
+    super.onActivityResult(requestCode, resultCode, data);
+  }
 
   /**
    * Creates the menu items for the options menu
@@ -248,8 +275,8 @@ public class TurnSummary extends Activity {
     default:
       return super.onOptionsItemSelected(item);
     }
-  }
-
+  }  
+  
   /**
    * Handle creation of dialogs used in TurnSummary
    */
