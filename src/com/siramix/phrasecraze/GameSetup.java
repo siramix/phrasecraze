@@ -159,11 +159,6 @@ public class GameSetup extends Activity {
       editTeamNameIntent.putExtra(getString(R.string.teamBundleKey), team);
       startActivityForResult(editTeamNameIntent, EDITTEAMNAME_REQUEST_CODE);
 
-      /*
-       * // Launch into Turn activity startActivity(new
-       * Intent(getApplication().getString(R.string.IntentEditTeamName),
-       * getIntent().getData()));
-       */
       mContinueMusic = true;
     }
   };
