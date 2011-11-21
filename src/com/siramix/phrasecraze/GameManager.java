@@ -256,15 +256,21 @@ public class GameManager {
   {
 	  Iterator<Team> itr = mTeams.iterator();
 	  Team teamAtItr;
+	  int i = 0;
+	  int roundScore = 0;
+	  int[] scores = new int[mTeams.size()];
 	  for (itr = mTeams.iterator(); itr.hasNext();) {
 		  teamAtItr = itr.next();
 		  if (!teamAtItr.equals(mBuzzedTeam))
-			  teamAtItr.setRoundScore(1);
+			  roundScore = 1;
 		  else
-			  teamAtItr.setRoundScore(0);
+			  roundScore = 0;
+		  
+		  scores[i] = roundScore;
+		  ++i;
 	  }
 	  
-	  this.setNewTotalScores();
+	  this.setNewRoundScores(scores);
   }
   
   /*
