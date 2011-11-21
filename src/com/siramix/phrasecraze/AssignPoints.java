@@ -195,23 +195,19 @@ public class AssignPoints extends Activity {
     scoreView = (TextView) this.findViewById(R.id.AssignPoints_Team2_Score);
     scoreView.setTypeface(antonFont);
     
-/*
-    // Get the team from the passed in Bundle
-    Intent curIntent = this.getIntent();
-    Bundle teamBundle = curIntent.getExtras();
-    mTeam = (Team) teamBundle
-        .getSerializable(getString(R.string.teamBundleKey));
-*/
-    
+    // Get teams from application. This should maybe be passed in as a 
+    // serializable list of teams
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
     		.getApplication();
     GameManager game = application.getGameManager();
     List<Team> teams = game.getTeams();
+    Team team1 = teams.get(0);
+    Team team2 = teams.get(1);
     
     // Initialize scores to the round score of each team
     mScores = new int[teams.size()];
-    mScores[0] = teams.get(0).getRoundScore();
-    mScores[1] = teams.get(1).getRoundScore();
+    mScores[0] = team1.getRoundScore();
+    mScores[1] = team2.getRoundScore();
     
     // Set initial values of each element based on its corresponding team
     TextView score = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
@@ -220,12 +216,20 @@ public class AssignPoints extends Activity {
     score.setText(Integer.toString(mScores[1]));
     
     // Color backgrounds based on the two teams represented
-    View bgTeam1 = this.findViewById(R.id.AssignPoints_Team1);
-    bgTeam1.setBackgroundResource(teams.get(0).getPrimaryColor());
-    View bgTeam2 = this.findViewById(R.id.AssignPoints_Team2);
-    bgTeam2.setBackgroundResource(teams.get(1).getPrimaryColor());
+    TextView nameTeam1 = (TextView) this.findViewById(R.id.AssignPoints_Team1_Name);
+    nameTeam1.setBackgroundResource(team1.getPrimaryColor());
+    nameTeam1.setText(team1.getName());
+    nameTeam1.setTextColor(this.getResources().getColor(team1.getSecondaryColor()));
+    View bgTeam1 = this.findViewById(R.id.AssignPoints_Team1_ScoreLayout);
+    bgTeam1.setBackgroundResource(team1.getPrimaryColor());
     
-
+    TextView nameTeam2 = (TextView) this.findViewById(R.id.AssignPoints_Team2_Name);
+    nameTeam2.setBackgroundResource(team2.getPrimaryColor());
+    nameTeam2.setText(team2.getName());
+    nameTeam2.setTextColor(this.getResources().getColor(team2.getSecondaryColor()));
+    View bgTeam2 = this.findViewById(R.id.AssignPoints_Team2_ScoreLayout);
+    bgTeam2.setBackgroundResource(team2.getPrimaryColor());
+    
     // Set listeners for buttons
     mButtonCancel.setOnClickListener(mCancelListener);
     mButtonAccept.setOnClickListener(mAcceptListener);
