@@ -16,6 +16,7 @@
   <string name="IntentEndGame">com.siramix.phrasecraze.intent.action.GAMEEND</string>
   <string name="IntentCardReview">com.siramix.phrasecraze.intent.action.CARDREVIEW</string>
   <string name="IntentEditTeamName">com.siramix.phrasecraze.intent.action.EDITTEAMNAME</string>
+  <string name="IntentAssignPoints">com.siramix.phrasecraze.intent.action.ASSIGNPOINTS</string>
 
   <!-- Global Prefkey IDs -->
   <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>
@@ -51,6 +52,12 @@
   <!-- Turn Summary dialog strings -->
   <string name="turnsummary_scoringteam">Buzzed Team: %s</string>
   <string name="turnsummary_nextbutton">Next Round</string>
+  <string name="turnsummary_assignpointsbutton">Assign Points</string>
+    
+  <!-- Assign Points dialog strings -->
+  <string name="assignpoints_title">Assign Points</string>
+  <string name="assignpoints_buttoncancel">Cancel</string>
+    <string name="assignpoints_buttonconfirm">Confirm</string>
 
   <!-- For EditTeamName dialog -->
   <string name="editTeamName_hint">Choose a new name for %s team.</string>

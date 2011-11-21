@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+	<RelativeLayout android:id="@+id/AssignPoints_Header"
+		android:layout_height="wrap_content" android:layout_width="wrap_content">
+		<View android:layout_centerVertical="true" android:id="@+id/AssignPoints_TitleBar"
+			android:layout_height="4dp" android:layout_width="fill_parent"
+			android:layout_centerHorizontal="true" android:background="@color/genericBG_trim"></View>
+		<TextView android:layout_marginLeft="10dp" android:gravity="center"
+			android:textSize="24dp" android:layout_centerVertical="true"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:id="@+id/AssignPoints_Title" android:textColor="@color/white" android:text="@string/assignpoints_title"></TextView>
+	</RelativeLayout>
+	<LinearLayout android:layout_height="wrap_content" android:id="@+id/AssignPoints_TeamLayout" android:layout_width="fill_parent">
+		<LinearLayout android:layout_height="fill_parent" android:id="@+id/AssignPoints_Team1" android:layout_width="fill_parent" android:background="@color/teamA_primary" android:orientation="vertical" android:layout_weight="1" android:layout_marginRight="1dp" android:layout_marginLeft="1dp">
+			<Button android:text="+" android:layout_height="40dp" android:id="@+id/AssignPoints_Team1_ButtonAdd" android:layout_width="fill_parent" android:layout_marginTop="2dp" android:textSize="24dp" style="@style/PhraseCrazeButton" android:includeFontPadding="false"></Button>
+			<TextView android:layout_height="wrap_content" android:textColor="@color/white" android:layout_width="fill_parent" android:id="@+id/AssignPoints_Team1_Score" android:gravity="center" android:textSize="48dp" android:text="0"></TextView>
+			<Button android:text="-" android:layout_height="40dp" android:id="@+id/AssignPoints_Team1_ButtonSubtract" android:layout_width="fill_parent" android:layout_marginBottom="2dp" android:textSize="24dp" style="@style/PhraseCrazeButton" android:includeFontPadding="false"></Button>
+		</LinearLayout>
+		<LinearLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="vertical" android:id="@+id/AssignPoints_Team2" android:layout_weight="1" android:background="@color/teamC_primary" android:layout_marginLeft="1dp" android:layout_marginRight="1dp">
+			<Button android:text="+" android:layout_height="40dp" android:layout_width="fill_parent" android:layout_marginTop="2dp" android:textSize="24dp" android:id="@+id/AssignPoints_Team2_ButtonAdd" style="@style/PhraseCrazeButton" android:includeFontPadding="false"></Button>
+			<TextView android:layout_height="wrap_content" android:textColor="@color/white" android:layout_width="fill_parent" android:gravity="center" android:textSize="48dp" android:text="0" android:id="@+id/AssignPoints_Team2_Score"></TextView>
+			<Button android:text="-" android:layout_height="40dp" android:layout_width="fill_parent" android:layout_marginBottom="2dp" android:textSize="24dp" android:id="@+id/AssignPoints_Team2_ButtonSubtract" style="@style/PhraseCrazeButton" android:includeFontPadding="false"></Button>
+		</LinearLayout>
+	</LinearLayout>
+	<RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/AssignPoints_Buttons" android:layout_marginTop="10dp">
+		<Button android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:text="@string/assignpoints_buttoncancel" android:layout_height="wrap_content" android:id="@+id/AssignPoints_ButtonCancel" android:layout_width="wrap_content" style="@style/PhraseCrazeButton"></Button>
+		<Button android:layout_alignBaseline="@+id/AssignPoints_ButtonCancel" android:layout_alignParentTop="true" android:text="@string/assignpoints_buttonconfirm" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/AssignPoints_ButtonConfirm" android:layout_alignParentRight="true" style="@style/PhraseCrazeButton"></Button>
+	</RelativeLayout>
+	
+</LinearLayout>

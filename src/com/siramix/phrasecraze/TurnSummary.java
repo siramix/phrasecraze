@@ -86,6 +86,22 @@ public class TurnSummary extends Activity {
 
     }
   }; // End NextTurnListener
+  
+  /**
+   * Watches the button that handles assigning team points.
+   */
+  private final OnClickListener mAssignPointsListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "AssignPoints OnClick()");
+      }
+      Intent intent = new Intent(getApplication().getString(
+              R.string.IntentAssignPoints), getIntent().getData());
+          startActivity(intent);
+
+    }
+  }; // End NextTurnListener
+
 
   /**
    * Initializes the activity to display the results of the turn.
@@ -172,6 +188,11 @@ public class TurnSummary extends Activity {
     Button playGameButton = (Button) this
         .findViewById(R.id.TurnSummary_NextTurn);
     playGameButton.setOnClickListener(mNextRoundListener);
+    
+    // Bind Assign Points button
+    Button assignPointsButton = (Button) this
+        .findViewById(R.id.TurnSummary_AssignPoints);
+    assignPointsButton.setOnClickListener(mAssignPointsListener);
 
     // Handle activity changes for final turn
     if ( game.isGameOver() ) {

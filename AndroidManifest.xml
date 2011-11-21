@@ -124,7 +124,16 @@
       </intent-filter>
       
     </activity>
-		
+		    <activity android:name=".AssignPoints" android:label=""
+      android:theme="@style/AssignPointsDialog"
+      android:screenOrientation="portrait">
+      <intent-filter>
+        <action android:name="com.siramix.phrasecraze.intent.action.ASSIGNPOINTS"></action>
+        <category android:name="android.intent.category.DEFAULT"></category>
+      </intent-filter>
+      
+    </activity>
+    
 	</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="7" />

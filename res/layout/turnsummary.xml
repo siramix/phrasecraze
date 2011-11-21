@@ -47,17 +47,16 @@
 
     </LinearLayout>
     
-    <LinearLayout android:id="@+id/TurnSummary_BottomGroup"
+    <RelativeLayout android:id="@+id/TurnSummary_BottomGroup"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
+        <Button android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:layout_width="wrap_content" android:id="@+id/TurnSummary_AssignPoints"></Button>
         
-        <Button android:id="@+id/TurnSummary_NextTurn"
-            android:layout_weight="1"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton">
+        <Button android:layout_alignParentRight="true" android:layout_alignBaseline="@+id/TurnSummary_EditPoints" android:layout_alignParentTop="true" android:id="@+id/TurnSummary_NextTurn"
+            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="wrap_content">
             
         </Button>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
