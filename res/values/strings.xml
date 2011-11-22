@@ -49,6 +49,10 @@
   <string name="gamesetup_teamshint">Tap to choose two teams to compete.</string>
   <string name="gamesetup_endgamerule">Score Limit</string>
   <string name="gamesetup_endgamerulehint">Choose the number of points required to win.</string>
+  <string name="gamesetup_scoringmode">Scoring Mode</string>
+  <string name="gamesetup_scoringmode_freeplay">Free Play</string>
+  <string name="gamesetup_scoringmode_assisted">Assisted</string>
+    <string name="gamesetup_scoringmodehint">Free Play - You are in charge of assigning points.\nAssisted - The computer tries to help with scoring.</string>
   <string name="gamesetup_button_startgame">Start Game</string>
   
   <!-- Turn Summary dialog strings -->

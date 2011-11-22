@@ -17,103 +17,55 @@
  ****************************************************************************/
  -->
  
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="@drawable/bg_generic" android:focusable="false">
-    <TextView android:layout_width="wrap_content" android:id="@+id/GameSetup_Title" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:textColor="@color/genericBG_trim" android:textSize="38dp" android:layout_marginRight="5dp" android:layout_marginTop="-10dp" android:text="@string/gamesetup_title"></TextView>
+	android:background="@drawable/bg_generic" android:focusable="false" android:orientation="vertical">
+    <TextView android:layout_height="wrap_content" android:textColor="@color/genericBG_trim" android:layout_width="fill_parent" android:id="@+id/GameSetup_Title" android:gravity="right" android:textSize="38dp" android:text="@string/gamesetup_title" android:layout_marginRight="5dp" android:layout_marginTop="-10dp"></TextView>
+    <ScrollView android:id="@+id/scrollView1" android:layout_width="fill_parent" android:layout_marginTop="-10dp" android:layout_height="fill_parent" android:layout_weight="1">
+        <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
+            <RelativeLayout android:layout_height="wrap_content" android:id="@+id/GameSetup_TeamHeader" android:layout_width="wrap_content">
+                <View android:id="@+id/GameSetup_TeamHeaderBar" android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:layout_height="4dp" android:layout_centerHorizontal="true" android:layout_centerVertical="true"></View>
+                <TextView android:layout_marginLeft="10dp" android:textColor="@color/white" android:id="@+id/GameSetup_TeamsTitle" android:gravity="center" android:textSize="24dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gamesetup_teams" android:layout_centerVertical="true"></TextView>
+            </RelativeLayout>
+            <LinearLayout android:layout_height="180dp" android:id="@+id/GameSetup_TeamLayout" android:layout_width="fill_parent" android:orientation="vertical">
+                <View android:id="@+id/GameSetup_TeamBorderTop" android:background="@color/black" android:layout_height="1dp" android:layout_width="wrap_content"></View>
+                <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:id="@+id/GameSetup_TeamALayout" android:layout_width="fill_parent" android:layout_weight="1"></com.siramix.phrasecraze.TeamSelectLayout>
+                <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:id="@+id/GameSetup_TeamBLayout" android:layout_width="fill_parent" android:layout_weight="1"></com.siramix.phrasecraze.TeamSelectLayout>
+                <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:id="@+id/GameSetup_TeamCLayout" android:layout_width="fill_parent" android:layout_weight="1"></com.siramix.phrasecraze.TeamSelectLayout>
+                <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:id="@+id/GameSetup_TeamDLayout" android:layout_width="fill_parent" android:layout_weight="1"></com.siramix.phrasecraze.TeamSelectLayout>
+                <View android:id="@+id/GameSetup_TeamBorderBot" android:background="@color/black" android:layout_height="1dp" android:layout_width="wrap_content"></View>
+            </LinearLayout>
+            <TextView android:layout_height="wrap_content" android:width="300dp" android:textColor="@color/white" android:layout_width="wrap_content" android:id="@+id/GameSetup_HelpText_Team" android:gravity="center" android:textSize="18dp" android:text="@string/gamesetup_teamshint" android:layout_gravity="center"></TextView>
+            <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_Header_ScoreLimit">
+                <View android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:layout_height="4dp" android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:id="@+id/GameSetup_Header_ScoreLimit_Bar"></View>
+                <TextView android:layout_marginLeft="10dp" android:textColor="@color/white" android:gravity="center" android:textSize="24dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gamesetup_endgamerule" android:layout_centerVertical="true" android:id="@+id/GameSetup_Header_ScoreLimit_Title"></TextView>
+            </RelativeLayout>
+            <LinearLayout android:layout_height="wrap_content" android:layout_gravity="center" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ScoreGroup">
+                <Button style="@style/PhraseCrazeButton" android:text="-" android:layout_height="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ButtonMinus" android:layout_width="50dp"></Button>
+                <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_Value" android:layout_gravity="center" android:text="0" android:paddingBottom="5dp" android:textSize="32dp" android:width="70dp" android:gravity="center"></TextView>
+                <Button style="@style/PhraseCrazeButton" android:text="+" android:layout_height="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ButtonPlus" android:layout_width="50dp"></Button>
+            </LinearLayout>
+            <TextView android:layout_height="wrap_content" android:width="300dp" android:textColor="@color/white" android:layout_width="wrap_content" android:id="@+id/GameSetup_HelpText_Turn" android:gravity="center" android:layout_gravity="center" android:textSize="18dp" android:text="@string/gamesetup_endgamerulehint"></TextView>
+            <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_Header_ScoringMode">
+                <View android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:layout_height="4dp" android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:id="@+id/GameSetup_Header_ScoringMode_Bar"></View>
+                <TextView android:layout_marginLeft="10dp" android:textColor="@color/white" android:gravity="center" android:textSize="24dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:id="@+id/GameSetup_Header_ScoringMode_Title" android:text="@string/gamesetup_scoringmode"></TextView>
+            </RelativeLayout>
+            <RadioGroup android:layout_gravity="center" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoringMode_Radios" android:orientation="horizontal">
+                <RadioButton android:gravity="center" android:id="@+id/GameSetup_ScoringMode_FreePlay" android:layout_height="wrap_content" android:layout_width="130dp" android:layout_weight="1" android:checked="true" android:text="@string/gamesetup_scoringmode_freeplay"></RadioButton>
+                <RadioButton android:gravity="center" android:id="@+id/GameSetup_ScoringMode_Assisted" android:layout_height="wrap_content" android:layout_width="130dp" android:layout_weight="1" android:text="@string/gamesetup_scoringmode_assisted"></RadioButton>
+            </RadioGroup>
+            <TextView android:layout_height="wrap_content" android:textColor="@color/white" android:layout_width="fill_parent" android:layout_weight="1" android:id="@+id/GameSetup_HelpText_ScoringMode" android:gravity="center" android:layout_gravity="center" android:textSize="18dp" android:text="@string/gamesetup_scoringmodehint"></TextView>
+        </LinearLayout>
+    </ScrollView>
 
 	<!-- Team selection box -->
-    <RelativeLayout android:layout_width="wrap_content" android:layout_below="@id/GameSetup_Title" android:id="@+id/GameSetup_TeamHeader" android:layout_marginTop="-20dp" android:layout_height="wrap_content">
-        <View android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:layout_width="fill_parent" android:layout_height="4dp" android:id="@+id/GameSetup_TeamHeaderBar" android:background="@color/genericBG_trim"></View>
-        <TextView android:textColor="@color/white" android:layout_width="wrap_content" android:textSize="24dp" android:layout_height="wrap_content" android:layout_centerVertical="true" android:id="@+id/GameSetup_TeamsTitle" android:gravity="center" android:layout_marginLeft="10dp" android:text="@string/gamesetup_teams"></TextView>
-    </RelativeLayout>
-    <LinearLayout android:id="@+id/GameSetup_TeamLayout" android:layout_width="fill_parent" android:orientation="vertical" android:layout_below="@id/GameSetup_TeamHeader" android:layout_height="180dp">
-        <View android:background="@color/black" android:layout_width="wrap_content" android:layout_height="1dp" android:id="@+id/GameSetup_TeamBorderTop"></View>
-        <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/GameSetup_TeamALayout"></com.siramix.phrasecraze.TeamSelectLayout>
-        <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/GameSetup_TeamBLayout"></com.siramix.phrasecraze.TeamSelectLayout>
-        <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/GameSetup_TeamCLayout"></com.siramix.phrasecraze.TeamSelectLayout>
-        <com.siramix.phrasecraze.TeamSelectLayout android:layout_height="fill_parent" android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/GameSetup_TeamDLayout"></com.siramix.phrasecraze.TeamSelectLayout>
-        <View android:background="@color/black" android:layout_width="wrap_content" android:layout_height="1dp" android:id="@+id/GameSetup_TeamBorderBot"></View>
-    </LinearLayout>
 	
 	<!--  Helper caption for Team selection -->
-	<TextView android:id="@+id/GameSetup_HelpText_Team"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:layout_centerHorizontal="true"
-		android:width="300dp"
-		android:textSize="18dp"
-		android:layout_below="@id/GameSetup_TeamLayout" android:textColor="@color/white" android:text="@string/gamesetup_teamshint"/>
 
 	<!-- Select number of turns -->
-	<RelativeLayout android:id="@+id/GameSetup_TurnGroup" 
-		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:layout_below="@id/GameSetup_HelpText_Team"
-		android:paddingTop="10dp">
-		<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GameSetup_SubHeader_Turns">
-			<View android:layout_centerHorizontal="true" android:layout_width="fill_parent" android:layout_centerVertical="true" android:background="@color/genericBG_trim" android:layout_height="4dp" android:id="@+id/GameSetup_SubHeader_Turns_Bar"></View>
-			<TextView android:textColor="@color/white" android:layout_width="wrap_content" android:gravity="center" android:layout_centerVertical="true" android:textSize="24dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:id="@+id/GameSetup_SubHeader_Turns_Title" android:text="@string/gamesetup_endgamerule"></TextView>
-		</RelativeLayout>
-		
-		<!--  Round selection -->
-		<RadioGroup android:id="@+id/GameSetup_RadioGroup"
-			android:checkedButton="@+id/GameSetup_Rounds5"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"
-			android:layout_below="@+id/GameSetup_SubHeader_Turns" >
-			
-			<RadioButton android:id="@+id/GameSetup_Rounds0"
-				android:layout_height="wrap_content"
-				android:textSize="28dp"
-				android:layout_gravity="center_horizontal"
-				android:layout_weight="1"
-				android:layout_width="fill_parent"
-				android:text="4"/>
-				
-			<RadioButton android:id="@+id/GameSetup_Rounds1"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:layout_weight="1"
-				android:layout_width="fill_parent"
-				android:textSize="28dp"
-				android:text="6"/>
-				
-			<RadioButton android:id="@+id/GameSetup_Rounds2"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:layout_weight="1"
-				android:layout_width="fill_parent"
-				android:textSize="28dp"
-				android:text="8"/>
-				
-			<RadioButton android:id="@+id/GameSetup_Rounds3"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center_horizontal"
-				android:layout_weight="1"
-				android:layout_width="fill_parent" 
-				android:textSize="28dp"
-				android:text="10"/>
-		</RadioGroup>
-		
-		<TextView android:id="@+id/GameSetup_HelpText_Turn"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:width="300dp"
-			android:layout_centerHorizontal="true"
-			android:textSize="18dp"
-			android:layout_below="@id/GameSetup_RadioGroup"
-			android:textColor="@color/white" android:text="@string/gamesetup_endgamerulehint"/>
-			
-	</RelativeLayout>
 	
 	<Button android:id="@+id/GameSetup_StartGameButton"
-		android:layout_width="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentRight="true"
-		android:layout_height="60dp"
-		android:text="@string/gamesetup_button_startgame"/>
+		android:text="@string/gamesetup_button_startgame" android:layout_width="fill_parent" style="@style/PhraseCrazeButton" android:layout_height="50dp"/>
 
-</RelativeLayout>
+</LinearLayout>
