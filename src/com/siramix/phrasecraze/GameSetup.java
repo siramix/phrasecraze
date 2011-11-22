@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.view.animation.Animation;
 import android.view.animation.AlphaAnimation;
 
@@ -149,7 +150,7 @@ public class GameSetup extends Activity {
   private final OnClickListener mAddPointScoreLimit = new OnClickListener() {
     public void onClick(View v) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "AddPointTeam1 onClick()");
+        Log.d(TAG, "mAddPointScoreLimit onClick()");
       }
 
       mScoreLimit += 1;
@@ -161,15 +162,55 @@ public class GameSetup extends Activity {
 
     }
   };
-  
 
+  /**
+   * Watches the help button for the Teams section
+   */
+  private final OnClickListener mTeamHelpListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "mTeamHelpListener onClick()");
+      }
+      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
+    		  GameSetup.this.getString(R.string.gamesetup_teamshint), Toast.LENGTH_LONG);
+      toast.show();
+    }
+  };
+  
+  /**
+   * Watches the help button for the Teams section
+   */
+  private final OnClickListener mScoreLimitHelpListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "mTeamHelpListener onClick()");
+      }
+      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
+    		  GameSetup.this.getString(R.string.gamesetup_endgamerulehint), Toast.LENGTH_LONG);
+      toast.show();
+    }
+  };
+  
+  /**
+   * Watches the help button for the Teams section
+   */
+  private final OnClickListener mScoringModeHelpListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "mTeamHelpListener onClick()");
+      }
+      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
+    		  GameSetup.this.getString(R.string.gamesetup_scoringmodehint), Toast.LENGTH_LONG);
+      toast.show();
+    }
+  };
   /**
    * Watches the button to remove a point from the Score Limit
    */
   private final OnClickListener mSubtractPointScoreLimit = new OnClickListener() {
     public void onClick(View v) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "AddPointTeam1 onClick()");
+        Log.d(TAG, "mSubtractPointScoreLimit onClick()");
       }
 
       // Don't let them set a score limit below 1
@@ -349,16 +390,19 @@ public class GameSetup extends Activity {
     helpText = (TextView) this.findViewById(R.id.GameSetup_HelpText_ScoringMode);
     helpText.setAnimation(this.fadeInHelpText(2500));
     
-    // Bind view buttons
-    Button startGameButton = (Button) this
-        .findViewById(R.id.GameSetup_StartGameButton);
-    startGameButton.setOnClickListener(mStartGameListener);
-    Button buttonAddScoreLimit = (Button) this
-            .findViewById(R.id.GameSetup_ScoreLimit_ButtonPlus);
-    buttonAddScoreLimit.setOnClickListener(mAddPointScoreLimit);
-    Button buttonSubtractScoreLimit = (Button) this
-            .findViewById(R.id.GameSetup_ScoreLimit_ButtonMinus);
-    buttonSubtractScoreLimit.setOnClickListener(mSubtractPointScoreLimit);
+
+    Button button = (Button) this.findViewById(R.id.GameSetup_StartGameButton);
+    button.setOnClickListener(mStartGameListener);
+    button = (Button) this.findViewById(R.id.GameSetup_ScoreLimit_ButtonPlus);
+    button.setOnClickListener(mAddPointScoreLimit);
+    button = (Button) this.findViewById(R.id.GameSetup_ScoreLimit_ButtonMinus);
+    button.setOnClickListener(mSubtractPointScoreLimit);
+    button = (Button) this.findViewById(R.id.GameSetup_Teams_HelpButton);
+    button.setOnClickListener(mTeamHelpListener);
+    button = (Button) this.findViewById(R.id.GameSetup_Header_ScoreLimit_HelpButton);
+    button.setOnClickListener(mScoreLimitHelpListener);
+    button = (Button) this.findViewById(R.id.GameSetup_Header_ScoringMode_HelpButton);
+    button.setOnClickListener(mScoringModeHelpListener);
 
   }
 
