@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+/*****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ****************************************************************************/
+ -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:id="@+id/PackPurchase_PackList"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" android:longClickable="false">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/PackPurchase_Buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/PackPurhcase_Back"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="@string/turnsummary_assignpointsbutton" />
+
+        <TextView
+            android:id="@+id/TurnSummary_ScoreLimit"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="top|center_horizontal"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="@string/turnsummary_scorelimit"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/TurnSummary_NextTurn"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="@string/turnsummary_nextbutton" />
+    </LinearLayout>
+
+</LinearLayout>

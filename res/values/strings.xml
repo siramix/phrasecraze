@@ -17,6 +17,7 @@
   <string name="IntentCardReview">com.siramix.phrasecraze.intent.action.CARDREVIEW</string>
   <string name="IntentEditTeamName">com.siramix.phrasecraze.intent.action.EDITTEAMNAME</string>
   <string name="IntentAssignPoints">com.siramix.phrasecraze.intent.action.ASSIGNPOINTS</string>
+  <string name="IntentPackPurchase">com.siramix.phrasecraze.intent.action.PHRASEPACKPURCHASE</string>
 
   <!-- Global Prefkey IDs -->
   <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>

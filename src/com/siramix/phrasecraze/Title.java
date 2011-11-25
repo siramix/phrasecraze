@@ -128,6 +128,19 @@ public class Title extends Activity {
             R.color.teamB_primary));
       }
       break;
+    case R.id.Title_PhrasesDelegate:
+      button = (ImageButton) Title.this.findViewById(R.id.Title_PhrasesButton);
+      label = (TextView) Title.this.findViewById(R.id.Title_PhrasesText);
+      if (on) {
+        button.setBackgroundResource(R.drawable.title_play_onclick);
+        label.setTextColor(Title.this.getResources().getColor(
+            R.color.teamC_highlight));
+      } else {
+        button.setBackgroundResource(R.drawable.title_play);
+        label.setTextColor(Title.this.getResources().getColor(
+            R.color.teamC_primary));
+      }
+      break;
     case R.id.Title_SettingsDelegate:
       button = (ImageButton) Title.this.findViewById(R.id.Title_SettingsButton);
       label = (TextView) Title.this.findViewById(R.id.Title_SettingsText);
@@ -179,6 +192,27 @@ public class Title extends Activity {
 
       startActivity(new Intent(Title.this.getApplication().getString(
           R.string.IntentGameSetup), getIntent().getData()));
+    }
+  };
+  
+
+  /**
+   * PlayGameListener plays an animation on the view that will result in
+   * launching GameSetup
+   */
+  private OnClickListener mPhrasesListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "PhrasesListener OnClick()");
+      }
+      mContinueMusic = true;
+
+      // play confirm sound
+      SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.CONFIRM);
+
+      startActivity(new Intent(Title.this.getApplication().getString(
+          R.string.IntentPackPurchase), getIntent().getData()));
     }
   };
 
@@ -342,6 +376,10 @@ public class Title extends Activity {
     View delegate = (View) this.findViewById(R.id.Title_PlayDelegate);
     delegate.setOnTouchListener(mTouchPlayListener);
     delegate.setOnClickListener(mPlayGameListener);
+    
+    delegate = (View) this.findViewById(R.id.Title_PhrasesDelegate);
+    delegate.setOnTouchListener(mTouchPlayListener);
+    delegate.setOnClickListener(mPhrasesListener);
 
     delegate = (View) this.findViewById(R.id.Title_SettingsDelegate);
     delegate.setOnTouchListener(mTouchPlayListener);
@@ -360,6 +398,8 @@ public class Title extends Activity {
     aboutusButton.setOnClickListener(mAboutUsListener);
 
     View button = (View) this.findViewById(R.id.Title_PlayButton);
+    button.startAnimation(this.translateButtons(4));
+    button = (View) this.findViewById(R.id.Title_PhrasesButton);
     button.startAnimation(this.translateButtons(3));
     button = (View) this.findViewById(R.id.Title_SettingsButton);
     button.startAnimation(this.translateButtons(2));
@@ -371,6 +411,9 @@ public class Title extends Activity {
         "fonts/Anton.ttf");
 
     TextView label = (TextView) this.findViewById(R.id.Title_PlayText);
+    label.startAnimation(this.translateLabels(4));
+    label.setTypeface(antonFont);
+    label = (TextView) this.findViewById(R.id.Title_PhrasesText);
     label.startAnimation(this.translateLabels(3));
     label.setTypeface(antonFont);
     label = (TextView) this.findViewById(R.id.Title_SettingsText);
