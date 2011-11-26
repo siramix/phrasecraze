@@ -37,7 +37,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.animation.Animation;
@@ -112,12 +111,7 @@ public class GameSetup extends Activity {
       }
       
       // Store off game's attributes as preferences
-      GameSetup.mGameSetupPrefEditor.putInt(GameSetup.this.getString(R.string.PREFKEY_SCORELIMIT),
-          mScoreLimit);
-      // Store off the selected Scoring Mode
-      GameSetup.mGameSetupPrefEditor.putBoolean(
-          GameSetup.this.getString(R.string.PREFKEY_AUTOSCORINGENABLED), isScoringModeAssisted());
-      GameSetup.mGameSetupPrefEditor.commit();
+      savePreferences();
 
       // Create a GameManager to manage attributes about the current game.
       // the while loop around the try-catch block makes sure the database
@@ -325,14 +319,18 @@ public class GameSetup extends Activity {
     RadioButton radioButtonAssisted = (RadioButton) GameSetup.
         this.findViewById(R.id.GameSetup_ScoringMode_Assisted);
     return radioButtonAssisted.isChecked();
-    
-    /*
-    // Check which of the two radio buttons is checked
-    RadioGroup grp = (RadioGroup) GameSetup.
-        this.findViewById(R.id.GameSetup_ScoringMode_Radios);
-    int checkedRadioId = grp.getCheckedRadioButtonId();
-    return (checkedRadioId == R.id.GameSetup_ScoringMode_Assisted);
-    */
+  }
+  
+  /**
+   * Helper function to store any preferences that aren't stored on
+   * click
+   */
+  protected void savePreferences()
+  {
+    GameSetup.mGameSetupPrefEditor.putInt(GameSetup.this.getString(R.string.PREFKEY_SCORELIMIT), mScoreLimit);
+    GameSetup.mGameSetupPrefEditor.putBoolean(
+        GameSetup.this.getString(R.string.PREFKEY_AUTOSCORINGENABLED), isScoringModeAssisted());
+    GameSetup.mGameSetupPrefEditor.commit();    
   }
   
   /**
@@ -514,10 +512,7 @@ public class GameSetup extends Activity {
 
     // Store off game's attributes as preferences. This is done in Pause to
     // maintain selections when they press "back" to main title then return.
-    GameSetup.mGameSetupPrefEditor.putInt(GameSetup.this.getString(R.string.PREFKEY_SCORELIMIT), mScoreLimit);
-    GameSetup.mGameSetupPrefEditor.putBoolean(
-        GameSetup.this.getString(R.string.PREFKEY_AUTOSCORINGENABLED), isScoringModeAssisted());
-    GameSetup.mGameSetupPrefEditor.commit();
+    savePreferences();
   }
 
   /**
