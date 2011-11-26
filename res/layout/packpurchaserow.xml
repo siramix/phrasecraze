@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="50dp"
     android:orientation="vertical">
@@ -10,10 +10,24 @@
         android:layout_marginBottom="1dp"
         android:background="@color/turnSummaryListItem" />
 
+    <TextView
+        android:layout_width="223dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:ellipsize="marquee"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:text="Franklin DelanoRooooo"
+        android:textColor="#FFFFFF"
+    		android:textSize="26dp" />
+    
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:background="@drawable/right" />
+        android:background="@drawable/right" 
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+</RelativeLayout>
