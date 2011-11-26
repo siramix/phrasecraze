@@ -238,7 +238,7 @@ public class GameEnd extends Activity {
 
       GameManager curgm = application.getGameManager();
       GameManager newgm = new GameManager(GameEnd.this);
-      newgm.startGame(curgm.getTeams(), curgm.getScoreLimit());
+      newgm.startGame(curgm.getTeams(), curgm.getScoreLimit(), curgm.isAssistedScoringEnabled());
       application.setGameManager(newgm);
 
       Intent clearStackIntent = new Intent(getApplication().getString(

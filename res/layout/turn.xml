@@ -21,7 +21,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_bluegradient">
+    android:background="@drawable/bg_cardreviewgradient">
 
     <TextView android:id="@+id/Turn_TimesUp"
         android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
                 
             <ImageView android:id="@+id/Turn_TimerFill"
                 android:layout_alignParentTop="true"
-                android:background="@color/teamA_primary"
+                android:background="@color/white"
                 android:layout_height="23dp"
                 android:layout_marginTop="1dp"
                 android:layout_alignParentLeft="true"

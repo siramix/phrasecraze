@@ -132,6 +132,12 @@ public class Turn extends Activity {
    * getprefs
    */
   private boolean mGesturesEnabled;
+  
+  /**
+   * Boolean representing whether or not assisted scoring is enabled. Reduces calls
+   * to getprefs
+   */
+  private boolean mAssistedScoringEnabled;
 
   /**
    * Boolean representing whether skip is enabled or not. Reduces calls to
@@ -668,13 +674,25 @@ public class Turn extends Activity {
     // Hide the card status until marked
     mCardStatus.setVisibility(View.INVISIBLE);
     mIsBack = false;
-
+    
+    // Change team colors only in assisted scoring mode
+    if(mAssistedScoringEnabled)
+    {
+      updateTeamColoring();
+    }
+  }
+  
+  /**
+   * Helper function that colors elements based on the current team
+   */
+  protected void updateTeamColoring()
+  {
     // Change views to appropriate team color
     Team curTeam = mGameManager.getActiveTeam();
     ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
     barFill.setImageResource(curTeam.getBackground());
     this.findViewById(R.id.Turn_Root).setBackgroundResource(
-        curTeam.getGradient());
+        curTeam.getGradient());    
   }
 
   /**
@@ -822,14 +840,11 @@ public class Turn extends Activity {
     this.findViewById(R.id.Turn_CardLayoutB).setOnTouchListener(
         mGestureListener);
 
-    // Change views to appropriate team color
-    ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
-
-    Team curTeam = mGameManager.getActiveTeam();
-    barFill.setImageResource(curTeam.getBackground());
-    this.findViewById(R.id.Turn_Root).setBackgroundResource(
-        curTeam.getGradient());
-
+    // Only change team color in assisted scoring mode  
+    if( mAssistedScoringEnabled)
+    {
+      updateTeamColoring();
+    }
   }
 
   /**
@@ -911,7 +926,14 @@ public class Turn extends Activity {
       mGesturesEnabled = true;
     else
       mGesturesEnabled = false;
-
+    
+    // Set local variable for assisted scoring so that we don't have 
+    // to make many calls to game manager
+    PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
+        .getApplication();
+    GameManager curGame = application.getGameManager();
+    mAssistedScoringEnabled = curGame.isAssistedScoringEnabled();
+    
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -1020,9 +1042,19 @@ public class Turn extends Activity {
       SoundManager sm = SoundManager.getInstance(Turn.this.getBaseContext());
       sm.playSound(SoundManager.Sound.TEAMREADY);
 
-      String curTeam = mGameManager.getActiveTeam().getName();
+      String readyPrompt;
+      if( mAssistedScoringEnabled)
+      {
+        String curTeam = mGameManager.getActiveTeam().getName();
+        readyPrompt = "Ready " + curTeam + "?";
+      }
+      else
+      {
+        readyPrompt = "Ready?";
+      }
+      
       builder = new AlertDialog.Builder(this);
-      builder.setMessage("Ready " + curTeam + "?").setCancelable(false)
+      builder.setMessage(readyPrompt).setCancelable(false)
           .setPositiveButton("Start!", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {

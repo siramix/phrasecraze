@@ -22,7 +22,9 @@
   <!-- Global Prefkey IDs -->
   <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>
   <string name="PREFKEY_PLAYCOUNT">com.siramix.phrasecraze.prefkey.PREFKEY_PLAYCOUNT</string>
-
+  <string name="PREFKEY_SCORELIMIT">com.siramix.phrasecraze.prefkey.SCORELIMIT</string>
+  <string name="PREFKEY_AUTOSCORINGENABLED">com.siramix.phrasecraze.prefkey.AUTOSCORING</string>
+  
   <!-- Menu Designations -->
   <string name="menu_EndGame">MENU_ENDGAME</string>
   <string name="menu_Rules">MENU_RULES</string>
