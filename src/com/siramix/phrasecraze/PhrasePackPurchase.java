@@ -54,6 +54,7 @@ public class PhrasePackPurchase extends Activity {
     mPackViewList = new LinkedList<ImageView>();
     mPackLineList = new LinkedList<View>();
     mPackList = new LinkedList<String>();
+    
     //TODO get this list from the database or marketplace if possible 
     mPackList.add("Test1");
     mPackList.add("Test2");
@@ -64,7 +65,7 @@ public class PhrasePackPurchase extends Activity {
 
     for (Iterator<String> it = mPackList.iterator(); it.hasNext();) {
       packname = it.next();
-      
+      Log.d(TAG, "Count: " + count + "\nPackname: " + packname);
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
       RelativeLayout packRow = (RelativeLayout) line.getChildAt(count);
@@ -78,7 +79,7 @@ public class PhrasePackPurchase extends Activity {
       // Set Pack Title
       TextView packTitle = (TextView) packRow.getChildAt(1);
       //TODO this will need to pull the string from our pack list
-      packTitle.setText(it.next());
+      packTitle.setText(packname);
 
       // Set Row end icon
       ImageView packIcon = (ImageView) packRow.getChildAt(2);
