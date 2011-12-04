@@ -21,6 +21,17 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/PackPurchase_Title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="-10dp"
+        android:gravity="right"
+        android:text="@string/packpurchase_title"
+        android:textColor="@color/genericBG_trim"
+        android:textSize="38dp" />
+
     <ScrollView
         android:id="@+id/PackPurchase_ScrollView"
         android:layout_width="fill_parent"
@@ -28,10 +39,121 @@
         android:scrollbars="vertical" >
 
         <LinearLayout
-            android:id="@+id/PackPurchase_PackSets"
+            android:id="@+id/PackPurchase_Packlist"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical" android:longClickable="false">
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/PackPurchase_FreePackHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <View
+                    android:id="@+id/PackPurchase_FreePackHeaderBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="4dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/genericBG_trim" />
+
+                <TextView
+                    android:id="@+id/PackPurchase_FreePackTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:text="@string/packpurchase_freepackheader"
+                    android:textColor="@color/white"
+                    android:textSize="24dp" />
+
+                <Button
+                    android:id="@+id/PackPurchase_FreePackHelpButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:text="i" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/PackPurchase_FreePackStartSpacer"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:background="@color/genericBG_trim" />                
+                
+            <LinearLayout
+                android:id="@+id/PackPurchase_FreePackSets"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:longClickable="false"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/PackPurchase_FreePackEndSpacer"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:background="@color/genericBG_trim" />
+
+            <RelativeLayout
+                android:id="@+id/PackPurchase_PaidPackHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:layout_marginTop="10dp">
+
+                <View
+                    android:id="@+id/PackPurchase_PaidPackHeaderBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="4dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/genericBG_trim" />
+
+                <TextView
+                    android:id="@+id/PackPurchase_PaidPackTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:text="@string/packpurchase_paidpackheader"
+                    android:textColor="@color/white"
+                    android:textSize="24dp" />
+
+                <Button
+                    android:id="@+id/PackPurchase_PaidPackHelpButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:text="i" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/PackPurchase_PaidPackStartSpacer"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:background="@color/genericBG_trim" />            
+                
+            <LinearLayout
+                android:id="@+id/PackPurchase_PaidPackSets"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:longClickable="false"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/PackPurchase_PaidPackEndSpacer"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:background="@color/genericBG_trim" />
 
         </LinearLayout>
     </ScrollView>
