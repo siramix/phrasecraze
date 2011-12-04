@@ -46,6 +46,11 @@
   <string name="teamNameBundleKey">com.siramix.phrasecraze.teamName</string>
   <string name="assignedPointsBundleKey">com.siramix.phrasecraze.assignedPoints</string>
 
+  <!-- Pack Purchasing dialog strings -->
+  <string name="packpurchase_title">Get Phrases</string>
+  <string name="packpurchase_freepackheader">Free Packs</string>
+  <string name="packpurchase_paidpackheader">Premium Packs</string>
+      
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>
   <string name="gamesetup_teams">Teams</string>

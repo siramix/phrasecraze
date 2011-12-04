@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="50dp"
-    android:orientation="vertical">
+    android:orientation="vertical" android:clickable="true">
 
     <View
         android:layout_width="fill_parent"
@@ -22,12 +22,24 @@
         android:text="Franklin DelanoRooooo"
         android:textColor="#FFFFFF"
     		android:textSize="26dp" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:text="$1.99"
+        android:textColor="#FFFFFF"
+        android:textSize="26dp" 
+        android:layout_alignParentRight="true" 
+        android:layout_width="100dp" 
+        android:gravity="top"/>
     
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:background="@drawable/right" 
         android:layout_alignParentRight="true"/>
 
 </RelativeLayout>
