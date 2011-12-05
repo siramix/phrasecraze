@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PhrasePackPurchase extends Activity {
 
   private static final String TAG = "CardPackPurchase";
+  private static final int REQUEST_CODE = 99;
   
   private List<String> mPackList;  // This must stay in sync with mPackLineList
   List<ImageView> mPackViewList;
@@ -99,6 +102,9 @@ public class PhrasePackPurchase extends Activity {
    * @param insertionPoint  The linearlayout at which to insert the rows of packs
    */
   private void populatePackLayout(List<String> packlist, LinearLayout insertionPoint) {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "populatePackLayout(");
+    }
     String packname;
     int count = 0;
     
@@ -107,8 +113,7 @@ public class PhrasePackPurchase extends Activity {
     layout.setOrientation(LinearLayout.VERTICAL);
     
     for (Iterator<String> it = packlist.iterator(); it.hasNext();) {
-      packname = it.next();
-      Log.d(TAG, "Count: " + count + "\nPackname: " + packname);
+      packname = it.next();      
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
       RelativeLayout packRow = (RelativeLayout) line.getChildAt(count);
@@ -140,24 +145,64 @@ public class PhrasePackPurchase extends Activity {
   
   /**
    * This listener will set each row to its appropriate behavior, with freemium
-   * apps needing share intents bound and paid apps needing purchase intents bound.
+   * packs needing share intents bound and paid packs needing purchase intents bound.
    */
   private final OnClickListener mPhrasePackListener = new OnClickListener() {
     public void onClick(View v) {
       int packIndex = mPackLineList.indexOf(v);
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "FreePackLineIndex: " + Integer.toString(packIndex));
+        Log.d(TAG, "PackIndex: " + Integer.toString(packIndex));
       }
       
       //TODO This is where we would need to retrieve the pack index
       //Card curCard = mCardList.get(cardIndex);
       
       Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-      shareIntent.setType("text/plain");
-      shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SUBJECT TEXT HERE");
-      shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "MESSAGE TEXT HERE");
+      //TODO Get the pack pay type here
+//      if (mPackList.get(packIndex).getPackPrice == "TWITTER") {
+//      else if (mPackList.get(packIndex).getPackPrice == "FACEBOOK") {
+//      else if (mPackList.get(packIndex).getPackPrice == "G+") {
+      if (packIndex == 0) { //Replace this
+        shareIntent.setType("application/twitter");          
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "MESSAGE TEXT HERE " + getString(R.string.URI_marketredirect));
+        startActivityForResult(Intent.createChooser(shareIntent, "Choose Twitter Client"), REQUEST_CODE);
+      }      
+      else if (packIndex == 1) {
+        shareIntent.setType("application/facebook");  
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "MESSAGE TEXT HERE " + getString(R.string.URI_marketredirect));
+        startActivityForResult(Intent.createChooser(shareIntent, "Choose Facebook Client"), REQUEST_CODE);
+      }
+      else if (packIndex == 2) {
+        shareIntent.setType("appplication/google+");  
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "MESSAGE TEXT HERE " + getString(R.string.URI_marketredirect));
+        startActivityForResult(Intent.createChooser(shareIntent, "Choose Google+ Client"), REQUEST_CODE);
+      }      
+      else {
+        //TODO Add market link
+        shareIntent.setType("text/plain");  
+        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "MESSAGE TEXT HERE " + getString(R.string.URI_marketredirect));
+        startActivityForResult(Intent.createChooser(shareIntent, "THIS WOULD BE A MARKET LINK"), REQUEST_CODE);
+      }
 
-      startActivity(Intent.createChooser(shareIntent, "Choose Sharing Platform"));
+//      Uri uri = Uri.parse("https://www.facebook.com/dialog/feed?app_id=123050457758183&link=https://developers.facebook.com/docs/reference/dialogs/&picture=http://fbrell.com/f8.jpg&name=Facebook%20Dialogs&caption=Reference%20Documentation&description=Using%20Dialogs%20to%20interact%20with%20users.&message=Facebook%20Dialogs%20are%20so%20easy!&redirect_uri=http://www.example.com/response");
+//      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//      startActivity(intent);
+      
+      
     }
   };
+  
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    Log.d(TAG, "****onActivityResult Called***");
+    Log.d(TAG, Integer.toString(resultCode));
+    
+    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+      if (data.hasExtra("returnKey1")) {
+        Toast.makeText(this, data.getExtras().getString("returnKey1"),
+            Toast.LENGTH_SHORT).show();
+      }
+    }
+  }
+
 }

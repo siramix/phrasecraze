@@ -101,5 +101,6 @@
   
   <!--  Rate Us URI for app store -->
   <string name="rateUs_URI">http://www.siramix.com/phrasecrazeappstore</string>
+	<string name="URI_marketredirect">http://www.siramix.com/phrasecrazeappstore</string>
 
 </resources>
