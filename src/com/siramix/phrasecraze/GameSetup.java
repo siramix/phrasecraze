@@ -71,6 +71,8 @@ public class GameSetup extends Activity {
 
   // Flag to play music into the next Activity
   private boolean mContinueMusic = false;
+  
+  private Toast mHelpToast = null;
 
   // Request code for EditTeam activity result
   static final int EDITTEAMNAME_REQUEST_CODE = 1;
@@ -80,6 +82,19 @@ public class GameSetup extends Activity {
    */
   public static String TAG = "GameSetup";
 
+  /**
+   * Handle showing a toast or refreshing an existing toast
+   */
+  private void showToast(String text) {
+    if(mHelpToast == null) {
+      mHelpToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+    } else {
+      mHelpToast.setText(text);
+      mHelpToast.setDuration(Toast.LENGTH_LONG);
+    }
+    mHelpToast.show();
+  }
+  
   /**
    * Creates the animation that fades in the helper text
    * 
@@ -167,9 +182,7 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mTeamHelpListener onClick()");
       }
-      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
-    		  GameSetup.this.getString(R.string.gamesetup_teamshint), Toast.LENGTH_LONG);
-      toast.show();
+      showToast(getString(R.string.gamesetup_teamshint));  
     }
   };
   
@@ -181,9 +194,7 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mTeamHelpListener onClick()");
       }
-      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
-    		  GameSetup.this.getString(R.string.gamesetup_endgamerulehint), Toast.LENGTH_LONG);
-      toast.show();
+      showToast(getString(R.string.gamesetup_endgamerulehint));     
     }
   };
   
@@ -195,9 +206,7 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mTeamHelpListener onClick()");
       }
-      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
-    		  GameSetup.this.getString(R.string.gamesetup_scoringmodehint), Toast.LENGTH_LONG);
-      toast.show();
+      showToast(getString(R.string.gamesetup_scoringmodehint));  
     }
   };
   /**
