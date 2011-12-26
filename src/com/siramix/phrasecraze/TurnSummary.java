@@ -190,10 +190,19 @@ public class TurnSummary extends Activity {
     });
 
     // Update scoring team display
-    TextView scoringTeam = (TextView) this
+    TextView stoppedTeam = (TextView) this
         .findViewById(R.id.TurnSummary_StoppedOn_Team);
-    scoringTeam.setText(game.getBuzzedTeam().getName());
-    scoringTeam.setTextColor(this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor())); 
+    if( game.isAssistedScoringEnabled())
+    {
+    	stoppedTeam.setText(game.getBuzzedTeam().getName());
+    	stoppedTeam.setTextColor(this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor()));
+    }
+    else
+    {
+    	// Hide Stopped Team views in Free Play 
+    	stoppedTeam.setVisibility(View.INVISIBLE);
+    	((TextView) this.findViewById(R.id.TurnSummary_StoppedOn)).setVisibility(View.INVISIBLE);
+    }
     
     // Set fonts
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
@@ -202,7 +211,6 @@ public class TurnSummary extends Activity {
     scoreTitle.setTypeface(antonFont);
     TextView resultsTitle = (TextView) findViewById(R.id.TurnSummary_Title);
     resultsTitle.setTypeface(antonFont);
-    TextView stoppedTeam = (TextView) findViewById(R.id.TurnSummary_StoppedOn_Team);
     stoppedTeam.setTypeface(antonFont);
     
     // Update the scoreboard views
