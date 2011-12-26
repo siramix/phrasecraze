@@ -164,12 +164,19 @@ public class TurnSummary extends Activity {
       TextView cardTitle = (TextView) realLine.getChildAt(1);
       cardTitle.setText(card.getTitle());
 
-      // Set Row end icon
+      // Set Row end background according to team (if assisted, otherwise mark it neutral)
       ImageView rowBG = (ImageView) realLine.getChildAt(2);
-      rowBG.setImageResource(card.getCreditedTeam().getTurnSumRowEndPiece());
+      if( game.isAssistedScoringEnabled())
+      {
+    	  rowBG.setImageResource(card.getCreditedTeam().getTurnSumRowEndPiece());
+      }
+      else
+      {
+    	  rowBG.setImageResource(R.drawable.turnsum_row_end_noteam);
+      }
       mCardViewList.add(rowBG);
       
-      // Set Row end icon
+      // Set Row end icon according to right wrong skip status
       ImageView cardIcon = (ImageView) realLine.getChildAt(3);
       cardIcon.setImageResource(card.getRowEndDrawableId());
       
