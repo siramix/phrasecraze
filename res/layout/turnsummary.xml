@@ -22,7 +22,7 @@
     android:layout_height="fill_parent"
     android:background="@drawable/bg_generic"
     android:orientation="vertical">
-    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Results" android:id="@+id/TurnSummary_Title" android:textSize="38dp" android:textColor="@color/genericBG_trim" android:layout_marginTop="-5dp" android:layout_marginLeft="5dp" android:layout_gravity="left"></TextView>
+    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Results" android:id="@+id/TurnSummary_Title" android:textSize="38dp" android:layout_marginTop="-5dp" android:layout_marginLeft="5dp" android:layout_gravity="left" android:textColor="@color/title"></TextView>
     <ImageView android:id="@+id/TurnSummary_SpacerA" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim"></ImageView>
     <ImageView android:id="@+id/TurnSummary_SpacerC" android:layout_height="1dp" android:layout_width="fill_parent" android:background="@color/black"></ImageView>
     <ScrollView android:layout_width="fill_parent" android:id="@+id/TurnSummary_CardList" android:layout_height="wrap_content" android:layout_weight="1"></ScrollView>
@@ -31,7 +31,7 @@
 
     <RelativeLayout android:layout_width="wrap_content" android:id="@+id/TurnSummary_ScoreboardTitle_Group" android:layout_height="wrap_content" android:layout_marginTop="-15dp">
         <View android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:layout_width="fill_parent" android:layout_height="4dp" android:id="@+id/TurnSummary_ScoreboardTitle_Bar" android:background="@color/genericBG_trim"></View>
-        <TextView android:textColor="@color/white" android:layout_width="wrap_content" android:textSize="24dp" android:layout_height="wrap_content" android:text="Scores" android:layout_centerVertical="true" android:id="@+id/TurnSummary_ScoreboardTitle" android:gravity="center" android:layout_marginLeft="10dp"></TextView>
+        <TextView android:layout_width="wrap_content" android:textSize="24dp" android:layout_height="wrap_content" android:text="Scores" android:layout_centerVertical="true" android:id="@+id/TurnSummary_ScoreboardTitle" android:gravity="center" android:layout_marginLeft="10dp" android:textColor="@color/headertitle"></TextView>
     </RelativeLayout>
     
     <LinearLayout android:id="@+id/TurnSummary_ScoreGroup"
