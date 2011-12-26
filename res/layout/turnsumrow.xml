@@ -41,14 +41,10 @@
         android:ellipsize="marquee"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        android:includeFontPadding="false"/>
+        android:includeFontPadding="false" android:id="@+id/textView1"/>
     
-    <!-- Card RWS Status -->    
-    <ImageView
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/right"
-        android:layout_marginBottom="1dp"/>
+    <!-- Card RWS Status -->
+    <ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:id="@+id/Turnsumrow_Endpiece" android:layout_marginBottom="1dp" android:layout_marginRight="-1dp"></ImageView>
+    <ImageView android:id="@+id/Stamp" android:layout_alignLeft="@+id/Turnsumrow_Endpiece" android:layout_marginLeft="50dp" android:layout_height="45dp" android:layout_width="45dp" android:layout_centerVertical="true"></ImageView>
         
 </RelativeLayout>

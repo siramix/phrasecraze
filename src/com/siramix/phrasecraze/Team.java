@@ -33,14 +33,14 @@ import android.util.Log;
 public enum Team implements Serializable {
   TEAMA("Blue", R.color.teamA_BG, R.color.teamA_secondary,
       R.color.teamA_primary, R.drawable.bg_bluegradient,
-      R.drawable.gameend_row_end_blue, "teamA_enabled"), TEAMB("Green", R.color.teamB_BG,
+      R.drawable.gameend_row_end_blue, "teamA_enabled", R.drawable.turnsum_row_end_blue), TEAMB("Green", R.color.teamB_BG,
       R.color.teamB_secondary, R.color.teamB_primary,
-      R.drawable.bg_greengradient, R.drawable.gameend_row_end_green, "teamB_enabled"), TEAMC(
+      R.drawable.bg_greengradient, R.drawable.gameend_row_end_green, "teamB_enabled", R.drawable.turnsum_row_end_green), TEAMC(
       "Red", R.color.teamC_BG, R.color.teamC_secondary, R.color.teamC_primary,
-      R.drawable.bg_redgradient, R.drawable.gameend_row_end_red, "teamC_enabled"), TEAMD(
+      R.drawable.bg_redgradient, R.drawable.gameend_row_end_red, "teamC_enabled", R.drawable.turnsum_row_end_red), TEAMD(
       "Yellow", R.color.teamD_BG, R.color.teamD_secondary,
       R.color.teamD_primary, R.drawable.bg_yellowgradient,
-      R.drawable.gameend_row_end_yellow, "teamD_enabled");
+      R.drawable.gameend_row_end_yellow, "teamD_enabled", R.drawable.turnsum_row_end_yellow);
 
   // Team name
   private String mName;
@@ -53,6 +53,7 @@ public enum Team implements Serializable {
   private final int mBackground;
   private final int mGradient;
   private final int mGameEndBackground;
+  private final int mTurnSumRowBackground;
   // The team's running score
   private int mScore;
   // The team's score for a round
@@ -70,7 +71,7 @@ public enum Team implements Serializable {
    * Construct a Team
    */
   private Team(String name, int bg, int secondary, int primary, int gradient,
-      int gameend_bg, String key) {
+      int gameend_bg, String key, int turnsumrow_bg) {
     mName = name;
     mDefaultName = name;
     mBackground = bg;
@@ -78,6 +79,7 @@ public enum Team implements Serializable {
     mPrimary = primary;
     mGradient = gradient;
     mGameEndBackground = gameend_bg;
+    mTurnSumRowBackground = turnsumrow_bg;
     mPrefKey = key;
     this.setScore(0);
     this.setRoundScore(0);
@@ -149,6 +151,16 @@ public enum Team implements Serializable {
   public int getGameEndPiece() {
     return mGameEndBackground;
   }
+  
+  /**
+   * Returns the id of the drawable that caps the end of turn summary rows
+   * 
+   * @return the end piece for a turn summary row end
+   */
+  public int getTurnSumRowEndPiece() {
+    return mTurnSumRowBackground;
+  }
+  
   
   /**
    * Returns the Team's preference key

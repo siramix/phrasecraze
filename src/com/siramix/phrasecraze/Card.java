@@ -173,7 +173,7 @@ public class Card implements Serializable {
    * Gets the team credited with the RWS status on this card
    * @return Team credited with the RWS status on this card
    */
-  private Team getCreditedTeam() {
+  public Team getCreditedTeam() {
 	  return mTeamCredited;
   }
 
@@ -223,11 +223,11 @@ public class Card implements Serializable {
     }
     switch (mRws) {
     case 0:
-      return R.drawable.right;
+      return R.drawable.turnend_stamp_right;
     case 1:
-      return R.drawable.wrong;
+      return R.drawable.turnend_stamp_wrong;
     case 2:
-      return R.drawable.skip;
+      return R.drawable.turnend_stamp_skip;
     default:
       return 0;
     }

@@ -165,8 +165,14 @@ public class TurnSummary extends Activity {
       cardTitle.setText(card.getTitle());
 
       // Set Row end icon
-      ImageView cardIcon = (ImageView) realLine.getChildAt(2);
+      ImageView rowBG = (ImageView) realLine.getChildAt(2);
+      rowBG.setImageResource(card.getCreditedTeam().getTurnSumRowEndPiece());
+      mCardViewList.add(rowBG);
+      
+      // Set Row end icon
+      ImageView cardIcon = (ImageView) realLine.getChildAt(3);
       cardIcon.setImageResource(card.getRowEndDrawableId());
+      
       mCardViewList.add(cardIcon);
       mCardLineList.add(realLine);
       count++;

@@ -89,11 +89,6 @@ public class GameManager {
   private int[] mRwsValueRules;
 
   /**
-   * An array of resource IDs to each right, wrong, skip sprite
-   */
-  public final int[] mRwsResourceIds;
-
-  /**
    * Time for the Timer in milliseconds
    */
   private int mTurnTime;
@@ -116,8 +111,6 @@ public class GameManager {
     mCardPosition = -1;
     mScoreLimit = -1;
     mCurrentCards = new LinkedList<Card>();
-    mRwsResourceIds = new int[] { R.drawable.right, R.drawable.wrong,
-        R.drawable.skip };
 
     mTurnTime = Integer.parseInt(sp.getString("turn_timer", "60")) * 1000;
 
