@@ -64,11 +64,11 @@
   <string name="gamesetup_button_startgame">Start Game</string>
   
   <!-- Turn Summary dialog strings -->
-  <string name="turnsummary_scoringteam">Buzzed Team: %s</string>
+  <string name="turnsummary_stoppedon">Stopped On:</string>
   <string name="turnsummary_nextbutton">Next Round</string>
   <string name="turnsummary_results">Game Results</string>
   <string name="turnsummary_assignpointsbutton">Assign Points</string>
-  <string name="turnsummary_scorelimit">Score Limit: %d</string>
+  <string name="turnsummary_scorelimit">Score Limit: %dpts</string>
     
   <!-- Assign Points dialog strings -->
   <string name="assignpoints_title">Assign Points</string>

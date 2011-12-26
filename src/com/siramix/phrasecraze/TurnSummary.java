@@ -130,12 +130,7 @@ public class TurnSummary extends Activity {
     // TODO: Automatically add in scores only in automatic scoring, otherwise show the dialog
     // to find a scoring team.
     game.setAutoAssignedRoundScores();
-    
-    // Update scoring team display
-    TextView scoringTeam = (TextView) this
-        .findViewById(R.id.TurnSummary_TurnScore);
-    scoringTeam.setText(getString(R.string.turnsummary_scoringteam, game.getBuzzedTeam().getDefaultName()));
-    
+
     // Populate and display list of cards
     ScrollView list = (ScrollView) findViewById(R.id.TurnSummary_CardList);
     LinearLayout layout = new LinearLayout(this.getBaseContext());
@@ -185,18 +180,31 @@ public class TurnSummary extends Activity {
       count++;
     }
     list.addView(layout);
+    
+	// Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
+    list.post(new Runnable() {
+    	@Override
+    	public void run() {
+    		((ScrollView) TurnSummary.this.findViewById(R.id.TurnSummary_CardList)).fullScroll(ScrollView.FOCUS_DOWN);
+    	}
+    });
 
+    // Update scoring team display
+    TextView scoringTeam = (TextView) this
+        .findViewById(R.id.TurnSummary_StoppedOn_Team);
+    scoringTeam.setText(game.getBuzzedTeam().getName());
+    scoringTeam.setTextColor(this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor())); 
+    
     // Set fonts
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
         "fonts/Anton.ttf");
-
-    // Set font on Title text
     TextView scoreTitle = (TextView) findViewById(R.id.TurnSummary_ScoreboardTitle);
     scoreTitle.setTypeface(antonFont);
-
     TextView resultsTitle = (TextView) findViewById(R.id.TurnSummary_Title);
     resultsTitle.setTypeface(antonFont);
-
+    TextView stoppedTeam = (TextView) findViewById(R.id.TurnSummary_StoppedOn_Team);
+    stoppedTeam.setTypeface(antonFont);
+    
     // Update the scoreboard views
     updateScoreViews();
 
