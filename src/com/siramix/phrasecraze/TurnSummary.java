@@ -127,10 +127,11 @@ public class TurnSummary extends Activity {
         .getApplication();
     GameManager game = application.getGameManager();
 
-    // TODO: Automatically add in scores only in automatic scoring, otherwise show the dialog
-    // to find a scoring team.
-    game.setAutoAssignedRoundScores();
-
+    // Automatically add in scores only in automatic scoring
+    if( game.isAssistedScoringEnabled())
+    {
+    	game.setAutoAssignedRoundScores();
+    }
     // Populate and display list of cards
     ScrollView list = (ScrollView) findViewById(R.id.TurnSummary_CardList);
     LinearLayout layout = new LinearLayout(this.getBaseContext());
