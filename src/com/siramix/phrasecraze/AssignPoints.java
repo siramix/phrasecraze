@@ -244,19 +244,10 @@ public class AssignPoints extends Activity {
     score.setText(Integer.toString(mScores[1]));
     
     // Color backgrounds based on the two teams represented
-    TextView nameTeam1 = (TextView) this.findViewById(R.id.AssignPoints_Team1_Name);
-    nameTeam1.setBackgroundResource(team1.getPrimaryColor());
-    nameTeam1.setText(team1.getName());
-    nameTeam1.setTextColor(this.getResources().getColor(team1.getSecondaryColor()));
-    View bgTeam1 = this.findViewById(R.id.AssignPoints_Team1_ScoreLayout);
-    bgTeam1.setBackgroundResource(team1.getPrimaryColor());
-    
-    TextView nameTeam2 = (TextView) this.findViewById(R.id.AssignPoints_Team2_Name);
-    nameTeam2.setBackgroundResource(team2.getPrimaryColor());
-    nameTeam2.setText(team2.getName());
-    nameTeam2.setTextColor(this.getResources().getColor(team2.getSecondaryColor()));
-    View bgTeam2 = this.findViewById(R.id.AssignPoints_Team2_ScoreLayout);
-    bgTeam2.setBackgroundResource(team2.getPrimaryColor());
+    setupScoreboard((TextView) this.findViewById(R.id.AssignPoints_Team1_Name),
+    		this.findViewById(R.id.AssignPoints_Team1_ScoreLayout), team1);
+    setupScoreboard((TextView) this.findViewById(R.id.AssignPoints_Team2_Name),
+    		this.findViewById(R.id.AssignPoints_Team2_ScoreLayout), team2);
     
     // Set listeners for buttons
     mButtonCancel.setOnClickListener(mCancelListener);
@@ -266,5 +257,22 @@ public class AssignPoints extends Activity {
     mButtonSubtractTeam1.setOnClickListener(mSubtractPointTeam1);
     mButtonSubtractTeam2.setOnClickListener(mSubtractPointTeam2);
     
+  }
+  
+  /**
+   * Helper function to assign colors and visuals of the team related views
+   * @param teamNameView - the view that houses the team's name
+   * @param scoreBackground - the background view for the team's score
+   * @param team - the team to be represented
+   */
+  private void setupScoreboard(TextView teamNameView, View scoreBackground, Team team)
+  {
+	  Typeface antonFont = Typeface.createFromAsset(getAssets(),
+			  "fonts/Anton.ttf");
+	  teamNameView.setBackgroundResource(team.getSecondaryColor());
+	  teamNameView.setText(team.getName());
+	  teamNameView.setTextColor(this.getResources().getColor(team.getPrimaryColor()));
+	  teamNameView.setTypeface(antonFont);
+	  scoreBackground.setBackgroundResource(team.getPrimaryColor());
   }
 }

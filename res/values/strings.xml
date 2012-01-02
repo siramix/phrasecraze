@@ -71,9 +71,9 @@
   <string name="turnsummary_scorelimit">Score Limit: %dpts</string>
     
   <!-- Assign Points dialog strings -->
-  <string name="assignpoints_title">Assign Points</string>
+  <string name="assignpoints_title">Assign Round Scores</string>
   <string name="assignpoints_buttoncancel">Cancel</string>
-    <string name="assignpoints_buttonconfirm">Confirm</string>
+  <string name="assignpoints_buttonconfirm">Confirm</string>
 
   <!-- For EditTeamName dialog -->
   <string name="editTeamName_hint">Choose a new name for %s team.</string>
