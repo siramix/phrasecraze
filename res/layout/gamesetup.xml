@@ -44,9 +44,9 @@
                 <Button android:id="@+id/GameSetup_Header_ScoreLimit_HelpButton" android:layout_alignParentRight="true" android:layout_height="30dp" android:layout_width="30dp" android:layout_centerVertical="true" android:layout_marginRight="10dp" android:text="i"></Button>
             </RelativeLayout>
             <LinearLayout android:layout_height="wrap_content" android:layout_gravity="center" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ScoreGroup" android:layout_marginTop="10dp">
-                <Button style="@style/PhraseCrazeButton" android:text="-" android:layout_height="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ButtonMinus" android:layout_width="50dp"></Button>
-                <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_Value" android:layout_gravity="center" android:text="0" android:paddingBottom="5dp" android:textSize="32dp" android:width="70dp" android:gravity="center"></TextView>
-                <Button style="@style/PhraseCrazeButton" android:text="+" android:layout_height="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ButtonPlus" android:layout_width="50dp"></Button>
+                <Button android:id="@+id/GameSetup_ScoreLimit_ButtonMinus" android:layout_width="50dp" android:layout_height="50dp" android:background="@drawable/button_minus" android:layout_gravity="center"></Button>
+                <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_Value" android:layout_gravity="center" android:text="0" android:paddingBottom="5dp" android:width="70dp" android:gravity="center" android:textSize="48dp"></TextView>
+                <Button android:id="@+id/GameSetup_ScoreLimit_ButtonPlus" android:layout_width="50dp" android:background="@drawable/button_plus" android:layout_height="50dp" android:layout_gravity="center"></Button>
             </LinearLayout>
             <TextView android:layout_height="wrap_content" android:width="300dp" android:textColor="@color/white" android:layout_width="wrap_content" android:id="@+id/GameSetup_HelpText_Turn" android:gravity="center" android:layout_gravity="center" android:textSize="18dp" android:text="@string/gamesetup_endgamerulehint" android:visibility="gone"></TextView>
             <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_Header_ScoringMode" android:layout_marginTop="10dp">

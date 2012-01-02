@@ -66,6 +66,12 @@ public class GameSetup extends Activity {
   // Int that stores the score limit
   private int mScoreLimit;
 
+  // Int for maximum score limit for a game
+  private final int mSCORELIMIT_MAX = 99;
+  // Int for minimum score limit for a game
+  private final int mSCORELIMIT_MIN = 1;
+  
+
   // Preference keys (indicating quadrant)
   public static final String PREFS_NAME = "gamesetupprefs";
 
@@ -163,14 +169,16 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mAddPointScoreLimit onClick()");
       }
-
-      mScoreLimit += 1;
-      mScoreLimitView.setText(Integer.toString(mScoreLimit));
       
-      // play confirm sound when points are added
-      SoundManager sm = SoundManager.getInstance(GameSetup.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.CONFIRM);
-
+      if(mScoreLimit < mSCORELIMIT_MAX)
+      {
+          mScoreLimit += 1;
+          mScoreLimitView.setText(Integer.toString(mScoreLimit));
+     
+          // play confirm sound when points are added
+          SoundManager sm = SoundManager.getInstance(GameSetup.this.getBaseContext());
+          sm.playSound(SoundManager.Sound.CONFIRM);
+      }
     }
   };
 
@@ -219,7 +227,7 @@ public class GameSetup extends Activity {
       }
 
       // Don't let them set a score limit below 1
-      if( mScoreLimit > 1 )
+      if( mScoreLimit > mSCORELIMIT_MIN )
       {
     	  mScoreLimit -= 1;
 	      mScoreLimitView.setText(Integer.toString(mScoreLimit));

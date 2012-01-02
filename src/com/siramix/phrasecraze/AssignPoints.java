@@ -55,6 +55,12 @@ public class AssignPoints extends Activity {
    * Members that track desired changes to scores
    */
   private int[] mScores;
+  
+  /*
+   * Members for minimum and maximum scores for the round
+   */
+  private final int mMAXSCORE = 99;
+  private final int mMINSCORE = -99;
 
   /**
    * Set the references to the elements from the layout file
@@ -122,14 +128,16 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScores[0] += 1;
-      TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
-      score.setText(Integer.toString(mScores[0]));
-      
-      // play confirm sound when points are added
-      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.CONFIRM);
+      if(mScores[0] < mMAXSCORE)
+      {
+    	  mScores[0] += 1;
+    	  TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
+    	  score.setText(Integer.toString(mScores[0]));
 
+          // play confirm sound when points are added
+          SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+          sm.playSound(SoundManager.Sound.CONFIRM);
+      }
     }
   };
   
@@ -143,14 +151,16 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScores[1] += 1;
-      TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
-      score.setText(Integer.toString(mScores[1]));
-      
-      // play confirm sound when points are added
-      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.CONFIRM);
+      if(mScores[1] < mMAXSCORE)
+      {
+          mScores[1] += 1;
+          TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
+          score.setText(Integer.toString(mScores[1]));
 
+          // play confirm sound when points are added
+          SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+          sm.playSound(SoundManager.Sound.CONFIRM);
+      } 
     }
   };
   
@@ -164,14 +174,16 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScores[0] -= 1;
-      TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
-      score.setText(Integer.toString(mScores[0]));
-      
-      // play back sound when points are subtracted
-      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.BACK);
-
+      if (mScores[0] > mMINSCORE)
+      {
+    	  mScores[0] -= 1;
+          TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team1_Score);
+          score.setText(Integer.toString(mScores[0]));
+          
+          // play back sound when points are subtracted
+          SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+          sm.playSound(SoundManager.Sound.BACK);
+      }
     }
   };
   
@@ -185,13 +197,16 @@ public class AssignPoints extends Activity {
         Log.d(TAG, "AddPointTeam1 onClick()");
       }
 
-      mScores[1] -= 1;
-      TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
-      score.setText(Integer.toString(mScores[1]));
-      
-      // play back sound when points are subtracted
-      SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.BACK);
+      if (mScores[1] > mMINSCORE)
+      {
+    	  mScores[1] -= 1;
+          TextView score = (TextView) AssignPoints.this.findViewById(R.id.AssignPoints_Team2_Score);
+          score.setText(Integer.toString(mScores[1]));      
+
+          // play back sound when points are subtracted
+          SoundManager sm = SoundManager.getInstance(AssignPoints.this.getBaseContext());
+          sm.playSound(SoundManager.Sound.BACK);
+      }
     }
   };
 
