@@ -184,7 +184,6 @@ public class TurnSummary extends Activity {
     
 	// Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
     list.post(new Runnable() {
-    	@Override
     	public void run() {
     		((ScrollView) TurnSummary.this.findViewById(R.id.TurnSummary_CardList)).fullScroll(ScrollView.FOCUS_DOWN);
     	}
