@@ -1,11 +1,17 @@
 package com.siramix.phrasecraze;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -25,9 +31,11 @@ public class PhrasePackPurchase extends Activity {
   List<ImageView> mPackViewList;
   List<View> mPackLineList;
   
+  HashMap<String, String> knownTwitterClients; // For sharing packs on Twitter
+  HashMap<String, ActivityInfo> foundTwitterClients; // To compare against known clients
+  
   /**
    * Create the packages screen from an XML layout and
-   * 
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,9 @@ public class PhrasePackPurchase extends Activity {
 
     // Setup the view
     this.setContentView(R.layout.packpurchase);
+    
+    // Detect Twitter Clients
+    detectTwitterClients();
     
     // Get our current context
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
@@ -131,7 +142,7 @@ public class PhrasePackPurchase extends Activity {
       mPackLineList.add(packRow);
       
       // Bind Listener
-      packRow.setOnClickListener(mPhrasePackListener);
+      packRow.setOnClickListener(mTweetListener);
       count++;
     }
     insertionPoint.addView(layout);   
@@ -139,25 +150,100 @@ public class PhrasePackPurchase extends Activity {
   }
   
   /**
-   * This listener will set each row to its appropriate behavior, with freemium
-   * apps needing share intents bound and paid apps needing purchase intents bound.
+   * This listener is specifically for packs that require tweeting to get.
    */
-  private final OnClickListener mPhrasePackListener = new OnClickListener() {
+  private final OnClickListener mTweetListener = new OnClickListener() {    
+    //Tweet button handler
     public void onClick(View v) {
-      int packIndex = mPackLineList.indexOf(v);
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "FreePackLineIndex: " + Integer.toString(packIndex));
-      }
-      
-      //TODO This is where we would need to retrieve the pack index
-      //Card curCard = mCardList.get(cardIndex);
-      
-      Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-      shareIntent.setType("text/plain");
-      shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SUBJECT TEXT HERE");
-      shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "MESSAGE TEXT HERE");
+      ComponentName targetComponent = getTwitterClientComponentName();
 
-      startActivity(Intent.createChooser(shareIntent, "Choose Sharing Platform"));
+      if (targetComponent != null) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setComponent(targetComponent);
+        String intentType = (targetComponent.getClassName().contains("com.twidroid")) ?
+            "application/twitter" : "text/plain";
+        intent.setType(intentType);
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
+        startActivityForResult(intent, 0);
+      } else {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
+        startActivityForResult(Intent.createChooser(intent, "Share..."), 0);
+      }
     }
   };
+
+  /**
+   * Listen for the result of social activities like twitter, facebook, and google+
+   */
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
+    Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);
+    Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);
+ /* if (requestCode == PICK_CONTACT_REQUEST) {
+      if (resultCode == RESULT_OK) {
+          // A contact was picked.  Here we will just display it
+          // to the user.
+          startActivity(new Intent(Intent.ACTION_VIEW, data));
+      }
+  }*/
+  }
+  
+  /**
+   * http://blogrescue.com/2011/12/android-development-send-tweet-action/ 
+   */
+  private void buildKnownTwitterClientsList() {
+    knownTwitterClients = new HashMap<String, String>();
+    knownTwitterClients.put("Twitter", "com.twitter.android.PostActivity");
+    knownTwitterClients.put("UberSocial", "com.twidroid.activity.SendTweet");
+    knownTwitterClients.put("TweetDeck", "com.tweetdeck.compose.ComposeActivity");
+    knownTwitterClients.put("Seesmic", "com.seesmic.ui.Composer");
+    knownTwitterClients.put("TweetCaster", "com.handmark.tweetcaster.ShareSelectorActivity");
+    knownTwitterClients.put("Plume", "com.levelup.touiteur.appwidgets.TouiteurWidgetNewTweet");
+    knownTwitterClients.put("Twicca", "jp.r246.twicca.statuses.Send");
+  }
+  
+  /**
+   * http://blogrescue.com/2011/12/android-development-send-tweet-action/ 
+   * @return
+   */
+  public boolean detectTwitterClients() {
+    buildKnownTwitterClientsList();
+    foundTwitterClients = new HashMap<String, ActivityInfo>();
+   
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent.setType("text/plain");
+    PackageManager pm = getPackageManager();
+    List<ResolveInfo> activityList = pm.queryIntentActivities(intent, 0);
+    
+    for (int i = 0; i < activityList.size(); i++) {
+      ResolveInfo app = (ResolveInfo) activityList.get(i);
+      ActivityInfo activity = app.activityInfo;
+      if (knownTwitterClients.containsValue(activity.name)) {
+        foundTwitterClients.put(activity.name, activity);
+      }
+    }
+    
+    return false;
+  }
+ 
+  //Resolve the twitter client component name
+  public ComponentName getTwitterClientComponentName() {
+    ComponentName result = null;
+
+    if (foundTwitterClients.size() > 0) {
+      ActivityInfo tweetActivity = null;
+      for(Map.Entry<String, ActivityInfo> entry : foundTwitterClients.entrySet()) {
+        tweetActivity = entry.getValue();
+        break;
+      }
+   
+      result = new ComponentName(tweetActivity.applicationInfo.packageName, tweetActivity.name);
+    }
+
+    return result;
+  }
+
 }
+
+
