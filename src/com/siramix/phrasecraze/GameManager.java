@@ -74,6 +74,11 @@ public class GameManager {
   private int mScoreLimit;
 
   /**
+   * Tracks the Assisted scoring mode
+   */
+  private boolean mIsAssistedScoringEnabled;
+  
+  /**
    * The set of cards that have been activated in the latest turn
    */
   private LinkedList<Card> mCurrentCards;
@@ -176,8 +181,10 @@ public class GameManager {
    *          a string array of team names
    * @param rounds
    *          the number of points to play to
+   * @param assistedScoring
+   *          true if the user specified assisted scoring as the game mode
    */
-  public void startGame(List<Team> teams, int score) {
+  public void startGame(List<Team> teams, int score, boolean assistedScoring) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "StartGame()");
     }
@@ -194,6 +201,7 @@ public class GameManager {
     mCurrentRound = 0;
     mScoreLimit = score;
     mDeck.prepareForRound();
+    mIsAssistedScoringEnabled = assistedScoring;
   }
 
   /**
@@ -434,6 +442,14 @@ public class GameManager {
   public int getScoreLimit()
   {
 	  return mScoreLimit;
+  }
+  
+  /**
+   * Returns true if the game is using assisted scoring
+   */
+  public boolean isAssistedScoringEnabled()
+  {
+    return mIsAssistedScoringEnabled;
   }
 
   /**

@@ -22,7 +22,9 @@
   <!-- Global Prefkey IDs -->
   <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>
   <string name="PREFKEY_PLAYCOUNT">com.siramix.phrasecraze.prefkey.PREFKEY_PLAYCOUNT</string>
-
+  <string name="PREFKEY_SCORELIMIT">com.siramix.phrasecraze.prefkey.SCORELIMIT</string>
+  <string name="PREFKEY_AUTOSCORINGENABLED">com.siramix.phrasecraze.prefkey.AUTOSCORING</string>
+  
   <!-- Menu Designations -->
   <string name="menu_EndGame">MENU_ENDGAME</string>
   <string name="menu_Rules">MENU_RULES</string>
@@ -44,6 +46,11 @@
   <string name="teamNameBundleKey">com.siramix.phrasecraze.teamName</string>
   <string name="assignedPointsBundleKey">com.siramix.phrasecraze.assignedPoints</string>
 
+  <!-- Pack Purchasing dialog strings -->
+  <string name="packpurchase_title">Get Phrases</string>
+  <string name="packpurchase_freepackheader">Free Packs</string>
+  <string name="packpurchase_paidpackheader">Premium Packs</string>
+      
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>
   <string name="gamesetup_teams">Teams</string>

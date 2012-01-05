@@ -36,6 +36,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.animation.Animation;
@@ -68,11 +69,10 @@ public class GameSetup extends Activity {
   // Preference keys (indicating quadrant)
   public static final String PREFS_NAME = "gamesetupprefs";
 
-  // Index for the score limit
-  private static final String SCORE_LIMIT = "game_score_limit";
-
   // Flag to play music into the next Activity
   private boolean mContinueMusic = false;
+  
+  private Toast mHelpToast = null;
 
   // Request code for EditTeam activity result
   static final int EDITTEAMNAME_REQUEST_CODE = 1;
@@ -82,6 +82,19 @@ public class GameSetup extends Activity {
    */
   public static String TAG = "GameSetup";
 
+  /**
+   * Handle showing a toast or refreshing an existing toast
+   */
+  private void showToast(String text) {
+    if(mHelpToast == null) {
+      mHelpToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+    } else {
+      mHelpToast.setText(text);
+      mHelpToast.setDuration(Toast.LENGTH_LONG);
+    }
+    mHelpToast.show();
+  }
+  
   /**
    * Creates the animation that fades in the helper text
    * 
@@ -111,11 +124,9 @@ public class GameSetup extends Activity {
         GameSetup.this.showDialog(DIALOG_TEAMERROR);
         return;
       }
-
+      
       // Store off game's attributes as preferences
-      GameSetup.mGameSetupPrefEditor.putInt(GameSetup.SCORE_LIMIT,
-          mScoreLimit);
-      GameSetup.mGameSetupPrefEditor.commit();
+      savePreferences();
 
       // Create a GameManager to manage attributes about the current game.
       // the while loop around the try-catch block makes sure the database
@@ -126,7 +137,7 @@ public class GameSetup extends Activity {
       while (keepLooping) {
         try {
           GameManager gm = new GameManager(GameSetup.this);
-          gm.startGame(mTeamList, mScoreLimit);
+          gm.startGame(mTeamList, mScoreLimit, isScoringModeAssisted());
           application.setGameManager(gm);
           keepLooping = false;
         } catch (SQLiteException e) {
@@ -171,9 +182,7 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mTeamHelpListener onClick()");
       }
-      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
-    		  GameSetup.this.getString(R.string.gamesetup_teamshint), Toast.LENGTH_LONG);
-      toast.show();
+      showToast(getString(R.string.gamesetup_teamshint));  
     }
   };
   
@@ -185,9 +194,7 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mTeamHelpListener onClick()");
       }
-      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
-    		  GameSetup.this.getString(R.string.gamesetup_endgamerulehint), Toast.LENGTH_LONG);
-      toast.show();
+      showToast(getString(R.string.gamesetup_endgamerulehint));     
     }
   };
   
@@ -199,9 +206,7 @@ public class GameSetup extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "mTeamHelpListener onClick()");
       }
-      Toast toast = Toast.makeText(GameSetup.this.getApplicationContext(), 
-    		  GameSetup.this.getString(R.string.gamesetup_scoringmodehint), Toast.LENGTH_LONG);
-      toast.show();
+      showToast(getString(R.string.gamesetup_scoringmodehint));  
     }
   };
   /**
@@ -315,6 +320,29 @@ public class GameSetup extends Activity {
   }
   
   /**
+   * Returns true if the user has checked assisted scoring mode
+   * @return true if the user has checked assisted scoring mode
+   */
+  protected boolean isScoringModeAssisted()
+  {
+    RadioButton radioButtonAssisted = (RadioButton) GameSetup.
+        this.findViewById(R.id.GameSetup_ScoringMode_Assisted);
+    return radioButtonAssisted.isChecked();
+  }
+  
+  /**
+   * Helper function to store any preferences that aren't stored on
+   * click
+   */
+  protected void savePreferences()
+  {
+    GameSetup.mGameSetupPrefEditor.putInt(GameSetup.this.getString(R.string.PREFKEY_SCORELIMIT), mScoreLimit);
+    GameSetup.mGameSetupPrefEditor.putBoolean(
+        GameSetup.this.getString(R.string.PREFKEY_AUTOSCORINGENABLED), isScoringModeAssisted());
+    GameSetup.mGameSetupPrefEditor.commit();    
+  }
+  
+  /**
    * Initializes the activity to display the results of the turn.
    * 
    * @param savedInstanceState
@@ -357,9 +385,23 @@ public class GameSetup extends Activity {
     mScoreLimitView.setTypeface(antonFont);
     
     // Set default value for score limit
-    mScoreLimit = GameSetup.mGameSetupPrefs.getInt(GameSetup.SCORE_LIMIT, 7);
+    mScoreLimit = GameSetup.mGameSetupPrefs.getInt(GameSetup.this.getString(R.string.PREFKEY_SCORELIMIT), 7);
     mScoreLimitView.setText(Integer.toString(mScoreLimit));
-
+    
+    // Set default value for scoring mode
+    boolean automatedScoringEnabled = GameSetup.mGameSetupPrefs.getBoolean(
+        GameSetup.this.getString(R.string.PREFKEY_AUTOSCORINGENABLED), false);
+    RadioButton defaultRadio;
+    if (automatedScoringEnabled)
+    {
+      defaultRadio = (RadioButton) this.findViewById(R.id.GameSetup_ScoringMode_Assisted);
+    }
+    else
+    {
+      defaultRadio = (RadioButton) this.findViewById(R.id.GameSetup_ScoringMode_FreePlay);
+    }
+    defaultRadio.setChecked(true);
+    
     // Assign teams to TeamSelectLayouts
     TeamSelectLayout teamSelect;
     Team curTeam;
@@ -405,34 +447,6 @@ public class GameSetup extends Activity {
     button.setOnClickListener(mScoringModeHelpListener);
 
   }
-
-  
-  /**
-   * Getter that returns the index of the checked radio button.
-   * 
-   * @return index of the checked radio button (-1 if none found)
-   */
-  /*
-  private int getCheckedRadioIndex() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getCheckedRadioValue()");
-    }
-
-    int checkedRadioIndex = -1;
-    // Iterate through radio buttons to find the one that is checked and return
-    // it.
-    for (int i = 0; i < GameSetup.ROUND_RADIOS.length; i++) {
-      RadioButton test = (RadioButton) GameSetup.this
-          .findViewById(GameSetup.ROUND_RADIOS[i][0]);
-      if (test.isChecked()) {
-        checkedRadioIndex = i;
-        break;
-      }
-    }
-
-    return checkedRadioIndex;
-  }
-  */
 
   /**
    * Handle creation of team warning dialog, used to prevent starting a game
@@ -506,10 +520,8 @@ public class GameSetup extends Activity {
     }
 
     // Store off game's attributes as preferences. This is done in Pause to
-    // maintain selections
-    // when they press "back" to main title then return.
-    GameSetup.mGameSetupPrefEditor.putInt(GameSetup.SCORE_LIMIT, mScoreLimit);
-    GameSetup.mGameSetupPrefEditor.commit();
+    // maintain selections when they press "back" to main title then return.
+    savePreferences();
   }
 
   /**

@@ -20,8 +20,7 @@
 <RelativeLayout android:id="@+id/Turn_Root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/bg_bluegradient">
+    android:layout_height="fill_parent" android:background="@drawable/bg_freeplaygradient">
 
     <TextView android:id="@+id/Turn_TimesUp"
         android:layout_width="wrap_content"
@@ -90,7 +89,7 @@
                 
             <ImageView android:id="@+id/Turn_TimerFill"
                 android:layout_alignParentTop="true"
-                android:background="@color/teamA_primary"
+                android:background="@color/white"
                 android:layout_height="23dp"
                 android:layout_marginTop="1dp"
                 android:layout_alignParentLeft="true"
@@ -167,37 +166,13 @@
         </ViewFlipper>
         
         <!-- Grouping for buttons on the bottom -->
-        <RelativeLayout android:id="@+id/Turn_LowBar"
-            android:layout_width="fill_parent"
-            android:layout_height="90dp">
-
-            <View android:id="@+id/Turn_LowBarBG"
-                android:layout_width="fill_parent"
-                android:background="@color/genericBG"
-                android:layout_marginTop="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_height="45dp"
-                />
-                 
-            <View android:id="@+id/Turn_LowBarTrim"
-                android:layout_height="10dp"
-                android:layout_width="fill_parent"
-                android:background="@color/genericBG_trim"
-                android:layout_alignTop="@id/Turn_LowBarBG"
-                />
-
-            <ImageButton android:id="@+id/Turn_ButtonSkip"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/controls_skip_selector"
-                android:layout_alignParentLeft="true" android:layout_marginLeft="10dp"/>
-                
-            <ImageButton android:id="@+id/Turn_ButtonCorrect"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/controls_right_selector"
-                android:layout_alignParentRight="true" android:layout_marginRight="10dp"/>
-                
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="90dp" android:id="@+id/Turn_LowBar">
+            <View android:layout_width="fill_parent" android:id="@+id/Turn_LowBarBG" android:layout_height="45dp" android:background="@color/genericBG" android:layout_alignParentBottom="true"></View>
+            <View android:layout_width="fill_parent" android:id="@+id/Turn_LowBarTrim" android:layout_height="10dp" android:background="@color/genericBG_trim" android:layout_above="@id/Turn_LowBarBG"></View>
+            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/Turn_LowBar_Buttons">
+                <ImageButton android:id="@+id/Turn_ButtonSkip" android:layout_height="wrap_content" android:background="@drawable/button_skip" android:layout_width="fill_parent" android:layout_weight="2"></ImageButton>
+                <ImageButton android:id="@+id/Turn_ButtonCorrect" android:background="@drawable/button_right" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1"></ImageButton>
+            </LinearLayout>
         </RelativeLayout>
         
     </LinearLayout>

@@ -283,10 +283,9 @@
 						<ImageView android:id="@+id/Rules_Gameplay_RightButton"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:background="@drawable/controls_right"
 							android:contentDescription="Right button icon"
 							android:scaleType="centerCrop"
-							/>
+							android:background="@drawable/button_right"/>
 							
 						<TextView android:id="@+id/Rules_GameplayText02"
 							android:layout_width="wrap_content"
@@ -306,9 +305,7 @@
 						<ImageView android:id="@+id/Rules_Gameplay_SkipButton"
 							android:layout_below="@id/Rules_SkipIconCouple"
 							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:background="@drawable/controls_skip"
-							/>
+							android:layout_height="wrap_content" android:background="@drawable/button_skip"/>
 							
 						<TextView android:id="@+id/Rules_GameplayText03"
 							android:layout_below="@id/Rules_GameplayText02"
@@ -316,30 +313,6 @@
 							android:layout_height="wrap_content"
 							android:text="Skip Button:  For when you are not up to the challenge of the current word. No penalty."
 							android:layout_toRightOf="@+id/Rules_Gameplay_SkipButton"
-							android:padding="8dp"
-							/>
-							
-					</LinearLayout>
-
-					<LinearLayout android:id="@+id/Rules_WrongIconCouple"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_below="@id/Rules_SkipIconCouple"
-						android:padding="5dp">
-						
-						<ImageView android:id="@+id/Rules_Gameplay_WrongButton"
-							android:layout_below="@id/Rules_WrongIconCouple"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:background="@drawable/controls_wrong"
-							/>
-							
-						<TextView android:id="@+id/Rules_GameplayText04"
-							android:layout_below="@id/Rules_GameplayText03"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="Wrong Button:  For when you get called out by the other team for using a 'buzz' word. -1 Point."
-							android:layout_toRightOf="@+id/Rules_Gameplay_WrongButton"
 							android:padding="8dp"
 							/>
 							
