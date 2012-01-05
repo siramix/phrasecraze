@@ -974,7 +974,7 @@ public class Turn extends Activity {
    */
   @Override
   public boolean onSearchRequested() {
-    if(BuzzWordsApplication.DEBUG) {
+    if(PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onSearchRequested()");
     }
     return false;
