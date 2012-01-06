@@ -99,6 +99,11 @@
   <string name="rateUsDialog_neutralBtn">Later</string>
   <string name="rateUsDialog_negativeBtn">Never</string>
   
+	<!--  Pack Purchasing text -->
+	<string name="toast_packpurchase_notwitter">Sorry, we could not detect any Twitter clients.</string>      
+	<string name="toast_packpurchase_nofacebook">Sorry, we could not detect any Facebook clients.</string>      
+	<string name="toast_packpurchase_nogoogleplus">Sorry, we could not detect any Google+ clients.</string>      
+      
   <!--  Rate Us URI for app store -->
   <string name="rateUs_URI">http://www.siramix.com/phrasecrazeappstore</string>
 
