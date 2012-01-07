@@ -65,18 +65,26 @@ public class Deck {
   private static final String TAG = "Deck";
 
   private static final String DATABASE_NAME = "phrasecraze";
-  private static final String CARD_TABLE_NAME = "cards";
+  private static final String PHRASE_TABLE_NAME = "phrases";
   private static final String CACHE_TABLE_NAME = "cache";
+  private static final String PACK_TABLE_NAME = "packs";
   private static final int DATABASE_VERSION = 2;
   private static final int CACHE_SIZE = 50;
-  private static final String CARD_TABLE_CREATE = "CREATE TABLE "
-      + CARD_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-      + "title TEXT, " + "badwords TEXT );";
+  private static final String PHRASE_TABLE_CREATE = "CREATE TABLE "
+      + PHRASE_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+      + "phrase TEXT, " + "difficulty INTEGER, "
+      + "playcount INTEGER, " + "pack_id INTEGER, "
+      + "FOREIGN KEY(pack_id) REFERENCES pack(id) );";
   private static final String CACHE_TABLE_CREATE = "CREATE TABLE "
       + CACHE_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
       + "val TEXT );";
+  private static final String PACK_TABLE_CREATE = "CREATE TABLE " 
+      + PACK_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+      + "packname TEXT );";
 
-  private static final String[] CARD_COLUMNS = { "id", "title", "badwords" };
+  private static final String[] PHRASE_COLUMNS = { "id", "phrase", "difficulty", 
+                                                   "playcount", "pack_id" };
+  private static final String[] PACK_COLUMNS = { "id", "packname" };
   private static final String[] CACHE_COLUMNS = { "id", "val" };
   private LinkedList<Card> mCache;
   private int mSeed;
@@ -105,7 +113,7 @@ public class Deck {
     editor.putInt("deck_seed", mSeed);
     editor.commit();
     mPosition = sp.getInt("deck_position", 0);
-    int sizeOfDeck = mDatabaseOpenHelper.countCards();
+    int sizeOfDeck = mDatabaseOpenHelper.countPhrases();
     mOrder = new ArrayList<Integer>(sizeOfDeck);
     for (int i = 0; i < sizeOfDeck; ++i) {
       mOrder.add(i);
@@ -145,20 +153,20 @@ public class Deck {
     editor.commit();
 
     // Fill the cache from the deck (DB)
-    mCache.addAll(mDatabaseOpenHelper.getCards(ids));
+    mCache.addAll(mDatabaseOpenHelper.getPhrases(ids));
     Collections.shuffle(mCache);
     mDatabaseOpenHelper.saveCache(mCache);
     mDatabaseOpenHelper.close();
   }
 
   /**
-   * Get the card from the top of the cache
+   * Get the phrase from the top of the cache
    * 
    * @return a card reference
    */
-  public Card getCard() {
+  public Card getPhrase() {
     if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getCard()");
+      Log.d(TAG, "getPhrase()");
     }
     if (mCache.isEmpty()) {
       this.prepareForRound();
@@ -192,22 +200,23 @@ public class Deck {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-      db.execSQL(CARD_TABLE_CREATE);
+      db.execSQL(PACK_TABLE_CREATE);
+      db.execSQL(PHRASE_TABLE_CREATE);
       db.execSQL(CACHE_TABLE_CREATE);
-      loadWords(db);
+      loadPhrases(db);
     }
 
     /**
-     * Count the cards in the deck quickly
+     * Count the phrases in the deck quickly
      * 
-     * @return the number of cards in the deck
+     * @return the number of phrases in the deck
      */
-    public int countCards() {
+    public int countPhrases() {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "countCards()");
+        Log.d(TAG, "countPhrases()");
       }
       mDatabase = getWritableDatabase();
-      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, CARD_TABLE_NAME);
+      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PHRASE_TABLE_NAME);
       return ret;
     }
 
@@ -224,6 +233,20 @@ public class Deck {
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, CACHE_TABLE_NAME);
       return ret;
     }
+    
+    /**
+     * Count the number of packs which will likely be needed for setting up views
+     * 
+     * @return the number of packs
+     */
+    public int countPacks() {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "countPacks()");
+      }
+      mDatabase = getWritableDatabase();
+      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PHRASE_TABLE_NAME);
+      return ret;
+    }
 
     /**
      * Load the words from the XML file using only one SQLite database
@@ -231,9 +254,9 @@ public class Deck {
      * @param db
      *          from the installing context
      */
-    private void loadWords(SQLiteDatabase db) {
+    private void loadPhrases(SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Loading words...");
+        Log.d(TAG, "Loading phrases...");
       }
 
       mDatabase = db;
@@ -244,41 +267,37 @@ public class Deck {
           .newInstance();
 
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Building DocBuilderFactory for card pack parsing from "
+        Log.d(TAG, "Building DocBuilderFactory for phrase pack parsing from "
             + R.class.toString());
       }
       try {
         mDatabase.beginTransaction();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
         Document doc = docBuilder.parse(starterXML);
-        NodeList cardNodes = doc.getElementsByTagName("card");
-        for (int i = 0; i < cardNodes.getLength(); i++) {
-          NodeList titleWhiteAndBads = cardNodes.item(i).getChildNodes();
-          Node titleNode = null;
-          Node badsNode = null;
-          for (int j = 0; j < titleWhiteAndBads.getLength(); j++) {
-            String candidateName = titleWhiteAndBads.item(j).getNodeName();
-            if (candidateName.equals("title")) {
-              titleNode = titleWhiteAndBads.item(j);
-            } else if (candidateName.equals("bad-words")) {
-              badsNode = titleWhiteAndBads.item(j);
-            } else {
+        NodeList phraseEntryNodes = doc.getElementsByTagName("phrase_entry");
+        for (int i = 0; i < phraseEntryNodes.getLength(); i++) {
+          NodeList packPhraseDif = phraseEntryNodes.item(i).getChildNodes();
+          Node packNode = null;
+          Node phraseNode = null;
+          Node difficultyNode = null;
+          for (int j = 0; j < packPhraseDif.getLength(); j++) {
+            String candidateName = packPhraseDif.item(j).getNodeName();
+            if (candidateName.equals("pack_id")) {
+              packNode = packPhraseDif.item(j);
+            } else if (candidateName.equals("phrase")) {
+              phraseNode = packPhraseDif.item(j);
+            } else if (candidateName.equals("difficulty")) {
+              difficultyNode = packPhraseDif.item(j);
+            }
+            else {
               continue; // We found some #text
             }
           }
-          String title = titleNode.getFirstChild().getNodeValue();
-          String badWords = "";
-          NodeList bads = badsNode.getChildNodes();
-          for (int j = 0; j < bads.getLength(); j++) {
-            String candidateName = bads.item(j).getNodeName();
-            if (candidateName.equals("word")) {
-              badWords += bads.item(j).getFirstChild().getNodeValue();
-              if (j < (bads.getLength() - 1)) {
-                badWords += ",";
-              }
-            }
-          }
-          this.addWord(i, title, badWords, mDatabase);
+          int pack = Integer.parseInt(packNode.getFirstChild().getNodeValue());
+          String phrase = phraseNode.getFirstChild().getNodeValue();
+          int difficulty = Integer.parseInt(difficultyNode.getFirstChild().getNodeValue());          
+          
+          this.addPhrase(i, phrase, difficulty, pack, mDatabase);
         }
         mDatabase.setTransactionSuccessful();
       } catch (ParserConfigurationException e) {
@@ -297,34 +316,36 @@ public class Deck {
     }
 
     /**
-     * Add a word to the deck (DB)
+     * Add a phrase to the deck (DB)
      * 
      * @return rowId or -1 if failed
      */
-    public long addWord(int id, String title, String badWords, SQLiteDatabase db) {
+    public long addPhrase(int id, String phrase, int difficulty, int packId, SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "addWord()");
+        Log.d(TAG, "addPhrase()");
       }
       ContentValues initialValues = new ContentValues();
       initialValues.put("id", id);
-      initialValues.put("title", title);
-      initialValues.put("badwords", badWords);
-      return db.insert(CARD_TABLE_NAME, null, initialValues);
+      initialValues.put("phrase", phrase);
+      initialValues.put("difficulty", difficulty);
+      initialValues.put("playcount", 0);
+      initialValues.put("pack_id", packId);      
+      return db.insert(PHRASE_TABLE_NAME, null, initialValues);
     }
 
     /**
-     * Get the cards corresponding to a comma-separated list of indices
+     * Get the phrases corresponding to a comma-separated list of indices
      * 
      * @param args
      *          indices separated by commas
      * @return a reference to a linked list of cards corresponding to the ids
      */
-    public LinkedList<Card> getCards(String args) {
+    public LinkedList<Card> getPhrases(String args) {
       mDatabase = getWritableDatabase();
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "getCards()");
+        Log.d(TAG, "getPhrases()");
       }
-      Cursor res = mDatabase.query(CARD_TABLE_NAME, CARD_COLUMNS, "id in ("
+      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "id in ("
           + args + ")", null, null, null, null);
       res.moveToFirst();
       LinkedList<Card> ret = new LinkedList<Card>();
@@ -369,8 +390,8 @@ public class Deck {
     }
 
     /**
-     * Load a cache from the database into cards in memory
-     * @return the linked list of cards loaded into memory
+     * Load a cache from the database into phrases in memory
+     * @return the linked list of phrases loaded into memory
      */
     public LinkedList<Card> loadCache() {
       mDatabase = getWritableDatabase();
@@ -384,13 +405,15 @@ public class Deck {
         ret = new LinkedList<Card>();
       } else {
         res.moveToFirst();
-        ret = getCards(res.getString(1));
+        ret = getPhrases(res.getString(1));
       }
       res.close();
       return ret;
 
     }
 
+    //TODO Let's reconsider if this is the best thing to do after we figure out 
+    // how marketplace updates will affect each phone's database
     /**
      * For now, onUpgrade destroys the old database and runs create again.
      */
@@ -398,7 +421,8 @@ public class Deck {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
       Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
           + newVersion + ", which will destroy all old data");
-      db.execSQL("DROP TABLE IF EXISTS cards;");
+      db.execSQL("DROP TABLE IF EXISTS phrases;");
+      db.execSQL("DROP TABLE IF EXISTS packs;");
       db.execSQL("DROP TABLE IF EXISTS cache;");
       onCreate(db);
     }
