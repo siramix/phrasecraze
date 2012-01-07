@@ -155,7 +155,16 @@ public class PhrasePackPurchase extends Activity {
       mPackLineList.add(packRow);
       
       // Bind Listener
-      packRow.setOnClickListener(mGoogleListener);
+      //TODO this will need to be more specific later (to just free social apps)
+      if (count == 0) {
+        packRow.setOnClickListener(mTweetListener);
+      }
+      else if (count == 1) {
+        packRow.setOnClickListener(mFacebookListener);
+      }
+      else if (count == 2) {
+        packRow.setOnClickListener(mGoogleListener);
+      }
       count++;
     }
     insertionPoint.addView(layout);   
@@ -175,9 +184,8 @@ public class PhrasePackPurchase extends Activity {
         intent.setComponent(targetComponent);
         String intentType = (targetComponent.getClassName().contains("com.twidroid")) ?
             "application/twitter" : "text/plain";
-        intent.setType(intentType);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
-        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
+        intent.setType(intentType);        
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
         startActivityForResult(intent, 0);
       } else {
         showToast(getString(R.string.toast_packpurchase_notwitter));
@@ -200,7 +208,8 @@ public class PhrasePackPurchase extends Activity {
         intent.setType(intentType);
         intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
         intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
-        startActivityForResult(intent, 0);
+        intent.putExtra(Intent.EXTRA_TEXT, "https://market.android.com/details?id=com.buzzwords");
+        startActivity(intent);
       } else {
         showToast(getString(R.string.toast_packpurchase_nofacebook));
       }
@@ -221,7 +230,7 @@ public class PhrasePackPurchase extends Activity {
         String intentType = ("text/plain");
         intent.setType(intentType);
         intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
-        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
         startActivityForResult(intent, 0);
       } else {
         showToast(getString(R.string.toast_packpurchase_nogoogleplus));
@@ -233,15 +242,13 @@ public class PhrasePackPurchase extends Activity {
    * Listen for the result of social activities like twitter, facebook, and google+
    */
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
-    Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);
-    Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);
- /* if (requestCode == PICK_CONTACT_REQUEST) {
-      if (resultCode == RESULT_OK) {
-          // A contact was picked.  Here we will just display it
-          // to the user.
-          startActivity(new Intent(Intent.ACTION_VIEW, data));
-      }
-  }*/
+    Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);    
+
+    //TODO obviously handle this better
+    if (resultCode == 0) {
+      showToast("WE'RE GIVING YOU THIS PACK NOW!!!");
+    }
+    
     if (data != null) {
       // launch the application that we just picked
       startActivity(data);
@@ -266,6 +273,7 @@ public class PhrasePackPurchase extends Activity {
     mKnownTwitterClients.put("Twicca", "jp.r246.twicca.statuses.Send");
     mKnownFacebookClients = new HashMap<String, String>();
     mKnownFacebookClients.put("Facebook", "com.facebook.katana.ShareLinkActivity");       
+    mKnownFacebookClients.put("FriendCaster", "uk.co.senab.blueNotifyFree.activity.PostToFeedActivity");
     mKnownGoogleClients = new HashMap<String, String>();  
     mKnownGoogleClients.put("Google+", "com.google.android.apps.plus.phone.PostActivity");    
   }
