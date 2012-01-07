@@ -329,7 +329,7 @@ public class Deck {
       initialValues.put("phrase", phrase);
       initialValues.put("difficulty", difficulty);
       initialValues.put("playcount", 0);
-      initialValues.put("pack_id", packId);      
+      initialValues.put("pack_id", packId);            
       return db.insert(PHRASE_TABLE_NAME, null, initialValues);
     }
 
@@ -359,7 +359,32 @@ public class Deck {
       res.close();
       return ret;
     }
-
+    
+    /**
+     * Increment playcount for all passed in phrase ids by 1
+     * @param args
+     *          comma delimited set of phrase ids to incrment, ex. "1, 2, 4, 10"
+     * @return
+     */
+    public void incrementPlayCount(String args) {
+      mDatabase = getWritableDatabase();
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "incrementPlayCount()");
+      }
+      //TODO for code review:  For some reason the database.update command was interpreting the
+      // playcount+1 as a string and inserting that string instead of actually incrementing
+      // If its all the same to everyone, I went ahead and hardcoded this query to work around this
+      // There is also a known issue with this...if a card is seen twice in a single round
+      // it will only get updated once.  To me the issue of seeing a card twice is the real issue
+      // and it's not worth fixing the count for that severe case.
+//      ContentValues newValues = new ContentValues();
+//      newValues.put("playcount", "playcount+1");
+//      mDatabase.update(PHRASE_TABLE_NAME, newValues, "id in (" + args + ")", null);
+      mDatabase.execSQL("UPDATE " + PHRASE_TABLE_NAME  
+                      + " SET playcount = (playcount+1)"
+                      + " WHERE id in(" + args + ");"); 
+    }
+    
     /**
      * Saves the cache in the database
      * 
