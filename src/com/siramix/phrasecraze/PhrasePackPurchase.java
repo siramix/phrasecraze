@@ -1,14 +1,22 @@
 package com.siramix.phrasecraze;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,18 +24,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PhrasePackPurchase extends Activity {
 
   private static final String TAG = "CardPackPurchase";
+  
+  // To be used for tooltips to help guide users
+  private Toast mHelpToast = null;
   
   private List<String> mPackList;  // This must stay in sync with mPackLineList
   List<ImageView> mPackViewList;
   List<View> mPackLineList;
   
   /**
+   * This block of maps stores our lists of clients
+   */
+  HashMap<String, String> mKnownTwitterClients;   
+  HashMap<String, String> mKnownFacebookClients; 
+  HashMap<String, String> mKnownGoogleClients;     
+  HashMap<String, ActivityInfo> mFoundTwitterClients; 
+  HashMap<String, ActivityInfo> mFoundFacebookClients;
+  HashMap<String, ActivityInfo> mFoundGoogleClients; 
+  
+  /**
    * Create the packages screen from an XML layout and
-   * 
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +62,9 @@ public class PhrasePackPurchase extends Activity {
 
     // Setup the view
     this.setContentView(R.layout.packpurchase);
+    
+    // Detect Social Clients
+    detectClients();
     
     // Get our current context
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
@@ -131,7 +155,16 @@ public class PhrasePackPurchase extends Activity {
       mPackLineList.add(packRow);
       
       // Bind Listener
-      packRow.setOnClickListener(mPhrasePackListener);
+      //TODO this will need to be more specific later (to just free social apps)
+      if (count == 0) {
+        packRow.setOnClickListener(mTweetListener);
+      }
+      else if (count == 1) {
+        packRow.setOnClickListener(mFacebookListener);
+      }
+      else if (count == 2) {
+        packRow.setOnClickListener(mGoogleListener);
+      }
       count++;
     }
     insertionPoint.addView(layout);   
@@ -139,25 +172,190 @@ public class PhrasePackPurchase extends Activity {
   }
   
   /**
-   * This listener will set each row to its appropriate behavior, with freemium
-   * apps needing share intents bound and paid apps needing purchase intents bound.
+   * This listener is specifically for packs that require tweeting to get.
    */
-  private final OnClickListener mPhrasePackListener = new OnClickListener() {
+  private final OnClickListener mTweetListener = new OnClickListener() {    
+    //Tweet button handler
     public void onClick(View v) {
-      int packIndex = mPackLineList.indexOf(v);
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "FreePackLineIndex: " + Integer.toString(packIndex));
-      }
-      
-      //TODO This is where we would need to retrieve the pack index
-      //Card curCard = mCardList.get(cardIndex);
-      
-      Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-      shareIntent.setType("text/plain");
-      shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SUBJECT TEXT HERE");
-      shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "MESSAGE TEXT HERE");
+      ComponentName targetComponent = getClientComponentName(mFoundTwitterClients);
 
-      startActivity(Intent.createChooser(shareIntent, "Choose Sharing Platform"));
+      if (targetComponent != null) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setComponent(targetComponent);
+        String intentType = (targetComponent.getClassName().contains("com.twidroid")) ?
+            "application/twitter" : "text/plain";
+        intent.setType(intentType);        
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
+        startActivityForResult(intent, 0);
+      } else {
+        showToast(getString(R.string.toast_packpurchase_notwitter));
+      }
     }
   };
+  
+  /**
+   * This listener is specifically for packs that require posting on facebook to get.
+   */
+  private final OnClickListener mFacebookListener = new OnClickListener() {    
+    //Tweet button handler
+    public void onClick(View v) {
+      ComponentName targetComponent = getClientComponentName(mFoundFacebookClients);
+
+      if (targetComponent != null) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setComponent(targetComponent);
+        String intentType = ("text/plain");
+        intent.setType(intentType);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
+        intent.putExtra(Intent.EXTRA_TEXT, "https://market.android.com/details?id=com.buzzwords");
+        startActivity(intent);
+      } else {
+        showToast(getString(R.string.toast_packpurchase_nofacebook));
+      }
+    }
+  };
+
+  /**
+   * This listener is specifically for packs that require google+ posting to get.
+   */
+  private final OnClickListener mGoogleListener = new OnClickListener() {    
+    //Tweet button handler
+    public void onClick(View v) {
+      ComponentName targetComponent = getClientComponentName(mFoundGoogleClients);
+ 
+      if (targetComponent != null) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setComponent(targetComponent);
+        String intentType = ("text/plain");
+        intent.setType(intentType);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
+        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
+        startActivityForResult(intent, 0);
+      } else {
+        showToast(getString(R.string.toast_packpurchase_nogoogleplus));
+      }
+    }  
+  };
+  
+  /**
+   * Listen for the result of social activities like twitter, facebook, and google+
+   */
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
+    Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);    
+
+    //TODO obviously handle this better
+    if (resultCode == 0) {
+      showToast("WE'RE GIVING YOU THIS PACK NOW!!!");
+    }
+    
+    if (data != null) {
+      // launch the application that we just picked
+      startActivity(data);
+   }    
+  }
+  
+  /**
+   * http://blogrescue.com/2011/12/android-development-send-tweet-action/ 
+   */
+  private void buildKnownClientsList() {    
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "buildKnownClientsList()");
+    }
+    
+    mKnownTwitterClients = new HashMap<String, String>();
+    mKnownTwitterClients.put("Twitter", "com.twitter.android.PostActivity");
+    mKnownTwitterClients.put("UberSocial", "com.twidroid.activity.SendTweet");
+    mKnownTwitterClients.put("TweetDeck", "com.tweetdeck.compose.ComposeActivity");
+    mKnownTwitterClients.put("Seesmic", "com.seesmic.ui.Composer");
+    mKnownTwitterClients.put("TweetCaster", "com.handmark.tweetcaster.ShareSelectorActivity");
+    mKnownTwitterClients.put("Plume", "com.levelup.touiteur.appwidgets.TouiteurWidgetNewTweet");
+    mKnownTwitterClients.put("Twicca", "jp.r246.twicca.statuses.Send");
+    mKnownFacebookClients = new HashMap<String, String>();
+    mKnownFacebookClients.put("Facebook", "com.facebook.katana.ShareLinkActivity");       
+    mKnownFacebookClients.put("FriendCaster", "uk.co.senab.blueNotifyFree.activity.PostToFeedActivity");
+    mKnownGoogleClients = new HashMap<String, String>();  
+    mKnownGoogleClients.put("Google+", "com.google.android.apps.plus.phone.PostActivity");    
+  }
+  
+  /**
+   * http://blogrescue.com/2011/12/android-development-send-tweet-action/ 
+   * @return
+   */
+  public void detectClients() {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "detectClients()");
+    }
+    
+    buildKnownClientsList();
+    mFoundTwitterClients = new HashMap<String, ActivityInfo>();
+    mFoundFacebookClients = new HashMap<String, ActivityInfo>();
+    mFoundGoogleClients = new HashMap<String, ActivityInfo>();
+   
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent.setType("text/plain");
+    PackageManager pm = getPackageManager();
+    List<ResolveInfo> activityList = pm.queryIntentActivities(intent, 0);
+    
+    for (int i = 0; i < activityList.size(); i++) {
+      ResolveInfo app = (ResolveInfo) activityList.get(i);
+      ActivityInfo activity = app.activityInfo;
+      Log.d(TAG, "******* --> " + activity.name );
+      if (mKnownTwitterClients.containsValue(activity.name)) {
+        mFoundTwitterClients.put(activity.name, activity);
+      }
+      else if (mKnownFacebookClients.containsValue(activity.name)) {
+        mFoundFacebookClients.put(activity.name, activity);
+      }
+      else if (mKnownGoogleClients.containsValue(activity.name)) {
+        mFoundGoogleClients.put(activity.name, activity);
+      }
+    }    
+  }
+ 
+  /**
+   * Returns the Component name of either Twitter, Google, or Facebook
+   * @param foundClients A hashmap of clients that have been identified by 
+   *                     Detect Clients as being on the users phone
+   * @return
+   */
+  public ComponentName getClientComponentName(HashMap<String, ActivityInfo> foundClients) {    
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "getClientComponentName()");
+    }
+    
+    ComponentName result = null;
+
+    if (foundClients.size() > 0) {
+      ActivityInfo socialActivity = null;
+      for(Map.Entry<String, ActivityInfo> entry : foundClients.entrySet()) {
+        socialActivity = entry.getValue();
+        break;
+      }
+   
+      result = new ComponentName(socialActivity.applicationInfo.packageName, socialActivity.name);
+    }
+
+    return result;
+  }
+
+  
+  /**
+   * Handle showing a toast or refreshing an existing toast
+   */
+  private void showToast(String text) {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "showToast(" + text + ")");
+    }
+    
+    if(mHelpToast == null) {
+      mHelpToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+    } else {
+      mHelpToast.setText(text);
+      mHelpToast.setDuration(Toast.LENGTH_LONG);
+    }
+    mHelpToast.show();
+  }
 }
+
+
