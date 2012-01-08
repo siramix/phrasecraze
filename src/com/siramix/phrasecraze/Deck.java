@@ -203,7 +203,8 @@ public class Deck {
       db.execSQL(PACK_TABLE_CREATE);
       db.execSQL(PHRASE_TABLE_CREATE);
       db.execSQL(CACHE_TABLE_CREATE);
-      loadPhrases(db);
+      loadPack(db, "starter");
+      loadPack(db, "stubpack");
     }
 
     /**
@@ -254,15 +255,18 @@ public class Deck {
      * @param db
      *          from the installing context
      */
-    private void loadPhrases(SQLiteDatabase db) {
+    private void loadPack(SQLiteDatabase db, String packFileName) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Loading phrases...");
       }
 
       mDatabase = db;
 
-      InputStream starterXML = mHelperContext.getResources().openRawResource(
-          R.raw.starter);
+      // Dynamically retrieve the xml resource Id for the pack name
+      int resId = mHelperContext.getResources().
+          getIdentifier(packFileName, "raw", "com.siramix.phrasecraze");
+      InputStream packXML = mHelperContext.getResources().openRawResource(resId);
+      
       DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
           .newInstance();
 
@@ -273,18 +277,21 @@ public class Deck {
       try {
         mDatabase.beginTransaction();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-        Document doc = docBuilder.parse(starterXML);
+        Document doc = docBuilder.parse(packXML);        
+        // Parse out pack and insert in database        
+        Node packname = doc.getElementsByTagName("pack_name").item(0);     
+        
+        int packId = (int) this.addPack(packname.getFirstChild().getNodeValue(), mDatabase);        
+        
+        // Parse out phrase entries and add to database
         NodeList phraseEntryNodes = doc.getElementsByTagName("phrase_entry");
         for (int i = 0; i < phraseEntryNodes.getLength(); i++) {
-          NodeList packPhraseDif = phraseEntryNodes.item(i).getChildNodes();
-          Node packNode = null;
+          NodeList packPhraseDif = phraseEntryNodes.item(i).getChildNodes();          
           Node phraseNode = null;
           Node difficultyNode = null;
           for (int j = 0; j < packPhraseDif.getLength(); j++) {
             String candidateName = packPhraseDif.item(j).getNodeName();
-            if (candidateName.equals("pack_id")) {
-              packNode = packPhraseDif.item(j);
-            } else if (candidateName.equals("phrase")) {
+            if (candidateName.equals("phrase")) {
               phraseNode = packPhraseDif.item(j);
             } else if (candidateName.equals("difficulty")) {
               difficultyNode = packPhraseDif.item(j);
@@ -292,12 +299,11 @@ public class Deck {
             else {
               continue; // We found some #text
             }
-          }
-          int pack = Integer.parseInt(packNode.getFirstChild().getNodeValue());
+          }          
           String phrase = phraseNode.getFirstChild().getNodeValue();
           int difficulty = Integer.parseInt(difficultyNode.getFirstChild().getNodeValue());          
           
-          this.addPhrase(i, phrase, difficulty, pack, mDatabase);
+          this.addPhrase(phrase, difficulty, packId, mDatabase);
         }
         mDatabase.setTransactionSuccessful();
       } catch (ParserConfigurationException e) {
@@ -320,17 +326,31 @@ public class Deck {
      * 
      * @return rowId or -1 if failed
      */
-    public long addPhrase(int id, String phrase, int difficulty, int packId, SQLiteDatabase db) {
+    public long addPhrase(String phrase, int difficulty, int packId, SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "addPhrase()");
       }
-      ContentValues initialValues = new ContentValues();
-      initialValues.put("id", id);
+      ContentValues initialValues = new ContentValues();      
       initialValues.put("phrase", phrase);
       initialValues.put("difficulty", difficulty);
       initialValues.put("playcount", 0);
       initialValues.put("pack_id", packId);            
       return db.insert(PHRASE_TABLE_NAME, null, initialValues);
+    }
+    
+    /**
+     * Insert a new pack into the Pack table of a given database.
+     * @param packname The name of the pack to insert
+     * @param db The db in which to insert the new pack
+     * @return the row ID of the newly inserted row, or -1 if an error occurred
+     */
+    public long addPack(String packname, SQLiteDatabase db) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "addPack()");
+      }
+      ContentValues packValues = new ContentValues();
+      packValues.put("packname", packname);
+      return db.insert(PACK_TABLE_NAME, null, packValues);
     }
 
     /**
