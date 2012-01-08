@@ -1,627 +1,503 @@
 <?xml version="1.0" ?>
 <pack>
+	<pack_name>starter</pack_name>	
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Harvard University</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Fly Swatter</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Canada</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Addiction</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Incision</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Polo</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Scream</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Curfew</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Spreadsheet</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Spiritual</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Blister</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Motherboard</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>North Carolina</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Bar Stool</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Therapist</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Whirlpool</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Calculus</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Illiterate</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Beatbox</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Squirrel</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Anteater</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Bigfoot</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Conch</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Paper Boy</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Pillage</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Sit-up</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Photograph</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Witchcraft</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Tumor</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Garbage</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Zoo</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Luge</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Cucumber</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Entrepreneur</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Birthday Cake</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Cologne</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Democracy</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Fungus</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Hairbrush</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Visor</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Wall Street</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Odysseus</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Motel</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Rainbow</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Elvis Presley</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Canvas</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Write</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Wildfire</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Emerald</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Boxer</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Beef Jerky</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Kiddie Pool</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Toothpaste</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Puree</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>King Crab</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Welcome</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Crawl</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Crop Circle</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Password</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Webcam</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Wheelchair</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Yankee</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Zeus</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Beethoven</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Bikini</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Buffet</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Coast</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Plateau</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Rancid</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Signal</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Slow Motion</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Sleet</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Dance</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Engineer</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>CEO</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Cheat</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Julius Caesar</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Apocalypse</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Surgeon</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Samurai</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Watermelon</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Blind</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Real Estate</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Exorcism</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Peanut</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Pardon</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Easter Egg</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Embarrassed</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Poison Ivy</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Beg</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Buddha</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Bruise</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Thorn</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Pharmacist</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Vocal Chords</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Camel</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Green Tea</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Supercomputer</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Tragedy</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Draw</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Serial Killer</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Al Capone</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>East</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Hillary Clinton</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Wrestling</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>French Kiss</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Pipe Organ</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Waiter</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Stewardess</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Poker</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Ferris Wheel</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Smooth</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Cello</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Whiskey</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Goldfish</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Bartender</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Jaywalk</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Earring</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Wright Brothers</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Demon</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Moose</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Diaper</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Unicorn</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Hangman</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
   <phrase_entry>
-    <pack_id>0</pack_id>
     <phrase>Drumstick</phrase>
     <difficulty>1</difficulty>
   </phrase_entry>
