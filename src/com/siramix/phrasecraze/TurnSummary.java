@@ -59,7 +59,9 @@ public class TurnSummary extends Activity {
   // Request code for AssignPoints activity result
   static final int ASSIGNPOINTS_REQUEST_CODE = 1;
 
-
+  // Create a therad for updating the playcount for each card
+  private Thread mUpdateThread;
+  
   private List<Card> mCardList;
   private List<ImageView> mCardViewList;
   private List<View> mCardLineList;
@@ -141,11 +143,20 @@ public class TurnSummary extends Activity {
     mCardViewList = new LinkedList<ImageView>();
     mCardLineList = new LinkedList<View>();
     mCardList = game.getCurrentCards();
+    // While incrementing, build a string for updating the playcount
+    String idstring = "";
     Card card = null;
     int count = 0;
 
     for (Iterator<Card> it = mCardList.iterator(); it.hasNext();) {
       card = it.next();
+      // Build our string of ids for updating playcount
+      if (it.hasNext()) {
+        idstring += card.getId() + ", ";        
+      }
+      else {
+        idstring += card.getId();
+      }
 
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.turnsumrow, layout);
@@ -182,7 +193,19 @@ public class TurnSummary extends Activity {
     }
     list.addView(layout);
     
-	// Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
+    // Update our database in a thread to avoid crashes on fast next clicks and slow db writes
+    final String ids = idstring;
+    mUpdateThread = new Thread(new Runnable() {
+      public void run() {
+      Deck.DeckOpenHelper helper = new Deck.DeckOpenHelper(
+          TurnSummary.this);      
+      helper.incrementPlayCount(ids);
+      helper.close();
+        }
+      });
+    mUpdateThread.start();
+    
+    // Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
     list.post(new Runnable() {
     	public void run() {
     		((ScrollView) TurnSummary.this.findViewById(R.id.TurnSummary_CardList)).fullScroll(ScrollView.FOCUS_DOWN);

@@ -116,9 +116,7 @@ public class Card implements Serializable {
    * Standard constructor accepting all members as their native types
    * 
    * @param id
-   * @param rws
    * @param title
-   * @param badWords
    */
   public Card(int id, String title) {
     this.init(id, Card.NOTSET, title, null);
