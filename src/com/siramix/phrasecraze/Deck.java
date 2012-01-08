@@ -84,8 +84,8 @@ public class Deck {
 
   private static final String[] PHRASE_COLUMNS = { "id", "phrase", "difficulty", 
                                                    "playcount", "pack_id" };
-  private static final String[] PACK_COLUMNS = { "id", "packname" };
   private static final String[] CACHE_COLUMNS = { "id", "val" };
+  
   private LinkedList<Card> mCache;
   private int mSeed;
   private int mPosition;
