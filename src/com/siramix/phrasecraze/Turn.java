@@ -80,7 +80,7 @@ public class Turn extends Activity {
   private int mGestureVelocityThreshold;
 
   private View mPauseOverlay;
-  private ImageButton mNextButton;
+  private ImageButton mCorrectButton;
   private ImageButton mSkipButton;
   private TextView mCountdownText;
   private TextView mTimesUpText;
@@ -144,6 +144,11 @@ public class Turn extends Activity {
    * getprefs
    */
   private boolean mSkipEnabled;
+  
+  /**
+   * Boolean representing whether correct is enabled. 
+   */
+  private boolean mCorrectEnabled;
 
   /**
    * Boolean representing whether the countdown ticking has already been
@@ -188,7 +193,7 @@ public class Turn extends Activity {
             && Math.abs(velocityX) > mGestureVelocityThreshold) {
           Turn.this.doBack();
           return true;
-        } else if (e1.getY() - e2.getY() > mGestureThreshold
+        } else if (mCorrectEnabled && e1.getY() - e2.getY() > mGestureThreshold
             && Math.abs(velocityY) > mGestureVelocityThreshold) {
           Turn.this.doCorrect();
           return true;
@@ -560,6 +565,7 @@ public class Turn extends Activity {
     flipper.showNext();
     mGameManager.processCard(Card.RIGHT);
 
+    
     // Mark the card with an icon
     mCardStatus.setBackgroundResource(Card.getCardMarkDrawableId(Card.RIGHT));
     mCardStatus.setVisibility(View.VISIBLE);
@@ -569,7 +575,9 @@ public class Turn extends Activity {
     sm.playSound(SoundManager.Sound.RIGHT);
 
     // Show the next card
-    showCard();
+    showCard(false);
+    
+    mIsBack = false;
   }
 
   /**
@@ -587,15 +595,18 @@ public class Turn extends Activity {
     mGameManager.processCard(Card.SKIP);
 
     // Mark the card with an icon for SKIP
+
     mCardStatus.setBackgroundResource(Card.getCardMarkDrawableId(Card.SKIP));
     mCardStatus.setVisibility(View.VISIBLE);
-
+    
     // Only play sound once card has been processed so we don't confuse the user
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
     sm.playSound(SoundManager.Sound.SKIP);
 
     // Show the next card
-    showCard();
+    showCard(false);
+    
+    mIsBack = false;
   }
 
   /**
@@ -609,6 +620,7 @@ public class Turn extends Activity {
     if (mIsBack) {
       return;
     }
+    mIsBack = true;
 
     mAIsActive = !mAIsActive;
 
@@ -618,18 +630,13 @@ public class Turn extends Activity {
 
     mViewFlipper.showNext();
 
-    this.setActiveCard();
-    mGameManager.processCard(Card.SKIP);
-    Card curCard = mGameManager.getPreviousCard();
-    mCardTitle.setText(curCard.getTitle());
-    mIsBack = true;
-
     // Restore animations for future actions
     mViewFlipper.setInAnimation(inFromRightAnimation());
     mViewFlipper.setOutAnimation(outToLeftAnimation());
 
-    // Show mark when going back
-    mCardStatus.setVisibility(View.VISIBLE);
+    mGameManager.processBack();
+    
+    this.showCard(true);
 
     // Play back sound
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
@@ -659,21 +666,22 @@ public class Turn extends Activity {
   }
 
   /**
-   * Function for changing the currently viewed card. It does a bit of bounds
-   * checking.
+   * Function for changing the display to display the current Card.
    */
-  protected void showCard() {
+  protected void showCard(boolean showCardStatus) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "ShowCard()");
     }
 
     this.setActiveCard();
 
-    Card curCard = mGameManager.getNextCard();
+    Card curCard = mGameManager.getCurrentCard();
     mCardTitle.setText(curCard.getTitle());
-    // Hide the card status until marked
-    mCardStatus.setVisibility(View.INVISIBLE);
-    mIsBack = false;
+    if(showCardStatus)
+    	mCardStatus.setVisibility(View.VISIBLE);
+    else
+        // Hide the card status until marked
+        mCardStatus.setVisibility(View.INVISIBLE);
     
     // Change team colors only in assisted scoring mode
     if(mAssistedScoringEnabled)
@@ -741,7 +749,7 @@ public class Turn extends Activity {
 
     // turn off buttons
     mSkipButton.setEnabled(false);
-    mNextButton.setEnabled(false);
+    mCorrectButton.setEnabled(false);
 
     TextView timesUpView = (TextView) this.findViewById(R.id.Turn_TimesUp);
     timesUpView.setVisibility(View.VISIBLE);
@@ -779,7 +787,7 @@ public class Turn extends Activity {
     mViewFlipper = (ViewFlipper) this.findViewById(R.id.Turn_ViewFlipper);
     mTimesUpText = (TextView) this.findViewById(R.id.Turn_TimesUp);
 
-    mNextButton = (ImageButton) this.findViewById(R.id.Turn_ButtonCorrect);
+    mCorrectButton = (ImageButton) this.findViewById(R.id.Turn_ButtonCorrect);
     mSkipButton = (ImageButton) this.findViewById(R.id.Turn_ButtonSkip);
 
     mTimerfill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
@@ -805,15 +813,24 @@ public class Turn extends Activity {
     mViewFlipper.setInAnimation(inFromRightAnimation());
     mViewFlipper.setOutAnimation(outToLeftAnimation());
 
-    mNextButton.setOnClickListener(mCorrectListener);
-
-    // Set visibility and control of Skip Button
-    if (mSkipEnabled) {
-      mSkipButton.setOnClickListener(mSkipListener);
-      mSkipButton.setVisibility(View.VISIBLE);
-    } else {
-      mSkipButton.setVisibility(View.INVISIBLE);
+    mCorrectButton.setOnClickListener(mCorrectListener);
+    mSkipButton.setOnClickListener(mSkipListener);
+ 
+    if(mCorrectEnabled)
+    {
+        // Set visibility and control of Skip Button
+        if (mSkipEnabled) {
+          mSkipButton.setVisibility(View.VISIBLE);
+        } else {
+          mSkipButton.setVisibility(View.GONE);
+        }
+        mCorrectButton.setVisibility(View.VISIBLE);
     }
+    else
+    {
+    	mCorrectButton.setVisibility(View.GONE);
+    }
+
 
     // Listen for all gestures
     mSwipeDetector = new GestureDetector(mSwipeListener);
@@ -905,7 +922,14 @@ public class Turn extends Activity {
     final float scale = Turn.this.getResources().getDisplayMetrics().density;
     mGestureThreshold = (int) (SWIPE_MIN_DISTANCE_DP * scale + 0.5f);
     mGestureVelocityThreshold = (int) (SWIPE_THRESHOLD_VELOCITY_DP * scale + 0.5f);
-
+    
+    // Set local variable for assisted scoring so that we don't have 
+    // to make many calls to game manager
+    PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
+        .getApplication();
+    GameManager curGame = application.getGameManager();
+    mAssistedScoringEnabled = curGame.isAssistedScoringEnabled();
+    
     // Capture our preference variable for music, skip, and gestures once
     SharedPreferences sp = PreferenceManager
         .getDefaultSharedPreferences(getBaseContext());
@@ -926,13 +950,9 @@ public class Turn extends Activity {
       mGesturesEnabled = true;
     else
       mGesturesEnabled = false;
+
+    mCorrectEnabled = mAssistedScoringEnabled;
     
-    // Set local variable for assisted scoring so that we don't have 
-    // to make many calls to game manager
-    PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
-        .getApplication();
-    GameManager curGame = application.getGameManager();
-    mAssistedScoringEnabled = curGame.isAssistedScoringEnabled();
     
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -1073,7 +1093,7 @@ public class Turn extends Activity {
               mIsPaused = false;
               mIsBack = true;
               dialog.dismiss();
-              Turn.this.showCard();
+              Turn.this.showCard(false);
               Turn.this.startTimer();
 
               // Play back sound to differentiate from normal clicks
@@ -1175,7 +1195,7 @@ public class Turn extends Activity {
       mViewFlipper.setVisibility(View.VISIBLE);
 
       mSkipButton.setEnabled(true);
-      mNextButton.setEnabled(true);
+      mCorrectButton.setEnabled(true);
 
       mTimerGroup.startAnimation(this.showTimerAnim(true));
       mButtonGroup.startAnimation(this.showButtonsAnim(true));
@@ -1222,7 +1242,7 @@ public class Turn extends Activity {
 
       mViewFlipper.setVisibility(View.INVISIBLE);
       mSkipButton.setEnabled(false);
-      mNextButton.setEnabled(false);
+      mCorrectButton.setEnabled(false);
 
       mTimerGroup.startAnimation(this.showTimerAnim(false));
       mButtonGroup.startAnimation(this.showButtonsAnim(false));

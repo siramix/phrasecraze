@@ -128,12 +128,12 @@ public class GameManager {
   }
 
   /**
-   * Get the card indicated by the cardIdPosition. If we've dealt past the end
+   * Sets the next card indicated by the cardIdPosition. If we've dealt past the end
    * of the deck, we should prep the deck.
    * 
    * @return the card we want
    */
-  public Card getNextCard() {
+  public Card dealNextCard() {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "getNextCard()");
     }
@@ -195,6 +195,7 @@ public class GameManager {
     mScoreLimit = score;
     mDeck.prepareForRound();
     mIsAssistedScoringEnabled = assistedScoring;
+    dealNextCard();
   }
 
   /**
@@ -208,6 +209,7 @@ public class GameManager {
     mCurrentCards.clear();
     mCardPosition = -1;
     mDeck.prepareForRound();
+    dealNextCard();
     
     // Clear round scores
     Iterator<Team> itr = mTeams.iterator();
@@ -234,6 +236,16 @@ public class GameManager {
       Log.d(TAG, "NextTurn()");
     }
     this.incrementActiveTeamIndex();
+  }
+  
+  /**
+   * Returns to the previous turn
+   */
+  public void previousTurn() {
+	  if (PhraseCrazeApplication.DEBUG) {
+		  Log.d(TAG, "PreviousTurn()");
+	  }
+	  this.decrementActiveTeamIndex();
   }
   
   /*
@@ -303,6 +315,15 @@ public class GameManager {
       mCurrentTeam = mTeamIterator.next();
     }
   }
+  
+  // Set the current team to the previous team in the team list
+  private void decrementActiveTeamIndex() {  
+	  int countToPrevious = mTeams.size();
+	  while( --countToPrevious > 0)
+	  {
+		  this.incrementActiveTeamIndex();
+	  }
+  }
 
   /**
    * Call to clean up game data at the end of a game.
@@ -332,6 +353,25 @@ public class GameManager {
     {
     	this.nextTurn();
     }
+    // If Wrong, it's the last card. Don't deal any more.
+    if(rws != Card.WRONG)
+    	dealNextCard();
+  }
+  
+  /**
+   * Processes the current card as a back (currently handled as a skip)
+   * and sets the team to the previous team
+   */  
+  public void processBack()
+  {
+	  if (PhraseCrazeApplication.DEBUG) {
+		  Log.d(TAG, "ProcessBack()");
+	  }
+	  mCurrentCard.setRws(Card.SKIP, mCurrentTeam);
+	  // If the previous card was correct, we must return to that team
+	  if(getPreviousCard().getRws() == Card.RIGHT)
+		  this.previousTurn();
+	
   }
 
   /**
