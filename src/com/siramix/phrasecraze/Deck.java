@@ -34,6 +34,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.siramix.phrasecraze.Consts.PurchaseState;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -187,6 +189,25 @@ public class Deck {
       Log.d(TAG, "setPlaySize()");
     }
     this.mCacheSize = cacheSize;
+  }
+
+  /**
+   * Add a pack to the sytem
+   * @return an integer indicating the number of packs processed
+   */
+  public synchronized int updatePurchase(String orderId, String productId,
+          PurchaseState purchaseState, long purchaseTime, String developerPayload) {
+    if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "updatePurchase()");
+      }
+    Log.d(TAG, "STUB");
+    Log.d(TAG, orderId);
+    Log.d(TAG, productId);
+    Log.d(TAG, purchaseState.name());
+    Log.d(TAG, Long.toString(purchaseTime));
+    Log.d(TAG, Long.toString(purchaseTime));
+    Log.d(TAG, developerPayload);
+    return 0;
   }
 
   /**

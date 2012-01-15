@@ -3,22 +3,33 @@
 	android:versionCode="3" android:versionName="1.0" package="com.siramix.phrasecraze">
 
   <uses-permission android:name="android.permission.GET_TASKS" />
+  <uses-permission android:name="com.android.vending.BILLING" />
 
-	<application android:icon="@drawable/icon" android:label="@string/AppName"
-		android:theme="@style/PhraseCrazeTheme" android:name=".PhraseCrazeApplication"
-		android:configChanges="keyboardHidden">
+  <application android:icon="@drawable/icon" android:label="@string/AppName"
+    android:theme="@style/PhraseCrazeTheme" android:name=".PhraseCrazeApplication"
+    android:configChanges="keyboardHidden">
 
-		<activity android:name=".SplashScreen" android:label="@string/AppName"
-			android:screenOrientation="portrait">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="com.siramix.phrasecraze.intent.action.SPLASHSCREEN" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
+    <service android:name="BillingService" />
+
+    <receiver android:name="BillingReceiver">
+      <intent-filter>
+        <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+        <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+        <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+      </intent-filter>
+    </receiver>
+
+    <activity android:name=".SplashScreen" android:label="@string/AppName"
+              android:screenOrientation="portrait">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="com.siramix.phrasecraze.intent.action.SPLASHSCREEN" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
 
 		<activity android:name=".Title" android:label="@string/AppName"
 			android:screenOrientation="portrait">
