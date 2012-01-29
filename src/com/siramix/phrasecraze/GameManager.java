@@ -193,7 +193,7 @@ public class GameManager {
     mCurrentTeam = mTeamIterator.next();
     mCurrentRound = 0;
     mScoreLimit = score;
-    mDeck.prepareForRound();
+    mDeck.prepareForGame();
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
   }
@@ -208,7 +208,7 @@ public class GameManager {
     // The same team who was buzzed will start the next round
     mCurrentCards.clear();
     mCardPosition = -1;
-    mDeck.prepareForRound();
+    mDeck.prepareForGame();
     dealNextCard();
     
     // Clear round scores
@@ -333,7 +333,7 @@ public class GameManager {
       Log.d(TAG, "EndGame()");
     }
     mTeamIterator = mTeams.iterator();
-    mDeck.prepareForRound();
+    mDeck.prepareForGame();
     // clear current cards so that scoreboards don't add turn score in
     mCurrentCards.clear();
   }
