@@ -193,6 +193,9 @@ public class GameManager {
     mCurrentTeam = mTeamIterator.next();
     mCurrentRound = 0;
     mScoreLimit = score;
+    //TODO put this in the right place (after pack select) -- 
+    // actually this will be problematic because we won't "know" which packs they want to 
+    // stick with until they hit start, unless we ask for packs before game settings
     mDeck.prepareForGame();
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
@@ -208,6 +211,7 @@ public class GameManager {
     // The same team who was buzzed will start the next round
     mCurrentCards.clear();
     mCardPosition = -1;
+    //TODO figure out when to call prepare for game.  mb this should be checkdeckstatus
     mDeck.prepareForGame();
     dealNextCard();
     
@@ -333,6 +337,7 @@ public class GameManager {
       Log.d(TAG, "EndGame()");
     }
     mTeamIterator = mTeams.iterator();
+//  TODO figure out when to call prepare for game.  mb this should be checkdeckstatus
     mDeck.prepareForGame();
     // clear current cards so that scoreboards don't add turn score in
     mCurrentCards.clear();

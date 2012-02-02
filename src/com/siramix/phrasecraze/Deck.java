@@ -88,7 +88,8 @@ public class Deck {
   private static final String[] CACHE_COLUMNS = { "id", "val" };
   
   // Take the top 1/DIVISOR phrases from a pack as possible cards for the phraseCache
-  private static final int PACK_DIVISOR = 4; 
+  //TODO This should be weighted
+  private static final int PACK_DIVISOR = 25; 
   // After taking the top 1/DIVSOR phrases from a pack, throw back a percentage of them 
   private static final int THROW_BACK_PERCENTAGE = 10;
   
@@ -120,7 +121,7 @@ public class Deck {
     // Use the preferences to pull the chosen decks as these will
     // need to be set anyways to save user's last game's settings
     
-    
+    //TODO FIGURE OUT WEIGHTING
     String ids = "";
 
     // For all packs being played get the phrases we want  
@@ -369,7 +370,7 @@ public class Deck {
       // TODO: Question for code review.  Better to do a join or two separate 
       // Get our pack ID 
       Cursor res = mDatabase.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname = '" + packname +"'", null, null, null, null);
-      Log.d(TAG, "**** MADE IT PAST CUROSR");
+      
       res.moveToFirst();
       int packid = res.getInt(0);      
       
@@ -398,7 +399,7 @@ public class Deck {
 //      newValues.put("playcount", "playcount+1");
 //      mDatabase.update(PHRASE_TABLE_NAME, newValues, "id in (" + args + ")", null);
       mDatabase.execSQL("UPDATE " + PHRASE_TABLE_NAME  
-                      + " SET playdate = date('now')"
+                      + " SET playdate = datetime('now')"
                       + " WHERE id in(" + ids + ");"); 
     }
     
@@ -460,29 +461,50 @@ public class Deck {
       }
       mDatabase = getWritableDatabase();      
       
+      LinkedList<Card> ret = new LinkedList<Card>();      
       int packid = getPackId(packname);     
 
       // TODO: Do you think it's faster to pull all cards from a pack, then filter, or count all cards in pack, then pull w/ filter?
       // My guess is counting all cards may need to be done before any of this method to see if we have enough for a "good game" and then
-      // take the number of cards needed for a good game.
-      LinkedList<Card> ret = new LinkedList<Card>();      
-      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "pack_id = " + packid, null, null, null, "playdate");
+      // take the number of cards needed for a good game.      
+      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "pack_id = " + packid, null, null, null, "playdate asc");
       res.moveToFirst();
       
       // The number of cards to return from any given pack will use the following formula:
       // TOTAL / DIVISOR + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
-      int targetnum = (int) Math.ceil(res.getCount() / Deck.PACK_DIVISOR);
-      int surplusnum = (int) Math.ceil(targetnum * Deck.THROW_BACK_PERCENTAGE);
-      int workingnum = targetnum + surplusnum;      
+      int decksize = res.getCount();
+      int targetnum = (int) Math.ceil(decksize / Deck.PACK_DIVISOR);
+      int surplusnum = (int) Math.ceil(targetnum * (Deck.THROW_BACK_PERCENTAGE / 100));
+      int workingnum = targetnum + surplusnum;
+      Log.d(TAG, "** decksize: " + decksize);
+      Log.d(TAG, "** targetnum: " + targetnum);
+      Log.d(TAG, "** surplusnum: " + surplusnum);
+      Log.d(TAG, "** workingnum: " + workingnum);
       
+      Log.d(TAG, "** ADDING PHRASES");
       // Take the first workingnum cards, throwing out THROW_BACK_PERCENTAGE of the cards seen
       while (!res.isAfterLast() && res.getPosition() < workingnum) {
         if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, "adding: " + res.getString(1));
-        }
+        }        
         ret.add(new Card(res.getInt(0), res.getString(1)));
         res.moveToNext();
-      }    
+      }
+      Log.d(TAG, "**" + ret.size() + " phrases added.");
+      
+      // Throw out x surplus cards at random
+      Random r = new Random();
+      int removeCount = 0;
+      int index = 0;
+      Log.d(TAG, "** REMOVING PHRASES");
+      while (removeCount < surplusnum) {
+        index = r.nextInt(ret.size()-1);
+        Log.d(TAG, "**removing: " + ret.get(index));
+        ret.remove(index);
+        removeCount++;
+      }
+      Log.d(TAG, "**" + removeCount + " phrases removed.");
+      
       res.close();
       return ret;
     }
