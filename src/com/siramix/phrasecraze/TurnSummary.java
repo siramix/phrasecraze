@@ -199,7 +199,7 @@ public class TurnSummary extends Activity {
       public void run() {
       Deck.DeckOpenHelper helper = new Deck.DeckOpenHelper(
           TurnSummary.this);      
-      helper.incrementPlayCount(ids);
+      helper.updatePlaydate(ids);
       helper.close();
         }
       });
