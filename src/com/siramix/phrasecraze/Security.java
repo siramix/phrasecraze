@@ -3,7 +3,6 @@
 package com.siramix.phrasecraze;
 
 import com.siramix.phrasecraze.Consts.PurchaseState;
-import android.util.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;

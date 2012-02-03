@@ -7,15 +7,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.siramix.phrasecraze.Consts;
+import com.siramix.phrasecraze.PurchaseObserver;
+import com.siramix.phrasecraze.BillingService.RequestPurchase;
+import com.siramix.phrasecraze.BillingService.RestoreTransactions;
+import com.siramix.phrasecraze.Consts.PurchaseState;
+import com.siramix.phrasecraze.Consts.ResponseCode;
+
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +39,8 @@ import android.widget.Toast;
 public class PhrasePackPurchase extends Activity {
 
   private static final String TAG = "CardPackPurchase";
+
+public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALIZED";
   
   // To be used for tooltips to help guide users
   private Toast mHelpToast = null;
@@ -40,13 +52,99 @@ public class PhrasePackPurchase extends Activity {
   /**
    * This block of maps stores our lists of clients
    */
-  HashMap<String, String> mKnownTwitterClients;   
-  HashMap<String, String> mKnownFacebookClients; 
-  HashMap<String, String> mKnownGoogleClients;     
+  HashMap<String, String> mKnownTwitterClients;
+  HashMap<String, String> mKnownFacebookClients;
+  HashMap<String, String> mKnownGoogleClients;
   HashMap<String, ActivityInfo> mFoundTwitterClients; 
   HashMap<String, ActivityInfo> mFoundFacebookClients;
   HashMap<String, ActivityInfo> mFoundGoogleClients; 
-  
+
+  /**
+   * A {@link PurchaseObserver} is used to get callbacks when Android Market sends
+   * messages to this application so that we can update the UI.
+   */
+  private class PhrasePackPurchaseObserver extends PurchaseObserver {
+      public PhrasePackPurchaseObserver(Activity activity, Handler handler) {
+        super(activity, handler);
+      }
+
+      @Override
+      public void onBillingSupported(boolean supported) {
+          if (Consts.DEBUG) {
+              Log.i(TAG, "supported: " + supported);
+          }
+          if (supported) {
+              //restoreDatabase();
+          } else {
+              showToast("Billing not Supported");
+          }
+      }
+
+      @Override
+      public void onPurchaseStateChange(PurchaseState purchaseState, String itemId,
+              int quantity, long purchaseTime, String developerPayload) {
+          if (Consts.DEBUG) {
+              Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " " + purchaseState);
+          }
+
+          if (developerPayload == null) {
+              //logProductActivity(itemId, purchaseState.toString());
+          } else {
+              //logProductActivity(itemId, purchaseState + "\n\t" + developerPayload);
+          }
+
+          if (purchaseState == PurchaseState.PURCHASED) {
+              //mOwnedItems.add(itemId);
+          }
+          //mCatalogAdapter.setOwnedItems(mOwnedItems);
+          //mOwnedItemsCursor.requery();
+      }
+
+      @Override
+      public void onRequestPurchaseResponse(RequestPurchase request,
+              ResponseCode responseCode) {
+          if (Consts.DEBUG) {
+              Log.d(TAG, request.mProductId + ": " + responseCode);
+          }
+          if (responseCode == ResponseCode.RESULT_OK) {
+              if (Consts.DEBUG) {
+                  Log.i(TAG, "purchase was successfully sent to server");
+              }
+              //logProductActivity(request.mProductId, "sending purchase request");
+          } else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
+              if (Consts.DEBUG) {
+                  Log.i(TAG, "user canceled purchase");
+              }
+              //logProductActivity(request.mProductId, "dismissed purchase dialog");
+          } else {
+              if (Consts.DEBUG) {
+                  Log.i(TAG, "purchase failed");
+              }
+              //logProductActivity(request.mProductId, "request purchase returned " + responseCode);
+          }
+      }
+
+      @Override
+      public void onRestoreTransactionsResponse(RestoreTransactions request,
+              ResponseCode responseCode) {
+          if (responseCode == ResponseCode.RESULT_OK) {
+              if (Consts.DEBUG) {
+                  Log.d(TAG, "completed RestoreTransactions request");
+              }
+              // Update the shared preferences so that we don't perform
+              // a RestoreTransactions again.
+              SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+              SharedPreferences.Editor edit = prefs.edit();
+              edit.putBoolean(DB_INITIALIZED, true);
+              edit.commit();
+          } else {
+              if (Consts.DEBUG) {
+                  Log.d(TAG, "RestoreTransactions error: " + responseCode);
+              }
+          }
+      }
+  }
+
   /**
    * Create the packages screen from an XML layout and
    */
