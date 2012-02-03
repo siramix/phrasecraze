@@ -225,7 +225,9 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     } else {
         showToast("HURRAY BILLING!");
     }
-    mBillingService.requestPurchase("foo", "bar");
+    PackClient client = new PackClient();
+    showToast(String.valueOf(client.getNumPacks()));
+    //mBillingService.requestPurchase("foo", "bar");
   }
   
   /**
