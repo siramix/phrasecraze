@@ -70,28 +70,43 @@ public class Deck {
   private static final String PACK_TABLE_NAME = "packs";
   private static final int DATABASE_VERSION = 1;
   private static final int PHRASECACHE_SIZE = 200;
-  private static final String PHRASE_TABLE_CREATE = "CREATE TABLE "
-      + PHRASE_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-      + "phrase TEXT, " + "difficulty INTEGER, "
-      + "playdate INTEGER, " + "pack_id INTEGER, "
-      + "FOREIGN KEY(pack_id) REFERENCES pack(id) );";
-  private static final String CACHE_TABLE_CREATE = "CREATE TABLE "
-      + CACHE_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-      + "val TEXT );";
-  private static final String PACK_TABLE_CREATE = "CREATE TABLE " 
-      + PACK_TABLE_NAME + "( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-      + "packname TEXT );";
-
+  
   private static final String[] PHRASE_COLUMNS = { "id", "phrase", "difficulty", 
                                                    "playdate", "pack_id" };
-  private static final String[] PACK_COLUMNS = { "id", "packname" };
+  private static final String[] PACK_COLUMNS = { "id", "packname", "version" };
   private static final String[] CACHE_COLUMNS = { "id", "val" };
+  
+  private static final String PHRASE_TABLE_CREATE = "CREATE TABLE "
+      + PHRASE_TABLE_NAME + "( " + 
+          PHRASE_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  
+          PHRASE_COLUMNS[1] + " TEXT, " + 
+          PHRASE_COLUMNS[2] + " INTEGER, " +
+          PHRASE_COLUMNS[3] + " INTEGER, " +
+          PHRASE_COLUMNS[4] + " INTEGER, " + 
+          "FOREIGN KEY(" + PACK_COLUMNS[0] + ") REFERENCES " + PACK_TABLE_NAME + "(" + PACK_COLUMNS[0] + ") );";
+  private static final String CACHE_TABLE_CREATE = "CREATE TABLE "
+      + CACHE_TABLE_NAME + "( " + 
+          CACHE_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+          CACHE_COLUMNS[1] + " TEXT );";
+  private static final String PACK_TABLE_CREATE = "CREATE TABLE " 
+      + PACK_TABLE_NAME + "( " + 
+          PACK_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+          PACK_COLUMNS[1] + " TEXT, " + 
+          PACK_COLUMNS[2] + " INTEGER );";
   
   // Take the top 1/DIVISOR phrases from a pack as possible cards for the phraseCache
   //TODO This should be weighted
   private static final int PACK_DIVISOR = 25; 
+  
+  // This is the sum of all cards in selected packs
+  private int mPackTotalCards;
+  
+  // This will get set during Game Setup, it's the ideal number of cards for a single game
+  // Potentially this will be dependent on num rounds selected
+  private int mCacheSize;
+  
   // After taking the top 1/DIVSOR phrases from a pack, throw back a percentage of them 
-  private static final int THROW_BACK_PERCENTAGE = 10;
+  private static final int THROW_BACK_PERCENTAGE = 20;
   
   private LinkedList<Card> mPhraseCache;    
   private Context mContext;
@@ -122,10 +137,14 @@ public class Deck {
     // need to be set anyways to save user's last game's settings
     
     //TODO FIGURE OUT WEIGHTING
-    String ids = "";
-
+    
+    
+    //TODO STUB
+    mPackTotalCards = 125;
+    mCacheSize = 100;
+    
     // For all packs being played get the phrases we want  
-    mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack("starter"));
+    mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack("starter", mCacheSize, mPackTotalCards));
     
     // Put all the phrases together
     
@@ -152,6 +171,22 @@ public class Deck {
     } else {
       return mPhraseCache.removeFirst();
     }
+  }
+  
+  /**
+   * Sets the value for how many cards will be played for the night.  Should
+   * be set before a game begins and after packs are chosen.  This may be
+   * proportional to all the cards selected.  We should also validate that
+   * players chose a 'good' amount, i.e. not playing with just 200 cards.
+   * 
+   * @param cacheSize The number of cards to store for a game's worth of cards 
+   * @return
+   */
+  public void setCacheSize(int cacheSize) {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "setPlaySize()");
+    }
+    this.mCacheSize = cacheSize;
   }
 
   /**
@@ -455,7 +490,7 @@ public class Deck {
       return ret;
     }
     
-    public LinkedList<Card> pullFromPack(String packname) {
+    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, int TOTAL_SELECTED) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "pullFromPack(" + packname + ")");        
       }
@@ -464,25 +499,27 @@ public class Deck {
       LinkedList<Card> ret = new LinkedList<Card>();      
       int packid = getPackId(packname);     
 
-      // TODO: Do you think it's faster to pull all cards from a pack, then filter, or count all cards in pack, then pull w/ filter?
-      // My guess is counting all cards may need to be done before any of this method to see if we have enough for a "good game" and then
-      // take the number of cards needed for a good game.      
-      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "pack_id = " + packid, null, null, null, "playdate asc");
+      // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
+      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "pack_id = " + packid, 
+                                  null, null, null, "playdate asc", Integer.toString(CACHE_SIZE));
       res.moveToFirst();
       
       // The number of cards to return from any given pack will use the following formula:
-      // TOTAL / DIVISOR + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
-      int decksize = res.getCount();
-      int targetnum = (int) Math.ceil(decksize / Deck.PACK_DIVISOR);
-      int surplusnum = (int) Math.ceil(targetnum * (Deck.THROW_BACK_PERCENTAGE / 100));
+      // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
+      int packsize = res.getCount();
+      float weight = (float) packsize / (float) TOTAL_SELECTED;      
+      int targetnum = (int) Math.ceil(CACHE_SIZE * weight);
+      int surplusnum = (int) Math.ceil( (float) targetnum * (Deck.THROW_BACK_PERCENTAGE / 100));
       int workingnum = targetnum + surplusnum;
-      Log.d(TAG, "** decksize: " + decksize);
+      
+      Log.d(TAG, "** packsize: " + packsize);
+      Log.d(TAG, "** weight: " + weight);
       Log.d(TAG, "** targetnum: " + targetnum);
       Log.d(TAG, "** surplusnum: " + surplusnum);
       Log.d(TAG, "** workingnum: " + workingnum);
       
       Log.d(TAG, "** ADDING PHRASES");
-      // Take the first workingnum cards, throwing out THROW_BACK_PERCENTAGE of the cards seen
+      // Add the first workingnum cards, throwing out THROW_BACK_PERCENTAGE of the cards seen
       while (!res.isAfterLast() && res.getPosition() < workingnum) {
         if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, "adding: " + res.getString(1));
