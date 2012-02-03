@@ -1,6 +1,5 @@
 package com.siramix.phrasecraze;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -145,6 +144,10 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       }
   }
 
+  private PhrasePackPurchaseObserver mPurchaseObserver;
+  private Handler mHandler;
+  private BillingService mBillingService;
+
   /**
    * Create the packages screen from an XML layout and
    */
@@ -209,6 +212,20 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     
     populatePackLayout(freePackList, freePackLayout);
     populatePackLayout(paidPackList, paidPackLayout);
+    
+    mHandler = new Handler();
+    mPurchaseObserver = new PhrasePackPurchaseObserver(this,mHandler);
+    mBillingService = new BillingService();
+    mBillingService.setContext(this);
+
+    // Check if billing is supported.
+    ResponseHandler.register(mPurchaseObserver);
+    if (!mBillingService.checkBillingSupported()) {
+        showToast("NO BILLING!");
+    } else {
+        showToast("HURRAY BILLING!");
+    }
+    mBillingService.requestPurchase("foo", "bar");
   }
   
   /**
