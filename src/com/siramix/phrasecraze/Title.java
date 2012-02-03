@@ -121,7 +121,7 @@ public class Title extends Activity {
       if (on) {
         button.setBackgroundResource(R.drawable.title_play_onclick);
         label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamB_highlight));
+            R.color.play_highlight));
       } else {
         button.setBackgroundResource(R.drawable.title_play);
         label.setTextColor(Title.this.getResources().getColor(
@@ -134,7 +134,7 @@ public class Title extends Activity {
       if (on) {
         button.setBackgroundResource(R.drawable.title_play_onclick);
         label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamC_highlight));
+            R.color.buzzer_highlight));
       } else {
         button.setBackgroundResource(R.drawable.title_play);
         label.setTextColor(Title.this.getResources().getColor(
@@ -147,7 +147,7 @@ public class Title extends Activity {
       if (on) {
         button.setBackgroundResource(R.drawable.title_settings_onclick);
         label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamD_highlight));
+            R.color.settings_highlight));
       } else {
         button.setBackgroundResource(R.drawable.title_settings);
         label.setTextColor(Title.this.getResources().getColor(
@@ -160,7 +160,7 @@ public class Title extends Activity {
       if (on) {
         button.setBackgroundResource(R.drawable.title_rules_onclick);
         label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamA_highlight));
+            R.color.rules_highlight));
       } else {
         button.setBackgroundResource(R.drawable.title_rules);
         label.setTextColor(Title.this.getResources().getColor(

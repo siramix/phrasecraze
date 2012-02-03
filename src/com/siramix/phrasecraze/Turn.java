@@ -699,7 +699,7 @@ public class Turn extends Activity {
     // Change views to appropriate team color
     Team curTeam = mGameManager.getActiveTeam();
     ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
-    barFill.setImageResource(curTeam.getBackground());
+    barFill.setImageResource(curTeam.getPrimaryColor());
     this.findViewById(R.id.Turn_Root).setBackgroundResource(
         curTeam.getGradient());    
   }
