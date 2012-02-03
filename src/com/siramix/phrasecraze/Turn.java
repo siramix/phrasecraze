@@ -21,6 +21,7 @@ import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
@@ -845,10 +846,10 @@ public class Turn extends Activity {
     };
 
     // Setup the "card" views to allow for skip gesture to be performed on top
-    this.findViewById(R.id.Turn_CardTitleA)
-        .setOnTouchListener(mGestureListener);
-    this.findViewById(R.id.Turn_CardTitleB)
-        .setOnTouchListener(mGestureListener);
+    TextView titleA = (TextView) this.findViewById(R.id.Turn_CardTitleA);
+    titleA.setOnTouchListener(mGestureListener);
+    TextView titleB = (TextView) this.findViewById(R.id.Turn_CardTitleB);
+    titleB.setOnTouchListener(mGestureListener);
     this.findViewById(R.id.Turn_Root).setOnTouchListener(mGestureListener);
     this.findViewById(R.id.Turn_ViewFlipper).setOnTouchListener(
         mGestureListener);
@@ -856,7 +857,15 @@ public class Turn extends Activity {
         mGestureListener);
     this.findViewById(R.id.Turn_CardLayoutB).setOnTouchListener(
         mGestureListener);
-
+    
+   /* Typeface font = Typeface.createFromAsset(getAssets(),
+            "fonts/Boogaloo-Regular.ttf");
+            */
+    Typeface font = Typeface.createFromAsset(getAssets(),
+    "fonts/FrancoisOne.ttf");
+    titleA.setTypeface(font);
+    titleB.setTypeface(font);
+    
     // Only change team color in assisted scoring mode  
     if( mAssistedScoringEnabled)
     {
