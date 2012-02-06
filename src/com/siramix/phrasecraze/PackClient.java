@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -29,44 +30,61 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * @author Siramix Labs
  * Client for communicating with the phrasecraze pack server
  */
 public class PackClient {
+  
+  /**
+   * URL Constants
+   */
+  private static final String URL_BASE = "http://siramix.com/phrasecraze/packs/";
+  private static final String LIST_URL = "list.json";
+  
+  /**
+   * Members
+   */
+  private static PackClient mInstance = null;
 
-  public int getNumPacks() {
+  /**
+   * Return the intance of the PackClient object
+   * @return
+   */
+  public static PackClient getInstance() {
+    if(mInstance == null) {
+      mInstance = new PackClient();
+    }
+    return mInstance;
+  }
+
+  public LinkedList<Pack> getPacks() throws IOException, URISyntaxException, JSONException {
     BufferedReader in = null;
-    try {
-        HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet();
-        request.setURI(new URI("http://siramix.com/phrasecraze/packs/list.json"));
-        HttpResponse response = client.execute(request);
-        in = new BufferedReader
-        (new InputStreamReader(response.getEntity().getContent()));
-        StringBuffer sb = new StringBuffer("");
-        String line = "";
-        String NL = System.getProperty("line.separator");
-        while ((line = in.readLine()) != null) {
-            sb.append(line + NL);
-        }
-        in.close();
-        String page = sb.toString();
-        System.out.println(page);
-        JSONArray jArray = new JSONArray(page);
-        for(int i = 0; i < jArray.length(); ++i) {
-          System.out.println(jArray.getJSONObject(i).getString("name"));
-        }
-        return jArray.length();
+    LinkedList<Pack> ret = null;
+    in = doHTTPGet(URL_BASE+LIST_URL);
+    ret = PackParser.parsePacks(in);
+    return ret;
+  }
 
-        } catch (IOException e) {
-        } catch (URISyntaxException e) {
-          e.printStackTrace();
-        } catch (JSONException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-    return 0;
+  public CardJSONIterator getCardsForPack(Pack pack) throws IOException, URISyntaxException {
+    BufferedReader in = null;
+    CardJSONIterator ret = null;
+    String packURL = pack.getPath();
+    in = doHTTPGet(URL_BASE+packURL);
+    ret = PackParser.parseCards(in);
+    return ret;
+  }
+
+  private static BufferedReader doHTTPGet(String url) throws IOException, URISyntaxException {
+    HttpClient client = new DefaultHttpClient();
+    HttpGet request = new HttpGet();
+    request.setURI(new URI(url));
+    HttpResponse response = client.execute(request);
+    BufferedReader ret = new BufferedReader
+    (new InputStreamReader(response.getEntity().getContent()));
+    return ret;
   }
 }

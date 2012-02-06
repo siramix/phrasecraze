@@ -1,10 +1,14 @@
 package com.siramix.phrasecraze;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONException;
 
 import com.siramix.phrasecraze.Consts;
 import com.siramix.phrasecraze.PurchaseObserver;
@@ -226,7 +230,18 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         showToast("HURRAY BILLING!");
     }
     PackClient client = new PackClient();
-    showToast(String.valueOf(client.getNumPacks()));
+    try {
+      showToast(client.getPacks().get(1).getName());
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (URISyntaxException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (JSONException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     //mBillingService.requestPurchase("foo", "bar");
   }
   
