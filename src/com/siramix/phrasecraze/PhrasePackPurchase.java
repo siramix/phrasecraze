@@ -47,20 +47,28 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
   
   // To be used for tooltips to help guide users
   private Toast mHelpToast = null;
-  
-  private List<String> mPackList;  // This must stay in sync with mPackLineList
+
   List<ImageView> mPackViewList;
   List<View> mPackLineList;
-  
+
+  private HashMap<Integer, Pack> mSocialPacks;
+
   /**
    * This block of maps stores our lists of clients
    */
   HashMap<String, String> mKnownTwitterClients;
   HashMap<String, String> mKnownFacebookClients;
   HashMap<String, String> mKnownGoogleClients;
-  HashMap<String, ActivityInfo> mFoundTwitterClients; 
+  HashMap<String, ActivityInfo> mFoundTwitterClients;
   HashMap<String, ActivityInfo> mFoundFacebookClients;
-  HashMap<String, ActivityInfo> mFoundGoogleClients; 
+  HashMap<String, ActivityInfo> mFoundGoogleClients;
+
+  /**
+   * Request Code constants for social media sharing 
+   */
+  private static final int TWITTER_REQUEST_CODE = 11;
+  private static final int FACEBOOK_REQUEST_CODE = 12;
+  private static final int GOOGLEPLUS_REQUEST_CODE = 13;
 
   /**
    * A {@link PurchaseObserver} is used to get callbacks when Android Market sends
@@ -193,29 +201,29 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     // Instantiate all of our lists for programmatic adding of packs to view
     mPackViewList = new LinkedList<ImageView>();
     mPackLineList = new LinkedList<View>();
-    mPackList = new LinkedList<String>(); // TODO This s/b a master list of packs
-        
-    //TODO pack list should be filled with all our packs
-    
-    //TODO get this list from the database or marketplace if possible
-    //      this is the free pack list
-    LinkedList<String> freePackList = new LinkedList<String>();
-    freePackList.add("Test1");
-    freePackList.add("Test2");
-    freePackList.add("Test3");
-    
+
     //TODO get this list from the database or marketplace if possible
     //      this is the paid pack list
-    LinkedList<String> paidPackList = new LinkedList<String>();
-    paidPackList.add("PaidTest1");
-    paidPackList.add("PaidTest2");
-    paidPackList.add("PaidTest3");
-    paidPackList.add("PaidTest4");
-    paidPackList.add("PaidTest5");
-    paidPackList.add("PaidTest6");
+    PackClient client = PackClient.getInstance();
+    LinkedList<Pack> socialPacks;
+    LinkedList<Pack> paidPacks;
+    mSocialPacks = new HashMap<Integer, Pack>();
     
-    populatePackLayout(freePackList, freePackLayout);
-    populatePackLayout(paidPackList, paidPackLayout);
+    try {
+      socialPacks = client.getSocialPacks();
+      paidPacks = client.getPayPacks();
+      populatePackLayout(socialPacks, freePackLayout);
+      populatePackLayout(paidPacks, paidPackLayout);
+    } catch (IOException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (URISyntaxException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (JSONException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
     
     mHandler = new Handler();
     mPurchaseObserver = new PhrasePackPurchaseObserver(this,mHandler);
@@ -224,25 +232,8 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
 
     // Check if billing is supported.
     ResponseHandler.register(mPurchaseObserver);
-    if (!mBillingService.checkBillingSupported()) {
-        showToast("NO BILLING!");
-    } else {
-        showToast("HURRAY BILLING!");
-    }
-    PackClient client = new PackClient();
-    try {
-      showToast(client.getPacks().get(1).getName());
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (URISyntaxException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JSONException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    //mBillingService.requestPurchase("foo", "bar");
+
+    //mBillingService.requestPurchase("test_pack", "payload_test");
   }
   
   /**
@@ -254,7 +245,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
    * @param packlist  A list of packs to iterate through and populate the purchase rows with
    * @param insertionPoint  The linearlayout at which to insert the rows of packs
    */
-  private void populatePackLayout(List<String> packlist, LinearLayout insertionPoint) {
+  private void populatePackLayout(List<Pack> packlist, LinearLayout insertionPoint) {
     String packname;
     int count = 0;
     
@@ -262,12 +253,17 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     LinearLayout layout = new LinearLayout(this.getBaseContext());
     layout.setOrientation(LinearLayout.VERTICAL);
     
-    for (Iterator<String> it = packlist.iterator(); it.hasNext();) {
-      packname = it.next();
+    for (Iterator<Pack> it = packlist.iterator(); it.hasNext();) {
+      Pack curPack = it.next();
+      packname = curPack.getName();
       Log.d(TAG, "Count: " + count + "\nPackname: " + packname);
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
       RelativeLayout packRow = (RelativeLayout) line.getChildAt(count);
+
+      // Add the current pack object to the row so that the listener can get its
+      // metadata
+      packRow.setTag(curPack);
 
       // Make every line alternating color
       if (count % 2 == 0) {
@@ -277,8 +273,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       
       // Set Pack Title
       TextView packTitle = (TextView) packRow.getChildAt(1);
-      //TODO this will need to pull the string from our pack list
-      packTitle.setText(packname);
+      packTitle.setText(curPack.getName());
 
       // Set Row end icon
       ImageView packIcon = (ImageView) packRow.getChildAt(3);
@@ -288,18 +283,24 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       
       // Bind Listener
       //TODO this will need to be more specific later (to just free social apps)
-      if (count == 0) {
+      if (curPack.getPath().equals("twitter.json")) {
         packRow.setOnClickListener(mTweetListener);
+        mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
       }
-      else if (count == 1) {
+      else if (curPack.getPath().equals("facebook.json")) {
         packRow.setOnClickListener(mFacebookListener);
+        mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
       }
-      else if (count == 2) {
+      else if (curPack.getPath().equals("googleplus.json")) {
         packRow.setOnClickListener(mGoogleListener);
+        mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
+      }
+      else {
+        packRow.setOnClickListener(mPremiumPackListener);
       }
       count++;
     }
-    insertionPoint.addView(layout);   
+    insertionPoint.addView(layout);
     
   }
   
@@ -316,9 +317,11 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         intent.setComponent(targetComponent);
         String intentType = (targetComponent.getClassName().contains("com.twidroid")) ?
             "application/twitter" : "text/plain";
-        intent.setType(intentType);        
+        intent.setType(intentType);
         intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
-        startActivityForResult(intent, 0);
+        Pack curPack = (Pack) v.getTag();
+        intent.putExtra(getString(R.string.packBundleKey), curPack);
+        startActivityForResult(intent, TWITTER_REQUEST_CODE);
       } else {
         showToast(getString(R.string.toast_packpurchase_notwitter));
       }
@@ -341,7 +344,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
         intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
         intent.putExtra(Intent.EXTRA_TEXT, "https://market.android.com/details?id=com.buzzwords");
-        startActivity(intent);
+        startActivityForResult(intent, FACEBOOK_REQUEST_CODE);
       } else {
         showToast(getString(R.string.toast_packpurchase_nofacebook));
       }
@@ -363,7 +366,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         intent.setType(intentType);
         intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n" + "TESTING");
         intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, GOOGLEPLUS_REQUEST_CODE);
       } else {
         showToast(getString(R.string.toast_packpurchase_nogoogleplus));
       }
@@ -378,14 +381,26 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
 
     //TODO obviously handle this better
     if (resultCode == 0) {
-      showToast("WE'RE GIVING YOU THIS PACK NOW!!!");
+      //showToast("WE'RE GIVING YOU THIS PACK NOW!!!");
+      showToast(mSocialPacks.get(requestCode).getName());
     }
-    
-    if (data != null) {
+
+    /*if (data != null) {
       // launch the application that we just picked
       startActivity(data);
-   }    
+   }*/
   }
+  
+  /**
+   * This listener is specifically for packs that require tweeting to get.
+   */
+  private final OnClickListener mPremiumPackListener = new OnClickListener() {    
+    //Tweet button handler
+    public void onClick(View v) {
+      Pack curPack = (Pack) v.getTag();
+      mBillingService.requestPurchase(curPack.getPath(), "payload_test");
+    }
+  };
   
   /**
    * http://blogrescue.com/2011/12/android-development-send-tweet-action/ 
@@ -404,10 +419,10 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     mKnownTwitterClients.put("Plume", "com.levelup.touiteur.appwidgets.TouiteurWidgetNewTweet");
     mKnownTwitterClients.put("Twicca", "jp.r246.twicca.statuses.Send");
     mKnownFacebookClients = new HashMap<String, String>();
-    mKnownFacebookClients.put("Facebook", "com.facebook.katana.ShareLinkActivity");       
+    mKnownFacebookClients.put("Facebook", "com.facebook.katana.ShareLinkActivity");
     mKnownFacebookClients.put("FriendCaster", "uk.co.senab.blueNotifyFree.activity.PostToFeedActivity");
     mKnownGoogleClients = new HashMap<String, String>();  
-    mKnownGoogleClients.put("Google+", "com.google.android.apps.plus.phone.PostActivity");    
+    mKnownGoogleClients.put("Google+", "com.google.android.apps.plus.phone.PostActivity");
   }
   
   /**
@@ -488,6 +503,6 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     }
     mHelpToast.show();
   }
-}
 
+}
 

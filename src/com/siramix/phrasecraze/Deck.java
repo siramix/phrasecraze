@@ -298,7 +298,7 @@ public class Deck {
 
       mDatabase = db;
 
-      // Dynamically retrieve the xml resource Id for the pack name
+      // Dynamically retrieve the resource Id for the pack name
       int resId = mHelperContext.getResources().
           getIdentifier(packFileName, "raw", "com.siramix.phrasecraze");
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(

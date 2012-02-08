@@ -43,7 +43,8 @@ public class PackClient {
    * URL Constants
    */
   private static final String URL_BASE = "http://siramix.com/phrasecraze/packs/";
-  private static final String LIST_URL = "list.json";
+  private static final String PAY_LIST_URL = "list.json";
+  private static final String SOCIAL_LIST_URL = "social.json";
   
   /**
    * Members
@@ -51,7 +52,7 @@ public class PackClient {
   private static PackClient mInstance = null;
 
   /**
-   * Return the intance of the PackClient object
+   * Return the instance of the PackClient object
    * @return
    */
   public static PackClient getInstance() {
@@ -61,14 +62,45 @@ public class PackClient {
     return mInstance;
   }
 
-  public LinkedList<Pack> getPacks() throws IOException, URISyntaxException, JSONException {
+  /**
+   * Get all of the packs available on the server for pay
+   * @return a LinkedList of Packs representing the pack that is available
+   * @throws IOException if the request to the server fails
+   * @throws URISyntaxException if the uri is malformed
+   * @throws JSONException if the JSON is invalid
+   */
+  public LinkedList<Pack> getPayPacks() throws IOException, URISyntaxException, JSONException {
     BufferedReader in = null;
     LinkedList<Pack> ret = null;
-    in = doHTTPGet(URL_BASE+LIST_URL);
+    in = doHTTPGet(URL_BASE+PAY_LIST_URL);
     ret = PackParser.parsePacks(in);
     return ret;
   }
 
+  /**
+   * Get all of the packs available on the server for social promotion
+   * @return a LinkedList of Packs representing the pack that is available
+   * @throws IOException if the request to the server fails
+   * @throws URISyntaxException if the uri is malformed
+   * @throws JSONException if the JSON is invalid
+   */
+  public LinkedList<Pack> getSocialPacks() throws IOException, URISyntaxException, JSONException {
+    BufferedReader in = null;
+    LinkedList<Pack> ret = null;
+    in = doHTTPGet(URL_BASE+SOCIAL_LIST_URL);
+    ret = PackParser.parsePacks(in);
+    return ret;
+  }
+
+  /**
+   * Get the cards associated with a given pack object. The iterator actually
+   * catches and handles IOExceptions in this function because of its parent
+   * API requirements.
+   * @param pack the pack to be retrieved from the server
+   * @return an iterator over the cards
+   * @throws IOException if the request to the server fails
+   * @throws URISyntaxException if the URI is invalid in some way
+   */
   public CardJSONIterator getCardsForPack(Pack pack) throws IOException, URISyntaxException {
     BufferedReader in = null;
     CardJSONIterator ret = null;
@@ -78,6 +110,14 @@ public class PackClient {
     return ret;
   }
 
+  /**
+   * Perform an HTTP get on a URL and return the response. This is a helper
+   * function to be used in pack and card fetching
+   * @param url the address to perform the GET upon
+   * @return a BufferedReader of the response body
+   * @throws IOException if the request fails in some way
+   * @throws URISyntaxException if the URI is malformed
+   */
   private static BufferedReader doHTTPGet(String url) throws IOException, URISyntaxException {
     HttpClient client = new DefaultHttpClient();
     HttpGet request = new HttpGet();

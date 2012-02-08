@@ -17,6 +17,7 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
@@ -24,8 +25,12 @@ import java.util.LinkedList;
  * it, but that is not a requirement.
  * @author Siramix Labs
  */
-public class Pack {
+public class Pack implements Serializable {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -3764144456280008930L;
   private String mName;
   private String mUpdateMessage;
   private String mPath;
