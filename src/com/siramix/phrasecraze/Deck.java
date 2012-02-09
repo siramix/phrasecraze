@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -74,6 +75,9 @@ public class Deck {
   private static final String PACK_TABLE_NAME = "packs";
   private static final int DATABASE_VERSION = 1;
   private static final int PHRASECACHE_SIZE = 200;
+  
+  private static final int PACK_CURRENT = -1;
+  private static final int PACK_NOT_PRESENT = -2;
   
   private static final String[] PHRASE_COLUMNS = { "id", "phrase", "difficulty", 
                                                    "playdate", "pack_id" };
@@ -194,7 +198,17 @@ public class Deck {
   }
 
   /**
-   * Add a pack to the sytem
+   * Take a Pack object and pull in cards from the server into the database. 
+   * @param pack
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  public synchronized void digestPack(Pack pack) throws IOException, URISyntaxException {
+    mDatabaseOpenHelper.digestPackFromServer(pack);
+  }
+  
+  /**
+   * Add a pack to the system
    * @return an integer indicating the number of packs processed
    */
   public synchronized int updatePurchase(String orderId, String productId,
@@ -239,7 +253,7 @@ public class Deck {
       db.execSQL(PACK_TABLE_CREATE);
       db.execSQL(PHRASE_TABLE_CREATE);
       db.execSQL(CACHE_TABLE_CREATE);
-      digestPack(db, "starter");
+      digestPackFromResource(db, "starter", R.raw.starter);
     }
 
     /**
@@ -285,41 +299,57 @@ public class Deck {
     }
 
     /**
-     * Load the words from the XML file using only one SQLite database.  Packs
-     * are broken out into separate XML files to allow for in-app purchasing.
+     * Load the words from the JSON file using only one SQLite database. This
+     * function loads the words from a json file that is stored as a resource in the project
      * 
      * @param db from the installing context
-     * @param packFileName the name of the file to digest
+     * @param packName the name of the file to digest
+     * @param resId the resource of the pack file to digest
      */
-    private void digestPack(SQLiteDatabase db, String packFileName) {
+    private void digestPackFromResource(SQLiteDatabase db, String packName, int resId) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Digesting pack " + packFileName + "...");
+        Log.d(TAG, "Digesting pack from resource " + String.valueOf(resId));
       }
 
-      mDatabase = db;
-
-      // Dynamically retrieve the resource Id for the pack name
-      int resId = mHelperContext.getResources().
-          getIdentifier(packFileName, "raw", "com.siramix.phrasecraze");
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(
           mHelperContext.getResources().openRawResource(resId)));
-
-      try {
-        mDatabase.beginTransaction();
-        int packId = (int) insertPack(packFileName, mDatabase);
-        CardJSONIterator cardItr = PackParser.parseCards(packJSON);
-        Card curCard = null;
-        while(cardItr.hasNext()) {
-          curCard = cardItr.next();
-          insertPhrase(curCard.getTitle(), 1, packId, mDatabase);
-        }
-        mDatabase.setTransactionSuccessful();
-      } finally {
-        mDatabase.endTransaction();
-      }
+      CardJSONIterator cardItr = PackParser.parseCards(packJSON);
+      digestPackInternal(db, packName, 0, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "DONE loading words.");
+      }
+    }
+
+    public void digestPackFromServer(Pack pack) throws IOException, URISyntaxException {
+      mDatabase = getWritableDatabase();
+      // Don't add a pack if it's aready there
+      int packId = packInstalled(pack.getName(), pack.getVersion(), mDatabase);
+      if(packId == PACK_CURRENT) {
+        return;
+      } else {
+        if(packId != PACK_NOT_PRESENT) { 
+          clearPack(packId, mDatabase);
+        }
+        CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
+        digestPackInternal(mDatabase, pack.getName(), pack.getVersion(), cardItr);
+      }
+    }
+
+    private static void digestPackInternal(SQLiteDatabase db, String packName, int packVersion, CardJSONIterator cardItr) {
+
+      // Add the pack and all cards in a single transaction.
+      try {
+        db.beginTransaction();
+        int packId = (int) insertPack(packName, packVersion, db);
+        Card curCard = null;
+        while(cardItr.hasNext()) {
+          curCard = cardItr.next();
+          insertPhrase(curCard.getTitle(), 1, packId, db);
+        }
+        db.setTransactionSuccessful();
+      } finally {
+        db.endTransaction();
       }
     }
 
@@ -346,14 +376,39 @@ public class Deck {
      * @param db The db in which to insert the new pack
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public static long insertPack(String packname, SQLiteDatabase db) {
+    public static long insertPack(String packName, int packVersion, SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "addPack()");
       }
       ContentValues packValues = new ContentValues();
-      packValues.put("packname", packname);
+      packValues.put("packname", packName);
+      packValues.put("version", packVersion);
       return db.insert(PACK_TABLE_NAME, null, packValues);
-    }   
+    }
+
+    public static int packInstalled(String packName, int packVersion, SQLiteDatabase db) {
+      Cursor res = db.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname IN ("
+          + packName + ")", null, null, null, null);
+      if(res.getCount() >= 1) {
+        res.moveToFirst();
+        int oldVersion = res.getInt(2);
+        int oldId = res.getInt(0);
+        if(packVersion > oldVersion) {
+          return oldId;
+        } else {
+          return PACK_CURRENT;
+        }
+      } else {
+        return PACK_NOT_PRESENT;
+      }
+    }
+
+
+    public static void clearPack(int packId, SQLiteDatabase db) {
+      String[] whereArgs = new String[] { String.valueOf(packId) };
+      db.delete(PACK_TABLE_NAME, "id=?", whereArgs);
+      db.delete(PHRASE_TABLE_NAME, "pack_id=?", whereArgs);
+    }
 
     /**
      * Get the phrases corresponding to a comma-separated list of indices
