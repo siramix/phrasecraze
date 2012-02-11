@@ -381,7 +381,12 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
 
     //TODO obviously handle this better
     if (resultCode == 0) {
-      //showToast("WE'RE GIVING YOU THIS PACK NOW!!!");
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
+          .getApplication();
+      GameManager game = application.getGameManager();
+      Pack curPack = mSocialPacks.get(requestCode);
+      // TODO: Catch the runtime exception
+      game.getDeck().digestPack(curPack);
       showToast(mSocialPacks.get(requestCode).getName());
     }
 

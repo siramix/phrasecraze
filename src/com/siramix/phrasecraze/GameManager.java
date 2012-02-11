@@ -507,4 +507,11 @@ public class GameManager {
 	  }
 	  return false;
   }
+
+  /**
+   * @return The current deck
+   */
+  public Deck getDeck() {
+    return mDeck;
+  }
 }

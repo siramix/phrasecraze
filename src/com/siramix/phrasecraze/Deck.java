@@ -203,8 +203,16 @@ public class Deck {
    * @throws IOException
    * @throws URISyntaxException
    */
-  public synchronized void digestPack(Pack pack) throws IOException, URISyntaxException {
-    mDatabaseOpenHelper.digestPackFromServer(pack);
+  public synchronized void digestPack(Pack pack) throws RuntimeException {
+    try {
+      mDatabaseOpenHelper.digestPackFromServer(pack);
+    } catch (IOException e) {
+      RuntimeException userException = new RuntimeException(e);
+      throw userException;
+    } catch (URISyntaxException e) {
+      RuntimeException userException = new RuntimeException(e);
+      throw userException;
+    }
   }
   
   /**
@@ -402,7 +410,6 @@ public class Deck {
         return PACK_NOT_PRESENT;
       }
     }
-
 
     public static void clearPack(int packId, SQLiteDatabase db) {
       String[] whereArgs = new String[] { String.valueOf(packId) };
