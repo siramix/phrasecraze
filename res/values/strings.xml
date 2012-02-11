@@ -38,6 +38,7 @@
 
   <!-- Bundle Keys -->
   <string name="cardBundleKey">com.siramix.phrasecraze.card</string>
+  <string name="packBundleKey">com.siramix.phrasecraze.pack</string>
   <string name="cardIndexBundleKey">com.siramix.phrasecraze.cardIndex</string>
   <string name="cardStateBundleKey">com.siramix.phrasecraze.cardState</string>
   <string name="scrollXBundleKey">com.siramix.phrasecraze.scrollY</string>

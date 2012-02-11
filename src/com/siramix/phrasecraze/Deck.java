@@ -17,8 +17,11 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -33,6 +36,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.siramix.phrasecraze.Consts.PurchaseState;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -70,6 +75,9 @@ public class Deck {
   private static final String PACK_TABLE_NAME = "packs";
   private static final int DATABASE_VERSION = 1;
   private static final int PHRASECACHE_SIZE = 200;
+  
+  private static final int PACK_CURRENT = -1;
+  private static final int PACK_NOT_PRESENT = -2;
   
   private static final String[] PHRASE_COLUMNS = { "id", "phrase", "difficulty", 
                                                    "playdate", "pack_id" };
@@ -190,6 +198,43 @@ public class Deck {
   }
 
   /**
+   * Take a Pack object and pull in cards from the server into the database. 
+   * @param pack
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  public synchronized void digestPack(Pack pack) throws RuntimeException {
+    try {
+      mDatabaseOpenHelper.digestPackFromServer(pack);
+    } catch (IOException e) {
+      RuntimeException userException = new RuntimeException(e);
+      throw userException;
+    } catch (URISyntaxException e) {
+      RuntimeException userException = new RuntimeException(e);
+      throw userException;
+    }
+  }
+  
+  /**
+   * Add a pack to the system
+   * @return an integer indicating the number of packs processed
+   */
+  public synchronized int updatePurchase(String orderId, String productId,
+          PurchaseState purchaseState, long purchaseTime, String developerPayload) {
+    if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "updatePurchase()");
+      }
+    Log.d(TAG, "STUB");
+    Log.d(TAG, orderId);
+    Log.d(TAG, productId);
+    Log.d(TAG, purchaseState.name());
+    Log.d(TAG, Long.toString(purchaseTime));
+    Log.d(TAG, Long.toString(purchaseTime));
+    Log.d(TAG, developerPayload);
+    return 0;
+  }
+
+  /**
    * This class creates/opens the database and provides helper functions for
    * batch CRUD operations
    */
@@ -216,8 +261,7 @@ public class Deck {
       db.execSQL(PACK_TABLE_CREATE);
       db.execSQL(PHRASE_TABLE_CREATE);
       db.execSQL(CACHE_TABLE_CREATE);
-      digestPack(db, "starter");
-      digestPack(db, "stubpack");
+      digestPackFromResource(db, "starter", R.raw.starter);
     }
 
     /**
@@ -263,75 +307,57 @@ public class Deck {
     }
 
     /**
-     * Load the words from the XML file using only one SQLite database.  Packs
-     * are broken out into separate XML files to allow for in-app purchasing.
+     * Load the words from the JSON file using only one SQLite database. This
+     * function loads the words from a json file that is stored as a resource in the project
      * 
      * @param db from the installing context
-     * @param packFileName the name of the file to digest
+     * @param packName the name of the file to digest
+     * @param resId the resource of the pack file to digest
      */
-    private void digestPack(SQLiteDatabase db, String packFileName) {
+    private void digestPackFromResource(SQLiteDatabase db, String packName, int resId) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Digesting pack " + packFileName + "...");
+        Log.d(TAG, "Digesting pack from resource " + String.valueOf(resId));
       }
 
-      mDatabase = db;
-
-      // Dynamically retrieve the xml resource Id for the pack name
-      int resId = mHelperContext.getResources().
-          getIdentifier(packFileName, "raw", "com.siramix.phrasecraze");
-      InputStream packXML = mHelperContext.getResources().openRawResource(resId);
-      
-      DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-          .newInstance();
-
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Building DocBuilderFactory for phrase pack parsing from "
-            + R.class.toString());
-      }
-      try {
-        mDatabase.beginTransaction();
-        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-        Document doc = docBuilder.parse(packXML);        
-        // Parse out pack and insert in database        
-        Node packname = doc.getElementsByTagName("pack_name").item(0);     
-        
-        int packId = (int) this.insertPack(packname.getFirstChild().getNodeValue(), mDatabase);        
-        
-        // Parse out phrase entries and add to database
-        NodeList phraseEntryNodes = doc.getElementsByTagName("phrase_entry");
-        for (int i = 0; i < phraseEntryNodes.getLength(); i++) {
-          NodeList packPhraseDif = phraseEntryNodes.item(i).getChildNodes();          
-          Node phraseNode = null;
-          Node difficultyNode = null;
-          for (int j = 0; j < packPhraseDif.getLength(); j++) {
-            String candidateName = packPhraseDif.item(j).getNodeName();
-            if (candidateName.equals("phrase")) {
-              phraseNode = packPhraseDif.item(j);
-            } else if (candidateName.equals("difficulty")) {
-              difficultyNode = packPhraseDif.item(j);
-            }
-            else {
-              continue; // We found some #text
-            }
-          }          
-          String phrase = phraseNode.getFirstChild().getNodeValue();
-          int difficulty = Integer.parseInt(difficultyNode.getFirstChild().getNodeValue());          
-          
-          this.insertPhrase(phrase, difficulty, packId, mDatabase);
-        }
-        mDatabase.setTransactionSuccessful();
-      } catch (ParserConfigurationException e) {
-        e.printStackTrace();
-      } catch (SAXException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
-        e.printStackTrace();
-      } finally {
-        mDatabase.endTransaction();
-      }
+      BufferedReader packJSON = new BufferedReader(new InputStreamReader(
+          mHelperContext.getResources().openRawResource(resId)));
+      CardJSONIterator cardItr = PackParser.parseCards(packJSON);
+      digestPackInternal(db, packName, 0, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "DONE loading words.");
+      }
+    }
+
+    public void digestPackFromServer(Pack pack) throws IOException, URISyntaxException {
+      mDatabase = getWritableDatabase();
+      // Don't add a pack if it's aready there
+      int packId = packInstalled(pack.getName(), pack.getVersion(), mDatabase);
+      if(packId == PACK_CURRENT) {
+        return;
+      } else {
+        if(packId != PACK_NOT_PRESENT) { 
+          clearPack(packId, mDatabase);
+        }
+        CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
+        digestPackInternal(mDatabase, pack.getName(), pack.getVersion(), cardItr);
+      }
+    }
+
+    private static void digestPackInternal(SQLiteDatabase db, String packName, int packVersion, CardJSONIterator cardItr) {
+
+      // Add the pack and all cards in a single transaction.
+      try {
+        db.beginTransaction();
+        int packId = (int) insertPack(packName, packVersion, db);
+        Card curCard = null;
+        while(cardItr.hasNext()) {
+          curCard = cardItr.next();
+          insertPhrase(curCard.getTitle(), 1, packId, db);
+        }
+        db.setTransactionSuccessful();
+      } finally {
+        db.endTransaction();
       }
     }
 
@@ -340,15 +366,15 @@ public class Deck {
      * 
      * @return rowId or -1 if failed
      */
-    public long insertPhrase(String phrase, int difficulty, int packId, SQLiteDatabase db) {
+    public static long insertPhrase(String phrase, int difficulty, int packId, SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "insertPhrase()");
       }
-      ContentValues initialValues = new ContentValues();      
+      ContentValues initialValues = new ContentValues();
       initialValues.put("phrase", phrase);
       initialValues.put("difficulty", difficulty);
       initialValues.put("playdate", 0);
-      initialValues.put("pack_id", packId);            
+      initialValues.put("pack_id", packId);
       return db.insert(PHRASE_TABLE_NAME, null, initialValues);
     }
     
@@ -358,14 +384,38 @@ public class Deck {
      * @param db The db in which to insert the new pack
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public long insertPack(String packname, SQLiteDatabase db) {
+    public static long insertPack(String packName, int packVersion, SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "addPack()");
       }
       ContentValues packValues = new ContentValues();
-      packValues.put("packname", packname);
+      packValues.put("packname", packName);
+      packValues.put("version", packVersion);
       return db.insert(PACK_TABLE_NAME, null, packValues);
-    }   
+    }
+
+    public static int packInstalled(String packName, int packVersion, SQLiteDatabase db) {
+      Cursor res = db.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname IN ("
+          + packName + ")", null, null, null, null);
+      if(res.getCount() >= 1) {
+        res.moveToFirst();
+        int oldVersion = res.getInt(2);
+        int oldId = res.getInt(0);
+        if(packVersion > oldVersion) {
+          return oldId;
+        } else {
+          return PACK_CURRENT;
+        }
+      } else {
+        return PACK_NOT_PRESENT;
+      }
+    }
+
+    public static void clearPack(int packId, SQLiteDatabase db) {
+      String[] whereArgs = new String[] { String.valueOf(packId) };
+      db.delete(PACK_TABLE_NAME, "id=?", whereArgs);
+      db.delete(PHRASE_TABLE_NAME, "pack_id=?", whereArgs);
+    }
 
     /**
      * Get the phrases corresponding to a comma-separated list of indices
