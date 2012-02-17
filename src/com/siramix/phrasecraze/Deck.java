@@ -24,8 +24,10 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -144,15 +146,35 @@ public class Deck {
     // Use the preferences to pull the chosen decks as these will
     // need to be set anyways to save user's last game's settings
     
-    //TODO FIGURE OUT WEIGHTING
+    //TODO This will work once we are parsing out decks from the server and have data in the db
+    SharedPreferences packPrefs = mContext.getSharedPreferences(
+                                  Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+    Map<String, ?> packSelections = new HashMap<String, Boolean>();
+    packSelections = packPrefs.getAll();
     
+    LinkedList<String> selectedPacks = new LinkedList<String>();
+    for (String packname : packSelections.keySet())
+      if (packPrefs.getBoolean(packname, false) == true) {
+        selectedPacks.add(packname);
+      }
     
-    //TODO STUB
-    mPackTotalCards = 125;
+
+    //TODO Hardcoding until we are parsing decks into the db
+    LinkedList<String> stublist= new LinkedList<String>();
+    stublist.add("starter");
+    
+    mPackTotalCards = mDatabaseOpenHelper.countPhrases(stublist);
+    
+    Log.d(TAG, "**** TOTAL NUMBER OF PHRASES SELECTED: " + Integer.toString(mPackTotalCards));
+    
+    //TODO We should review the best place for this.  It's possible that this number
+    // should depend on the number of turns played.
     mCacheSize = 100;
     
     // For all packs being played get the phrases we want  
-    mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack("starter", mCacheSize, mPackTotalCards));
+    for ( String packName : stublist ) {
+      mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack(packName, mCacheSize, mPackTotalCards));
+    }
     
     // Put all the phrases together
     
@@ -161,7 +183,7 @@ public class Deck {
     Collections.shuffle(mPhraseCache);
         
     mDatabaseOpenHelper.close();
-  }
+  }  
   
   //TODO LOOK THIS OVER, got deleted and added back...WHY?
   /**
@@ -192,7 +214,7 @@ public class Deck {
    */
   public void setCacheSize(int cacheSize) {
     if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "setPlaySize()");
+      Log.d(TAG, "setCacheSize()");
     }
     this.mCacheSize = cacheSize;
   }
@@ -273,9 +295,37 @@ public class Deck {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "countPhrases()");
       }
-      mDatabase = getWritableDatabase();
+      mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PHRASE_TABLE_NAME);
       return ret;
+    }
+    
+    /**
+     * Returns an integer count of all phrases associated with the passed in pack names
+     * @param packnames
+     * @return
+     */
+    public int countPhrases(LinkedList<String> packnames) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "countPhrases(LinkedList<String>)");
+      }
+      String packIds = "";
+      for (int i=0; i< packnames.size(); ++i) {
+        packIds += String.valueOf(getPackId(packnames.get(i)));
+        if (i < packnames.size()-1) {
+          packIds += ",";
+        }
+      }
+      Log.d(TAG, "*** pack ids = " + packIds.toString());
+      mDatabase = getReadableDatabase();
+      Cursor ret = mDatabase.rawQuery("SELECT COUNT(*)" + 
+                                         " FROM " + PHRASE_TABLE_NAME + 
+                                         " WHERE " + PHRASE_COLUMNS[4] + " IN (" + packIds + ")", null);
+      int count = -1;
+      if(ret.moveToFirst()) {
+        count = ret.getInt(0);
+      }
+      return count;
     }
 
     /**
@@ -287,7 +337,7 @@ public class Deck {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "countCaches()");
       }
-      mDatabase = getWritableDatabase();
+      mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, CACHE_TABLE_NAME);
       return ret;
     }
@@ -301,7 +351,7 @@ public class Deck {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "countPacks()");
       }
-      mDatabase = getWritableDatabase();
+      mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PHRASE_TABLE_NAME);
       return ret;
     }
@@ -456,9 +506,10 @@ public class Deck {
       // Get our pack ID 
       Cursor res = mDatabase.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname = '" + packname +"'", null, null, null, null);
       
-      res.moveToFirst();
-      int packid = res.getInt(0);      
-      
+      int packid = -1;
+      if (res.moveToFirst()) {
+        packid = res.getInt(0);
+      }
       res.close();
       return packid;
     }
@@ -540,13 +591,23 @@ public class Deck {
       return ret;
     }
     
+    /**
+     * Generates and returns a LinkedList of Cards from the database for a specific pack.  First,
+     * we request all the cards from the db sorted by date.  Then we calculate how many of the 
+     * Cards should be returned based on the pack's weight relative to the total number of selected
+     * cards.  Then, just to shake things up we take a few extra, and r
+     * @param packname
+     * @param CACHE_SIZE
+     * @param TOTAL_SELECTED
+     * @return
+     */
     public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, int TOTAL_SELECTED) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "pullFromPack(" + packname + ")");        
       }
       mDatabase = getWritableDatabase();      
       
-      LinkedList<Card> ret = new LinkedList<Card>();      
+      LinkedList<Card> returnCards = new LinkedList<Card>();      
       int packid = getPackId(packname);     
 
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
@@ -554,30 +615,29 @@ public class Deck {
                                   null, null, null, "playdate asc", Integer.toString(CACHE_SIZE));
       res.moveToFirst();
       
-      // The number of cards to return from any given pack will use the following formula:
+      // The number of cards to returnCardsurn from any given pack will use the following formula:
       // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
       int packsize = res.getCount();
       float weight = (float) packsize / (float) TOTAL_SELECTED;      
       int targetnum = (int) Math.ceil(CACHE_SIZE * weight);
       int surplusnum = (int) Math.ceil( (float) targetnum * (Deck.THROW_BACK_PERCENTAGE / 100));
-      int workingnum = targetnum + surplusnum;
       
       Log.d(TAG, "** packsize: " + packsize);
       Log.d(TAG, "** weight: " + weight);
       Log.d(TAG, "** targetnum: " + targetnum);
       Log.d(TAG, "** surplusnum: " + surplusnum);
-      Log.d(TAG, "** workingnum: " + workingnum);
       
       Log.d(TAG, "** ADDING PHRASES");
-      // Add the first workingnum cards, throwing out THROW_BACK_PERCENTAGE of the cards seen
-      while (!res.isAfterLast() && res.getPosition() < workingnum) {
+
+      // Add cards to our returnCards, including a surplus 
+      while (!res.isAfterLast() && res.getPosition() < (targetnum + surplusnum)) {
         if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, "adding: " + res.getString(1));
         }        
-        ret.add(new Card(res.getInt(0), res.getString(1)));
+        returnCards.add(new Card(res.getInt(0), res.getString(1)));
         res.moveToNext();
       }
-      Log.d(TAG, "**" + ret.size() + " phrases added.");
+      Log.d(TAG, "**" + returnCards.size() + " phrases added.");
       
       // Throw out x surplus cards at random
       Random r = new Random();
@@ -585,15 +645,15 @@ public class Deck {
       int index = 0;
       Log.d(TAG, "** REMOVING PHRASES");
       while (removeCount < surplusnum) {
-        index = r.nextInt(ret.size()-1);
-        Log.d(TAG, "**removing: " + ret.get(index));
-        ret.remove(index);
+        index = r.nextInt(returnCards.size()-1);
+        Log.d(TAG, "**removing: " + returnCards.get(index));
+        returnCards.remove(index);
         removeCount++;
       }
       Log.d(TAG, "**" + removeCount + " phrases removed.");
       
       res.close();
-      return ret;
+      return returnCards;
     }
 
     //TODO Let's reconsider if this is the best thing to do after we figure out 

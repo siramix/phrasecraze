@@ -312,6 +312,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     public void onClick(View v) {
       ComponentName targetComponent = getClientComponentName(mFoundTwitterClients);
 
+      //TODO intent is a stupid name
       if (targetComponent != null) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setComponent(targetComponent);
@@ -321,7 +322,6 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
         Pack curPack = (Pack) v.getTag();
         intent.putExtra(getString(R.string.packBundleKey), curPack);
-        startActivityForResult(intent, TWITTER_REQUEST_CODE);
       } else {
         showToast(getString(R.string.toast_packpurchase_notwitter));
       }
@@ -336,6 +336,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     public void onClick(View v) {
       ComponentName targetComponent = getClientComponentName(mFoundFacebookClients);
 
+      //TODO intent is a stupid name
       if (targetComponent != null) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setComponent(targetComponent);
@@ -358,7 +359,8 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     //Tweet button handler
     public void onClick(View v) {
       ComponentName targetComponent = getClientComponentName(mFoundGoogleClients);
- 
+
+      //TODO intent is a stupid name 
       if (targetComponent != null) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setComponent(targetComponent);
@@ -385,9 +387,15 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
           .getApplication();
       GameManager game = application.getGameManager();
       Pack curPack = mSocialPacks.get(requestCode);
+      String packName = curPack.getName();
       // TODO: Catch the runtime exception
       game.getDeck().digestPack(curPack);
       showToast(mSocialPacks.get(requestCode).getName());
+      if (getPackPref(packName)) {
+        setPackPref(packName, false);
+      } else {
+        setPackPref(packName, true);
+      }
     }
 
     /*if (data != null) {
@@ -397,13 +405,22 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
   }
   
   /**
-   * This listener is specifically for packs that require tweeting to get.
+   * This listener is specifically for packs that require purchasing to get.
    */
   private final OnClickListener mPremiumPackListener = new OnClickListener() {    
     //Tweet button handler
     public void onClick(View v) {
       Pack curPack = (Pack) v.getTag();
+      String packName = curPack.getName();
       mBillingService.requestPurchase(curPack.getPath(), "payload_test");
+      
+      if (getPackPref(packName)) {
+        setPackPref(packName, false);
+      } else {
+        setPackPref(packName, true);
+      }
+      
+      
     }
   };
   
@@ -465,6 +482,42 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     }    
   }
  
+  
+  /**
+   * Get the current value of the pack preferences for a given pack name
+   * @param packName
+   * @return
+   */
+  public boolean getPackPref(String packName) {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "getPackPref(" + packName + ")");
+    }
+    SharedPreferences packPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+    return packPrefs.getBoolean(packName, false);
+  }
+  
+  /**
+   * Change the pack preference for the passed in pack to either on or off.
+   * @param curPack the pack whose preference will be changed
+   */
+  public void setPackPref(String packName, boolean onoff) {
+    if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "setPackPref(" + packName + "," + onoff + ")");
+    }
+    // Store the pack's boolean in the preferences file for pack preferences
+    SharedPreferences packPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+    SharedPreferences.Editor packPrefsEdit = packPrefs.edit();
+    
+    packPrefsEdit.putBoolean(packName, onoff);
+    if (PhraseCrazeApplication.DEBUG && onoff == false) {
+      Log.d(TAG, "pref set to false");
+    } 
+    else if (PhraseCrazeApplication.DEBUG) {
+      Log.d(TAG, "pref set to true");
+    }
+    packPrefsEdit.commit();      
+  }
+  
   /**
    * Returns the Component name of either Twitter, Google, or Facebook
    * @param foundClients A hashmap of clients that have been identified by 
