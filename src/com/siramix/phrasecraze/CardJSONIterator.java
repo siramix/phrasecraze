@@ -17,11 +17,12 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import org.json.JSONException;
+
+import android.util.Log;
 
 /**
  * Iterator for processing a JSON-filled buffered reader into cards. This is
@@ -37,29 +38,28 @@ import org.json.JSONException;
  */
 public class CardJSONIterator implements Iterator<Card> {
 
+  private static final String TAG = "CardJSONIterator";
   /**
    * The internal buffered reader
    */
-  private BufferedReader mReader;
+  private Scanner mScanner;
+  
 
   /**
    * Always construct with a valid buffered reader.
    * @param reader
    */
-  public CardJSONIterator(BufferedReader reader) {
-    mReader = reader;
+  public CardJSONIterator(StringBuilder builder) {
+    Log.d(TAG, "Constructor");
+    mScanner = new Scanner(builder.toString());
   }
 
   /**
    * @return true if the buffered reader is "ready"
    */
   public boolean hasNext() {
-    try {
-      return mReader.ready();
-    } catch (IOException e) {
-      e.printStackTrace();
-      return false;
-    }
+    Log.d(TAG, "hasNext");
+    return mScanner.hasNextLine();
   }
 
   /**
@@ -68,16 +68,12 @@ public class CardJSONIterator implements Iterator<Card> {
    * @return the card from the reader or null if an exception occurs
    */
   public Card next() {
-    String strCard;
-    Card card;
+    Log.d(TAG, "next");
+    String strCard = mScanner.nextLine();
+    Card card = null;
     try {
-      strCard = mReader.readLine();
       card = PackParser.stringToCard(strCard);
-    } catch (IOException e) {
-      card = null;
-      e.printStackTrace();
     } catch (JSONException e) {
-      card = null;
       e.printStackTrace();
     }
     return card;
@@ -88,22 +84,8 @@ public class CardJSONIterator implements Iterator<Card> {
    * incoming stream, we just burn a line off the reader.
    */
   public void remove() {
-    try {
-      mReader.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Close the buffered reader. This is more important than you think it is :)
-   */
-  public void close() {
-    try {
-      mReader.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    Log.d(TAG, "remove");
+    mScanner.nextLine();
   }
 
 }

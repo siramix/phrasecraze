@@ -20,6 +20,8 @@ package com.siramix.phrasecraze;
 import java.io.Serializable;
 import java.util.LinkedList;
 
+import android.util.Log;
+
 /**
  * Helpful structure for holding pack metadata. You can also attach cards to
  * it, but that is not a requirement.
@@ -38,11 +40,15 @@ public class Pack implements Serializable {
   private int mSize;
   private LinkedList<Card> mCardList;
 
+  private static final String TAG = "Pack";
+  /**
+  
   /**
    * Default constructor
    */
   public Pack() {
     this("","","",-1,-1);
+    Log.d(TAG, "consructor Pack()");
   }
 
   /**
@@ -54,6 +60,7 @@ public class Pack implements Serializable {
    * @param size
    */
   public Pack( String name, String updateMessage, String path, int version, int size) {
+    Log.d(TAG, "constructor Pack(args)");
     mName = name;
     mUpdateMessage = updateMessage;
     mPath = path;
@@ -66,6 +73,7 @@ public class Pack implements Serializable {
    * @return the name of the pack
    */
   public String getName() {
+    Log.d(TAG, "getName()");
     return mName;
   }
 
@@ -73,6 +81,7 @@ public class Pack implements Serializable {
    * @return the update message
    */
   public String getUpdateMessage() {
+    Log.d(TAG, "getUpdateMessage()");    
     return mUpdateMessage;
   }
 

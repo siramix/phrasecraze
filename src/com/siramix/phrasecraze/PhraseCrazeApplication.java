@@ -57,8 +57,8 @@ public class PhraseCrazeApplication extends Application {
     super();
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "PhraseCrazeApplication()");
-
     }
+    mGameManager = null;
   }
 
   /**
@@ -67,6 +67,9 @@ public class PhraseCrazeApplication extends Application {
   public GameManager getGameManager() {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "GetGameManager()");
+    }
+    if(mGameManager == null) {
+      mGameManager = new GameManager(this.getApplicationContext());
     }
     return this.mGameManager;
   }

@@ -20,9 +20,13 @@ package com.siramix.phrasecraze;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import android.util.Log;
 
 /**
  * Utility class for parsing input streams of JSON data into packs and cards.
@@ -32,6 +36,8 @@ import org.json.JSONObject;
  */
 public class PackParser {
   
+  private static final String TAG = "PackParser";
+
   /**
    * Return a linked-list of packs from a buffered reader
    * @param reader the buffered-reader containing json pack objects
@@ -39,14 +45,14 @@ public class PackParser {
    * @throws IOException if there is something wrong with the reader
    * @throws JSONException if the json is malformed
    */
-  public static LinkedList<Pack> parsePacks(BufferedReader reader) throws IOException, JSONException {
-    String line = "";
-    LinkedList<Pack> packList = new LinkedList<Pack>(); 
-    while ((line = reader.readLine()) != null) {
-        Pack pack = stringToPack(line);
-        packList.add(pack);
+  public static LinkedList<Pack> parsePacks(StringBuilder builder) throws IOException, JSONException {
+    Log.d(TAG, "parsePacks");
+    LinkedList<Pack> packList = new LinkedList<Pack>();
+    Scanner scan = new Scanner(builder.toString());
+    while (scan.hasNextLine()) {
+      Pack pack = stringToPack(scan.nextLine());
+      packList.add(pack);
     }
-    reader.close();
     return packList;
   }
 
@@ -57,6 +63,8 @@ public class PackParser {
    * @throws JSONException if the json is invalid in some way
    */
   public static Pack stringToPack(String strPack) throws JSONException {
+    Log.d(TAG, "stringToPack");
+    Log.d(TAG, "--> " + strPack);
     JSONObject curPack = new JSONObject(strPack);
     String curName = curPack.getString("name");
     String curPath = curPack.getString("path");
@@ -74,6 +82,8 @@ public class PackParser {
    * @throws JSONException if the json is invalid in some way
    */
   public static Card stringToCard(String strCard) throws JSONException {
+    Log.d(TAG, "stringToCard");
+    Log.d(TAG, "--> " + strCard);
     JSONObject curCard = new JSONObject(strCard);
     String curName = curCard.getString("phrase");
     //int curDifficulty = curCard.getInt("difficulty");
@@ -87,8 +97,9 @@ public class PackParser {
    * @param reader the buffered reader containing newline-delimited json cards
    * @return an iterator of cards
    */
-  public static CardJSONIterator parseCards(BufferedReader reader) {
-    return new CardJSONIterator(reader);
+  public static CardJSONIterator parseCards(StringBuilder builder) {
+    Log.d(TAG, "parseCards");
+    return new CardJSONIterator(builder);
   }
 
 }

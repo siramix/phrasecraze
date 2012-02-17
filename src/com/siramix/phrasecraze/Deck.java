@@ -160,10 +160,10 @@ public class Deck {
     
 
     //TODO Hardcoding until we are parsing decks into the db
-    LinkedList<String> stublist= new LinkedList<String>();
-    stublist.add("starter");
+    //LinkedList<String> stublist= new LinkedList<String>();
+    //stublist.add("starter");
     
-    mPackTotalCards = mDatabaseOpenHelper.countPhrases(stublist);
+    mPackTotalCards = mDatabaseOpenHelper.countPhrases(selectedPacks);
     
     Log.d(TAG, "**** TOTAL NUMBER OF PHRASES SELECTED: " + Integer.toString(mPackTotalCards));
     
@@ -172,7 +172,7 @@ public class Deck {
     mCacheSize = 100;
     
     // For all packs being played get the phrases we want  
-    for ( String packName : stublist ) {
+    for ( String packName : selectedPacks ) {
       mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack(packName, mCacheSize, mPackTotalCards));
     }
     
@@ -371,7 +371,17 @@ public class Deck {
 
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(
           mHelperContext.getResources().openRawResource(resId)));
-      CardJSONIterator cardItr = PackParser.parseCards(packJSON);
+      StringBuilder packBuilder = new StringBuilder();
+      String line = null;
+      try {
+        while((line = packJSON.readLine()) == null) {
+          packBuilder.append(line).append("\n");
+        }
+      } catch (IOException e) {
+        Log.e(TAG,"Problem Reading pack from Resource.");
+        e.printStackTrace();
+      }
+      CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       digestPackInternal(db, packName, 0, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
@@ -396,12 +406,18 @@ public class Deck {
 
     private static void digestPackInternal(SQLiteDatabase db, String packName, int packVersion, CardJSONIterator cardItr) {
 
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "digestPackInternal: " + packName + "v" + String.valueOf(packVersion));
+      }
       // Add the pack and all cards in a single transaction.
       try {
         db.beginTransaction();
         int packId = (int) insertPack(packName, packVersion, db);
         Card curCard = null;
         while(cardItr.hasNext()) {
+          if (PhraseCrazeApplication.DEBUG) {
+            Log.d(TAG, "Trying to add Card");
+          }
           curCard = cardItr.next();
           insertPhrase(curCard.getTitle(), 1, packId, db);
         }
@@ -445,8 +461,8 @@ public class Deck {
     }
 
     public static int packInstalled(String packName, int packVersion, SQLiteDatabase db) {
-      Cursor res = db.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname IN ("
-          + packName + ")", null, null, null, null);
+      String[] packNames = {packName};
+      Cursor res = db.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname IN (?)", packNames, null, null, null);
       if(res.getCount() >= 1) {
         res.moveToFirst();
         int oldVersion = res.getInt(2);
@@ -603,12 +619,12 @@ public class Deck {
      */
     public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, int TOTAL_SELECTED) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "pullFromPack(" + packname + ")");        
+        Log.d(TAG, "pullFromPack(" + packname + ")");
       }
-      mDatabase = getWritableDatabase();      
+      mDatabase = getWritableDatabase();
       
-      LinkedList<Card> returnCards = new LinkedList<Card>();      
-      int packid = getPackId(packname);     
+      LinkedList<Card> returnCards = new LinkedList<Card>();
+      int packid = getPackId(packname);
 
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "pack_id = " + packid, 
