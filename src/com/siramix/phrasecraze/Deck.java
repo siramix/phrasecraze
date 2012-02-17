@@ -72,40 +72,15 @@ public class Deck {
   private static final String TAG = "Deck";
 
   private static final String DATABASE_NAME = "phrasecraze";
-  private static final String PHRASE_TABLE_NAME = "phrases";
-  private static final String CACHE_TABLE_NAME = "cache";
-  private static final String PACK_TABLE_NAME = "packs";
   private static final int DATABASE_VERSION = 1;
   private static final int PHRASECACHE_SIZE = 200;
   
   private static final int PACK_CURRENT = -1;
   private static final int PACK_NOT_PRESENT = -2;
-  
-  private static final String[] PHRASE_COLUMNS = { "id", "phrase", "difficulty", 
-                                                   "playdate", "pack_id" };
-  private static final String[] PACK_COLUMNS = { "id", "packname", "version" };
-  private static final String[] CACHE_COLUMNS = { "id", "val" };
-  
-  private static final String PHRASE_TABLE_CREATE = "CREATE TABLE "
-      + PHRASE_TABLE_NAME + "( " + 
-          PHRASE_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  
-          PHRASE_COLUMNS[1] + " TEXT, " + 
-          PHRASE_COLUMNS[2] + " INTEGER, " +
-          PHRASE_COLUMNS[3] + " INTEGER, " +
-          PHRASE_COLUMNS[4] + " INTEGER, " + 
-          "FOREIGN KEY(" + PACK_COLUMNS[0] + ") REFERENCES " + PACK_TABLE_NAME + "(" + PACK_COLUMNS[0] + ") );";
-  private static final String CACHE_TABLE_CREATE = "CREATE TABLE "
-      + CACHE_TABLE_NAME + "( " + 
-          CACHE_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-          CACHE_COLUMNS[1] + " TEXT );";
-  private static final String PACK_TABLE_CREATE = "CREATE TABLE " 
-      + PACK_TABLE_NAME + "( " + 
-          PACK_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-          PACK_COLUMNS[1] + " TEXT, " + 
-          PACK_COLUMNS[2] + " INTEGER );";
+
+  // TODO We need to look at ALL OF THE QUERIES in this class.
   
   // Take the top 1/DIVISOR phrases from a pack as possible cards for the phraseCache
-  //TODO This should be weighted
   private static final int PACK_DIVISOR = 25; 
   
   // This is the sum of all cards in selected packs
@@ -153,26 +128,23 @@ public class Deck {
     packSelections = packPrefs.getAll();
     
     LinkedList<String> selectedPacks = new LinkedList<String>();
+    selectedPacks.add("starter");
     for (String packname : packSelections.keySet())
       if (packPrefs.getBoolean(packname, false) == true) {
         selectedPacks.add(packname);
       }
     
 
-    //TODO Hardcoding until we are parsing decks into the db
-    LinkedList<String> stublist= new LinkedList<String>();
-    stublist.add("starter");
-    
-    mPackTotalCards = mDatabaseOpenHelper.countPhrases(stublist);
-    
+    mPackTotalCards = mDatabaseOpenHelper.countPhrases(selectedPacks);
+
     Log.d(TAG, "**** TOTAL NUMBER OF PHRASES SELECTED: " + Integer.toString(mPackTotalCards));
-    
+
     //TODO We should review the best place for this.  It's possible that this number
     // should depend on the number of turns played.
     mCacheSize = 100;
-    
+
     // For all packs being played get the phrases we want  
-    for ( String packName : stublist ) {
+    for ( String packName : selectedPacks ) {
       mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack(packName, mCacheSize, mPackTotalCards));
     }
     
@@ -280,9 +252,8 @@ public class Deck {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-      db.execSQL(PACK_TABLE_CREATE);
-      db.execSQL(PHRASE_TABLE_CREATE);
-      db.execSQL(CACHE_TABLE_CREATE);
+      db.execSQL(PackColumns.TABLE_CREATE);
+      db.execSQL(PhraseColumns.TABLE_CREATE);
       digestPackFromResource(db, "starter", R.raw.starter);
     }
 
@@ -296,7 +267,7 @@ public class Deck {
         Log.d(TAG, "countPhrases()");
       }
       mDatabase = getReadableDatabase();
-      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PHRASE_TABLE_NAME);
+      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PhraseColumns.TABLE_NAME);
       return ret;
     }
     
@@ -319,8 +290,8 @@ public class Deck {
       Log.d(TAG, "*** pack ids = " + packIds.toString());
       mDatabase = getReadableDatabase();
       Cursor ret = mDatabase.rawQuery("SELECT COUNT(*)" + 
-                                         " FROM " + PHRASE_TABLE_NAME + 
-                                         " WHERE " + PHRASE_COLUMNS[4] + " IN (" + packIds + ")", null);
+                                         " FROM " + PhraseColumns.TABLE_NAME + 
+                                         " WHERE " + PhraseColumns.PACK_ID + " IN (" + packIds + ")", null);
       int count = -1;
       if(ret.moveToFirst()) {
         count = ret.getInt(0);
@@ -328,20 +299,6 @@ public class Deck {
       return count;
     }
 
-    /**
-     * Count the number of cache entries (This should NEVER be > 1)
-     * 
-     * @return the number of cache entries
-     */
-    public int countCaches() {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "countCaches()");
-      }
-      mDatabase = getReadableDatabase();
-      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, CACHE_TABLE_NAME);
-      return ret;
-    }
-    
     /**
      * Count the number of packs which will likely be needed for setting up views
      * 
@@ -352,7 +309,7 @@ public class Deck {
         Log.d(TAG, "countPacks()");
       }
       mDatabase = getReadableDatabase();
-      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PHRASE_TABLE_NAME);
+      int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PackColumns.TABLE_NAME);
       return ret;
     }
 
@@ -371,7 +328,17 @@ public class Deck {
 
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(
           mHelperContext.getResources().openRawResource(resId)));
-      CardJSONIterator cardItr = PackParser.parseCards(packJSON);
+      StringBuilder packBuilder = new StringBuilder();
+      String line = null;
+      try {
+        while((line = packJSON.readLine()) != null) {
+          packBuilder.append(line).append("\n");
+        }
+      } catch (IOException e) {
+        Log.e(TAG,"Problem Reading pack from Resource.");
+        e.printStackTrace();
+      }
+      CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       digestPackInternal(db, packName, 0, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
@@ -396,12 +363,18 @@ public class Deck {
 
     private static void digestPackInternal(SQLiteDatabase db, String packName, int packVersion, CardJSONIterator cardItr) {
 
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "digestPackInternal: " + packName + "v" + String.valueOf(packVersion));
+      }
       // Add the pack and all cards in a single transaction.
       try {
         db.beginTransaction();
         int packId = (int) insertPack(packName, packVersion, db);
         Card curCard = null;
         while(cardItr.hasNext()) {
+          if (PhraseCrazeApplication.DEBUG) {
+            Log.d(TAG, "Trying to add Card");
+          }
           curCard = cardItr.next();
           insertPhrase(curCard.getTitle(), 1, packId, db);
         }
@@ -421,11 +394,11 @@ public class Deck {
         Log.d(TAG, "insertPhrase()");
       }
       ContentValues initialValues = new ContentValues();
-      initialValues.put("phrase", phrase);
-      initialValues.put("difficulty", difficulty);
-      initialValues.put("playdate", 0);
-      initialValues.put("pack_id", packId);
-      return db.insert(PHRASE_TABLE_NAME, null, initialValues);
+      initialValues.put(PhraseColumns.PHRASE, phrase);
+      initialValues.put(PhraseColumns.DIFFICULTY, difficulty);
+      initialValues.put(PhraseColumns.PLAY_DATE, 0);
+      initialValues.put(PhraseColumns.PACK_ID, packId);
+      return db.insert(PhraseColumns.TABLE_NAME, null, initialValues);
     }
     
     /**
@@ -439,14 +412,15 @@ public class Deck {
         Log.d(TAG, "addPack()");
       }
       ContentValues packValues = new ContentValues();
-      packValues.put("packname", packName);
-      packValues.put("version", packVersion);
-      return db.insert(PACK_TABLE_NAME, null, packValues);
+      packValues.put(PackColumns.NAME, packName);
+      packValues.put(PackColumns.VERSION, packVersion);
+      return db.insert(PackColumns.TABLE_NAME, null, packValues);
     }
 
     public static int packInstalled(String packName, int packVersion, SQLiteDatabase db) {
-      Cursor res = db.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname IN ("
-          + packName + ")", null, null, null, null);
+      String[] packNames = {packName};
+      Cursor res = db.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
+          PackColumns.NAME + " IN (?)", packNames, null, null, null);
       if(res.getCount() >= 1) {
         res.moveToFirst();
         int oldVersion = res.getInt(2);
@@ -463,8 +437,8 @@ public class Deck {
 
     public static void clearPack(int packId, SQLiteDatabase db) {
       String[] whereArgs = new String[] { String.valueOf(packId) };
-      db.delete(PACK_TABLE_NAME, "id=?", whereArgs);
-      db.delete(PHRASE_TABLE_NAME, "pack_id=?", whereArgs);
+      db.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
+      db.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
     }
 
     /**
@@ -481,8 +455,9 @@ public class Deck {
       }
       // TODO: Refactor this once it's working so we can make sure it is efficient 
       // and syntactically elegant (with ?s) 
-      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "id IN ("
-          + args + ") and pack_id IN ( " + packIds + ")", null, null, null, null);
+      Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+          PhraseColumns._ID + " IN (" + args + ") and " + PhraseColumns.PACK_ID + "IN ( " + packIds + ")",
+          null, null, null, null);
       res.moveToFirst();
       LinkedList<Card> ret = new LinkedList<Card>();
       while (!res.isAfterLast()) {
@@ -504,7 +479,8 @@ public class Deck {
       
       // TODO: Question for code review.  Better to do a join or two separate 
       // Get our pack ID 
-      Cursor res = mDatabase.query(PACK_TABLE_NAME, PACK_COLUMNS, "packname = '" + packname +"'", null, null, null, null);
+      Cursor res = mDatabase.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS, 
+          PackColumns.NAME + " = '" + packname +"'", null, null, null, null);
       
       int packid = -1;
       if (res.moveToFirst()) {
@@ -534,63 +510,11 @@ public class Deck {
 //      ContentValues newValues = new ContentValues();
 //      newValues.put("playcount", "playcount+1");
 //      mDatabase.update(PHRASE_TABLE_NAME, newValues, "id in (" + args + ")", null);
-      mDatabase.execSQL("UPDATE " + PHRASE_TABLE_NAME  
-                      + " SET playdate = datetime('now')"
-                      + " WHERE id in(" + ids + ");"); 
-    }
-    
-    /**
-     * Saves the cache in the database
-     * 
-     * @param cache
-     *          Linked list of cards to insert (by DB index)
-     */
-    public void saveCache(LinkedList<Card> cache) {
-      mDatabase = getWritableDatabase();
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "saveCache()");
-      }
-      String cacheString = "";
-      for (Iterator<Card> itr = cache.iterator(); itr.hasNext();) {
-        cacheString += itr.next().getId();
-        if (itr.hasNext()) {
-          cacheString += ",";
-        }
-      }
-      
-      ContentValues values = new ContentValues();
-      values.put("id", 0);
-      values.put("val", cacheString);
-      if (this.countCaches() >= 1) {
-        mDatabase.update(CACHE_TABLE_NAME, values, "", null);
-      } else {
-        mDatabase.insert(CACHE_TABLE_NAME, null, values);
-      }
+      mDatabase.execSQL("UPDATE " + PhraseColumns.TABLE_NAME
+                      + " SET " + PhraseColumns.PLAY_DATE + " = datetime('now')"
+                      + " WHERE " + PhraseColumns._ID + " in(" + ids + ");"); 
     }
 
-    /**
-     * Load a cache from the database into phrases in memory
-     * @return the linked list of phrases loaded into memory
-     */
-    public LinkedList<Card> loadCache() {      
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "loadCache()");
-      }
-      mDatabase = getWritableDatabase();
-      Cursor res = mDatabase.query(CACHE_TABLE_NAME, CACHE_COLUMNS, "id in (0)", null,
-          null, null, null);
-      LinkedList<Card> ret;
-      if (res.getCount() == 0) {
-        ret = new LinkedList<Card>();
-      } else {
-        res.moveToFirst();
-        // TODO MAYBE THIS WHOLE METHOD GOES?
-        ret = getPhrases(res.getString(1), "1");
-      }
-      res.close();
-      return ret;
-    }
-    
     /**
      * Generates and returns a LinkedList of Cards from the database for a specific pack.  First,
      * we request all the cards from the db sorted by date.  Then we calculate how many of the 
@@ -603,16 +527,17 @@ public class Deck {
      */
     public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, int TOTAL_SELECTED) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "pullFromPack(" + packname + ")");        
+        Log.d(TAG, "pullFromPack(" + packname + ")");
       }
-      mDatabase = getWritableDatabase();      
+      mDatabase = getWritableDatabase();
       
-      LinkedList<Card> returnCards = new LinkedList<Card>();      
-      int packid = getPackId(packname);     
+      LinkedList<Card> returnCards = new LinkedList<Card>();
+      int packid = getPackId(packname);
 
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
-      Cursor res = mDatabase.query(PHRASE_TABLE_NAME, PHRASE_COLUMNS, "pack_id = " + packid, 
-                                  null, null, null, "playdate asc", Integer.toString(CACHE_SIZE));
+      Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+          PhraseColumns.PACK_ID + " = " + packid, null, null, null, PhraseColumns.PLAY_DATE + " asc",
+          Integer.toString(CACHE_SIZE));
       res.moveToFirst();
       
       // The number of cards to returnCardsurn from any given pack will use the following formula:
@@ -665,9 +590,9 @@ public class Deck {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
       Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
           + newVersion + ", which will destroy all old data");
+      // TODO Handle Upgrades (here may not be relevant).
       db.execSQL("DROP TABLE IF EXISTS phrases;");
       db.execSQL("DROP TABLE IF EXISTS packs;");
-      db.execSQL("DROP TABLE IF EXISTS cache;");
       onCreate(db);
     }
 

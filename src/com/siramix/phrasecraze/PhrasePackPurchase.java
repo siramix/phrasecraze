@@ -322,6 +322,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
         Pack curPack = (Pack) v.getTag();
         intent.putExtra(getString(R.string.packBundleKey), curPack);
+        startActivityForResult(intent, TWITTER_REQUEST_CODE);
       } else {
         showToast(getString(R.string.toast_packpurchase_notwitter));
       }
@@ -389,6 +390,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       Pack curPack = mSocialPacks.get(requestCode);
       String packName = curPack.getName();
       // TODO: Catch the runtime exception
+      
       game.getDeck().digestPack(curPack);
       showToast(mSocialPacks.get(requestCode).getName());
       if (getPackPref(packName)) {

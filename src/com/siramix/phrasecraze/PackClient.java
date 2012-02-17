@@ -32,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 
 /**
  * @author Siramix Labs
@@ -45,6 +47,7 @@ public class PackClient {
   private static final String URL_BASE = "http://siramix.com/phrasecraze/packs/";
   private static final String PAY_LIST_URL = "list.json";
   private static final String SOCIAL_LIST_URL = "social.json";
+  private static final String TAG = "PackClient";
   
   /**
    * Members
@@ -56,6 +59,7 @@ public class PackClient {
    * @return
    */
   public static PackClient getInstance() {
+    Log.d(TAG, "getInstance");
     if(mInstance == null) {
       mInstance = new PackClient();
     }
@@ -70,7 +74,8 @@ public class PackClient {
    * @throws JSONException if the JSON is invalid
    */
   public LinkedList<Pack> getPayPacks() throws IOException, URISyntaxException, JSONException {
-    BufferedReader in = null;
+    Log.d(TAG, "getPayPacks");
+    StringBuilder in = null;
     LinkedList<Pack> ret = null;
     in = doHTTPGet(URL_BASE+PAY_LIST_URL);
     ret = PackParser.parsePacks(in);
@@ -85,7 +90,8 @@ public class PackClient {
    * @throws JSONException if the JSON is invalid
    */
   public LinkedList<Pack> getSocialPacks() throws IOException, URISyntaxException, JSONException {
-    BufferedReader in = null;
+    Log.d(TAG, "getSocialPacks");
+    StringBuilder in = null;
     LinkedList<Pack> ret = null;
     in = doHTTPGet(URL_BASE+SOCIAL_LIST_URL);
     ret = PackParser.parsePacks(in);
@@ -102,7 +108,8 @@ public class PackClient {
    * @throws URISyntaxException if the URI is invalid in some way
    */
   public CardJSONIterator getCardsForPack(Pack pack) throws IOException, URISyntaxException {
-    BufferedReader in = null;
+    Log.d(TAG, "getCardsForPack");
+    StringBuilder in = null;
     CardJSONIterator ret = null;
     String packURL = pack.getPath();
     in = doHTTPGet(URL_BASE+packURL);
@@ -118,13 +125,19 @@ public class PackClient {
    * @throws IOException if the request fails in some way
    * @throws URISyntaxException if the URI is malformed
    */
-  private static BufferedReader doHTTPGet(String url) throws IOException, URISyntaxException {
+  private static StringBuilder doHTTPGet(String url) throws IOException, URISyntaxException {
+    Log.d(TAG, "doHTTPGet()");
     HttpClient client = new DefaultHttpClient();
     HttpGet request = new HttpGet();
     request.setURI(new URI(url));
     HttpResponse response = client.execute(request);
-    BufferedReader ret = new BufferedReader
-    (new InputStreamReader(response.getEntity().getContent()));
+    BufferedReader reader = new BufferedReader
+      (new InputStreamReader(response.getEntity().getContent()));
+    StringBuilder ret = new StringBuilder();
+    String line = null;
+    while ((line = reader.readLine()) != null) {
+      ret.append(line).append("\n");
+    }
     return ret;
   }
 }
