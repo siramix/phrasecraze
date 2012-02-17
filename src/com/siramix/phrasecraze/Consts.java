@@ -119,4 +119,5 @@ public class Consts {
     public static long BILLING_RESPONSE_INVALID_REQUEST_ID = -1;
 
     public static final boolean DEBUG = false;
+    public static final String PREF_PACK_SELECTIONS = "PACK_SELECTIONS";
 }
