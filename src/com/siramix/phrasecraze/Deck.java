@@ -215,9 +215,7 @@ public class Deck {
    */
   public synchronized int updatePurchase(String orderId, String productId,
           PurchaseState purchaseState, long purchaseTime, String developerPayload) {
-    if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "updatePurchase()");
-      }
+    Log.d(TAG, "updatePurchase()");
     Log.d(TAG, "STUB");
     Log.d(TAG, orderId);
     Log.d(TAG, productId);
@@ -263,9 +261,7 @@ public class Deck {
      * @return the number of phrases in the deck
      */
     public int countPhrases() {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "countPhrases()");
-      }
+      Log.d(TAG, "countPhrases()");
       mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PhraseColumns.TABLE_NAME);
       return ret;
@@ -277,9 +273,7 @@ public class Deck {
      * @return
      */
     public int countPhrases(LinkedList<String> packnames) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "countPhrases(LinkedList<String>)");
-      }
+      Log.d(TAG, "countPhrases(LinkedList<String>)");
       String packIds = "";
       for (int i=0; i< packnames.size(); ++i) {
         packIds += String.valueOf(getPackId(packnames.get(i)));
@@ -376,7 +370,7 @@ public class Deck {
             Log.d(TAG, "Trying to add Card");
           }
           curCard = cardItr.next();
-          insertPhrase(curCard.getTitle(), 1, packId, db);
+          insertPhrase(curCard.getId(), curCard.getTitle(), 1, packId, db);
         }
         db.setTransactionSuccessful();
       } finally {
@@ -389,11 +383,12 @@ public class Deck {
      * 
      * @return rowId or -1 if failed
      */
-    public static long insertPhrase(String phrase, int difficulty, int packId, SQLiteDatabase db) {
+    public static long insertPhrase(int id, String phrase, int difficulty, int packId, SQLiteDatabase db) {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "insertPhrase()");
       }
       ContentValues initialValues = new ContentValues();
+      initialValues.put(PhraseColumns._ID, id);
       initialValues.put(PhraseColumns.PHRASE, phrase);
       initialValues.put(PhraseColumns.DIFFICULTY, difficulty);
       initialValues.put(PhraseColumns.PLAY_DATE, 0);
