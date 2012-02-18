@@ -86,8 +86,9 @@ public class PackParser {
     Log.d(TAG, "--> " + strCard);
     JSONObject curCard = new JSONObject(strCard);
     String curName = curCard.getString("phrase");
+    int curId = curCard.getInt("_id");
     //int curDifficulty = curCard.getInt("difficulty");
-    Card card = new Card(0,curName);
+    Card card = new Card(curId, curName);
     return card;
   }
 
