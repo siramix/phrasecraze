@@ -21,6 +21,9 @@
   <color name="teamA_secondary">
     #0b1920
   </color>
+  <color name="teamA_complement">
+    #1a4152
+  </color>
   <color name="rules_highlight">
     #52a2c6
   </color>
@@ -29,6 +32,9 @@
   </color>
   <color name="teamB_secondary">
     #0e200a
+  </color>
+  <color name="teamB_complement">
+    #2c6922ff
   </color>
   <color name="play_highlight">
     #91c751
@@ -39,6 +45,9 @@
   <color name="teamC_secondary">
     #200706
   </color>
+  <color name="teamC_complement">
+    #6f1d15
+  </color>
   <color name="buzzer_highlight">
     #dc4c3c
   </color>
@@ -47,6 +56,9 @@
   </color>
   <color name="teamD_secondary">
     #232008
+  </color>
+  <color name="teamD_complement">
+    #74691c
   </color>
   <color name="settings_highlight">
     #d3c045

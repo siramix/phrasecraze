@@ -17,6 +17,8 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
+import java.util.List;
+
 import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +44,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -700,8 +703,30 @@ public class Turn extends Activity {
     Team curTeam = mGameManager.getActiveTeam();
     ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
     barFill.setImageResource(curTeam.getPrimaryColor());
-    this.findViewById(R.id.Turn_Root).setBackgroundResource(
+    this.findViewById(R.id.Turn_ViewFlipper).setBackgroundResource(
         curTeam.getGradient());    
+  }
+  
+  /**
+   * Helper function to color the scoreboard elements based
+   * on the participating teams
+   */
+  protected void updateScoreboard()
+  {
+    List<Team> teams = mGameManager.getTeams();
+    // Update scoreboard colors
+    int[] scoreTextViews = {R.id.Turn_ScoreA, R.id.Turn_ScoreB};
+    int[] scoreTextBGs = {R.id.Turn_ScoreABG, R.id.Turn_ScoreBBG};
+    int[] scoreFrameLayouts = {R.id.Turn_ScoreA_Frame, R.id.Turn_ScoreB_Frame};
+    for(int i = 0; i < scoreTextViews.length; i++)
+    {
+      TextView score = (TextView) this.findViewById(scoreTextViews[i]);
+      score.setText(Integer.toString((teams.get(i).getScore())));
+      View scoreBG = (View) this.findViewById(scoreTextBGs[i]);
+      scoreBG.setBackgroundColor(this.getResources().getColor(teams.get(i).getPrimaryColor()));
+      FrameLayout frame = (FrameLayout) this.findViewById(scoreFrameLayouts[i]);
+      frame.setBackgroundColor(this.getResources().getColor(teams.get(i).getComplementaryColor()));
+    }
   }
 
   /**
@@ -857,10 +882,7 @@ public class Turn extends Activity {
         mGestureListener);
     this.findViewById(R.id.Turn_CardLayoutB).setOnTouchListener(
         mGestureListener);
-    
-   /* Typeface font = Typeface.createFromAsset(getAssets(),
-            "fonts/Boogaloo-Regular.ttf");
-            */
+
     Typeface font = Typeface.createFromAsset(getAssets(),
     "fonts/FrancoisOne.ttf");
     titleA.setTypeface(font);
@@ -871,6 +893,8 @@ public class Turn extends Activity {
     {
       updateTeamColoring();
     }
+    
+    updateScoreboard();
   }
 
   /**
@@ -927,7 +951,6 @@ public class Turn extends Activity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
-
     final float scale = Turn.this.getResources().getDisplayMetrics().density;
     mGestureThreshold = (int) (SWIPE_MIN_DISTANCE_DP * scale + 0.5f);
     mGestureVelocityThreshold = (int) (SWIPE_THRESHOLD_VELOCITY_DP * scale + 0.5f);

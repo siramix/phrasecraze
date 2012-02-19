@@ -284,7 +284,7 @@ public class AssignPoints extends Activity {
   {
 	  Typeface antonFont = Typeface.createFromAsset(getAssets(),
 			  "fonts/Anton.ttf");
-	  teamNameView.setBackgroundResource(team.getSecondaryColor());
+	  teamNameView.setBackgroundResource(team.getComplementaryColor());
 	  teamNameView.setText(team.getName());
 	  teamNameView.setTextColor(this.getResources().getColor(team.getPrimaryColor()));
 	  teamNameView.setTypeface(antonFont);
