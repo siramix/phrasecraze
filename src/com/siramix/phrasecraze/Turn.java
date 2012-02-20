@@ -661,7 +661,7 @@ public class Turn extends Activity {
       curStatus = R.id.Turn_StatusImageA;
     } else {
       curTitle = R.id.Turn_CardTitleB;
-      curStatus = R.id.Turn_StatusImageB;
+      curStatus = R.id.Turn_StatusImageB; 
     }
 
     mCardTitle = (TextView) this.findViewById(curTitle);
@@ -703,8 +703,10 @@ public class Turn extends Activity {
     Team curTeam = mGameManager.getActiveTeam();
     ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
     barFill.setImageResource(curTeam.getPrimaryColor());
-    this.findViewById(R.id.Turn_ViewFlipper).setBackgroundResource(
-        curTeam.getGradient());    
+    
+    this.findViewById(R.id.Turn_Root).setBackgroundResource(
+    curTeam.getGradient());
+
   }
   
   /**
