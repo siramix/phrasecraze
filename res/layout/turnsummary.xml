@@ -34,7 +34,7 @@
 
     <RelativeLayout android:layout_width="wrap_content" android:id="@+id/TurnSummary_ScoreboardTitle_Group" android:layout_height="wrap_content" android:layout_marginTop="-15dp">
         <View android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:layout_width="fill_parent" android:layout_height="4dp" android:id="@+id/TurnSummary_ScoreboardTitle_Bar" android:background="@color/genericBG_trim"></View>
-        <TextView android:layout_width="wrap_content" android:textSize="24dp" android:layout_height="wrap_content" android:text="Scores" android:layout_centerVertical="true" android:id="@+id/TurnSummary_ScoreboardTitle" android:gravity="center" android:layout_marginLeft="10dp" android:textColor="@color/headertitle"></TextView>
+        <TextView android:layout_width="wrap_content" android:textSize="24dp" android:layout_height="wrap_content" android:layout_centerVertical="true" android:id="@+id/TurnSummary_ScoreboardTitle" android:gravity="center" android:layout_marginLeft="10dp" android:textColor="@color/headertitle" android:text="@string/turnsummary_scoreheader"></TextView>
     </RelativeLayout>
     
     <LinearLayout android:id="@+id/TurnSummary_ScoreGroup"
@@ -45,8 +45,6 @@
 
         <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamA" android:layout_height="30dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
         <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamB" android:layout_height="30dp" android:layout_marginTop="-1dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
-        <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamC" android:layout_height="30dp" android:layout_marginTop="-1dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
-        <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamD" android:layout_height="30dp" android:layout_marginTop="-1dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
 
     </LinearLayout>
     
@@ -54,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
         <Button android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:layout_width="wrap_content" android:id="@+id/TurnSummary_AssignPoints"></Button>
-        <TextView android:layout_width="fill_parent" android:layout_weight="1" android:id="@+id/TurnSummary_ScoreLimit" android:text="@string/turnsummary_scorelimit" android:gravity="top|center_horizontal" android:maxLines="2" android:minLines="2" android:layout_height="fill_parent" android:textSize="20dp"></TextView>
+        <TextView android:text="@string/turnsummary_scorelimit" android:layout_height="wrap_content" android:id="@+id/TurnSummary_ScoreLimit" android:maxLines="2" android:minLines="2" android:layout_width="fill_parent" android:layout_weight="1" android:gravity="center" android:textSize="18dp" android:layout_gravity="center"></TextView>
         
         <Button android:id="@+id/TurnSummary_NextTurn"
             android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="wrap_content">

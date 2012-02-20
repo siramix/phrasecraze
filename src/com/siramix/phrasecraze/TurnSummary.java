@@ -407,8 +407,7 @@ public class TurnSummary extends Activity {
 
     // References to Scoreboard team Groups
     final int[] TEAM_SCORE_GROUPS = new int[] { R.id.TurnSummary_Scores_TeamA,
-        R.id.TurnSummary_Scores_TeamB, R.id.TurnSummary_Scores_TeamC,
-        R.id.TurnSummary_Scores_TeamD };
+        R.id.TurnSummary_Scores_TeamB};
 
     ScoreboardRowLayout row;
     // Setup score displays. Iterate through all team groups, setting scores for

@@ -56,7 +56,7 @@
   <string name="gamesetup_title">Game Setup</string>
   <string name="gamesetup_teams">Teams</string>
   <string name="gamesetup_teamshint">Teams shows the colors and names of the participating teams. Tap a team\'s row to add and remove it.</string>
-  <string name="gamesetup_endgamerule">Score Limit</string>
+  <string name="gamesetup_endgamerule">Score To Win</string>
   <string name="gamesetup_endgamerulehint">Score Limit is the number of points required to win. Press the + and - buttons to change the value.</string>
   <string name="gamesetup_scoringmode">Scoring Mode</string>
   <string name="gamesetup_scoringmode_freeplay">Free Play</string>
@@ -69,7 +69,8 @@
   <string name="turnsummary_nextbutton">Next Round</string>
   <string name="turnsummary_results">Game Results</string>
   <string name="turnsummary_assignpointsbutton">Assign Points</string>
-  <string name="turnsummary_scorelimit">Score Limit: %dpts</string>
+  <string name="turnsummary_scoreheader">Total Scores</string>
+  <string name="turnsummary_scorelimit">Score to Win: %dpts</string>
     
   <!-- Assign Points dialog strings -->
   <string name="assignpoints_title">Assign Round Scores</string>

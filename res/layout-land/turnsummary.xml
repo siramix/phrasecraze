@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+/*****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ****************************************************************************/
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_generic"
+    android:orientation="vertical">
+    <RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/relativeLayout1">
+        <TextView android:layout_marginTop="-5dp" android:text="Results" android:layout_marginLeft="5dp" android:textSize="38dp" android:id="@+id/TurnSummary_Title" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textColor="@color/title"></TextView>
+        <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:orientation="vertical">
+            <TextView android:layout_gravity="right" android:text="@string/turnsummary_stoppedon" android:id="@+id/TurnSummary_StoppedOn" android:layout_height="30dp" android:layout_width="fill_parent" android:textColor="@color/white" android:textStyle="bold" android:minWidth="130dp" android:textSize="18dp" android:gravity="right|top"></TextView>
+            <TextView android:text="Red Dogs intheHousewoo" android:scrollHorizontally="true" android:textSize="32dp" android:ellipsize="end" android:id="@+id/TurnSummary_StoppedOn_Team" android:layout_width="fill_parent" android:maxLines="1" android:textStyle="bold" android:layout_height="wrap_content" android:gravity="right|bottom" android:layout_marginTop="-20dp"></TextView>
+        </LinearLayout>
+    </RelativeLayout>
+    <ImageView android:id="@+id/TurnSummary_SpacerA" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim" android:layout_marginTop="-10dp"></ImageView>
+    <ImageView android:id="@+id/TurnSummary_SpacerC" android:layout_height="1dp" android:layout_width="fill_parent" android:background="@color/black"></ImageView>
+    <ScrollView android:layout_width="fill_parent" android:id="@+id/TurnSummary_CardList" android:layout_height="wrap_content" android:layout_weight="1" android:scrollY="-500dp"></ScrollView>
+    <ImageView android:id="@+id/TurnSummary_SpacerB" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim"></ImageView>
+    <RelativeLayout android:layout_width="wrap_content" android:id="@+id/TurnSummary_ScoreboardTitle_Group" android:layout_height="30dp">
+        <TextView android:text="@string/turnsummary_scorelimit" android:textSize="18dp" android:id="@+id/TurnSummary_ScoreLimit" android:layout_height="wrap_content" android:layout_width="fill_parent" android:maxLines="2" android:minLines="2" android:gravity="right|bottom"></TextView>
+        <View android:layout_width="fill_parent" android:layout_height="4dp" android:id="@+id/TurnSummary_ScoreboardTitle_Bar" android:background="@color/genericBG_trim" android:layout_alignParentBottom="true"></View>
+        <TextView android:text="@string/turnsummary_scoreheader" android:layout_height="wrap_content" android:textSize="24dp" android:id="@+id/TurnSummary_ScoreboardTitle" android:textColor="@color/headertitle" android:layout_width="wrap_content" android:layout_marginLeft="110dp" android:gravity="center"></TextView>
+    </RelativeLayout>
+    
+    <LinearLayout android:id="@+id/TurnSummary_BottomGroup"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <Button android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:layout_width="wrap_content" android:id="@+id/TurnSummary_AssignPoints" android:layout_gravity="center"></Button>
+        <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:orientation="vertical" android:layout_weight="1">
+            <LinearLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TurnSummary_ScoreGroup" android:orientation="vertical" android:padding="3dp">
+                <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_height="30dp" android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamA"></com.siramix.phrasecraze.ScoreboardRowLayout>
+                <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_height="30dp" android:layout_width="fill_parent" android:layout_marginTop="-1dp" android:id="@+id/TurnSummary_Scores_TeamB"></com.siramix.phrasecraze.ScoreboardRowLayout>
+            </LinearLayout>
+        </LinearLayout>
+        
+        <Button android:id="@+id/TurnSummary_NextTurn"
+            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="wrap_content" android:layout_gravity="center">
+            
+        </Button>
+
+    </LinearLayout>
+
+</LinearLayout>
