@@ -1,0 +1,940 @@
+{'phrase': 'Abdominal', '_id': 125, 'difficulty': 1}
+{'phrase': 'Abraham Lincoln', '_id': 126, 'difficulty': 1}
+{'phrase': 'Academy', '_id': 127, 'difficulty': 1}
+{'phrase': 'Accident', '_id': 128, 'difficulty': 1}
+{'phrase': 'Accordion', '_id': 129, 'difficulty': 1}
+{'phrase': 'Accountant', '_id': 130, 'difficulty': 1}
+{'phrase': 'Acoustic Guitar', '_id': 131, 'difficulty': 1}
+{'phrase': 'Addiction', '_id': 132, 'difficulty': 1}
+{'phrase': 'Adultery', '_id': 133, 'difficulty': 1}
+{'phrase': 'Afternoon', '_id': 134, 'difficulty': 1}
+{'phrase': 'Aircraft Carrier', '_id': 135, 'difficulty': 1}
+{'phrase': 'Airport', '_id': 136, 'difficulty': 1}
+{'phrase': 'Al Capone', '_id': 137, 'difficulty': 1}
+{'phrase': 'Alaska', '_id': 138, 'difficulty': 1}
+{'phrase': 'Albert Einstein', '_id': 139, 'difficulty': 1}
+{'phrase': 'Algebra', '_id': 140, 'difficulty': 1}
+{'phrase': 'Allergy', '_id': 141, 'difficulty': 1}
+{'phrase': 'Aluminum', '_id': 142, 'difficulty': 1}
+{'phrase': 'Amelia Earhart', '_id': 143, 'difficulty': 1}
+{'phrase': 'Amerigo Vespucci', '_id': 144, 'difficulty': 1}
+{'phrase': 'Ancestor', '_id': 145, 'difficulty': 1}
+{'phrase': 'Android', '_id': 146, 'difficulty': 1}
+{'phrase': 'Angel', '_id': 147, 'difficulty': 1}
+{'phrase': 'Anne Frank', '_id': 148, 'difficulty': 1}
+{'phrase': 'Anteater', '_id': 149, 'difficulty': 1}
+{'phrase': 'Apocalypse', '_id': 150, 'difficulty': 1}
+{'phrase': 'Applause', '_id': 151, 'difficulty': 1}
+{'phrase': 'Apple Pie', '_id': 152, 'difficulty': 1}
+{'phrase': 'Archaeology', '_id': 153, 'difficulty': 1}
+{'phrase': 'Area 51', '_id': 154, 'difficulty': 1}
+{'phrase': 'Ares', '_id': 155, 'difficulty': 1}
+{'phrase': 'Argue', '_id': 156, 'difficulty': 1}
+{'phrase': 'Arm Wrestle', '_id': 157, 'difficulty': 1}
+{'phrase': 'The Terminator', '_id': 158, 'difficulty': 1}
+{'phrase': 'Artery', '_id': 159, 'difficulty': 1}
+{'phrase': 'Arthritis', '_id': 160, 'difficulty': 1}
+{'phrase': 'Assassinate', '_id': 161, 'difficulty': 1}
+{'phrase': 'Assumption', '_id': 162, 'difficulty': 1}
+{'phrase': 'Astronaut', '_id': 163, 'difficulty': 1}
+{'phrase': 'Attendance', '_id': 164, 'difficulty': 1}
+{'phrase': 'Auto Mechanic', '_id': 165, 'difficulty': 1}
+{'phrase': 'Awkward', '_id': 166, 'difficulty': 1}
+{'phrase': 'Babe Ruth', '_id': 167, 'difficulty': 1}
+{'phrase': 'Bach', '_id': 168, 'difficulty': 1}
+{'phrase': 'Ballet Dancer', '_id': 169, 'difficulty': 1}
+{'phrase': 'Ballroom', '_id': 170, 'difficulty': 1}
+{'phrase': 'Banana', '_id': 171, 'difficulty': 1}
+{'phrase': 'Bandanna', '_id': 172, 'difficulty': 1}
+{'phrase': 'Bang', '_id': 173, 'difficulty': 1}
+{'phrase': 'Banker', '_id': 174, 'difficulty': 1}
+{'phrase': 'Bankruptcy', '_id': 175, 'difficulty': 1}
+{'phrase': 'Bar Stool', '_id': 176, 'difficulty': 1}
+{'phrase': 'Barack Obama', '_id': 177, 'difficulty': 1}
+{'phrase': 'Barbed Wire', '_id': 178, 'difficulty': 1}
+{'phrase': 'Barbell', '_id': 179, 'difficulty': 1}
+{'phrase': 'Barber', '_id': 180, 'difficulty': 1}
+{'phrase': 'Barn', '_id': 181, 'difficulty': 1}
+{'phrase': 'Barometer', '_id': 182, 'difficulty': 1}
+{'phrase': 'Bartender', '_id': 183, 'difficulty': 1}
+{'phrase': 'Barter', '_id': 184, 'difficulty': 1}
+{'phrase': 'Baseball', '_id': 185, 'difficulty': 1}
+{'phrase': 'Basement', '_id': 186, 'difficulty': 1}
+{'phrase': 'Basket', '_id': 187, 'difficulty': 1}
+{'phrase': 'Basketball', '_id': 188, 'difficulty': 1}
+{'phrase': 'Batman', '_id': 189, 'difficulty': 1}
+{'phrase': 'Battleship', '_id': 190, 'difficulty': 1}
+{'phrase': 'Bayonet', '_id': 191, 'difficulty': 1}
+{'phrase': 'Bazooka', '_id': 192, 'difficulty': 1}
+{'phrase': 'Beach', '_id': 193, 'difficulty': 1}
+{'phrase': 'Beach Towel', '_id': 194, 'difficulty': 1}
+{'phrase': 'Bear Hug', '_id': 195, 'difficulty': 1}
+{'phrase': 'Beatbox', '_id': 196, 'difficulty': 1}
+{'phrase': 'Beet', '_id': 197, 'difficulty': 1}
+{'phrase': 'Beethoven', '_id': 198, 'difficulty': 1}
+{'phrase': 'Beg', '_id': 199, 'difficulty': 1}
+{'phrase': 'Belch', '_id': 200, 'difficulty': 1}
+{'phrase': 'Bench Press', '_id': 201, 'difficulty': 1}
+{'phrase': 'Berlin', '_id': 202, 'difficulty': 1}
+{'phrase': 'Big Bang', '_id': 203, 'difficulty': 1}
+{'phrase': 'Bigfoot', '_id': 204, 'difficulty': 1}
+{'phrase': 'Bikini', '_id': 205, 'difficulty': 1}
+{'phrase': 'Bill Gates', '_id': 206, 'difficulty': 1}
+{'phrase': 'Billboard', '_id': 207, 'difficulty': 1}
+{'phrase': 'Billionaire', '_id': 208, 'difficulty': 1}
+{'phrase': 'Birdhouse', '_id': 209, 'difficulty': 1}
+{'phrase': 'Birthday', '_id': 210, 'difficulty': 1}
+{'phrase': 'Birthday Cake', '_id': 211, 'difficulty': 1}
+{'phrase': 'Black', '_id': 212, 'difficulty': 1}
+{'phrase': 'Black Coffee', '_id': 213, 'difficulty': 1}
+{'phrase': 'Black Widow Spider', '_id': 214, 'difficulty': 1}
+{'phrase': 'Blackout', '_id': 215, 'difficulty': 1}
+{'phrase': 'Blimp', '_id': 216, 'difficulty': 1}
+{'phrase': 'Blind', '_id': 217, 'difficulty': 1}
+{'phrase': 'Blind Melon', '_id': 218, 'difficulty': 1}
+{'phrase': 'Blister', '_id': 219, 'difficulty': 1}
+{'phrase': 'Bloated', '_id': 220, 'difficulty': 1}
+{'phrase': 'Blubber', '_id': 221, 'difficulty': 1}
+{'phrase': 'Blueberry', '_id': 222, 'difficulty': 1}
+{'phrase': 'Boast', '_id': 223, 'difficulty': 1}
+{'phrase': 'Bobsled', '_id': 224, 'difficulty': 1}
+{'phrase': 'Bone', '_id': 225, 'difficulty': 1}
+{'phrase': 'Boomerang', '_id': 226, 'difficulty': 1}
+{'phrase': 'Boredom', '_id': 227, 'difficulty': 1}
+{'phrase': 'Borrow', '_id': 228, 'difficulty': 1}
+{'phrase': 'Boulder', '_id': 229, 'difficulty': 1}
+{'phrase': 'Bounty', '_id': 230, 'difficulty': 1}
+{'phrase': 'Bouquet', '_id': 231, 'difficulty': 1}
+{'phrase': 'Bow Tie', '_id': 232, 'difficulty': 1}
+{'phrase': 'Boxer', '_id': 233, 'difficulty': 1}
+{'phrase': 'Beef Jerky', '_id': 234, 'difficulty': 1}
+{'phrase': 'Brainwash', '_id': 235, 'difficulty': 1}
+{'phrase': 'Brass', '_id': 236, 'difficulty': 1}
+{'phrase': 'Bratwurst', '_id': 237, 'difficulty': 1}
+{'phrase': 'Bravery', '_id': 238, 'difficulty': 1}
+{'phrase': 'Brazil', '_id': 239, 'difficulty': 1}
+{'phrase': 'Breakdance', '_id': 240, 'difficulty': 1}
+{'phrase': 'Breathalyzer', '_id': 241, 'difficulty': 1}
+{'phrase': 'Breeze', '_id': 242, 'difficulty': 1}
+{'phrase': 'Brick', '_id': 243, 'difficulty': 1}
+{'phrase': 'Bride', '_id': 244, 'difficulty': 1}
+{'phrase': 'Broccoli', '_id': 245, 'difficulty': 1}
+{'phrase': 'Broil', '_id': 246, 'difficulty': 1}
+{'phrase': 'Brontosaurus', '_id': 247, 'difficulty': 1}
+{'phrase': 'Bruise', '_id': 248, 'difficulty': 1}
+{'phrase': 'Brutal', '_id': 249, 'difficulty': 1}
+{'phrase': 'Bubble', '_id': 250, 'difficulty': 1}
+{'phrase': 'Buck', '_id': 251, 'difficulty': 1}
+{'phrase': 'Buddha', '_id': 252, 'difficulty': 1}
+{'phrase': 'Buddy', '_id': 253, 'difficulty': 1}
+{'phrase': 'Buffet', '_id': 254, 'difficulty': 1}
+{'phrase': 'Bulldoze', '_id': 255, 'difficulty': 1}
+{'phrase': 'Bullet', '_id': 256, 'difficulty': 1}
+{'phrase': 'Bullfrog', '_id': 257, 'difficulty': 1}
+{'phrase': 'Bunsen Burner', '_id': 258, 'difficulty': 1}
+{'phrase': 'Burger King', '_id': 259, 'difficulty': 1}
+{'phrase': 'Burn', '_id': 260, 'difficulty': 1}
+{'phrase': 'Busy', '_id': 261, 'difficulty': 1}
+{'phrase': 'Butcher', '_id': 262, 'difficulty': 1}
+{'phrase': 'Butler', '_id': 263, 'difficulty': 1}
+{'phrase': 'Cactus', '_id': 264, 'difficulty': 1}
+{'phrase': 'Cafeteria', '_id': 265, 'difficulty': 1}
+{'phrase': 'Caffeine', '_id': 266, 'difficulty': 1}
+{'phrase': 'Calculator', '_id': 267, 'difficulty': 1}
+{'phrase': 'Calculus', '_id': 268, 'difficulty': 1}
+{'phrase': 'California', '_id': 269, 'difficulty': 1}
+{'phrase': 'Camel', '_id': 270, 'difficulty': 1}
+{'phrase': 'Campfire', '_id': 271, 'difficulty': 1}
+{'phrase': 'Canada', '_id': 272, 'difficulty': 1}
+{'phrase': 'Canal', '_id': 273, 'difficulty': 1}
+{'phrase': 'Candlestick', '_id': 274, 'difficulty': 1}
+{'phrase': 'Candy Corn', '_id': 275, 'difficulty': 1}
+{'phrase': 'Canvas', '_id': 276, 'difficulty': 1}
+{'phrase': 'Capsize', '_id': 277, 'difficulty': 1}
+{'phrase': 'Car Wash', '_id': 278, 'difficulty': 1}
+{'phrase': 'Carnival', '_id': 279, 'difficulty': 1}
+{'phrase': 'Carpet Bagger', '_id': 280, 'difficulty': 1}
+{'phrase': 'Carrot', '_id': 281, 'difficulty': 1}
+{'phrase': 'Castle', '_id': 282, 'difficulty': 1}
+{'phrase': 'Caveman', '_id': 283, 'difficulty': 1}
+{'phrase': 'Ceiling Fan', '_id': 284, 'difficulty': 1}
+{'phrase': 'Celebrate', '_id': 285, 'difficulty': 1}
+{'phrase': 'Cello', '_id': 286, 'difficulty': 1}
+{'phrase': 'CEO', '_id': 287, 'difficulty': 1}
+{'phrase': 'Chairman', '_id': 288, 'difficulty': 1}
+{'phrase': 'Chapstick', '_id': 289, 'difficulty': 1}
+{'phrase': 'Charity', '_id': 290, 'difficulty': 1}
+{'phrase': 'Charles Darwin', '_id': 291, 'difficulty': 1}
+{'phrase': "Charlotte's Web", '_id': 292, 'difficulty': 1}
+{'phrase': 'Charm', '_id': 293, 'difficulty': 1}
+{'phrase': 'Cheat', '_id': 294, 'difficulty': 1}
+{'phrase': 'Cheeseburger', '_id': 295, 'difficulty': 1}
+{'phrase': 'Chicken Pox', '_id': 296, 'difficulty': 1}
+{'phrase': 'Chimney', '_id': 297, 'difficulty': 1}
+{'phrase': 'Chimpanzee', '_id': 298, 'difficulty': 1}
+{'phrase': 'Chipmunk', '_id': 299, 'difficulty': 1}
+{'phrase': 'Chocolate', '_id': 300, 'difficulty': 1}
+{'phrase': 'Choir', '_id': 301, 'difficulty': 1}
+{'phrase': 'Christopher Columbus', '_id': 302, 'difficulty': 1}
+{'phrase': 'Circus', '_id': 303, 'difficulty': 1}
+{'phrase': 'Citrus', '_id': 304, 'difficulty': 1}
+{'phrase': 'City', '_id': 305, 'difficulty': 1}
+{'phrase': 'Civil War', '_id': 306, 'difficulty': 1}
+{'phrase': 'Cleopatra', '_id': 307, 'difficulty': 1}
+{'phrase': 'Cliff', '_id': 308, 'difficulty': 1}
+{'phrase': 'Clothes Drier', '_id': 309, 'difficulty': 1}
+{'phrase': 'Clothes Line', '_id': 310, 'difficulty': 1}
+{'phrase': 'Coal', '_id': 311, 'difficulty': 1}
+{'phrase': 'Coast', '_id': 312, 'difficulty': 1}
+{'phrase': 'Cocoon', '_id': 313, 'difficulty': 1}
+{'phrase': 'Coed', '_id': 314, 'difficulty': 1}
+{'phrase': 'Coffee Mug', '_id': 315, 'difficulty': 1}
+{'phrase': 'Coffee Table', '_id': 316, 'difficulty': 1}
+{'phrase': 'Coliseum', '_id': 317, 'difficulty': 1}
+{'phrase': 'Cologne', '_id': 318, 'difficulty': 1}
+{'phrase': 'Comic Book', '_id': 319, 'difficulty': 1}
+{'phrase': 'Compromise', '_id': 320, 'difficulty': 1}
+{'phrase': 'Computer Programmer', '_id': 321, 'difficulty': 1}
+{'phrase': 'Conch', '_id': 322, 'difficulty': 1}
+{'phrase': 'Conclusion', '_id': 323, 'difficulty': 1}
+{'phrase': 'Congress', '_id': 324, 'difficulty': 1}
+{'phrase': 'Convertible', '_id': 325, 'difficulty': 1}
+{'phrase': 'Cordless Phone', '_id': 326, 'difficulty': 1}
+{'phrase': 'Corn on the Cob', '_id': 327, 'difficulty': 1}
+{'phrase': 'Costume', '_id': 328, 'difficulty': 1}
+{'phrase': 'Couch', '_id': 329, 'difficulty': 1}
+{'phrase': 'Court House', '_id': 330, 'difficulty': 1}
+{'phrase': 'Covered Wagon', '_id': 331, 'difficulty': 1}
+{'phrase': 'Crawl', '_id': 332, 'difficulty': 1}
+{'phrase': 'Criminal', '_id': 333, 'difficulty': 1}
+{'phrase': 'Crop Circle', '_id': 334, 'difficulty': 1}
+{'phrase': 'Crumb', '_id': 335, 'difficulty': 1}
+{'phrase': 'Crutch', '_id': 336, 'difficulty': 1}
+{'phrase': 'Cry', '_id': 337, 'difficulty': 1}
+{'phrase': 'Cucumber', '_id': 338, 'difficulty': 1}
+{'phrase': 'Cumulonimbus', '_id': 339, 'difficulty': 1}
+{'phrase': 'Curfew', '_id': 340, 'difficulty': 1}
+{'phrase': 'Dagger', '_id': 341, 'difficulty': 1}
+{'phrase': 'Dairy Cow', '_id': 342, 'difficulty': 1}
+{'phrase': 'Dalai Lama', '_id': 343, 'difficulty': 1}
+{'phrase': 'Dance', '_id': 344, 'difficulty': 1}
+{'phrase': 'Dandruff', '_id': 345, 'difficulty': 1}
+{'phrase': 'Dart Board', '_id': 346, 'difficulty': 1}
+{'phrase': 'Dashboard', '_id': 347, 'difficulty': 1}
+{'phrase': 'David Beckham', '_id': 348, 'difficulty': 1}
+{'phrase': 'Debate', '_id': 349, 'difficulty': 1}
+{'phrase': 'Deceive', '_id': 350, 'difficulty': 1}
+{'phrase': 'Deer', '_id': 351, 'difficulty': 1}
+{'phrase': 'Democracy', '_id': 352, 'difficulty': 1}
+{'phrase': 'Democrat', '_id': 353, 'difficulty': 1}
+{'phrase': 'Demon', '_id': 354, 'difficulty': 1}
+{'phrase': 'Demonstration', '_id': 355, 'difficulty': 1}
+{'phrase': 'Dentures', '_id': 356, 'difficulty': 1}
+{'phrase': 'Deodorant', '_id': 357, 'difficulty': 1}
+{'phrase': 'Depart', '_id': 358, 'difficulty': 1}
+{'phrase': 'Desert', '_id': 359, 'difficulty': 1}
+{'phrase': 'Destiny', '_id': 360, 'difficulty': 1}
+{'phrase': 'Diaper', '_id': 361, 'difficulty': 1}
+{'phrase': 'Dice', '_id': 362, 'difficulty': 1}
+{'phrase': 'Diesel', '_id': 363, 'difficulty': 1}
+{'phrase': 'Dinner Plate', '_id': 364, 'difficulty': 1}
+{'phrase': 'Disco', '_id': 365, 'difficulty': 1}
+{'phrase': 'Dishwasher', '_id': 366, 'difficulty': 1}
+{'phrase': 'Distill', '_id': 367, 'difficulty': 1}
+{'phrase': 'Diver', '_id': 368, 'difficulty': 1}
+{'phrase': 'Doctor', '_id': 369, 'difficulty': 1}
+{'phrase': 'Dodgeball', '_id': 370, 'difficulty': 1}
+{'phrase': 'Doggy Paddle', '_id': 371, 'difficulty': 1}
+{'phrase': 'Dogsled', '_id': 372, 'difficulty': 1}
+{'phrase': 'Dollhouse', '_id': 373, 'difficulty': 1}
+{'phrase': 'Dolphin', '_id': 374, 'difficulty': 1}
+{'phrase': 'Donald Trump', '_id': 375, 'difficulty': 1}
+{'phrase': 'Draw', '_id': 376, 'difficulty': 1}
+{'phrase': 'Drawbridge', '_id': 377, 'difficulty': 1}
+{'phrase': 'Drive', '_id': 378, 'difficulty': 1}
+{'phrase': 'Drizzle', '_id': 379, 'difficulty': 1}
+{'phrase': 'Drown', '_id': 380, 'difficulty': 1}
+{'phrase': 'Drumstick', '_id': 381, 'difficulty': 1}
+{'phrase': 'Duel', '_id': 382, 'difficulty': 1}
+{'phrase': 'Dungeon', '_id': 383, 'difficulty': 1}
+{'phrase': 'Dust', '_id': 384, 'difficulty': 1}
+{'phrase': 'DVR', '_id': 385, 'difficulty': 1}
+{'phrase': 'Dwarf', '_id': 386, 'difficulty': 1}
+{'phrase': 'Eager', '_id': 387, 'difficulty': 1}
+{'phrase': 'Earring', '_id': 388, 'difficulty': 1}
+{'phrase': 'Earthquake', '_id': 389, 'difficulty': 1}
+{'phrase': 'East', '_id': 390, 'difficulty': 1}
+{'phrase': 'Easter Egg', '_id': 391, 'difficulty': 1}
+{'phrase': 'Easter Island', '_id': 392, 'difficulty': 1}
+{'phrase': 'Eggs Benedict', '_id': 393, 'difficulty': 1}
+{'phrase': 'Elastic', '_id': 394, 'difficulty': 1}
+{'phrase': 'Elderly', '_id': 395, 'difficulty': 1}
+{'phrase': 'Electric Eel', '_id': 396, 'difficulty': 1}
+{'phrase': 'Electric Guitar', '_id': 397, 'difficulty': 1}
+{'phrase': 'Elephant', '_id': 398, 'difficulty': 1}
+{'phrase': 'Elvis Presley', '_id': 399, 'difficulty': 1}
+{'phrase': 'Embarrassed', '_id': 400, 'difficulty': 1}
+{'phrase': 'Emerald', '_id': 401, 'difficulty': 1}
+{'phrase': 'Emergency', '_id': 402, 'difficulty': 1}
+{'phrase': 'Engineer', '_id': 403, 'difficulty': 1}
+{'phrase': 'Enthusiastic', '_id': 404, 'difficulty': 1}
+{'phrase': 'Entrepreneur', '_id': 405, 'difficulty': 1}
+{'phrase': 'Escape', '_id': 406, 'difficulty': 1}
+{'phrase': 'Exam', '_id': 407, 'difficulty': 1}
+{'phrase': 'Excalibur', '_id': 408, 'difficulty': 1}
+{'phrase': 'Exile', '_id': 409, 'difficulty': 1}
+{'phrase': 'Exorcism', '_id': 410, 'difficulty': 1}
+{'phrase': 'Exterminator', '_id': 411, 'difficulty': 1}
+{'phrase': 'Faint', '_id': 412, 'difficulty': 1}
+{'phrase': 'Fantasy Football', '_id': 413, 'difficulty': 1}
+{'phrase': 'Faucet', '_id': 414, 'difficulty': 1}
+{'phrase': 'Feedback', '_id': 415, 'difficulty': 1}
+{'phrase': 'Fencing', '_id': 416, 'difficulty': 1}
+{'phrase': 'Ferris Wheel', '_id': 417, 'difficulty': 1}
+{'phrase': 'Fight', '_id': 418, 'difficulty': 1}
+{'phrase': 'Fighter Jet', '_id': 419, 'difficulty': 1}
+{'phrase': 'Figure Skating', '_id': 420, 'difficulty': 1}
+{'phrase': 'Filibuster', '_id': 421, 'difficulty': 1}
+{'phrase': 'Firefighter', '_id': 422, 'difficulty': 1}
+{'phrase': 'Fireworks', '_id': 423, 'difficulty': 1}
+{'phrase': 'Fisherman', '_id': 424, 'difficulty': 1}
+{'phrase': 'Fitness', '_id': 425, 'difficulty': 1}
+{'phrase': 'Flank', '_id': 426, 'difficulty': 1}
+{'phrase': 'Flea', '_id': 427, 'difficulty': 1}
+{'phrase': 'Flock', '_id': 428, 'difficulty': 1}
+{'phrase': 'Flood', '_id': 429, 'difficulty': 1}
+{'phrase': 'Florida', '_id': 430, 'difficulty': 1}
+{'phrase': 'Floss', '_id': 431, 'difficulty': 1}
+{'phrase': 'Flunk', '_id': 432, 'difficulty': 1}
+{'phrase': 'Flute', '_id': 433, 'difficulty': 1}
+{'phrase': 'Fly Swatter', '_id': 434, 'difficulty': 1}
+{'phrase': 'Foolish', '_id': 435, 'difficulty': 1}
+{'phrase': 'Football', '_id': 436, 'difficulty': 1}
+{'phrase': 'Forest', '_id': 437, 'difficulty': 1}
+{'phrase': 'Forgive', '_id': 438, 'difficulty': 1}
+{'phrase': 'Forrest Gump', '_id': 439, 'difficulty': 1}
+{'phrase': 'Fortress', '_id': 440, 'difficulty': 1}
+{'phrase': 'Fossil', '_id': 441, 'difficulty': 1}
+{'phrase': 'Foul Play', '_id': 442, 'difficulty': 1}
+{'phrase': 'Futon', '_id': 443, 'difficulty': 1}
+{'phrase': 'France', '_id': 444, 'difficulty': 1}
+{'phrase': 'Frankenstein', '_id': 445, 'difficulty': 1}
+{'phrase': 'Freckle', '_id': 446, 'difficulty': 1}
+{'phrase': 'Freestyle', '_id': 447, 'difficulty': 1}
+{'phrase': 'French Toast', '_id': 448, 'difficulty': 1}
+{'phrase': 'Friendly Fire', '_id': 449, 'difficulty': 1}
+{'phrase': 'Frolic', '_id': 450, 'difficulty': 1}
+{'phrase': 'Fungus', '_id': 451, 'difficulty': 1}
+{'phrase': 'Futon', '_id': 452, 'difficulty': 1}
+{'phrase': 'Fuzz', '_id': 453, 'difficulty': 1}
+{'phrase': 'Galaxy', '_id': 454, 'difficulty': 1}
+{'phrase': 'Gang War', '_id': 455, 'difficulty': 1}
+{'phrase': 'Garbage', '_id': 456, 'difficulty': 1}
+{'phrase': 'Gargoyle', '_id': 457, 'difficulty': 1}
+{'phrase': 'Genius', '_id': 458, 'difficulty': 1}
+{'phrase': 'Geyser', '_id': 459, 'difficulty': 1}
+{'phrase': 'Ghost', '_id': 460, 'difficulty': 1}
+{'phrase': 'Gift', '_id': 461, 'difficulty': 1}
+{'phrase': 'Gift Shop', '_id': 462, 'difficulty': 1}
+{'phrase': 'Giggle', '_id': 463, 'difficulty': 1}
+{'phrase': 'Giraffe', '_id': 464, 'difficulty': 1}
+{'phrase': 'Girlfriend', '_id': 465, 'difficulty': 1}
+{'phrase': 'Glacier', '_id': 466, 'difficulty': 1}
+{'phrase': 'Glare', '_id': 467, 'difficulty': 1}
+{'phrase': 'Global Warming', '_id': 468, 'difficulty': 1}
+{'phrase': 'Globe', '_id': 469, 'difficulty': 1}
+{'phrase': 'Glue Stick', '_id': 470, 'difficulty': 1}
+{'phrase': 'Goat', '_id': 471, 'difficulty': 1}
+{'phrase': 'Goatee', '_id': 472, 'difficulty': 1}
+{'phrase': 'Godzilla', '_id': 473, 'difficulty': 1}
+{'phrase': 'Golden Retriever', '_id': 474, 'difficulty': 1}
+{'phrase': 'Goldfish', '_id': 475, 'difficulty': 1}
+{'phrase': 'Goldrush', '_id': 476, 'difficulty': 1}
+{'phrase': 'Golf', '_id': 477, 'difficulty': 1}
+{'phrase': 'Goose', '_id': 478, 'difficulty': 1}
+{'phrase': 'Goosebumps', '_id': 479, 'difficulty': 1}
+{'phrase': 'Gorilla', '_id': 480, 'difficulty': 1}
+{'phrase': 'Gourd', '_id': 481, 'difficulty': 1}
+{'phrase': 'Governor', '_id': 482, 'difficulty': 1}
+{'phrase': 'Graduation', '_id': 483, 'difficulty': 1}
+{'phrase': 'Grand Canyon', '_id': 484, 'difficulty': 1}
+{'phrase': 'Grand Piano', '_id': 485, 'difficulty': 1}
+{'phrase': 'Grandfather Clock', '_id': 486, 'difficulty': 1}
+{'phrase': 'Granny Smith', '_id': 487, 'difficulty': 1}
+{'phrase': 'Grape', '_id': 488, 'difficulty': 1}
+{'phrase': 'Gravestone', '_id': 489, 'difficulty': 1}
+{'phrase': 'Great Uncle', '_id': 490, 'difficulty': 1}
+{'phrase': 'Green Tea', '_id': 491, 'difficulty': 1}
+{'phrase': 'Grim Reaper', '_id': 492, 'difficulty': 1}
+{'phrase': 'Grizzly Bear', '_id': 493, 'difficulty': 1}
+{'phrase': 'Guillotine', '_id': 494, 'difficulty': 1}
+{'phrase': 'Gymnast', '_id': 495, 'difficulty': 1}
+{'phrase': 'Gypsy', '_id': 496, 'difficulty': 1}
+{'phrase': 'Hail', '_id': 497, 'difficulty': 1}
+{'phrase': 'Hairbrush', '_id': 498, 'difficulty': 1}
+{'phrase': 'Hamster', '_id': 499, 'difficulty': 1}
+{'phrase': 'Hand Grenade', '_id': 500, 'difficulty': 1}
+{'phrase': 'Hang Glide', '_id': 501, 'difficulty': 1}
+{'phrase': 'Hangman', '_id': 502, 'difficulty': 1}
+{'phrase': 'Hangnail', '_id': 503, 'difficulty': 1}
+{'phrase': 'Hangover', '_id': 504, 'difficulty': 1}
+{'phrase': 'Harvard University', '_id': 505, 'difficulty': 1}
+{'phrase': 'Hawaii', '_id': 506, 'difficulty': 1}
+{'phrase': 'Crop Circle', '_id': 507, 'difficulty': 1}
+{'phrase': 'Heist', '_id': 508, 'difficulty': 1}
+{'phrase': 'Helen Keller', '_id': 509, 'difficulty': 1}
+{'phrase': 'Hell', '_id': 510, 'difficulty': 1}
+{'phrase': 'Henry Ford', '_id': 511, 'difficulty': 1}
+{'phrase': 'Hermit Crab', '_id': 512, 'difficulty': 1}
+{'phrase': 'Hero', '_id': 513, 'difficulty': 1}
+{'phrase': 'Hidden Camera', '_id': 514, 'difficulty': 1}
+{'phrase': 'Hide and Seek', '_id': 515, 'difficulty': 1}
+{'phrase': 'Hideous', '_id': 516, 'difficulty': 1}
+{'phrase': 'High Chair', '_id': 517, 'difficulty': 1}
+{'phrase': 'High Five', '_id': 518, 'difficulty': 1}
+{'phrase': 'Hillary Clinton', '_id': 519, 'difficulty': 1}
+{'phrase': 'Hip Hop', '_id': 520, 'difficulty': 1}
+{'phrase': 'Hippie', '_id': 521, 'difficulty': 1}
+{'phrase': 'Hippopotamus', '_id': 522, 'difficulty': 1}
+{'phrase': 'Hitchhike', '_id': 523, 'difficulty': 1}
+{'phrase': 'Hobo', '_id': 524, 'difficulty': 1}
+{'phrase': 'Hockey', '_id': 525, 'difficulty': 1}
+{'phrase': 'Honesty', '_id': 526, 'difficulty': 1}
+{'phrase': 'Honey Bee', '_id': 527, 'difficulty': 1}
+{'phrase': 'Honeymoon', '_id': 528, 'difficulty': 1}
+{'phrase': 'French Kiss', '_id': 529, 'difficulty': 1}
+{'phrase': 'Hoover Dam', '_id': 530, 'difficulty': 1}
+{'phrase': 'Hose', '_id': 531, 'difficulty': 1}
+{'phrase': 'Hula Hoop', '_id': 532, 'difficulty': 1}
+{'phrase': 'Hummer', '_id': 533, 'difficulty': 1}
+{'phrase': 'Hybrid', '_id': 534, 'difficulty': 1}
+{'phrase': 'Hydroelectric', '_id': 535, 'difficulty': 1}
+{'phrase': 'Hyena', '_id': 536, 'difficulty': 1}
+{'phrase': 'Ignition', '_id': 537, 'difficulty': 1}
+{'phrase': 'Illiterate', '_id': 538, 'difficulty': 1}
+{'phrase': 'Illness', '_id': 539, 'difficulty': 1}
+{'phrase': 'Incision', '_id': 540, 'difficulty': 1}
+{'phrase': 'Incognito', '_id': 541, 'difficulty': 1}
+{'phrase': 'Indentured Servant', '_id': 542, 'difficulty': 1}
+{'phrase': 'Insane', '_id': 543, 'difficulty': 1}
+{'phrase': 'Inspire', '_id': 544, 'difficulty': 1}
+{'phrase': 'Insurgent', '_id': 545, 'difficulty': 1}
+{'phrase': 'Invest', '_id': 546, 'difficulty': 1}
+{'phrase': 'iPhone', '_id': 547, 'difficulty': 1}
+{'phrase': 'Iron', '_id': 548, 'difficulty': 1}
+{'phrase': 'Island', '_id': 549, 'difficulty': 1}
+{'phrase': 'J.R.R. Tolkien', '_id': 550, 'difficulty': 1}
+{'phrase': "Jack-o'-Lantern", '_id': 551, 'difficulty': 1}
+{'phrase': 'Jackalope', '_id': 552, 'difficulty': 1}
+{'phrase': 'Janitor', '_id': 553, 'difficulty': 1}
+{'phrase': 'Jargon', '_id': 554, 'difficulty': 1}
+{'phrase': 'Jawbreaker', '_id': 555, 'difficulty': 1}
+{'phrase': 'Jaywalk', '_id': 556, 'difficulty': 1}
+{'phrase': 'Jazz', '_id': 557, 'difficulty': 1}
+{'phrase': 'Jean Shorts', '_id': 558, 'difficulty': 1}
+{'phrase': 'Jester', '_id': 559, 'difficulty': 1}
+{'phrase': 'Jockey', '_id': 560, 'difficulty': 1}
+{'phrase': 'John Lennon', '_id': 561, 'difficulty': 1}
+{'phrase': 'Julius Caesar', '_id': 562, 'difficulty': 1}
+{'phrase': 'Jump', '_id': 563, 'difficulty': 1}
+{'phrase': 'Jump Rope', '_id': 564, 'difficulty': 1}
+{'phrase': 'Jungle', '_id': 565, 'difficulty': 1}
+{'phrase': 'Junk Food', '_id': 566, 'difficulty': 1}
+{'phrase': 'Jury', '_id': 567, 'difficulty': 1}
+{'phrase': 'Juvenile Delinquent', '_id': 568, 'difficulty': 1}
+{'phrase': 'Kangaroo', '_id': 569, 'difficulty': 1}
+{'phrase': 'Kansas', '_id': 570, 'difficulty': 1}
+{'phrase': 'Karate', '_id': 571, 'difficulty': 1}
+{'phrase': 'Kayak', '_id': 572, 'difficulty': 1}
+{'phrase': 'Kermit the Frog', '_id': 573, 'difficulty': 1}
+{'phrase': 'KGB', '_id': 574, 'difficulty': 1}
+{'phrase': 'Kiddie Pool', '_id': 575, 'difficulty': 1}
+{'phrase': 'Killer Whale', '_id': 576, 'difficulty': 1}
+{'phrase': 'Kilt', '_id': 577, 'difficulty': 1}
+{'phrase': 'King Cobra', '_id': 578, 'difficulty': 1}
+{'phrase': 'King Crab', '_id': 579, 'difficulty': 1}
+{'phrase': 'King Kong', '_id': 580, 'difficulty': 1}
+{'phrase': 'Kiss', '_id': 581, 'difficulty': 1}
+{'phrase': 'Kitchen Sink', '_id': 582, 'difficulty': 1}
+{'phrase': 'Kite', '_id': 583, 'difficulty': 1}
+{'phrase': 'Kiwi', '_id': 584, 'difficulty': 1}
+{'phrase': 'Koala Bear', '_id': 585, 'difficulty': 1}
+{'phrase': 'Kung Fu', '_id': 586, 'difficulty': 1}
+{'phrase': 'Lacrosse', '_id': 587, 'difficulty': 1}
+{'phrase': 'Ladder', '_id': 588, 'difficulty': 1}
+{'phrase': 'Lady Gaga', '_id': 589, 'difficulty': 1}
+{'phrase': 'Lampshade', '_id': 590, 'difficulty': 1}
+{'phrase': 'Landfill', '_id': 591, 'difficulty': 1}
+{'phrase': 'Laptop', '_id': 592, 'difficulty': 1}
+{'phrase': 'Laugh', '_id': 593, 'difficulty': 1}
+{'phrase': 'Lawnmower', '_id': 594, 'difficulty': 1}
+{'phrase': 'Layoff', '_id': 595, 'difficulty': 1}
+{'phrase': 'Leap Year', '_id': 596, 'difficulty': 1}
+{'phrase': 'Lebron James', '_id': 597, 'difficulty': 1}
+{'phrase': 'Lettuce', '_id': 598, 'difficulty': 1}
+{'phrase': 'License Plate', '_id': 599, 'difficulty': 1}
+{'phrase': 'Light Bulb', '_id': 600, 'difficulty': 1}
+{'phrase': 'Lighthouse', '_id': 601, 'difficulty': 1}
+{'phrase': 'Lightning', '_id': 602, 'difficulty': 1}
+{'phrase': 'Lightning Bug', '_id': 603, 'difficulty': 1}
+{'phrase': 'Limousine', '_id': 604, 'difficulty': 1}
+{'phrase': 'Lioness', '_id': 605, 'difficulty': 1}
+{'phrase': 'Lips', '_id': 606, 'difficulty': 1}
+{'phrase': 'Literature', '_id': 607, 'difficulty': 1}
+{'phrase': 'Lobster', '_id': 608, 'difficulty': 1}
+{'phrase': 'Loch Ness Monster', '_id': 609, 'difficulty': 1}
+{'phrase': 'Locksmith', '_id': 610, 'difficulty': 1}
+{'phrase': 'London', '_id': 611, 'difficulty': 1}
+{'phrase': 'Los Angeles', '_id': 612, 'difficulty': 1}
+{'phrase': 'Lost and Found', '_id': 613, 'difficulty': 1}
+{'phrase': 'Luge', '_id': 614, 'difficulty': 1}
+{'phrase': 'Lumberjack', '_id': 615, 'difficulty': 1}
+{'phrase': 'Lunch', '_id': 616, 'difficulty': 1}
+{'phrase': 'Lust', '_id': 617, 'difficulty': 1}
+{'phrase': 'Machete', '_id': 618, 'difficulty': 1}
+{'phrase': 'Madonna', '_id': 619, 'difficulty': 1}
+{'phrase': 'Magician', '_id': 620, 'difficulty': 1}
+{'phrase': 'Malaria', '_id': 621, 'difficulty': 1}
+{'phrase': 'Mallard', '_id': 622, 'difficulty': 1}
+{'phrase': 'Manatee', '_id': 623, 'difficulty': 1}
+{'phrase': 'Mansion', '_id': 624, 'difficulty': 1}
+{'phrase': 'Maple Syrup', '_id': 625, 'difficulty': 1}
+{'phrase': 'Marble', '_id': 626, 'difficulty': 1}
+{'phrase': 'March', '_id': 627, 'difficulty': 1}
+{'phrase': 'Margarine', '_id': 628, 'difficulty': 1}
+{'phrase': 'Mark Zuckerberg', '_id': 629, 'difficulty': 1}
+{'phrase': 'Maroon', '_id': 630, 'difficulty': 1}
+{'phrase': 'Marshall', '_id': 631, 'difficulty': 1}
+{'phrase': 'Martian', '_id': 632, 'difficulty': 1}
+{'phrase': 'Mashed Potatoes', '_id': 633, 'difficulty': 1}
+{'phrase': 'Mask', '_id': 634, 'difficulty': 1}
+{'phrase': 'Mayor', '_id': 635, 'difficulty': 1}
+{'phrase': 'Meatball', '_id': 636, 'difficulty': 1}
+{'phrase': 'Meditate', '_id': 637, 'difficulty': 1}
+{'phrase': 'Mercenary', '_id': 638, 'difficulty': 1}
+{'phrase': 'Mercury', '_id': 639, 'difficulty': 1}
+{'phrase': 'Merit Badge', '_id': 640, 'difficulty': 1}
+{'phrase': 'Mexico', '_id': 641, 'difficulty': 1}
+{'phrase': 'Michael Jackson', '_id': 642, 'difficulty': 1}
+{'phrase': 'Michael Jordan', '_id': 643, 'difficulty': 1}
+{'phrase': 'Microphone', '_id': 644, 'difficulty': 1}
+{'phrase': 'Midnight Snack', '_id': 645, 'difficulty': 1}
+{'phrase': 'Miley Cyrus', '_id': 646, 'difficulty': 1}
+{'phrase': 'Milk Man', '_id': 647, 'difficulty': 1}
+{'phrase': 'Milkshake', '_id': 648, 'difficulty': 1}
+{'phrase': 'Mime', '_id': 649, 'difficulty': 1}
+{'phrase': 'Mine', '_id': 650, 'difficulty': 1}
+{'phrase': 'Miracle', '_id': 651, 'difficulty': 1}
+{'phrase': 'Missile', '_id': 652, 'difficulty': 1}
+{'phrase': 'Mission', '_id': 653, 'difficulty': 1}
+{'phrase': 'Missionary', '_id': 654, 'difficulty': 1}
+{'phrase': 'Mistletoe', '_id': 655, 'difficulty': 1}
+{'phrase': 'Monitor', '_id': 656, 'difficulty': 1}
+{'phrase': 'Monk', '_id': 657, 'difficulty': 1}
+{'phrase': 'Monkey Bars', '_id': 658, 'difficulty': 1}
+{'phrase': 'Monopoly', '_id': 659, 'difficulty': 1}
+{'phrase': 'Monty Python', '_id': 660, 'difficulty': 1}
+{'phrase': 'Moose', '_id': 661, 'difficulty': 1}
+{'phrase': 'Mosquito', '_id': 662, 'difficulty': 1}
+{'phrase': 'Motel', '_id': 663, 'difficulty': 1}
+{'phrase': 'Mother Nature', '_id': 664, 'difficulty': 1}
+{'phrase': "Mother's Day", '_id': 665, 'difficulty': 1}
+{'phrase': 'Motherboard', '_id': 666, 'difficulty': 1}
+{'phrase': 'Motion Sickness', '_id': 667, 'difficulty': 1}
+{'phrase': 'Motor Oil', '_id': 668, 'difficulty': 1}
+{'phrase': 'Mount Rushmore', '_id': 669, 'difficulty': 1}
+{'phrase': 'Mountain', '_id': 670, 'difficulty': 1}
+{'phrase': 'Mr. Potato Head', '_id': 671, 'difficulty': 1}
+{'phrase': 'Mug Shot', '_id': 672, 'difficulty': 1}
+{'phrase': 'Mugging', '_id': 673, 'difficulty': 1}
+{'phrase': 'Muhammad Ali', '_id': 674, 'difficulty': 1}
+{'phrase': 'Multi-Vitamin', '_id': 675, 'difficulty': 1}
+{'phrase': 'Mystery', '_id': 676, 'difficulty': 1}
+{'phrase': 'Nail Gun', '_id': 677, 'difficulty': 1}
+{'phrase': 'Nap', '_id': 678, 'difficulty': 1}
+{'phrase': 'Narcissistic', '_id': 679, 'difficulty': 1}
+{'phrase': 'NASCAR', '_id': 680, 'difficulty': 1}
+{'phrase': 'Negotiator', '_id': 681, 'difficulty': 1}
+{'phrase': 'New York City', '_id': 682, 'difficulty': 1}
+{'phrase': 'Niagara Falls', '_id': 683, 'difficulty': 1}
+{'phrase': 'North', '_id': 684, 'difficulty': 1}
+{'phrase': 'North Carolina', '_id': 685, 'difficulty': 1}
+{'phrase': 'North Pole', '_id': 686, 'difficulty': 1}
+{'phrase': 'Nosedive', '_id': 687, 'difficulty': 1}
+{'phrase': 'Notebook', '_id': 688, 'difficulty': 1}
+{'phrase': 'Nuclear Meltdown', '_id': 689, 'difficulty': 1}
+{'phrase': 'Nurse', '_id': 690, 'difficulty': 1}
+{'phrase': 'Oasis', '_id': 691, 'difficulty': 1}
+{'phrase': 'Odysseus', '_id': 692, 'difficulty': 1}
+{'phrase': 'Oil Filter', '_id': 693, 'difficulty': 1}
+{'phrase': 'Oil Rig', '_id': 694, 'difficulty': 1}
+{'phrase': 'Omelet', '_id': 695, 'difficulty': 1}
+{'phrase': 'Onion', '_id': 696, 'difficulty': 1}
+{'phrase': 'Opera', '_id': 697, 'difficulty': 1}
+{'phrase': 'Oprah Winfrey', '_id': 698, 'difficulty': 1}
+{'phrase': 'Orange', '_id': 699, 'difficulty': 1}
+{'phrase': 'Orchestra', '_id': 700, 'difficulty': 1}
+{'phrase': 'Ottoman', '_id': 701, 'difficulty': 1}
+{'phrase': 'Ouija Board', '_id': 702, 'difficulty': 1}
+{'phrase': 'Owl', '_id': 703, 'difficulty': 1}
+{'phrase': 'Oyster', '_id': 704, 'difficulty': 1}
+{'phrase': 'Paddle', '_id': 705, 'difficulty': 1}
+{'phrase': 'Pain', '_id': 706, 'difficulty': 1}
+{'phrase': 'Palm Tree', '_id': 707, 'difficulty': 1}
+{'phrase': 'Panama Canal', '_id': 708, 'difficulty': 1}
+{'phrase': 'Panda Bear', '_id': 709, 'difficulty': 1}
+{'phrase': 'Panic', '_id': 710, 'difficulty': 1}
+{'phrase': 'Paper Boy', '_id': 711, 'difficulty': 1}
+{'phrase': 'Parade', '_id': 712, 'difficulty': 1}
+{'phrase': 'Pardon', '_id': 713, 'difficulty': 1}
+{'phrase': 'Paris', '_id': 714, 'difficulty': 1}
+{'phrase': 'Parrot', '_id': 715, 'difficulty': 1}
+{'phrase': 'Partner', '_id': 716, 'difficulty': 1}
+{'phrase': 'Password', '_id': 717, 'difficulty': 1}
+{'phrase': 'Patient', '_id': 718, 'difficulty': 1}
+{'phrase': 'Patio', '_id': 719, 'difficulty': 1}
+{'phrase': 'Patty-Cake', '_id': 720, 'difficulty': 1}
+{'phrase': 'Peach', '_id': 721, 'difficulty': 1}
+{'phrase': 'Peanut', '_id': 722, 'difficulty': 1}
+{'phrase': 'Pear', '_id': 723, 'difficulty': 1}
+{'phrase': 'Pebble', '_id': 724, 'difficulty': 1}
+{'phrase': 'Pedestrian', '_id': 725, 'difficulty': 1}
+{'phrase': 'Pediatrician', '_id': 726, 'difficulty': 1}
+{'phrase': 'Pelican', '_id': 727, 'difficulty': 1}
+{'phrase': 'Penetrate', '_id': 728, 'difficulty': 1}
+{'phrase': 'Penny', '_id': 729, 'difficulty': 1}
+{'phrase': 'Perfume', '_id': 730, 'difficulty': 1}
+{'phrase': 'Pesticide', '_id': 731, 'difficulty': 1}
+{'phrase': 'Petition', '_id': 732, 'difficulty': 1}
+{'phrase': 'Petrified', '_id': 733, 'difficulty': 1}
+{'phrase': 'Pharmacist', '_id': 734, 'difficulty': 1}
+{'phrase': 'Philanthropist', '_id': 735, 'difficulty': 1}
+{'phrase': 'Phobia', '_id': 736, 'difficulty': 1}
+{'phrase': 'Photograph', '_id': 737, 'difficulty': 1}
+{'phrase': 'Photographer', '_id': 738, 'difficulty': 1}
+{'phrase': 'Pilgrim', '_id': 739, 'difficulty': 1}
+{'phrase': 'Pillage', '_id': 740, 'difficulty': 1}
+{'phrase': 'Pillow Fight', '_id': 741, 'difficulty': 1}
+{'phrase': 'Pilot', '_id': 742, 'difficulty': 1}
+{'phrase': 'Pineapple', '_id': 743, 'difficulty': 1}
+{'phrase': 'Ping Pong', '_id': 744, 'difficulty': 1}
+{'phrase': 'Pinstripe', '_id': 745, 'difficulty': 1}
+{'phrase': 'Pipe Organ', '_id': 746, 'difficulty': 1}
+{'phrase': 'Piranha', '_id': 747, 'difficulty': 1}
+{'phrase': 'Plagiarism', '_id': 748, 'difficulty': 1}
+{'phrase': 'Plague', '_id': 749, 'difficulty': 1}
+{'phrase': 'Plaintiff', '_id': 750, 'difficulty': 1}
+{'phrase': 'Plateau', '_id': 751, 'difficulty': 1}
+{'phrase': 'Pleasant', '_id': 752, 'difficulty': 1}
+{'phrase': 'Plow', '_id': 753, 'difficulty': 1}
+{'phrase': 'Plum', '_id': 754, 'difficulty': 1}
+{'phrase': 'Plunger', '_id': 755, 'difficulty': 1}
+{'phrase': 'Pluto', '_id': 756, 'difficulty': 1}
+{'phrase': 'Plutonium', '_id': 757, 'difficulty': 1}
+{'phrase': 'Poison Ivy', '_id': 758, 'difficulty': 1}
+{'phrase': 'Poker', '_id': 759, 'difficulty': 1}
+{'phrase': 'Police Officer', '_id': 760, 'difficulty': 1}
+{'phrase': 'Polo', '_id': 761, 'difficulty': 1}
+{'phrase': 'Pope', '_id': 762, 'difficulty': 1}
+{'phrase': 'Popeye', '_id': 763, 'difficulty': 1}
+{'phrase': 'Pore', '_id': 764, 'difficulty': 1}
+{'phrase': 'Possum', '_id': 765, 'difficulty': 1}
+{'phrase': 'Potato', '_id': 766, 'difficulty': 1}
+{'phrase': 'Potluck', '_id': 767, 'difficulty': 1}
+{'phrase': 'Power Line', '_id': 768, 'difficulty': 1}
+{'phrase': 'Preach', '_id': 769, 'difficulty': 1}
+{'phrase': 'Precious', '_id': 770, 'difficulty': 1}
+{'phrase': 'Priest', '_id': 771, 'difficulty': 1}
+{'phrase': 'Prince', '_id': 772, 'difficulty': 1}
+{'phrase': 'Prisoner', '_id': 773, 'difficulty': 1}
+{'phrase': 'Privacy', '_id': 774, 'difficulty': 1}
+{'phrase': 'Prohibition', '_id': 775, 'difficulty': 1}
+{'phrase': 'Prom', '_id': 776, 'difficulty': 1}
+{'phrase': 'Promotion', '_id': 777, 'difficulty': 1}
+{'phrase': 'Prune', '_id': 778, 'difficulty': 1}
+{'phrase': 'Psychic', '_id': 779, 'difficulty': 1}
+{'phrase': 'Psycho', '_id': 780, 'difficulty': 1}
+{'phrase': 'Puddle', '_id': 781, 'difficulty': 1}
+{'phrase': 'Punk', '_id': 782, 'difficulty': 1}
+{'phrase': 'Puree', '_id': 783, 'difficulty': 1}
+{'phrase': 'Purse', '_id': 784, 'difficulty': 1}
+{'phrase': 'Putt', '_id': 785, 'difficulty': 1}
+{'phrase': 'Python', '_id': 786, 'difficulty': 1}
+{'phrase': 'Quality', '_id': 787, 'difficulty': 1}
+{'phrase': 'Quicksand', '_id': 788, 'difficulty': 1}
+{'phrase': 'Rabbit', '_id': 789, 'difficulty': 1}
+{'phrase': 'Rabies', '_id': 790, 'difficulty': 1}
+{'phrase': 'Radio', '_id': 791, 'difficulty': 1}
+{'phrase': 'Radioactive', '_id': 792, 'difficulty': 1}
+{'phrase': 'Radish', '_id': 793, 'difficulty': 1}
+{'phrase': 'Raffle', '_id': 794, 'difficulty': 1}
+{'phrase': 'Railroad', '_id': 795, 'difficulty': 1}
+{'phrase': 'Rain', '_id': 796, 'difficulty': 1}
+{'phrase': 'Rain Cloud', '_id': 797, 'difficulty': 1}
+{'phrase': 'Rain Forest', '_id': 798, 'difficulty': 1}
+{'phrase': 'Rainbow', '_id': 799, 'difficulty': 1}
+{'phrase': 'Raincoat', '_id': 800, 'difficulty': 1}
+{'phrase': 'Ram', '_id': 801, 'difficulty': 1}
+{'phrase': 'Rancid', '_id': 802, 'difficulty': 1}
+{'phrase': 'Ransom', '_id': 803, 'difficulty': 1}
+{'phrase': 'Rash', '_id': 804, 'difficulty': 1}
+{'phrase': 'Raspberry', '_id': 805, 'difficulty': 1}
+{'phrase': 'Read', '_id': 806, 'difficulty': 1}
+{'phrase': 'Reading Lamp', '_id': 807, 'difficulty': 1}
+{'phrase': 'Real Estate', '_id': 808, 'difficulty': 1}
+{'phrase': 'Reality TV', '_id': 809, 'difficulty': 1}
+{'phrase': 'Reboot', '_id': 810, 'difficulty': 1}
+{'phrase': 'Recession', '_id': 811, 'difficulty': 1}
+{'phrase': 'Recoil', '_id': 812, 'difficulty': 1}
+{'phrase': 'Red', '_id': 813, 'difficulty': 1}
+{'phrase': 'Refrigerator', '_id': 814, 'difficulty': 1}
+{'phrase': 'Remote Control', '_id': 815, 'difficulty': 1}
+{'phrase': 'Republican', '_id': 816, 'difficulty': 1}
+{'phrase': 'Retire', '_id': 817, 'difficulty': 1}
+{'phrase': 'Revolution', '_id': 818, 'difficulty': 1}
+{'phrase': 'Revolver', '_id': 819, 'difficulty': 1}
+{'phrase': 'Rhinoceros', '_id': 820, 'difficulty': 1}
+{'phrase': 'Rifle', '_id': 821, 'difficulty': 1}
+{'phrase': 'Riot', '_id': 822, 'difficulty': 1}
+{'phrase': 'Roadblock', '_id': 823, 'difficulty': 1}
+{'phrase': 'Roadkill', '_id': 824, 'difficulty': 1}
+{'phrase': 'Robot', '_id': 825, 'difficulty': 1}
+{'phrase': 'Rock Star', '_id': 826, 'difficulty': 1}
+{'phrase': 'Roller Coaster', '_id': 827, 'difficulty': 1}
+{'phrase': 'Romantic', '_id': 828, 'difficulty': 1}
+{'phrase': 'Rome', '_id': 829, 'difficulty': 1}
+{'phrase': 'Romeo and Juliet', '_id': 830, 'difficulty': 1}
+{'phrase': 'Rooster', '_id': 831, 'difficulty': 1}
+{'phrase': 'Rosa Parks', '_id': 832, 'difficulty': 1}
+{'phrase': 'Royalty', '_id': 833, 'difficulty': 1}
+{'phrase': 'Rugby', '_id': 834, 'difficulty': 1}
+{'phrase': 'Rumble', '_id': 835, 'difficulty': 1}
+{'phrase': 'Run', '_id': 836, 'difficulty': 1}
+{'phrase': 'Russia', '_id': 837, 'difficulty': 1}
+{'phrase': 'RV', '_id': 838, 'difficulty': 1}
+{'phrase': 'RV', '_id': 839, 'difficulty': 1}
+{'phrase': 'Saddle', '_id': 840, 'difficulty': 1}
+{'phrase': 'Saffron', '_id': 841, 'difficulty': 1}
+{'phrase': 'Sailor', '_id': 842, 'difficulty': 1}
+{'phrase': 'Salad Bowl', '_id': 843, 'difficulty': 1}
+{'phrase': 'Salary', '_id': 844, 'difficulty': 1}
+{'phrase': 'Salesman', '_id': 845, 'difficulty': 1}
+{'phrase': 'Salmon', '_id': 846, 'difficulty': 1}
+{'phrase': 'Salute', '_id': 847, 'difficulty': 1}
+{'phrase': 'Samson', '_id': 848, 'difficulty': 1}
+{'phrase': 'Samurai', '_id': 849, 'difficulty': 1}
+{'phrase': 'San Francisco', '_id': 850, 'difficulty': 1}
+{'phrase': 'Sand', '_id': 851, 'difficulty': 1}
+{'phrase': 'Sandal', '_id': 852, 'difficulty': 1}
+{'phrase': 'Sandbox', '_id': 853, 'difficulty': 1}
+{'phrase': 'Sanitize', '_id': 854, 'difficulty': 1}
+{'phrase': 'Santa Clause', '_id': 855, 'difficulty': 1}
+{'phrase': 'Sarah Palin', '_id': 856, 'difficulty': 1}
+{'phrase': 'Sasquatch', '_id': 857, 'difficulty': 1}
+{'phrase': 'Saturn', '_id': 858, 'difficulty': 1}
+{'phrase': 'Sawdust', '_id': 859, 'difficulty': 1}
+{'phrase': 'Saxophone', '_id': 860, 'difficulty': 1}
+{'phrase': 'School Teacher', '_id': 861, 'difficulty': 1}
+{'phrase': 'Scream', '_id': 862, 'difficulty': 1}
+{'phrase': 'SCUBA Dive', '_id': 863, 'difficulty': 1}
+{'phrase': 'Sculpture', '_id': 864, 'difficulty': 1}
+{'phrase': 'Sea Lion', '_id': 865, 'difficulty': 1}
+{'phrase': 'Seahorse', '_id': 866, 'difficulty': 1}
+{'phrase': 'Seashell', '_id': 867, 'difficulty': 1}
+{'phrase': 'Seattle', '_id': 868, 'difficulty': 1}
+{'phrase': 'Senator', '_id': 869, 'difficulty': 1}
+{'phrase': 'Serial Killer', '_id': 870, 'difficulty': 1}
+{'phrase': 'Sesame Street', '_id': 871, 'difficulty': 1}
+{'phrase': 'Sewer Rat', '_id': 872, 'difficulty': 1}
+{'phrase': 'Sham', '_id': 873, 'difficulty': 1}
+{'phrase': 'Shave', '_id': 874, 'difficulty': 1}
+{'phrase': 'Sheriff', '_id': 875, 'difficulty': 1}
+{'phrase': 'Shooting Star', '_id': 876, 'difficulty': 1}
+{'phrase': 'Shotgun', '_id': 877, 'difficulty': 1}
+{'phrase': 'Shoulder Blade', '_id': 878, 'difficulty': 1}
+{'phrase': 'Shout', '_id': 879, 'difficulty': 1}
+{'phrase': 'Shred', '_id': 880, 'difficulty': 1}
+{'phrase': 'Shrimp', '_id': 881, 'difficulty': 1}
+{'phrase': 'Signal', '_id': 882, 'difficulty': 1}
+{'phrase': 'Silicon', '_id': 883, 'difficulty': 1}
+{'phrase': 'Silt', '_id': 884, 'difficulty': 1}
+{'phrase': 'Sit-Up', '_id': 885, 'difficulty': 1}
+{'phrase': 'Skateboard', '_id': 886, 'difficulty': 1}
+{'phrase': 'Skiing', '_id': 887, 'difficulty': 1}
+{'phrase': 'Skydive', '_id': 888, 'difficulty': 1}
+{'phrase': 'Skyscraper', '_id': 889, 'difficulty': 1}
+{'phrase': 'Slacker', '_id': 890, 'difficulty': 1}
+{'phrase': 'Slam Dunk', '_id': 891, 'difficulty': 1}
+{'phrase': 'Sleet', '_id': 892, 'difficulty': 1}
+{'phrase': 'Sliding Door', '_id': 893, 'difficulty': 1}
+{'phrase': 'Slob', '_id': 894, 'difficulty': 1}
+{'phrase': 'Slow Motion', '_id': 895, 'difficulty': 1}
+{'phrase': 'Slug', '_id': 896, 'difficulty': 1}
+{'phrase': 'Slum', '_id': 897, 'difficulty': 1}
+{'phrase': 'Slurp', '_id': 898, 'difficulty': 1}
+{'phrase': 'Smoke', '_id': 899, 'difficulty': 1}
+{'phrase': 'Smooth', '_id': 900, 'difficulty': 1}
+{'phrase': 'Smother', '_id': 901, 'difficulty': 1}
+{'phrase': 'Snail', '_id': 902, 'difficulty': 1}
+{'phrase': 'Sneeze', '_id': 903, 'difficulty': 1}
+{'phrase': 'Sniper', '_id': 904, 'difficulty': 1}
+{'phrase': 'Snore', '_id': 905, 'difficulty': 1}
+{'phrase': 'Snow Cone', '_id': 906, 'difficulty': 1}
+{'phrase': 'Snowboard', '_id': 907, 'difficulty': 1}
+{'phrase': 'Soccer', '_id': 908, 'difficulty': 1}
+{'phrase': 'Sock', '_id': 909, 'difficulty': 1}
+{'phrase': 'Soggy', '_id': 910, 'difficulty': 1}
+{'phrase': 'Solar Panel', '_id': 911, 'difficulty': 1}
+{'phrase': 'Soldier', '_id': 912, 'difficulty': 1}
+{'phrase': 'South', '_id': 913, 'difficulty': 1}
+{'phrase': 'South Carolina', '_id': 914, 'difficulty': 1}
+{'phrase': 'South Pole', '_id': 915, 'difficulty': 1}
+{'phrase': 'Spaceship', '_id': 916, 'difficulty': 1}
+{'phrase': 'Spaghetti', '_id': 917, 'difficulty': 1}
+{'phrase': 'Spam', '_id': 918, 'difficulty': 1}
+{'phrase': 'Spanking', '_id': 919, 'difficulty': 1}
+{'phrase': 'Spark', '_id': 920, 'difficulty': 1}
+{'phrase': 'Speedo', '_id': 921, 'difficulty': 1}
+{'phrase': 'Spelling Bee', '_id': 922, 'difficulty': 1}
+{'phrase': 'Sphinx', '_id': 923, 'difficulty': 1}
+{'phrase': 'Spiderman', '_id': 924, 'difficulty': 1}
+{'phrase': 'Spinach', '_id': 925, 'difficulty': 1}
+{'phrase': 'Spiritual', '_id': 926, 'difficulty': 1}
+{'phrase': 'Sprain', '_id': 927, 'difficulty': 1}
+{'phrase': 'Spreadsheet', '_id': 928, 'difficulty': 1}
+{'phrase': 'Spunk', '_id': 929, 'difficulty': 1}
+{'phrase': 'Squirrel', '_id': 930, 'difficulty': 1}
+{'phrase': 'Stained Glass', '_id': 931, 'difficulty': 1}
+{'phrase': 'Staircase', '_id': 932, 'difficulty': 1}
+{'phrase': 'Stallion', '_id': 933, 'difficulty': 1}
+{'phrase': 'Stand', '_id': 934, 'difficulty': 1}
+{'phrase': 'Starve', '_id': 935, 'difficulty': 1}
+{'phrase': 'Statue of Liberty', '_id': 936, 'difficulty': 1}
+{'phrase': 'Stealth', '_id': 937, 'difficulty': 1}
+{'phrase': 'Steam', '_id': 938, 'difficulty': 1}
+{'phrase': 'Stewardess', '_id': 939, 'difficulty': 1}
+{'phrase': 'Sticky', '_id': 940, 'difficulty': 1}
+{'phrase': 'Stock Broker', '_id': 941, 'difficulty': 1}
+{'phrase': 'Stomach', '_id': 942, 'difficulty': 1}
+{'phrase': 'Stonehenge', '_id': 943, 'difficulty': 1}
+{'phrase': 'Stove', '_id': 944, 'difficulty': 1}
+{'phrase': 'Stream', '_id': 945, 'difficulty': 1}
+{'phrase': 'Stubble', '_id': 946, 'difficulty': 1}
+{'phrase': 'Sunbathe', '_id': 947, 'difficulty': 1}
+{'phrase': 'Sunburn', '_id': 948, 'difficulty': 1}
+{'phrase': 'Sunday Comics', '_id': 949, 'difficulty': 1}
+{'phrase': 'Sunglasses', '_id': 950, 'difficulty': 1}
+{'phrase': 'Sunscreen', '_id': 951, 'difficulty': 1}
+{'phrase': 'Superbowl', '_id': 952, 'difficulty': 1}
+{'phrase': 'Supercomputer', '_id': 953, 'difficulty': 1}
+{'phrase': 'Superman', '_id': 954, 'difficulty': 1}
+{'phrase': 'Supreme Court', '_id': 955, 'difficulty': 1}
+{'phrase': 'Surf', '_id': 956, 'difficulty': 1}
+{'phrase': 'Surgeon', '_id': 957, 'difficulty': 1}
+{'phrase': 'Surgery', '_id': 958, 'difficulty': 1}
+{'phrase': 'Surrender', '_id': 959, 'difficulty': 1}
+{'phrase': 'Surrogate', '_id': 960, 'difficulty': 1}
+{'phrase': 'Surround Sound', '_id': 961, 'difficulty': 1}
+{'phrase': 'Suspicious', '_id': 962, 'difficulty': 1}
+{'phrase': 'Swan', '_id': 963, 'difficulty': 1}
+{'phrase': 'SWAT Team', '_id': 964, 'difficulty': 1}
+{'phrase': 'Swine', '_id': 965, 'difficulty': 1}
+{'phrase': 'Swing Set', '_id': 966, 'difficulty': 1}
+{'phrase': 'Swiss Cheese', '_id': 967, 'difficulty': 1}
+{'phrase': 'Switchblade', '_id': 968, 'difficulty': 1}
+{'phrase': 'Swoop', '_id': 969, 'difficulty': 1}
+{'phrase': 'Swordfish', '_id': 970, 'difficulty': 1}
+{'phrase': 'Tango', '_id': 971, 'difficulty': 1}
+{'phrase': 'Tank', '_id': 972, 'difficulty': 1}
+{'phrase': 'Tap Dance', '_id': 973, 'difficulty': 1}
+{'phrase': 'Tartar Sauce', '_id': 974, 'difficulty': 1}
+{'phrase': 'Tarzan', '_id': 975, 'difficulty': 1}
+{'phrase': 'Taste Bud', '_id': 976, 'difficulty': 1}
+{'phrase': 'Tattoo', '_id': 977, 'difficulty': 1}
+{'phrase': 'Taxes', '_id': 978, 'difficulty': 1}
+{'phrase': 'Taxi Driver', '_id': 979, 'difficulty': 1}
+{'phrase': 'Taxidermy', '_id': 980, 'difficulty': 1}
+{'phrase': 'Teabag', '_id': 981, 'difficulty': 1}
+{'phrase': 'Teacup', '_id': 982, 'difficulty': 1}
+{'phrase': 'Television', '_id': 983, 'difficulty': 1}
+{'phrase': 'Tennis', '_id': 984, 'difficulty': 1}
+{'phrase': 'Tennis Racket', '_id': 985, 'difficulty': 1}
+{'phrase': 'Testify', '_id': 986, 'difficulty': 1}
+{'phrase': 'Texas', '_id': 987, 'difficulty': 1}
+{'phrase': 'Thanksgiving', '_id': 988, 'difficulty': 1}
+{'phrase': 'The Godfather', '_id': 989, 'difficulty': 1}
+{'phrase': 'The Grinch', '_id': 990, 'difficulty': 1}
+{'phrase': 'Therapist', '_id': 991, 'difficulty': 1}
+{'phrase': 'Thimble', '_id': 992, 'difficulty': 1}
+{'phrase': 'Thirst', '_id': 993, 'difficulty': 1}
+{'phrase': 'Thorn', '_id': 994, 'difficulty': 1}
+{'phrase': 'Thumbprint', '_id': 995, 'difficulty': 1}
+{'phrase': 'Thumbs Up', '_id': 996, 'difficulty': 1}
+{'phrase': 'Tickle', '_id': 997, 'difficulty': 1}
+{'phrase': 'Tiger', '_id': 998, 'difficulty': 1}
+{'phrase': 'Tiger Woods', '_id': 999, 'difficulty': 1}
+{'phrase': 'Time Machine', '_id': 1000, 'difficulty': 1}
+{'phrase': 'Time Out', '_id': 1001, 'difficulty': 1}
+{'phrase': 'Titanic', '_id': 1002, 'difficulty': 1}
+{'phrase': 'To Kill a Mockingbird', '_id': 1003, 'difficulty': 1}
+{'phrase': 'Toad', '_id': 1004, 'difficulty': 1}
+{'phrase': 'Tobacco', '_id': 1005, 'difficulty': 1}
+{'phrase': 'Toboggan', '_id': 1006, 'difficulty': 1}
+{'phrase': 'Toddler', '_id': 1007, 'difficulty': 1}
+{'phrase': 'Toenail', '_id': 1008, 'difficulty': 1}
+{'phrase': 'Tollbooth', '_id': 1009, 'difficulty': 1}
+{'phrase': 'Tom Cruise', '_id': 1010, 'difficulty': 1}
+{'phrase': 'Tomato', '_id': 1011, 'difficulty': 1}
+{'phrase': 'Tomcat', '_id': 1012, 'difficulty': 1}
+{'phrase': 'Toothbrush', '_id': 1013, 'difficulty': 1}
+{'phrase': 'Toothpaste', '_id': 1014, 'difficulty': 1}
+{'phrase': 'Torture', '_id': 1015, 'difficulty': 1}
+{'phrase': 'Tory', '_id': 1016, 'difficulty': 1}
+{'phrase': 'Toupee', '_id': 1017, 'difficulty': 1}
+{'phrase': 'Town House', '_id': 1018, 'difficulty': 1}
+{'phrase': 'Toyota', '_id': 1019, 'difficulty': 1}
+{'phrase': 'Track and Field', '_id': 1020, 'difficulty': 1}
+{'phrase': 'Tractor', '_id': 1021, 'difficulty': 1}
+{'phrase': 'Tragedy', '_id': 1022, 'difficulty': 1}
+{'phrase': 'Trapeze', '_id': 1023, 'difficulty': 1}
+{'phrase': 'Triceratops', '_id': 1024, 'difficulty': 1}
+{'phrase': 'Trojan Horse', '_id': 1025, 'difficulty': 1}
+{'phrase': 'Trophy', '_id': 1026, 'difficulty': 1}
+{'phrase': 'Trouble', '_id': 1027, 'difficulty': 1}
+{'phrase': 'Troubleshoot', '_id': 1028, 'difficulty': 1}
+{'phrase': 'Trumpet', '_id': 1029, 'difficulty': 1}
+{'phrase': 'Tuition', '_id': 1030, 'difficulty': 1}
+{'phrase': 'Tumor', '_id': 1031, 'difficulty': 1}
+{'phrase': 'Turbulence', '_id': 1032, 'difficulty': 1}
+{'phrase': 'Tuxedo', '_id': 1033, 'difficulty': 1}
+{'phrase': 'Tylenol', '_id': 1034, 'difficulty': 1}
+{'phrase': 'Tyrannosaurus Rex', '_id': 1035, 'difficulty': 1}
+{'phrase': 'UFO', '_id': 1036, 'difficulty': 1}
+{'phrase': 'Umpire', '_id': 1037, 'difficulty': 1}
+{'phrase': 'Unemployed', '_id': 1038, 'difficulty': 1}
+{'phrase': 'Unicorn', '_id': 1039, 'difficulty': 1}
+{'phrase': 'Unicycle', '_id': 1040, 'difficulty': 1}
+{'phrase': 'Universe', '_id': 1041, 'difficulty': 1}
+{'phrase': 'UPS', '_id': 1042, 'difficulty': 1}
+{'phrase': 'Vacuum Cleaner', '_id': 1043, 'difficulty': 1}
+{'phrase': 'Valley', '_id': 1044, 'difficulty': 1}
+{'phrase': 'Vampire', '_id': 1045, 'difficulty': 1}
+{'phrase': 'Vampire Bat', '_id': 1046, 'difficulty': 1}
+{'phrase': 'Vanilla', '_id': 1047, 'difficulty': 1}
+{'phrase': 'Vegetarian', '_id': 1048, 'difficulty': 1}
+{'phrase': 'Ventriloquist', '_id': 1049, 'difficulty': 1}
+{'phrase': 'Veto', '_id': 1050, 'difficulty': 1}
+{'phrase': 'Video Game', '_id': 1051, 'difficulty': 1}
+{'phrase': 'Vietnam War', '_id': 1052, 'difficulty': 1}
+{'phrase': 'Viking', '_id': 1053, 'difficulty': 1}
+{'phrase': 'Village', '_id': 1054, 'difficulty': 1}
+{'phrase': 'Villain', '_id': 1055, 'difficulty': 1}
+{'phrase': 'Vine', '_id': 1056, 'difficulty': 1}
+{'phrase': 'Violin', '_id': 1057, 'difficulty': 1}
+{'phrase': 'Virtual Reality', '_id': 1058, 'difficulty': 1}
+{'phrase': 'Vision', '_id': 1059, 'difficulty': 1}
+{'phrase': 'Visor', '_id': 1060, 'difficulty': 1}
+{'phrase': 'Vocal Chords', '_id': 1061, 'difficulty': 1}
+{'phrase': 'Vocalist', '_id': 1062, 'difficulty': 1}
+{'phrase': 'Vodka', '_id': 1063, 'difficulty': 1}
+{'phrase': 'Volcano', '_id': 1064, 'difficulty': 1}

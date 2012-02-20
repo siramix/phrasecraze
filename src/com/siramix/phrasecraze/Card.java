@@ -146,9 +146,7 @@ public class Card implements Serializable {
    * Function for initializing card state
    */
   private void init(int id, int rws, String title, Team team) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "init()");
-    }
+    Log.d(TAG, "init(" + title +")");
     mId = id;
     mRws = rws;
     mTitle = title;
@@ -194,9 +192,6 @@ public class Card implements Serializable {
    * @return
    */
   public String getTitle() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getTitle()");
-    }
     return mTitle;
   }
 
