@@ -32,14 +32,14 @@ import android.util.Log;
  */
 public enum Team implements Serializable {
   TEAMA("Blue", R.color.teamA_secondary,
-      R.color.teamA_primary, R.drawable.bg_bluegradient,
+      R.color.teamA_primary, R.color.teamA_complement, R.drawable.bg_bluegradient,
       R.drawable.gameend_row_end_blue, "teamA_enabled", R.drawable.turnsum_row_end_blue), TEAMB("Green",
-      R.color.teamB_secondary, R.color.teamB_primary,
+      R.color.teamB_secondary, R.color.teamB_primary, R.color.teamB_complement,
       R.drawable.bg_greengradient, R.drawable.gameend_row_end_green, "teamB_enabled", R.drawable.turnsum_row_end_green), TEAMC(
-      "Red", R.color.teamC_secondary, R.color.teamC_primary,
+      "Red", R.color.teamC_secondary, R.color.teamC_primary, R.color.teamC_complement,
       R.drawable.bg_redgradient, R.drawable.gameend_row_end_red, "teamC_enabled", R.drawable.turnsum_row_end_red), TEAMD(
       "Yellow", R.color.teamD_secondary,
-      R.color.teamD_primary, R.drawable.bg_yellowgradient,
+      R.color.teamD_primary, R.color.teamD_complement, R.drawable.bg_yellowgradient,
       R.drawable.gameend_row_end_yellow, "teamD_enabled", R.drawable.turnsum_row_end_yellow);
 
   // Team name
@@ -50,6 +50,7 @@ public enum Team implements Serializable {
   // Team colors
   private final int mPrimary;
   private final int mSecondary;
+  private final int mComplement;
   private final int mGradient;
   private final int mGameEndBackground;
   private final int mTurnSumRowBackground;
@@ -69,12 +70,13 @@ public enum Team implements Serializable {
   /*
    * Construct a Team
    */
-  private Team(String name, int secondary, int primary, int gradient,
+  private Team(String name, int secondary, int primary, int complement, int gradient,
       int gameend_bg, String key, int turnsumrow_bg) {
     mName = name;
     mDefaultName = name;
     mSecondary = secondary;
     mPrimary = primary;
+    mComplement = complement;
     mGradient = gradient;
     mGameEndBackground = gameend_bg;
     mTurnSumRowBackground = turnsumrow_bg;
@@ -120,6 +122,16 @@ public enum Team implements Serializable {
    */
   public int getPrimaryColor() {
     return mPrimary;
+  }
+  
+  /**
+   * Returns the id of the Team's complementary color
+   * 
+   * @return the complementary color. This is a slightly darker version of
+   * the primary color
+   */
+  public int getComplementaryColor() {
+    return mComplement;
   }
 
   /**
