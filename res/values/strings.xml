@@ -48,9 +48,10 @@
   <string name="assignedPointsBundleKey">com.siramix.phrasecraze.assignedPoints</string>
 
   <!-- Pack Purchasing dialog strings -->
-  <string name="packpurchase_title">Get Phrases</string>
-  <string name="packpurchase_freepackheader">Free Packs</string>
-  <string name="packpurchase_paidpackheader">Premium Packs</string>
+  <string name="packpurchase_title">Phrase Packs</string>
+  <string name="packpurchase_unlockedheader">Unlocked</string>
+  <string name="packpurchase_lockedheader">Locked</string>
+  <string name="packpurchase_button">Play!</string>
       
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>

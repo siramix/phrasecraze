@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:layout_marginTop="-10dp"
-        android:gravity="right"
+        android:gravity="left"
         android:text="@string/packpurchase_title"
         android:textColor="@color/genericBG_trim"
         android:textSize="38dp" />
@@ -35,8 +35,8 @@
     <ScrollView
         android:id="@+id/PackPurchase_ScrollView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" >
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical" android:layout_weight="1" android:layout_marginTop="-10dp">
 
         <LinearLayout
             android:id="@+id/PackPurchase_Packlist"
@@ -58,33 +58,23 @@
                     android:layout_centerVertical="true"
                     android:background="@color/genericBG_trim" />
 
+                <Button
+                    android:id="@+id/PackPurchase_FreePackHelpButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/button_info" android:layout_alignRight="@id/PackPurchase_FreePackHeaderBar" android:layout_marginRight="5dp"/>
+
                 <TextView
                     android:id="@+id/PackPurchase_FreePackTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:text="@string/packpurchase_freepackheader"
+                    android:text="@string/packpurchase_unlockedheader"
                     android:textColor="@color/white"
-                    android:textSize="24dp" />
+                    android:textSize="24dp" android:layout_toLeftOf="@id/PackPurchase_FreePackHelpButton" android:layout_marginRight="10dp"/>
 
-                <Button
-                    android:id="@+id/PackPurchase_FreePackHelpButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="i" />
-
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/PackPurchase_FreePackStartSpacer"
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@color/genericBG_trim" />                
+            </RelativeLayout>                
                 
             <LinearLayout
                 android:id="@+id/PackPurchase_FreePackSets"
@@ -93,12 +83,6 @@
                 android:longClickable="false"
                 android:orientation="vertical" >
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/PackPurchase_FreePackEndSpacer"
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@color/genericBG_trim" />
 
             <RelativeLayout
                 android:id="@+id/PackPurchase_PaidPackHeader"
@@ -114,32 +98,24 @@
                     android:layout_centerVertical="true"
                     android:background="@color/genericBG_trim" />
 
+                <Button
+                    android:id="@+id/PackPurchase_PaidPackHelpButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/button_info" android:layout_alignRight="@id/PackPurchase_PaidPackHeaderBar"/>
+
                 <TextView
                     android:id="@+id/PackPurchase_PaidPackTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:text="@string/packpurchase_paidpackheader"
+                    android:text="@string/packpurchase_lockedheader"
                     android:textColor="@color/white"
-                    android:textSize="24dp" />
+                    android:textSize="24dp" android:layout_toLeftOf="@id/PackPurchase_PaidPackHelpButton" android:layout_marginRight="10dp"/>
 
-                <Button
-                    android:id="@+id/PackPurchase_PaidPackHelpButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="i" />
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/PackPurchase_PaidPackStartSpacer"
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@color/genericBG_trim" />            
+            </RelativeLayout>            
                 
             <LinearLayout
                 android:id="@+id/PackPurchase_PaidPackSets"
@@ -148,12 +124,6 @@
                 android:longClickable="false"
                 android:orientation="vertical" >
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/PackPurchase_PaidPackEndSpacer"
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@color/genericBG_trim" />
 
         </LinearLayout>
     </ScrollView>
@@ -164,27 +134,10 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/PackPurhcase_Back"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="@string/turnsummary_assignpointsbutton" />
-
-        <TextView
-            android:id="@+id/TurnSummary_ScoreLimit"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="top|center_horizontal"
-            android:maxLines="2"
-            android:minLines="2"
-            android:text="@string/turnsummary_scorelimit"
-            android:textSize="20dp" />
-
-        <Button
             android:id="@+id/TurnSummary_NextTurn"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="60dp"
-            android:text="@string/turnsummary_nextbutton" />
+            android:text="@string/packpurchase_button" />
     </LinearLayout>
 
 </LinearLayout>
