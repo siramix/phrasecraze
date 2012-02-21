@@ -119,9 +119,6 @@ public class GameEnd extends Activity {
     transPanel4.setDuration(250);
     transPanel4.setFillBefore(true);
     transPanel4.setInterpolator(new DecelerateInterpolator());
-    RelativeLayout panel4 = (RelativeLayout) this
-        .findViewById(R.id.GameEnd_Scores_4);
-    panel4.startAnimation(transPanel4);
 
     TranslateAnimation transPanel3 = new TranslateAnimation(
         Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -137,9 +134,6 @@ public class GameEnd extends Activity {
     transPanel3.setDuration(250);
     transPanel3.setFillBefore(true);
     transPanel3.setInterpolator(new DecelerateInterpolator());
-    RelativeLayout panel3 = (RelativeLayout) this
-        .findViewById(R.id.GameEnd_Scores_3);
-    panel3.startAnimation(transPanel3);
 
     TranslateAnimation transPanel2 = new TranslateAnimation(
         Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -322,9 +316,9 @@ public class GameEnd extends Activity {
 
     // Ids for Scoreboard list rows (one per team).
     final int[] TEAM_SCORE_GROUPS = new int[] { R.id.GameEnd_Scores_1,
-        R.id.GameEnd_Scores_2, R.id.GameEnd_Scores_3, R.id.GameEnd_Scores_4 };
+        R.id.GameEnd_Scores_2};
 
-    final String[] RANKS = new String[] { "1st", "2nd", "3rd", "4th" };
+    final String[] RANKS = new String[] { "1st", "2nd"};
 
     ScoreboardRowLayout row;
     // Setup score displays. Iterate through all team groups, setting scores for

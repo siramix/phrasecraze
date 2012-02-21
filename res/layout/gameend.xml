@@ -35,8 +35,6 @@
         
         <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/GameEnd_Scores_1" android:layout_height="30dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
         <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/GameEnd_Scores_2" android:layout_height="30dp" android:layout_marginTop="-1dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
-        <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/GameEnd_Scores_3" android:layout_height="30dp" android:layout_marginTop="-1dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
-        <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_width="fill_parent" android:id="@+id/GameEnd_Scores_4" android:layout_height="30dp" android:layout_marginTop="-1dp"></com.siramix.phrasecraze.ScoreboardRowLayout>
 
     </LinearLayout>
     <RelativeLayout android:layout_width="fill_parent" android:id="@+id/GameEnd_WinnerGroup" android:layout_height="fill_parent" android:layout_weight="1">
