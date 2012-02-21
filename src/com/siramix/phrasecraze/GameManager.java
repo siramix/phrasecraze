@@ -139,7 +139,7 @@ public class GameManager {
     }
     ++mCardPosition;
     if (mCardPosition >= mCurrentCards.size()) {
-      mCurrentCard = mDeck.getPhraseFromCache();
+      mCurrentCard = mDeck.getPhraseFromPhrasesInPlay();
       mCurrentCards.addLast(mCurrentCard);
     }
     else {

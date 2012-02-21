@@ -124,6 +124,24 @@ public class Deck {
   }
   
   /**
+   * Get a card from the top of the phrasesInPlay queue.  Once
+   * this reaches the bottom of the deck, we should top off the Deck which
+   * will in turn trigger a pull from packs to refill the cache.
+   * @return a card reference
+   */
+  public Card getPhraseFromPhrasesInPlay() {
+    Card ret;
+    if (mPhrasesInPlay.isEmpty()) {
+      this.topOffDeck();
+      ret = mPhrasesInPlay.removeFirst();
+    } else {
+      ret = mPhrasesInPlay.removeFirst();
+    }
+    Log.d(TAG, " Delt " + ret.getTitle() + " from phrasesInPlay");
+    return ret;
+  }
+  
+  /**
    * Get the card from the top of the cache
    * 
    * @return a card reference
