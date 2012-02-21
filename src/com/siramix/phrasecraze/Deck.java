@@ -41,6 +41,7 @@ import org.xml.sax.SAXException;
 
 import com.siramix.phrasecraze.Consts.PurchaseState;
 
+import android.R.string;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -50,20 +51,15 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
  * The Deck represents the stack of all cards in the game. We interact with a
  * SQLite database that stores the cards and intelligently caches them at the
  * beginning of the game and replenishes the cache at the beginning of each
- * turn. Each instance of PhraseCraze contains the same database; however the
- * sorted order is determined using a pseudo-random variable. This variable is
- * determined on the first run of the game using the Java Random class and has a
- * something to do with cpuid, system time, etc. The variable, called mSeed, is
- * used to shuffle the deck with a generating function such that the sort can be
- * repeated on every subsequent load of the game. Thus, we can store only on the
- * seed and an offset to preserve the sorted order of the players' deck. We also
- * save mCache to prevent any unnecessary card loss between sessions.
+ * turn. Each instance of PhraseCraze contains a different database so any 
+ * Autoincrement IDs in the database cannot be taken as the same across phones.
  * 
  * @author Siramix Labs
  */
@@ -73,31 +69,33 @@ public class Deck {
 
   private static final String DATABASE_NAME = "phrasecraze";
   private static final int DATABASE_VERSION = 1;
-  private static final int PHRASECACHE_SIZE = 200;
+  private static final int CACHE_SIZE = 100;
+  private static final int INPLAY_SIZE = 100;
   
   private static final int PACK_CURRENT = -1;
   private static final int PACK_NOT_PRESENT = -2;
-
+  
   // TODO We need to look at ALL OF THE QUERIES in this class.
   
   // Take the top 1/DIVISOR phrases from a pack as possible cards for the phraseCache
   private static final int PACK_DIVISOR = 25; 
   
   // This is the sum of all cards in selected packs
-  private int mPackTotalCards;
-  
-  // This will get set during Game Setup, it's the ideal number of cards for a single game
-  // Potentially this will be dependent on num rounds selected
-  private int mCacheSize;
+  private int mTotalSelectedCards;
   
   // After taking the top 1/DIVSOR phrases from a pack, throw back a percentage of them 
   private static final int THROW_BACK_PERCENTAGE = 20;
   
-  private LinkedList<Card> mPhraseCache;    
+  // A list of backup cards used for refreshing the deck.  Will be filled after it reaches 0.
+  private LinkedList<Card> mPhraseCache;
+  
+  // PhrasesInPlay will be topped off every turn
+  private LinkedList<Card> mPhrasesInPlay;
+  
   private Context mContext;
-
+  
   private DeckOpenHelper mDatabaseOpenHelper;
-
+  
   /**
    * Constructor
    * 
@@ -108,89 +106,58 @@ public class Deck {
     mContext = context;
     mDatabaseOpenHelper = new DeckOpenHelper(context);
     mPhraseCache = new LinkedList<Card>();
+    mPhrasesInPlay = new LinkedList<Card>();
     mDatabaseOpenHelper.close();
   }
-
-  /**
-   * Prepare for a game by caching the phrases necessary for the entire game.  
-   * Ideally we should only do this in between games. 
-   */
-  public void prepareForGame() {
-    mDatabaseOpenHelper = new DeckOpenHelper(mContext);
-    
-    // Use the preferences to pull the chosen decks as these will
-    // need to be set anyways to save user's last game's settings
-    
-    //TODO This will work once we are parsing out decks from the server and have data in the db
-    SharedPreferences packPrefs = mContext.getSharedPreferences(
-                                  Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
-    Map<String, ?> packSelections = new HashMap<String, Boolean>();
-    packSelections = packPrefs.getAll();
-    
-    LinkedList<String> selectedPacks = new LinkedList<String>();
-    selectedPacks.add("starter");
-    for (String packname : packSelections.keySet())
-      if (packPrefs.getBoolean(packname, false) == true) {
-        selectedPacks.add(packname);
-      }
-    
-
-    mPackTotalCards = mDatabaseOpenHelper.countPhrases(selectedPacks);
-
-    Log.d(TAG, "**** TOTAL NUMBER OF PHRASES SELECTED: " + Integer.toString(mPackTotalCards));
-
-    //TODO We should review the best place for this.  It's possible that this number
-    // should depend on the number of turns played.
-    mCacheSize = 100;
-
-    // For all packs being played get the phrases we want  
-    for ( String packName : selectedPacks ) {
-      mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack(packName, mCacheSize, mPackTotalCards));
-    }
-    
-    // Put all the phrases together
-    
-    // Fill the cache from the database and shuffle
-    //mPhraseCache.addAll(mDatabaseOpenHelper.getPhrases(ids));
-    Collections.shuffle(mPhraseCache);
-        
-    mDatabaseOpenHelper.close();
-  }  
   
-  //TODO LOOK THIS OVER, got deleted and added back...WHY?
+  public void topOffDeck() {
+    Log.d(TAG, "topOffDeck()");
+    int lack = INPLAY_SIZE - mPhrasesInPlay.size();
+    Log.d(TAG, "*** INPLAY SIZE: " + INPLAY_SIZE);
+    Log.d(TAG, "*** Cards in Play: " + mPhrasesInPlay.size());
+    Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
+    Log.d(TAG, "*** Current Cache Size: " + String.valueOf(mPhraseCache.size()));
+    
+    for (int i=0; i<lack; ++i) {
+      mPhrasesInPlay.add(getPhraseFromCache());
+    }
+  }
+  
+  /**
+   * Get a card from the top of the phrasesInPlay queue.  Once
+   * this reaches the bottom of the deck, we should top off the Deck which
+   * will in turn trigger a pull from packs to refill the cache.
+   * @return a card reference
+   */
+  public Card getPhraseFromPhrasesInPlay() {
+    Card ret;
+    if (mPhrasesInPlay.isEmpty()) {
+      this.topOffDeck();
+      ret = mPhrasesInPlay.removeFirst();
+    } else {
+      ret = mPhrasesInPlay.removeFirst();
+    }
+    Log.d(TAG, " Delt " + ret.getTitle() + " from phrasesInPlay");
+    return ret;
+  }
+  
   /**
    * Get the card from the top of the cache
    * 
    * @return a card reference
    */
-  public Card getPhrase() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getCard()");
-    }
+  public Card getPhraseFromCache() {
+    Card ret;
     if (mPhraseCache.isEmpty()) {
-      this.prepareForGame();
-      return mPhraseCache.removeFirst();
+      this.fillCache();
+      ret = mPhraseCache.removeFirst();
     } else {
-      return mPhraseCache.removeFirst();
+      ret = mPhraseCache.removeFirst();
     }
+    Log.d(TAG, " Grabbed " + ret.getTitle() + " from cache.");
+    return ret;
   }
   
-  /**
-   * Sets the value for how many cards will be played for the night.  Should
-   * be set before a game begins and after packs are chosen.  This may be
-   * proportional to all the cards selected.  We should also validate that
-   * players chose a 'good' amount, i.e. not playing with just 200 cards.
-   * 
-   * @param cacheSize The number of cards to store for a game's worth of cards 
-   * @return
-   */
-  public void setCacheSize(int cacheSize) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "setCacheSize()");
-    }
-    this.mCacheSize = cacheSize;
-  }
-
   /**
    * Take a Pack object and pull in cards from the server into the database. 
    * @param pack
@@ -209,6 +176,7 @@ public class Deck {
     }
   }
   
+  // TODO This doesn't look like it's in use to me.  Just a bunch of Log statements.
   /**
    * Add a pack to the system
    * @return an integer indicating the number of packs processed
@@ -226,6 +194,54 @@ public class Deck {
     return 0;
   }
 
+  /**
+   * Prepare for a game by caching the phrases necessary for the entire game.  
+   * Ideally we should only do this in between games. 
+   */
+  private void fillCache() {
+    Log.d(TAG, "fillCache()");
+    mDatabaseOpenHelper = new DeckOpenHelper(mContext);
+    SharedPreferences packPrefs = mContext.getSharedPreferences(
+                                  Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+    Map<String, ?> packSelections = new HashMap<String, Boolean>();
+    packSelections = packPrefs.getAll();
+    
+    // 1. Use the preferences to find the chosen packs to pull from 
+    LinkedList<String> selectedPacks = new LinkedList<String>();
+    // TODO starter.json should be selected through the front end, not hard-coded here
+    selectedPacks.add("starter");
+    selectedPacks.add("allphrases");
+    for (String packPath : packSelections.keySet())
+      if (packPrefs.getBoolean(packPath, false) == true) {
+        selectedPacks.add(packPath);
+      }
+    
+    // 2. Count how many phrases are selected
+    mTotalSelectedCards = mDatabaseOpenHelper.countPhrasesInPacks(selectedPacks);
+    
+    // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
+    for ( String packFileName : selectedPacks ) {
+      mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, CACHE_SIZE, mTotalSelectedCards));
+    }
+    
+    // 4. Now shuffle
+    Collections.shuffle(mPhraseCache);
+    
+    mDatabaseOpenHelper.close();
+  }  
+  
+  /**
+   * Debugging function.  Can be removed later.
+   */
+  public void printCache() {
+    Log.d(TAG, "printing cache...");
+    Log.d(TAG, "size is " + mPhraseCache.size());    
+    for (int i=0; i<mPhraseCache.size(); ++i) {
+      Log.d(TAG, "..." + mPhraseCache.get(i).getTitle());
+    }
+    Log.d(TAG, "end of cache");
+  }
+  
   /**
    * This class creates/opens the database and provides helper functions for
    * batch CRUD operations
@@ -253,14 +269,15 @@ public class Deck {
       db.execSQL(PackColumns.TABLE_CREATE);
       db.execSQL(PhraseColumns.TABLE_CREATE);
       digestPackFromResource(db, "starter", R.raw.starter);
+      digestPackFromResource(db, "allphrases", R.raw.allphrases);
     }
 
     /**
-     * Count the phrases in the deck quickly
+     * Count all phrases in the deck quickly
      * 
      * @return the number of phrases in the deck
      */
-    public int countPhrases() {
+    public int countAllPhrases() {
       Log.d(TAG, "countPhrases()");
       mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PhraseColumns.TABLE_NAME);
@@ -269,27 +286,33 @@ public class Deck {
     
     /**
      * Returns an integer count of all phrases associated with the passed in pack names
-     * @param packnames
-     * @return
+     * @param packFileNames The filenames of all packs to be counted
+     * @return -1 if no phrases found, otherwise the number of phrases found
      */
-    public int countPhrases(LinkedList<String> packnames) {
+    public int countPhrasesInPacks(LinkedList<String> packNames) {
       Log.d(TAG, "countPhrases(LinkedList<String>)");
-      String packIds = "";
-      for (int i=0; i< packnames.size(); ++i) {
-        packIds += String.valueOf(getPackId(packnames.get(i)));
-        if (i < packnames.size()-1) {
-          packIds += ",";
+      String[] packIds = {""};
+
+      // TODO Should it be an exception if pack isn't found?
+      for (int i=0; i< packNames.size(); ++i) {
+        // Protect against packs not found (-1 is ID returned)
+        packIds[0] += (String.valueOf(getPackId(packNames.get(i))));
+        if (i < packNames.size()-1) {
+          packIds[0] += (",");
         }
-      }
-      Log.d(TAG, "*** pack ids = " + packIds.toString());
-      mDatabase = getReadableDatabase();
-      Cursor ret = mDatabase.rawQuery("SELECT COUNT(*)" + 
-                                         " FROM " + PhraseColumns.TABLE_NAME + 
-                                         " WHERE " + PhraseColumns.PACK_ID + " IN (" + packIds + ")", null);
-      int count = -1;
-      if(ret.moveToFirst()) {
-        count = ret.getInt(0);
-      }
+      }      
+
+      //TODO Just a thought, but if this is slowing things down a lot to have to find pack
+      // id frequently, maybe we can make the packID a fixed ID like we are doing with phrases§
+      mDatabase = getWritableDatabase();
+      
+      //TODO WHy the HELL didn't that work?
+      //Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+          //PhraseColumns.PACK_ID + " IN (?)", packIds, null, null, null);
+      
+      Cursor countQuery = mDatabase.rawQuery("SELECT * FROM phrases where pack_id in (" + packIds[0] + ")", null);
+      int count = countQuery.getCount();
+
       return count;
     }
 
@@ -342,35 +365,38 @@ public class Deck {
 
     public void digestPackFromServer(Pack pack) throws IOException, URISyntaxException {
       mDatabase = getWritableDatabase();
-      // Don't add a pack if it's aready there
+      // Don't add a pack if it's already there
       int packId = packInstalled(pack.getName(), pack.getVersion(), mDatabase);
-      if(packId == PACK_CURRENT) {
+      if (packId == PACK_CURRENT) {
         return;
-      } else {
-        if(packId != PACK_NOT_PRESENT) { 
-          clearPack(packId, mDatabase);
-        }
-        CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
-        digestPackInternal(mDatabase, pack.getName(), pack.getVersion(), cardItr);
       }
+      if(packId != PACK_NOT_PRESENT) { 
+        clearPack(packId, mDatabase);
+      }
+      CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
+      digestPackInternal(mDatabase, pack.getName(), pack.getVersion(), cardItr);
     }
 
+    /**
+     * Replaces or inserts a new row into the Packs table and then replaces or inserts
+     * rows into the Phrases table for each phrase in that pack.
+     * 
+     * @param db
+     * @param packName
+     * @param packVersion
+     * @param cardItr
+     */
     private static void digestPackInternal(SQLiteDatabase db, String packName, int packVersion, CardJSONIterator cardItr) {
-
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "digestPackInternal: " + packName + "v" + String.valueOf(packVersion));
-      }
+      Log.d(TAG, "digestPackInternal: " + packName + "v" + String.valueOf(packVersion));
+ 
       // Add the pack and all cards in a single transaction.
       try {
         db.beginTransaction();
-        int packId = (int) insertPack(packName, packVersion, db);
+        int packId = (int) insertPack(packName, "starter.json", packVersion, db);
         Card curCard = null;
         while(cardItr.hasNext()) {
-          if (PhraseCrazeApplication.DEBUG) {
-            Log.d(TAG, "Trying to add Card");
-          }
           curCard = cardItr.next();
-          insertPhrase(curCard.getId(), curCard.getTitle(), 1, packId, db);
+          upsertPhrase(curCard.getId(), curCard.getTitle(), 1, packId, db);
         }
         db.setTransactionSuccessful();
       } finally {
@@ -379,21 +405,20 @@ public class Deck {
     }
 
     /**
-     * Insert a phrase to the deck (DB)
+     * Replaces existing phrase if it exists, otherwise inserts the phrase in the Phrases table.
      * 
      * @return rowId or -1 if failed
      */
-    public static long insertPhrase(int id, String phrase, int difficulty, int packId, SQLiteDatabase db) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "insertPhrase()");
-      }
+    public static long upsertPhrase(int id, String phrase, int difficulty, int packId, SQLiteDatabase db) {
+      Log.d(TAG, "upsertPhrase(" + phrase + ")");
+      
       ContentValues initialValues = new ContentValues();
       initialValues.put(PhraseColumns._ID, id);
       initialValues.put(PhraseColumns.PHRASE, phrase);
       initialValues.put(PhraseColumns.DIFFICULTY, difficulty);
       initialValues.put(PhraseColumns.PLAY_DATE, 0);
       initialValues.put(PhraseColumns.PACK_ID, packId);
-      return db.insert(PhraseColumns.TABLE_NAME, null, initialValues);
+      return db.replace(PhraseColumns.TABLE_NAME, null, initialValues);
     }
     
     /**
@@ -402,25 +427,33 @@ public class Deck {
      * @param db The db in which to insert the new pack
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public static long insertPack(String packName, int packVersion, SQLiteDatabase db) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "addPack()");
-      }
+    public static long insertPack(String packName, String path, int packVersion, SQLiteDatabase db) {
+      Log.d(TAG, "insertPack()");
+      
       ContentValues packValues = new ContentValues();
       packValues.put(PackColumns.NAME, packName);
+      packValues.put(PackColumns.PATH, path);
       packValues.put(PackColumns.VERSION, packVersion);
       return db.insert(PackColumns.TABLE_NAME, null, packValues);
     }
-
+    
+    /**
+     * Queries the Packs table and returns the packId if the pack requires updating, 
+     * otherwise returns either PACK_CURRENT or PACK_NOT_PRESENT.
+     * @param packName 
+     * @param packVersion Latest version of the pack
+     * @param db
+     * @return
+     */
     public static int packInstalled(String packName, int packVersion, SQLiteDatabase db) {
       String[] packNames = {packName};
       Cursor res = db.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
           PackColumns.NAME + " IN (?)", packNames, null, null, null);
-      if(res.getCount() >= 1) {
+      if (res.getCount() >= 1) {
         res.moveToFirst();
-        int oldVersion = res.getInt(2);
+        int oldVersion = res.getInt(3);
         int oldId = res.getInt(0);
-        if(packVersion > oldVersion) {
+        if (packVersion > oldVersion) {
           return oldId;
         } else {
           return PACK_CURRENT;
@@ -466,16 +499,21 @@ public class Deck {
       return ret;
     }
     
-    public int getPackId(String packname) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "getPackId(" + packname + ")");
-      }
+    /**
+     * Return the id a provided pack
+     * @param packName A string that matches a pack for which an ID is needed
+     * @return
+     */
+    public int getPackId(String packName) {
+      Log.d(TAG, "getPackId(" + packName + ")");
+      
       mDatabase = getWritableDatabase();
       
       // TODO: Question for code review.  Better to do a join or two separate 
-      // Get our pack ID 
+      // Get our pack ID
+      String[] name = {packName};
       Cursor res = mDatabase.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS, 
-          PackColumns.NAME + " = '" + packname +"'", null, null, null, null);
+          PackColumns.NAME + " = ?", name, null, null, null);
       
       int packid = -1;
       if (res.moveToFirst()) {
@@ -514,46 +552,43 @@ public class Deck {
      * Generates and returns a LinkedList of Cards from the database for a specific pack.  First,
      * we request all the cards from the db sorted by date.  Then we calculate how many of the 
      * Cards should be returned based on the pack's weight relative to the total number of selected
-     * cards.  Then, just to shake things up we take a few extra, and r
+     * cards.  Then, just to shake things up we take a few extra, and remove an equal number at random
      * @param packname
-     * @param CACHE_SIZE
+     * @param LACK
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, int TOTAL_SELECTED) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "pullFromPack(" + packname + ")");
-      }
+    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, long TOTAL_SELECTED) {
+      Log.d(TAG, "pullFromPack(" + packname + ")");
       mDatabase = getWritableDatabase();
       
       LinkedList<Card> returnCards = new LinkedList<Card>();
       int packid = getPackId(packname);
-
+      
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          PhraseColumns.PACK_ID + " = " + packid, null, null, null, PhraseColumns.PLAY_DATE + " asc",
-          Integer.toString(CACHE_SIZE));
+          PhraseColumns.PACK_ID + " = " + packid, null, null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
-      // The number of cards to returnCardsurn from any given pack will use the following formula:
+      // The number of cards to return from any given pack will use the following formula:
       // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
       int packsize = res.getCount();
       float weight = (float) packsize / (float) TOTAL_SELECTED;      
       int targetnum = (int) Math.ceil(CACHE_SIZE * weight);
-      int surplusnum = (int) Math.ceil( (float) targetnum * (Deck.THROW_BACK_PERCENTAGE / 100));
+      int surplusnum = (int) Math.ceil( (float) targetnum * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
       
-      Log.d(TAG, "** packsize: " + packsize);
+      Log.d(TAG, "Calculations:");
+      Log.d(TAG, "** Total Selected Cards: " + TOTAL_SELECTED);
+      Log.d(TAG, "** cache size: " + CACHE_SIZE);      
+      Log.d(TAG, "** pack size: " + packsize);
       Log.d(TAG, "** weight: " + weight);
       Log.d(TAG, "** targetnum: " + targetnum);
       Log.d(TAG, "** surplusnum: " + surplusnum);
       
       Log.d(TAG, "** ADDING PHRASES");
 
-      // Add cards to our returnCards, including a surplus 
+      // Add cards to what will be the Cache, including a surplus 
       while (!res.isAfterLast() && res.getPosition() < (targetnum + surplusnum)) {
-        if (PhraseCrazeApplication.DEBUG) {
-          Log.d(TAG, "adding: " + res.getString(1));
-        }        
         returnCards.add(new Card(res.getInt(0), res.getString(1)));
         res.moveToNext();
       }
@@ -562,12 +597,12 @@ public class Deck {
       // Throw out x surplus cards at random
       Random r = new Random();
       int removeCount = 0;
-      int index = 0;
+      int randIndex = 0;
       Log.d(TAG, "** REMOVING PHRASES");
       while (removeCount < surplusnum) {
-        index = r.nextInt(returnCards.size()-1);
-        Log.d(TAG, "**removing: " + returnCards.get(index));
-        returnCards.remove(index);
+        randIndex = r.nextInt(returnCards.size()-1);
+        Log.d(TAG, "**removing: " + returnCards.get(randIndex).getTitle());
+        returnCards.remove(randIndex);
         removeCount++;
       }
       Log.d(TAG, "**" + removeCount + " phrases removed.");
@@ -575,6 +610,8 @@ public class Deck {
       res.close();
       return returnCards;
     }
+    
+    
 
     //TODO Let's reconsider if this is the best thing to do after we figure out 
     // how marketplace updates will affect each phone's database

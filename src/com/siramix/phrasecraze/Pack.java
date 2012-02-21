@@ -33,6 +33,7 @@ public class Pack implements Serializable {
    * 
    */
   private static final long serialVersionUID = -3764144456280008930L;
+  private int mId;
   private String mName;
   private String mUpdateMessage;
   private String mPath;
@@ -47,7 +48,7 @@ public class Pack implements Serializable {
    * Default constructor
    */
   public Pack() {
-    this("","","",-1,-1);
+    this(-1, "","","",-1,-1);
     Log.d(TAG, "consructor Pack()");
   }
 
@@ -59,8 +60,9 @@ public class Pack implements Serializable {
    * @param version
    * @param size
    */
-  public Pack( String name, String updateMessage, String path, int version, int size) {
+  public Pack(int id, String name, String updateMessage, String path, int version, int size) {
     Log.d(TAG, "constructor Pack(args)");
+    mId = id;
     mName = name;
     mUpdateMessage = updateMessage;
     mPath = path;
@@ -68,12 +70,18 @@ public class Pack implements Serializable {
     mSize = size;
     mCardList = null;
   }
+  
+  /**
+   * @return the id of the pack (MUST NOT CHANGE)
+   */
+  public int getId() {
+    return mId;
+  }
 
   /**
    * @return the name of the pack
    */
   public String getName() {
-    Log.d(TAG, "getName()");
     return mName;
   }
 
@@ -81,7 +89,6 @@ public class Pack implements Serializable {
    * @return the update message
    */
   public String getUpdateMessage() {
-    Log.d(TAG, "getUpdateMessage()");    
     return mUpdateMessage;
   }
 

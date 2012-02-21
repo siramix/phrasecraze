@@ -79,7 +79,7 @@ public class SplashScreen extends Activity {
         public void run() {
           Deck.DeckOpenHelper helper = new Deck.DeckOpenHelper(
               SplashScreen.this);
-          helper.countPhrases();
+          helper.countAllPhrases();
           helper.close();
         }
       });

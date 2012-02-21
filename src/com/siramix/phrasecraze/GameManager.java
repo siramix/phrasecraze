@@ -138,8 +138,8 @@ public class GameManager {
       Log.d(TAG, "getNextCard()");
     }
     ++mCardPosition;
-    if(mCardPosition >= mCurrentCards.size()) {
-      mCurrentCard = mDeck.getPhrase();
+    if (mCardPosition >= mCurrentCards.size()) {
+      mCurrentCard = mDeck.getPhraseFromPhrasesInPlay();
       mCurrentCards.addLast(mCurrentCard);
     }
     else {
@@ -196,7 +196,7 @@ public class GameManager {
     //TODO put this in the right place (after pack select) -- 
     // actually this will be problematic because we won't "know" which packs they want to 
     // stick with until they hit start, unless we ask for packs before game settings
-    mDeck.prepareForGame();
+    mDeck.topOffDeck();
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
   }
@@ -211,8 +211,11 @@ public class GameManager {
     // The same team who was buzzed will start the next round
     mCurrentCards.clear();
     mCardPosition = -1;
-    //TODO figure out when to call prepare for game.  mb this should be checkdeckstatus
-    mDeck.prepareForGame();
+    //TODO figure out when to call prepare for game.  This happens at the wrong spot right now
+    // It should occur at the start of Turn Summery (but now this is called right before a new round)
+    mDeck.printCache();
+    mDeck.topOffDeck();
+    mDeck.printCache();
     dealNextCard();
     
     // Clear round scores
@@ -337,8 +340,8 @@ public class GameManager {
       Log.d(TAG, "EndGame()");
     }
     mTeamIterator = mTeams.iterator();
-//  TODO figure out when to call prepare for game.  mb this should be checkdeckstatus
-    mDeck.prepareForGame();
+    //TODO Another questionable location for topoffdeck
+    mDeck.topOffDeck();
     // clear current cards so that scoreboards don't add turn score in
     mCurrentCards.clear();
   }

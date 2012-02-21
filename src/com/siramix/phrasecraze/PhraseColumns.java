@@ -18,7 +18,7 @@ public class PhraseColumns implements BaseColumns {
 
   public static final String TABLE_CREATE = "CREATE TABLE "
       + TABLE_NAME + "( " + 
-      _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+      _ID + " INTEGER PRIMARY KEY, " +
       PHRASE + " TEXT, " + 
       DIFFICULTY + " INTEGER, " +
       PLAY_DATE + " INTEGER, " +
