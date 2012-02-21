@@ -199,7 +199,7 @@ public class Deck {
       }
     
     // 2. Count how many phrases are selected
-    mTotalSelectedCards = mDatabaseOpenHelper.countPhrases(selectedPacks);
+    mTotalSelectedCards = mDatabaseOpenHelper.countPhrasesInPacks(selectedPacks);
     
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
     for ( String packFileName : selectedPacks ) {
@@ -259,7 +259,7 @@ public class Deck {
      * 
      * @return the number of phrases in the deck
      */
-    public int countPhrases() {
+    public int countAllPhrases() {
       Log.d(TAG, "countPhrases()");
       mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PhraseColumns.TABLE_NAME);
@@ -271,7 +271,7 @@ public class Deck {
      * @param packFileNames The filenames of all packs to be counted
      * @return -1 if no phrases found, otherwise the number of phrases found
      */
-    public int countPhrases(LinkedList<String> packNames) {
+    public int countPhrasesInPacks(LinkedList<String> packNames) {
       Log.d(TAG, "countPhrases(LinkedList<String>)");
       String[] packIds = {""};
 

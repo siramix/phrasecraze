@@ -66,12 +66,13 @@ public class PackParser {
     Log.d(TAG, "stringToPack");
     Log.d(TAG, "--> " + strPack);
     JSONObject curPack = new JSONObject(strPack);
+    int curId = curPack.getInt("_id");
     String curName = curPack.getString("name");
     String curPath = curPack.getString("path");
     String curUpdateMessage = curPack.getString("update_message");
     int curVersion = curPack.getInt("version");
     int curSize = curPack.getInt("size");
-    Pack pack = new Pack(curName, curUpdateMessage, curPath, curVersion, curSize);
+    Pack pack = new Pack(curId, curName, curUpdateMessage, curPath, curVersion, curSize);
     return pack;
   }
 
