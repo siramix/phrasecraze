@@ -36,7 +36,7 @@
         android:id="@+id/PackPurchase_ScrollView"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:scrollbars="vertical" android:layout_weight="1" android:layout_marginTop="-10dp">
+        android:scrollbars="vertical" android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/PackPurchase_Packlist"
@@ -130,14 +130,12 @@
 
     <LinearLayout
         android:id="@+id/PackPurchase_Buttons"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="fill_parent" android:layout_height="wrap_content">
 
-        <Button
+        <com.siramix.phrasecraze.AntonButton
             android:id="@+id/PackPurchase_Button_Next"
             android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:text="@string/packpurchase_button" />
+            android:text="@string/packpurchase_button" android:textSize="22dp" android:layout_height="50dp"></com.siramix.phrasecraze.AntonButton>
     </LinearLayout>
 
 </LinearLayout>

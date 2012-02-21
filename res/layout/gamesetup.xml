@@ -68,7 +68,7 @@
 
 	<!-- Select number of turns -->
 	
-	<Button android:id="@+id/GameSetup_StartGameButton"
-		android:text="@string/gamesetup_button_startgame" android:layout_width="fill_parent" style="@style/PhraseCrazeButton" android:layout_height="50dp"/>
+	<com.siramix.phrasecraze.AntonButton android:id="@+id/GameSetup_StartGameButton"
+		android:text="@string/gamesetup_button_startgame" android:layout_width="fill_parent" style="@style/PhraseCrazeButton" android:layout_height="50dp" android:textSize="22dp"></com.siramix.phrasecraze.AntonButton>
 
 </LinearLayout>

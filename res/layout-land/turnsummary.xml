@@ -26,10 +26,10 @@
         <TextView android:layout_marginTop="-5dp" android:text="Results" android:layout_marginLeft="5dp" android:textSize="38dp" android:id="@+id/TurnSummary_Title" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textColor="@color/title"></TextView>
         <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:orientation="vertical">
             <TextView android:layout_gravity="right" android:text="@string/turnsummary_stoppedon" android:id="@+id/TurnSummary_StoppedOn" android:layout_height="30dp" android:layout_width="fill_parent" android:textColor="@color/white" android:textStyle="bold" android:minWidth="130dp" android:textSize="18dp" android:gravity="right|top"></TextView>
-            <TextView android:text="Red Dogs intheHousewoo" android:scrollHorizontally="true" android:textSize="32dp" android:ellipsize="end" android:id="@+id/TurnSummary_StoppedOn_Team" android:layout_width="fill_parent" android:maxLines="1" android:textStyle="bold" android:layout_height="wrap_content" android:gravity="right|bottom" android:layout_marginTop="-20dp"></TextView>
+            <TextView android:text="Red Dogs intheHousewoo" android:scrollHorizontally="true" android:textSize="32dp" android:ellipsize="end" android:id="@+id/TurnSummary_StoppedOn_Team" android:layout_width="fill_parent" android:maxLines="1" android:textStyle="bold" android:layout_height="wrap_content" android:gravity="right|bottom" android:layout_marginTop="-15dp"></TextView>
         </LinearLayout>
     </RelativeLayout>
-    <ImageView android:id="@+id/TurnSummary_SpacerA" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim" android:layout_marginTop="-10dp"></ImageView>
+    <ImageView android:id="@+id/TurnSummary_SpacerA" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim"></ImageView>
     <ImageView android:id="@+id/TurnSummary_SpacerC" android:layout_height="1dp" android:layout_width="fill_parent" android:background="@color/black"></ImageView>
     <ScrollView android:layout_width="fill_parent" android:id="@+id/TurnSummary_CardList" android:layout_height="wrap_content" android:layout_weight="1" android:scrollY="-500dp"></ScrollView>
     <ImageView android:id="@+id/TurnSummary_SpacerB" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim"></ImageView>
@@ -42,7 +42,7 @@
     <LinearLayout android:id="@+id/TurnSummary_BottomGroup"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
-        <Button android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:layout_width="wrap_content" android:id="@+id/TurnSummary_AssignPoints" android:layout_gravity="center"></Button>
+        <com.siramix.phrasecraze.AntonButton android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:id="@+id/TurnSummary_AssignPoints" android:layout_gravity="center" android:layout_width="100dp"></com.siramix.phrasecraze.AntonButton>
         <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:orientation="vertical" android:layout_weight="1">
             <LinearLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TurnSummary_ScoreGroup" android:orientation="vertical" android:padding="3dp">
                 <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_height="30dp" android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamA"></com.siramix.phrasecraze.ScoreboardRowLayout>
@@ -50,10 +50,10 @@
             </LinearLayout>
         </LinearLayout>
         
-        <Button android:id="@+id/TurnSummary_NextTurn"
-            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="wrap_content" android:layout_gravity="center">
+        <com.siramix.phrasecraze.AntonButton android:id="@+id/TurnSummary_NextTurn"
+            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_gravity="center" android:layout_width="100dp">
             
-        </Button>
+        </com.siramix.phrasecraze.AntonButton>
 
     </LinearLayout>
 
