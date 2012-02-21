@@ -33,6 +33,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,6 +71,26 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
   private static final int FACEBOOK_REQUEST_CODE = 12;
   private static final int GOOGLEPLUS_REQUEST_CODE = 13;
 
+
+  /**
+   * PlayGameListener plays an animation on the view that will result in
+   * launching GameSetup
+   */
+  private OnClickListener mGameSetupListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "PlayGameListener OnClick()");
+      }
+      
+      // play confirm sound
+      SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this.getBaseContext());
+      sm.playSound(SoundManager.Sound.CONFIRM);
+
+      startActivity(new Intent(PhrasePackPurchase.this.getApplication().getString(
+          R.string.IntentGameSetup), getIntent().getData()));
+    }
+  };
+  
   /**
    * A {@link PurchaseObserver} is used to get callbacks when Android Market sends
    * messages to this application so that we can update the UI.
@@ -232,6 +253,9 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
 
     // Check if billing is supported.
     ResponseHandler.register(mPurchaseObserver);
+    
+    Button btn = (Button) this.findViewById(R.id.PackPurchase_Button_Next);
+    btn.setOnClickListener(mGameSetupListener);
 
     //mBillingService.requestPurchase("test_pack", "payload_test");
   }

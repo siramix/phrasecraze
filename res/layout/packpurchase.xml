@@ -35,13 +35,13 @@
     <ScrollView
         android:id="@+id/PackPurchase_ScrollView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:scrollbars="vertical" android:layout_weight="1" android:layout_marginTop="-10dp">
 
         <LinearLayout
             android:id="@+id/PackPurchase_Packlist"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="vertical" >
 
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/TurnSummary_NextTurn"
+            android:id="@+id/PackPurchase_Button_Next"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:text="@string/packpurchase_button" />

@@ -51,7 +51,7 @@
   <string name="packpurchase_title">Phrase Packs</string>
   <string name="packpurchase_unlockedheader">Unlocked</string>
   <string name="packpurchase_lockedheader">Locked</string>
-  <string name="packpurchase_button">Play!</string>
+  <string name="packpurchase_button">Game Setup</string>
       
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>
@@ -63,7 +63,7 @@
   <string name="gamesetup_scoringmode_freeplay">Free Play</string>
   <string name="gamesetup_scoringmode_assisted">Assisted</string>
   <string name="gamesetup_scoringmodehint">Scoring Mode is how points are assigned. In Free Play you are in charge of assigning points. In Assisted the computer tries to help with scoring.</string>
-  <string name="gamesetup_button_startgame">Start Game</string>
+  <string name="gamesetup_button_startgame">Play!</string>
   
   <!-- Turn Summary dialog strings -->
   <string name="turnsummary_stoppedon">Stopped On:</string>
