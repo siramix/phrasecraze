@@ -21,7 +21,7 @@
     </receiver>
 
     <activity android:name=".SplashScreen" android:label="@string/AppName"
-              android:screenOrientation="landscape">
+              android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -33,7 +33,7 @@
     </activity>
 
 		<activity android:name=".Title" android:label="@string/AppName"
-			android:screenOrientation="landscape">
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="com.siramix.phrasecraze.intent.action.TITLE" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -41,7 +41,7 @@
 		</activity>
 
 		<activity android:name=".Settings" android:label="@string/AppName"
-			android:screenOrientation="landscape"
+			android:screenOrientation="portrait"
 			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
 			<intent-filter>
 				<action android:name="com.siramix.phrasecraze.intent.action.SETTINGS" />
@@ -49,17 +49,8 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".Settings" android:label="@string/AppName"
-			android:screenOrientation="landscape"
-			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
-			<intent-filter>
-				<action android:name="com.siramix.phrasecraze.intent.action.SETTINGS" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>    
-		
 		<activity android:name=".PhrasePackPurchase" android:label="@string/AppName"
-			android:screenOrientation="landscape">
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="com.siramix.phrasecraze.intent.action.PHRASEPACKPURCHASE" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -67,28 +58,29 @@
 		</activity>
 		    
 		<activity android:name=".Rules" android:label="@string/AppName"
-			android:screenOrientation="landscape">
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="com.siramix.phrasecraze.intent.action.RULES" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".Buzzer" android:label="@string/AppName"
-			android:screenOrientation="landscape">
-			<intent-filter>
-				<action android:name="com.siramix.phrasecraze.intent.action.BUZZER" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
 		<activity android:name=".GameSetup" android:label="@string/AppName"
-			android:screenOrientation="landscape">
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="com.siramix.phrasecraze.intent.action.GAMESETUP" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		
+    <activity android:name=".EditTeamName" android:label=""
+      android:theme="@style/EditTeamNameDialog"
+      android:screenOrientation="portrait">
+      <intent-filter>
+        <action android:name="com.siramix.phrasecraze.intent.action.EDITTEAMNAME"></action>
+        <category android:name="android.intent.category.DEFAULT"></category>
+      </intent-filter>  
+    </activity>
 		
 		<activity android:name=".Turn" android:label="@string/AppName"
 			android:screenOrientation="landscape">
@@ -113,24 +105,6 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-		
-		<activity android:name=".CardReview" android:label=""
-			android:theme="@android:style/Theme.Dialog"
-			android:screenOrientation="landscape">
-			<intent-filter>
-				<action android:name="com.siramix.phrasecraze.intent.action.CARDREVIEW"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
-			</intent-filter>	
-		</activity>
-				
-		<activity android:name=".EditTeamName" android:label=""
-      android:theme="@style/EditTeamNameDialog"
-      android:screenOrientation="landscape">
-      <intent-filter>
-        <action android:name="com.siramix.phrasecraze.intent.action.EDITTEAMNAME"></action>
-        <category android:name="android.intent.category.DEFAULT"></category>
-      </intent-filter>  
-    </activity>
 		
 		<activity android:name=".AssignPoints" android:label=""
       android:theme="@style/AssignPointsDialog"

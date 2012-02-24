@@ -22,11 +22,11 @@
     android:layout_height="fill_parent"
     android:background="@drawable/bg_generic"
     android:orientation="vertical">
-    <RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/relativeLayout1">
+    <RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/TurnSummary_Title_Group">
         <TextView android:layout_marginTop="-5dp" android:text="Results" android:layout_marginLeft="5dp" android:textSize="38dp" android:id="@+id/TurnSummary_Title" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textColor="@color/title"></TextView>
-        <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:orientation="vertical">
-            <TextView android:layout_gravity="right" android:text="@string/turnsummary_stoppedon" android:id="@+id/TurnSummary_StoppedOn" android:layout_height="30dp" android:layout_width="fill_parent" android:textColor="@color/white" android:textStyle="bold" android:minWidth="130dp" android:textSize="18dp" android:gravity="right|top"></TextView>
-            <TextView android:text="Red Dogs intheHousewoo" android:scrollHorizontally="true" android:textSize="32dp" android:ellipsize="end" android:id="@+id/TurnSummary_StoppedOn_Team" android:layout_width="fill_parent" android:maxLines="1" android:textStyle="bold" android:layout_height="wrap_content" android:gravity="right|bottom" android:layout_marginTop="-15dp"></TextView>
+        <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical" android:id="@+id/TurnSummary_StoppedOn_Group">
+            <TextView android:layout_gravity="right" android:text="@string/turnsummary_stoppedon" android:id="@+id/TurnSummary_StoppedOn" android:layout_height="30dp" android:textColor="@color/white" android:textStyle="bold" android:minWidth="130dp" android:textSize="18dp" android:gravity="right|top" android:layout_width="wrap_content" android:layout_marginRight="5dp"></TextView>
+            <TextView android:text="Red Dogs intheHousewoo" android:scrollHorizontally="true" android:textSize="32dp" android:ellipsize="end" android:id="@+id/TurnSummary_StoppedOn_Team" android:maxLines="1" android:textStyle="bold" android:layout_height="wrap_content" android:gravity="right|bottom" android:layout_marginTop="-15dp" android:layout_width="wrap_content" android:layout_marginRight="5dp" android:layout_gravity="right" android:width="400dp"></TextView>
         </LinearLayout>
     </RelativeLayout>
     <ImageView android:id="@+id/TurnSummary_SpacerA" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim"></ImageView>

@@ -27,7 +27,7 @@
     <ImageView android:id="@+id/TurnSummary_SpacerC" android:layout_height="1dp" android:layout_width="fill_parent" android:background="@color/black"></ImageView>
     <ScrollView android:layout_width="fill_parent" android:id="@+id/TurnSummary_CardList" android:layout_height="wrap_content" android:layout_weight="1" android:scrollY="-500dp"></ScrollView>
     <ImageView android:id="@+id/TurnSummary_SpacerB" android:layout_height="3dp" android:layout_width="fill_parent" android:background="@color/genericBG_trim"></ImageView>
-    <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:orientation="vertical">
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical" android:id="@+id/TurnSummary_StoppedOn_Group">
         <TextView android:layout_width="fill_parent" android:layout_gravity="right" android:textStyle="bold" android:minWidth="130dp" android:gravity="center" android:textColor="@color/white" android:id="@+id/TurnSummary_StoppedOn" android:text="@string/turnsummary_stoppedon" android:textSize="24dp" android:layout_height="30dp"></TextView>
         <TextView android:textSize="32dp" android:layout_width="fill_parent" android:textStyle="bold" android:gravity="center" android:id="@+id/TurnSummary_StoppedOn_Team" android:layout_height="50dp" android:scrollHorizontally="true" android:text="Red Dogs intheHousewoo" android:maxLines="1" android:ellipsize="end"></TextView>
     </LinearLayout>
