@@ -139,7 +139,7 @@ public class GameManager {
     }
     ++mCardPosition;
     if (mCardPosition >= mCurrentCards.size()) {
-      mCurrentCard = mDeck.getPhraseFromPhrasesInPlay();
+      mCurrentCard = mDeck.dealPhrase();
       mCurrentCards.addLast(mCurrentCard);
     }
     else {
@@ -196,7 +196,7 @@ public class GameManager {
     //TODO put this in the right place (after pack select) -- 
     // actually this will be problematic because we won't "know" which packs they want to 
     // stick with until they hit start, unless we ask for packs before game settings
-    mDeck.topOffDeck();
+    mDeck.topOffFrontCache();
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
   }
@@ -211,11 +211,7 @@ public class GameManager {
     // The same team who was buzzed will start the next round
     mCurrentCards.clear();
     mCardPosition = -1;
-    //TODO figure out when to call prepare for game.  This happens at the wrong spot right now
-    // It should occur at the start of Turn Summery (but now this is called right before a new round)
-    mDeck.printCache();
-    mDeck.topOffDeck();
-    mDeck.printCache();
+
     dealNextCard();
     
     // Clear round scores
@@ -340,10 +336,26 @@ public class GameManager {
       Log.d(TAG, "EndGame()");
     }
     mTeamIterator = mTeams.iterator();
-    //TODO Another questionable location for topoffdeck
-    mDeck.topOffDeck();
+    //TODO Another questionable location for topping off the front cache
+    mDeck.topOffFrontCache();
     // clear current cards so that scoreboards don't add turn score in
     mCurrentCards.clear();
+  }
+  
+  /**
+   * If there aren't enough cards in the backup cache to fill the 
+   * front-facing cache, fill up all of the back-end cache.  This
+   * should be called during downtime since it could be a costly
+   * database pull.
+   */
+  public void fillCacheIfLow() {
+    Log.d(TAG, "fillCacheIfLow()");
+    mDeck.topOffFrontCache();
+    if (mDeck.getBackupCacheSize() < Deck.FRONT_CACHE_MAXSIZE) {
+      Log.d(TAG, "...Back Cache size was low (" + mDeck.getBackupCacheSize() + "), filling...");
+      mDeck.fillBackupCache();
+      Log.d(TAG, "...filled. Back Cache size is now " + mDeck.getBackupCacheSize());
+    }
   }
 
   /**
