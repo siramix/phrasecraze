@@ -23,6 +23,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -205,6 +206,9 @@ public class TurnSummary extends Activity {
       });
     mUpdateThread.start();
     
+    // TODO This should be in a thread, but I'm not sure how to access the game from inside the thread
+    game.fillCacheIfLow();
+    
     // Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
     list.post(new Runnable() {
     	public void run() {
@@ -255,6 +259,8 @@ public class TurnSummary extends Activity {
     // Set the score limit display
     TextView scoreLimit = (TextView) findViewById(R.id.TurnSummary_ScoreLimit);
     scoreLimit.setText(getString(R.string.turnsummary_scorelimit, game.getScoreLimit()));
+    
+    
   }
   
   /**

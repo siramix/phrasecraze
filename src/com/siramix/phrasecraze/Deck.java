@@ -55,11 +55,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- * The Deck represents the stack of all cards in the game. We interact with a
- * SQLite database that stores the cards and intelligently caches them at the
- * beginning of the game and replenishes the cache at the beginning of each
- * turn. Each instance of PhraseCraze contains a different database so any 
- * Autoincrement IDs in the database cannot be taken as the same across phones.
+ * The Deck represents the phrases that will be used in any single game
+ * of PhraseCraze.  The Deck consists of two core pieces: a list of cards
+ * in play, and a list of cards cached for future play in the same game.
+ * Also included in this class is a SQLLite helper class that will support
+ * creation and consumption of phrases at the database level.
  * 
  * @author Siramix Labs
  */
@@ -69,17 +69,14 @@ public class Deck {
 
   private static final String DATABASE_NAME = "phrasecraze";
   private static final int DATABASE_VERSION = 1;
-  private static final int CACHE_SIZE = 100;
-  private static final int INPLAY_SIZE = 100;
+  protected static final int BACK_CACHE_MAXSIZE = 200;
+  protected static final int FRONT_CACHE_MAXSIZE = 25;
   
   private static final int PACK_CURRENT = -1;
   private static final int PACK_NOT_PRESENT = -2;
   
   // TODO We need to look at ALL OF THE QUERIES in this class.
-  
-  // Take the top 1/DIVISOR phrases from a pack as possible cards for the phraseCache
-  private static final int PACK_DIVISOR = 25; 
-  
+
   // This is the sum of all cards in selected packs
   private int mTotalSelectedCards;
   
@@ -87,10 +84,10 @@ public class Deck {
   private static final int THROW_BACK_PERCENTAGE = 20;
   
   // A list of backup cards used for refreshing the deck.  Will be filled after it reaches 0.
-  private LinkedList<Card> mPhraseCache;
+  private LinkedList<Card> mBackupCache;
   
   // PhrasesInPlay will be topped off every turn
-  private LinkedList<Card> mPhrasesInPlay;
+  private LinkedList<Card> mFrontCache;
   
   private Context mContext;
   
@@ -105,37 +102,38 @@ public class Deck {
   public Deck(Context context) {
     mContext = context;
     mDatabaseOpenHelper = new DeckOpenHelper(context);
-    mPhraseCache = new LinkedList<Card>();
-    mPhrasesInPlay = new LinkedList<Card>();
+    mBackupCache = new LinkedList<Card>();
+    mFrontCache= new LinkedList<Card>();
     mDatabaseOpenHelper.close();
   }
   
-  public void topOffDeck() {
-    Log.d(TAG, "topOffDeck()");
-    int lack = INPLAY_SIZE - mPhrasesInPlay.size();
-    Log.d(TAG, "*** INPLAY SIZE: " + INPLAY_SIZE);
-    Log.d(TAG, "*** Cards in Play: " + mPhrasesInPlay.size());
+  public void topOffFrontCache() {
+    Log.d(TAG, "topOffFrontCache()");
+    int lack = FRONT_CACHE_MAXSIZE - mFrontCache.size();
+    Log.d(TAG, "*** FRONT CACHE MAX SIZE: " + FRONT_CACHE_MAXSIZE);
+    Log.d(TAG, "*** Front Cache Size: " + mFrontCache.size());
     Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
-    Log.d(TAG, "*** Current Cache Size: " + String.valueOf(mPhraseCache.size()));
+    Log.d(TAG, "*** Current Back Cache Size: " + String.valueOf(mBackupCache.size()));
+    
     
     for (int i=0; i<lack; ++i) {
-      mPhrasesInPlay.add(getPhraseFromCache());
+      mFrontCache.add(getPhraseFromBackupCache());
     }
   }
   
   /**
-   * Get a card from the top of the phrasesInPlay queue.  Once
+   * Get a card from the top of the Front Cache queue.  Once
    * this reaches the bottom of the deck, we should top off the Deck which
    * will in turn trigger a pull from packs to refill the cache.
    * @return a card reference
    */
-  public Card getPhraseFromPhrasesInPlay() {
+  public Card dealPhrase() {
     Card ret;
-    if (mPhrasesInPlay.isEmpty()) {
-      this.topOffDeck();
-      ret = mPhrasesInPlay.removeFirst();
+    if (mFrontCache.isEmpty()) {
+      this.topOffFrontCache();
+      ret = mFrontCache.removeFirst();
     } else {
-      ret = mPhrasesInPlay.removeFirst();
+      ret = mFrontCache.removeFirst();
     }
     Log.d(TAG, " Delt " + ret.getTitle() + " from phrasesInPlay");
     return ret;
@@ -146,16 +144,32 @@ public class Deck {
    * 
    * @return a card reference
    */
-  public Card getPhraseFromCache() {
+  private Card getPhraseFromBackupCache() {
     Card ret;
-    if (mPhraseCache.isEmpty()) {
-      this.fillCache();
-      ret = mPhraseCache.removeFirst();
+    if (mBackupCache.isEmpty()) {
+      this.fillBackupCache();
+      ret = mBackupCache.removeFirst();
     } else {
-      ret = mPhraseCache.removeFirst();
+      ret = mBackupCache.removeFirst();
     }
     Log.d(TAG, " Grabbed " + ret.getTitle() + " from cache.");
     return ret;
+  }
+  
+  /**
+   * Return the current size of the Back-end Cache
+   * @return
+   */
+  protected int getBackupCacheSize() {
+    return mBackupCache.size();
+  }
+  
+  /**
+   * Return the current size of the Front-facing Cache
+   * @return
+   */
+  protected int getFrontCacheSize() {
+    return mFrontCache.size();
   }
   
   /**
@@ -198,8 +212,8 @@ public class Deck {
    * Prepare for a game by caching the phrases necessary for the entire game.  
    * Ideally we should only do this in between games. 
    */
-  private void fillCache() {
-    Log.d(TAG, "fillCache()");
+  protected void fillBackupCache() {
+    Log.d(TAG, "fillBackupCache()");
     mDatabaseOpenHelper = new DeckOpenHelper(mContext);
     SharedPreferences packPrefs = mContext.getSharedPreferences(
                                   Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
@@ -221,11 +235,11 @@ public class Deck {
     
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
     for ( String packFileName : selectedPacks ) {
-      mPhraseCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, CACHE_SIZE, mTotalSelectedCards));
+      mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, BACK_CACHE_MAXSIZE, mFrontCache, mTotalSelectedCards));
     }
     
     // 4. Now shuffle
-    Collections.shuffle(mPhraseCache);
+    Collections.shuffle(mBackupCache);
     
     mDatabaseOpenHelper.close();
   }  
@@ -233,13 +247,21 @@ public class Deck {
   /**
    * Debugging function.  Can be removed later.
    */
-  public void printCache() {
-    Log.d(TAG, "printing cache...");
-    Log.d(TAG, "size is " + mPhraseCache.size());    
-    for (int i=0; i<mPhraseCache.size(); ++i) {
-      Log.d(TAG, "..." + mPhraseCache.get(i).getTitle());
+  public void printCaches() {
+    Log.d(TAG, "printing caches...");
+    Log.d(TAG, "BACK CACHE: ");
+    Log.d(TAG, "Back Cache Size is " + mBackupCache.size());    
+    for (int i=0; i<mBackupCache.size(); ++i) {
+      Log.d(TAG, "..." + mBackupCache.get(i).getTitle());
     }
-    Log.d(TAG, "end of cache");
+    Log.d(TAG, "END BACK CACHE");
+    
+    Log.d(TAG, "FRONT CACHE: ");
+    Log.d(TAG, "Front Cache Size is " + mFrontCache.size());    
+    for (int i=0; i<mFrontCache.size(); ++i) {
+      Log.d(TAG, "..." + mFrontCache.get(i).getTitle());
+    }
+    Log.d(TAG, "END FRONT CACHE");
   }
   
   /**
@@ -558,16 +580,21 @@ public class Deck {
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, long TOTAL_SELECTED) {
+    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, LinkedList<Card> frontCache, long TOTAL_SELECTED) {
       Log.d(TAG, "pullFromPack(" + packname + ")");
       mDatabase = getWritableDatabase();
       
       LinkedList<Card> returnCards = new LinkedList<Card>();
       int packid = getPackId(packname);
       
+      String[] args = new String[2];
+      args[0] = String.valueOf(packid);
+      args[1] = getIdString(frontCache);
+      
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          PhraseColumns.PACK_ID + " = " + packid, null, null, null, PhraseColumns.PLAY_DATE + " asc");
+          PhraseColumns.PACK_ID + " = ? AND " + PhraseColumns._ID + " NOT IN (?)", args, 
+          null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
       // The number of cards to return from any given pack will use the following formula:
@@ -611,8 +638,26 @@ public class Deck {
       return returnCards;
     }
     
+    /**
+     * Helper class to convert a linked list of cards to a 
+     * comma-delimited string of card Ids.
+     * @param cardList
+     * @return packIds - 
+     */
+    public String getIdString(LinkedList<Card> cardList) {
+      String packIds = "";
+      
+      // TODO Should it be an exception if pack isn't found?
+      for (int i=0; i< cardList.size(); ++i) {
+        // Protect against packs not found (-1 is ID returned)
+        packIds += (String.valueOf(getPackId(cardList.get(i).getTitle())));
+        if (i < cardList.size()-1) {
+          packIds += (",");
+        }
+      }
+      return packIds;
+    }
     
-
     //TODO Let's reconsider if this is the best thing to do after we figure out 
     // how marketplace updates will affect each phone's database
     /**
