@@ -35,46 +35,18 @@
         android:textColor="@color/white"
         />
 
-    <LinearLayout android:id="@+id/Turn_PauseTextGroup"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_centerInParent="true"
-        android:visibility="invisible">
-
-        <TextView android:id="@+id/Turn_PausedText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="60dp"
-            android:textStyle="bold"
-            android:text="Paused"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            />
-
-        <TextView android:id="@+id/Turn_PausedSubText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:text="Tap to Unpause"
-            />
-
-    </LinearLayout>
-
     <LinearLayout android:id="@+id/Turn_MasterLayout"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:orientation="vertical">
         <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/Turn_MenuBar" android:orientation="vertical">
             <LinearLayout android:background="@color/genericBG_trimDark" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/Turn_MenuItems">
-                <FrameLayout android:layout_gravity="center" android:layout_width="110dp" android:id="@+id/Turn_ScoreA_Frame" android:background="@color/teamA_secondary" android:layout_height="35dp" android:padding="5dp" android:layout_margin="3dp">
+                <FrameLayout android:layout_gravity="center" android:layout_width="110dp" android:id="@+id/Turn_ScoreA_Frame" android:layout_height="35dp" android:padding="5dp" android:layout_margin="3dp" android:background="@color/teamA_complement">
                     <View android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/Turn_ScoreABG" android:background="@color/teamA_primary"></View>
                     <TextView android:includeFontPadding="false" android:layout_width="wrap_content" android:text="5" android:layout_gravity="center" android:layout_height="wrap_content" android:id="@+id/Turn_ScoreA" android:textSize="20dp"></TextView>
                 </FrameLayout>
-                <TextView android:layout_weight="1" android:layout_gravity="center" android:text="Menu" android:id="@+id/Turn_MenuBar_Menu" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"></TextView>
-                <FrameLayout android:padding="5dp" android:layout_gravity="center" android:layout_width="110dp" android:id="@+id/Turn_ScoreB_Frame" android:background="@color/teamC_secondary" android:layout_height="35dp" android:layout_margin="3dp">
+                <TextView android:layout_weight="1" android:layout_gravity="center" android:text="Menu" android:id="@+id/Turn_MenuBar_Menu" android:layout_width="fill_parent" android:gravity="center" android:layout_height="fill_parent"></TextView>
+                <FrameLayout android:padding="5dp" android:layout_gravity="center" android:layout_width="110dp" android:id="@+id/Turn_ScoreB_Frame" android:layout_height="35dp" android:layout_margin="3dp" android:background="@color/teamC_complement">
                     <View android:layout_gravity="center" android:id="@+id/Turn_ScoreBBG" android:background="@color/teamC_primary" android:layout_height="fill_parent" android:layout_width="fill_parent"></View>
                     <TextView android:includeFontPadding="false" android:layout_width="wrap_content" android:text="5" android:layout_gravity="center" android:layout_height="wrap_content" android:id="@+id/Turn_ScoreB" android:textSize="20dp"></TextView>
                 </FrameLayout>
@@ -82,7 +54,7 @@
             <View android:layout_width="fill_parent" android:background="@color/genericBG_trim" android:id="@+id/Turn_MenuBar_Trim_Bottom" android:layout_height="3dp"></View>
         </LinearLayout>
         <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical" android:clipChildren="true" android:id="@+id/Turn_TimerBar_ClipContents">
-            <RelativeLayout android:clipChildren="true" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/Turn_TimerBar">
+            <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/Turn_TimerBar">
                 <ImageView android:layout_width="fill_parent" android:layout_height="25dp" android:background="@color/genericBG" android:id="@+id/Turn_TimerBG"></ImageView>
                 <ImageView android:layout_marginTop="1dp" android:layout_width="fill_parent" android:layout_height="23dp" android:layout_marginRight="40dp" android:background="@color/white" android:layout_alignParentTop="true" android:id="@+id/Turn_TimerFill" android:layout_alignParentLeft="true"></ImageView>
                 <View android:layout_width="70dp" android:layout_height="25dp" android:id="@+id/Turn_TimerFrame" android:layout_alignParentRight="true" android:background="@drawable/turn_timer_frame"></View>
@@ -90,83 +62,41 @@
                 <View android:layout_width="fill_parent" android:background="@color/genericBG_trim" android:layout_below="@id/Turn_TimerFrame" android:id="@+id/Turn_TimerTrim_Bottom" android:layout_height="3dp"></View>
             </RelativeLayout>
         </LinearLayout>
-
-        <ViewFlipper android:id="@+id/Turn_ViewFlipper"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:layout_height="fill_parent">
-
-            <RelativeLayout android:id="@+id/Turn_CardLayoutA"
-                android:layout_width="fill_parent"
-                android:layout_gravity="center"
-                android:layout_height="fill_parent">
-                
-                <ImageView android:id="@+id/Turn_StatusImageA"
-                    android:layout_width="50dip"
-                    android:layout_height="50dip"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    />
-
-                <LinearLayout android:id="@+id/Turn_CardA_Words"
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerInParent="true"
-                    android:layout_height="wrap_content">
-                    
-                    <TextView android:id="@+id/Turn_CardTitleA"
-                        style="@style/CardTitle"/>
-                    
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1" android:id="@+id/Turn_PlayField">
+            <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/Turn_PauseTextGroup">
+                <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_centerInParent="true" android:id="@+id/Turn_PauseText" android:visibility="invisible">
+                    <TextView android:textSize="60dp" android:textStyle="bold" android:textColor="@color/white" android:text="Paused" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Turn_PausedHeaderText"></TextView>
+                    <TextView android:textSize="20dp" android:textStyle="bold" android:text="Tap to Unpause" android:id="@+id/Turn_PausedSubText" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
                 </LinearLayout>
-                
             </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/Turn_CardLayoutB"
-                android:layout_width="fill_parent"
-                android:layout_gravity="center"
-                android:layout_height="fill_parent">
-                
-                <ImageView android:id="@+id/Turn_StatusImageB"
-                    android:layout_alignParentTop="true"
-                    android:layout_height="50dip"
-                    android:layout_width="50dip"
-                    android:layout_alignParentRight="true"
-                    />
-
-                <LinearLayout android:id="@+id/Turn_CardB_Words"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical">
-                    
-                    <TextView android:id="@+id/Turn_CardTitleB"
-                        style="@style/CardTitle"
-                    	/>
-                    
-                </LinearLayout>
-                
-            </RelativeLayout>
-
-        </ViewFlipper>
-        
-        <!-- Grouping for buttons on the bottom -->
-        <RelativeLayout android:layout_width="fill_parent" android:id="@+id/Turn_LowBar" android:layout_height="90dp">
-            <View android:id="@+id/Turn_LowBarBG" android:layout_height="fill_parent" android:background="@color/genericBG" android:layout_width="fill_parent"></View>
-            <View android:id="@+id/Turn_LowBarTrim" android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:layout_height="3dp"></View>
-            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/Turn_LowBar_Buttons" android:layout_alignParentBottom="true">
-                <ImageButton android:id="@+id/Turn_ButtonSkip" android:background="@drawable/button_skip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:layout_margin="3dp"></ImageButton>
-                <ImageButton android:id="@+id/Turn_ButtonCorrect" android:background="@drawable/button_right" android:layout_width="fill_parent" android:layout_weight="1" android:layout_height="wrap_content" android:layout_margin="3dp"></ImageButton>
+            <ViewFlipper android:layout_height="fill_parent" android:id="@+id/Turn_ViewFlipper" android:layout_width="fill_parent">
+                <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center" android:id="@+id/Turn_CardLayoutA">
+                    <ImageView android:layout_height="50dip" android:layout_alignParentRight="true" android:id="@+id/Turn_StatusImageA" android:layout_alignParentTop="true" android:layout_width="50dip"></ImageView>
+                    <LinearLayout android:layout_height="wrap_content" android:id="@+id/Turn_CardA_Words" android:layout_centerInParent="true" android:layout_width="wrap_content" android:orientation="vertical">
+                        <TextView android:id="@+id/Turn_CardTitleA" style="@style/CardTitle"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center" android:id="@+id/Turn_CardLayoutB">
+                    <ImageView android:layout_height="50dip" android:layout_alignParentRight="true" android:id="@+id/Turn_StatusImageB" android:layout_alignParentTop="true" android:layout_width="50dip"></ImageView>
+                    <LinearLayout android:layout_height="wrap_content" android:id="@+id/Turn_CardB_Words" android:layout_centerInParent="true" android:layout_width="wrap_content" android:orientation="vertical">
+                        <TextView android:id="@+id/Turn_CardTitleB" style="@style/CardTitle"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+            </ViewFlipper>
+        </RelativeLayout>
+        <RelativeLayout android:layout_height="90dp" android:id="@+id/Turn_LowBar" android:layout_width="fill_parent">
+            <View android:layout_height="fill_parent" android:background="@color/genericBG" android:layout_width="fill_parent" android:id="@+id/Turn_LowBarBG"></View>
+            <View android:layout_height="3dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:id="@+id/Turn_LowBarTrim"></View>
+            <LinearLayout android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:id="@+id/Turn_LowBar_Buttons" android:layout_width="fill_parent" android:orientation="horizontal">
+                <ImageButton android:layout_weight="1" android:layout_margin="3dp" android:layout_width="fill_parent" android:background="@drawable/button_skip" android:id="@+id/Turn_ButtonSkip" android:layout_height="wrap_content"></ImageButton>
+                <ImageButton android:layout_weight="1" android:layout_margin="3dp" android:layout_width="fill_parent" android:background="@drawable/button_right" android:id="@+id/Turn_ButtonCorrect" android:layout_height="wrap_content"></ImageButton>
             </LinearLayout>
         </RelativeLayout>
+        
+        <!-- Grouping for buttons on the bottom -->
         
     </LinearLayout>
 
     <!--  View to unpause game on touch -->
-    <View android:id="@+id/Turn_PauseImageView"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        />
 
 </RelativeLayout>

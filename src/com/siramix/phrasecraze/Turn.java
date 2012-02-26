@@ -83,7 +83,7 @@ public class Turn extends Activity {
   private int mGestureThreshold;
   private int mGestureVelocityThreshold;
 
-  private View mPauseOverlay;
+  private RelativeLayout mPauseOverlay;
   private ImageButton mCorrectButton;
   private ImageButton mSkipButton;
   private TextView mCountdownText;
@@ -142,6 +142,12 @@ public class Turn extends Activity {
    * to getprefs
    */
   private boolean mAssistedScoringEnabled;
+  
+  /**
+   * Boolean representing whether or not the timer is visible. Reduces calls
+   * to getprefs
+   */
+  private boolean mIsTimerShown;
 
   /**
    * Boolean representing whether skip is enabled or not. Reduces calls to
@@ -810,7 +816,7 @@ public class Turn extends Activity {
         .getApplication();
     mGameManager = application.getGameManager();
 
-    mPauseOverlay = (View) this.findViewById(R.id.Turn_PauseImageView);
+    mPauseOverlay = (RelativeLayout) this.findViewById(R.id.Turn_PauseTextGroup);
     mCountdownText = (TextView) findViewById(R.id.Turn_Timer);
     mViewFlipper = (ViewFlipper) this.findViewById(R.id.Turn_ViewFlipper);
     mTimesUpText = (TextView) this.findViewById(R.id.Turn_TimesUp);
@@ -820,7 +826,7 @@ public class Turn extends Activity {
 
     mTimerfill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
     mPauseTextLayout = (LinearLayout) this
-        .findViewById(R.id.Turn_PauseTextGroup);
+        .findViewById(R.id.Turn_PauseText);
 
     mTimerGroup = (RelativeLayout) this.findViewById(R.id.Turn_TimerBar);
     mButtonGroup = (RelativeLayout) this.findViewById(R.id.Turn_LowBar);
@@ -837,6 +843,11 @@ public class Turn extends Activity {
     mPauseOverlay.setOnClickListener(mPauseListener);
 
     mTimerGroup.setOnClickListener(mTimerClickListener);
+    
+    if(!mIsTimerShown)
+    {
+      mTimerGroup.setVisibility(View.GONE);
+    }
 
     mViewFlipper.setInAnimation(inFromRightAnimation());
     mViewFlipper.setOutAnimation(outToLeftAnimation());
@@ -889,6 +900,10 @@ public class Turn extends Activity {
     "fonts/FrancoisOne.ttf");
     titleA.setTypeface(font);
     titleB.setTypeface(font);
+    TextView text = (TextView) this.findViewById(R.id.Turn_PausedHeaderText);
+    text.setTypeface(font);
+    text = (TextView) this.findViewById(R.id.Turn_PausedSubText);
+    text.setTypeface(font);
     
     // Only change team color in assisted scoring mode  
     if( mAssistedScoringEnabled)
@@ -985,6 +1000,8 @@ public class Turn extends Activity {
     else
       mGesturesEnabled = false;
 
+    mIsTimerShown = sp.getBoolean("turn_showtimer", false);
+    
     mCorrectEnabled = mAssistedScoringEnabled;
     
     
@@ -1217,6 +1234,14 @@ public class Turn extends Activity {
     }
     mIsPaused = false;
 
+    if(!mAssistedScoringEnabled)
+    {
+      //this.findViewById(R.id.Turn_Root).setBackgroundResource(
+      //    curTeam.getGradient());
+      this.findViewById(R.id.Turn_Root).setBackgroundResource(R.drawable.bg_freeplaygradient);
+    }
+    
+    
     if (!mTurnIsOver) {
       this.resumeTurnTimer();
 
@@ -1231,8 +1256,6 @@ public class Turn extends Activity {
       mSkipButton.setEnabled(true);
       mCorrectButton.setEnabled(true);
 
-      mTimerGroup.startAnimation(this.showTimerAnim(true));
-      mButtonGroup.startAnimation(this.showButtonsAnim(true));
     } else {
       mResultsDelay.resume();
 
@@ -1253,7 +1276,7 @@ public class Turn extends Activity {
     mPauseOverlay.setVisibility(View.VISIBLE);
 
     mPauseTextLayout = (LinearLayout) this
-        .findViewById(R.id.Turn_PauseTextGroup);
+        .findViewById(R.id.Turn_PauseText);
     mPauseTextLayout.setVisibility(View.VISIBLE);
 
     // Stop music
@@ -1263,7 +1286,17 @@ public class Turn extends Activity {
     if (mp.isPlaying()) {
       mp.pause();
     }
+    
+    Team curTeam = mGameManager.getActiveTeam();
 
+    if(!mAssistedScoringEnabled)
+    {
+      //this.findViewById(R.id.Turn_Root).setBackgroundResource(
+      //    curTeam.getGradient());
+      this.findViewById(R.id.Turn_Root).setBackgroundResource(R.drawable.bg_freeplaygradient_paused);
+    }
+    
+    
     // Play ready sound since it indicates a wait.
     // This is the menu method that is called on every menu push
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
@@ -1278,8 +1311,6 @@ public class Turn extends Activity {
       mSkipButton.setEnabled(false);
       mCorrectButton.setEnabled(false);
 
-      mTimerGroup.startAnimation(this.showTimerAnim(false));
-      mButtonGroup.startAnimation(this.showButtonsAnim(false));
     } else {
       mResultsDelay.pause();
 

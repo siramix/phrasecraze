@@ -53,7 +53,8 @@
 			android:title="Allow Gestures"
 			android:defaultValue="true"
 			android:summary="Swipe up for correct, down for wrong, left for skip, and right for back."
-			/>			
+			/>
+		<CheckBoxPreference android:key="turn_showtimer" android:title="Expose Timer" android:summary="Exposes the time remaining during the turn."></CheckBoxPreference>			
 
 	</PreferenceCategory>
 
@@ -77,9 +78,7 @@
 			android:defaultValue="true"
 			/>
 
-	</PreferenceCategory>
-
-  <PreferenceCategory android:title="App Info">
+	</PreferenceCategory><PreferenceCategory android:title="App Info">
       
     <Preference 
       android:key="app_version" 
@@ -87,6 +86,7 @@
       android:selectable="false" 
       android:enabled="false">
     </Preference>
+    
     
   </PreferenceCategory>
 
