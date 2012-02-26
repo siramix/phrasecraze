@@ -235,7 +235,7 @@ public class Deck {
       }
     
     // 2. Count how many phrases are selected
-    mTotalSelectedCards = mDatabaseOpenHelper.countPhrasesInPacks(selectedPacks);
+    mTotalSelectedCards = mDatabaseOpenHelper.countEligiblePhrases(selectedPacks);
     
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
     for ( String packFileName : selectedPacks ) {
@@ -318,7 +318,7 @@ public class Deck {
      * @param packFileNames The filenames of all packs to be counted
      * @return -1 if no phrases found, otherwise the number of phrases found
      */
-    public int countPhrasesInPacks(LinkedList<String> packNames) {
+    public int countEligiblePhrases(LinkedList<String> packNames) {
       Log.d(TAG, "countPhrases(LinkedList<String>)");
       String[] packIds = {""};
 
@@ -506,36 +506,6 @@ public class Deck {
       String[] whereArgs = new String[] { String.valueOf(packId) };
       db.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
       db.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
-    }
-
-    /**
-     * Get the phrases corresponding to a comma-separated list of indices
-     * 
-     * @param args indices separated by commas
-     * @param packName Exact match of the name of the pack in the database
-     * @return a reference to a linked list of cards corresponding to the ids
-     */
-    public LinkedList<Card> getPhrases(String args, String packIds) {
-      mDatabase = getWritableDatabase();
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "getPhrases()");
-      }
-      // TODO: Refactor this once it's working so we can make sure it is efficient 
-      // and syntactically elegant (with ?s) 
-      Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          PhraseColumns._ID + " IN (" + args + ") and " + PhraseColumns.PACK_ID + "IN ( " + packIds + ")",
-          null, null, null, null);
-      res.moveToFirst();
-      LinkedList<Card> ret = new LinkedList<Card>();
-      while (!res.isAfterLast()) {
-        if (PhraseCrazeApplication.DEBUG) {
-          Log.d(TAG, res.getString(1));
-        }
-        ret.add(new Card(res.getInt(0), res.getString(1), res.getInt(2)));
-        res.moveToNext();
-      }
-      res.close();
-      return ret;
     }
     
     /**
