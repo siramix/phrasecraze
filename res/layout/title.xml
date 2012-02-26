@@ -96,13 +96,12 @@
 				android:background="@drawable/title_play"
 				android:layout_centerVertical="true" 
 				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				/>
+				android:layout_width="wrap_content"/>
 
 			<View android:id="@+id/Title_PlayDelegate"
 				android:layout_height="fill_parent" 
 				android:layout_width="180dp"
-				/>
+				android:soundEffectsEnabled="false"/>
 
 		</RelativeLayout>
 		
@@ -129,12 +128,12 @@
 				android:layout_height="wrap_content" 
 				android:background="@drawable/title_settings"
 				android:layout_centerVertical="true"
-				/>
+				android:soundEffectsEnabled="false"/>
 				
 			<View android:id="@+id/Title_SettingsDelegate"
 				android:layout_width="240dp" 
 				android:layout_height="fill_parent"
-				/>
+				android:soundEffectsEnabled="false"/>
 
 		</RelativeLayout>
 		
@@ -160,13 +159,12 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" 
 				android:background="@drawable/title_rules"
-				android:layout_centerVertical="true"
-				/>
+				android:layout_centerVertical="true"/>
 				
 			<View  android:id="@+id/Title_RulesDelegate"
 				android:layout_height="fill_parent"
 				android:layout_width="200dp"
-				/>
+				android:soundEffectsEnabled="false"/>
 
 		</RelativeLayout>
 

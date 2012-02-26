@@ -51,11 +51,11 @@
     <LinearLayout android:id="@+id/TurnSummary_BottomGroup"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
-        <com.siramix.phrasecraze.AntonButton android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:id="@+id/TurnSummary_AssignPoints" android:layout_width="105dp"></com.siramix.phrasecraze.AntonButton>
+        <com.siramix.phrasecraze.AntonButton android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:id="@+id/TurnSummary_AssignPoints" android:layout_width="105dp" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
         <TextView android:text="@string/turnsummary_scorelimit" android:layout_height="wrap_content" android:id="@+id/TurnSummary_ScoreLimit" android:maxLines="2" android:minLines="2" android:layout_width="fill_parent" android:layout_weight="1" android:gravity="center" android:textSize="18dp" android:layout_gravity="center"></TextView>
         
         <com.siramix.phrasecraze.AntonButton android:id="@+id/TurnSummary_NextTurn"
-            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="105dp">    
+            android:layout_height="60dp" android:text="@string/turnsummary_nextbutton" android:layout_width="105dp" android:soundEffectsEnabled="false">    
         </com.siramix.phrasecraze.AntonButton>
 
     </LinearLayout>

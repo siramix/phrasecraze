@@ -88,8 +88,8 @@
             <View android:layout_height="fill_parent" android:background="@color/genericBG" android:layout_width="fill_parent" android:id="@+id/Turn_LowBarBG"></View>
             <View android:layout_height="3dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:id="@+id/Turn_LowBarTrim"></View>
             <LinearLayout android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:id="@+id/Turn_LowBar_Buttons" android:layout_width="fill_parent" android:orientation="horizontal">
-                <ImageButton android:layout_weight="1" android:layout_margin="3dp" android:layout_width="fill_parent" android:background="@drawable/button_skip" android:id="@+id/Turn_ButtonSkip" android:layout_height="wrap_content"></ImageButton>
-                <ImageButton android:layout_weight="1" android:layout_margin="3dp" android:layout_width="fill_parent" android:background="@drawable/button_right" android:id="@+id/Turn_ButtonCorrect" android:layout_height="wrap_content"></ImageButton>
+                <ImageButton android:layout_weight="1" android:layout_margin="3dp" android:layout_width="fill_parent" android:background="@drawable/button_skip" android:id="@+id/Turn_ButtonSkip" android:layout_height="wrap_content" android:soundEffectsEnabled="false"></ImageButton>
+                <ImageButton android:layout_weight="1" android:layout_margin="3dp" android:layout_width="fill_parent" android:background="@drawable/button_right" android:id="@+id/Turn_ButtonCorrect" android:layout_height="wrap_content" android:soundEffectsEnabled="false"></ImageButton>
             </LinearLayout>
         </RelativeLayout>
         

@@ -44,9 +44,9 @@
                 <Button android:id="@+id/GameSetup_Header_ScoreLimit_HelpButton" android:layout_centerVertical="true" android:background="@drawable/button_info" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_marginRight="5dp" android:layout_alignRight="@id/GameSetup_Header_ScoreLimit_Bar"></Button>
             </RelativeLayout>
             <LinearLayout android:layout_height="wrap_content" android:layout_gravity="center" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_ScoreGroup" android:layout_marginTop="-5dp">
-                <Button android:id="@+id/GameSetup_ScoreLimit_ButtonMinus" android:background="@drawable/button_minus" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+                <Button android:id="@+id/GameSetup_ScoreLimit_ButtonMinus" android:background="@drawable/button_minus" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:soundEffectsEnabled="false"></Button>
                 <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_ScoreLimit_Value" android:layout_gravity="center" android:text="0" android:paddingBottom="5dp" android:width="70dp" android:gravity="center" android:textSize="48dp"></TextView>
-                <Button android:id="@+id/GameSetup_ScoreLimit_ButtonPlus" android:background="@drawable/button_plus" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+                <Button android:id="@+id/GameSetup_ScoreLimit_ButtonPlus" android:background="@drawable/button_plus" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:soundEffectsEnabled="false"></Button>
             </LinearLayout>
             <TextView android:layout_height="wrap_content" android:width="300dp" android:textColor="@color/white" android:layout_width="wrap_content" android:id="@+id/GameSetup_HelpText_Turn" android:gravity="center" android:layout_gravity="center" android:textSize="18dp" android:text="@string/gamesetup_endgamerulehint" android:visibility="gone"></TextView>
             <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/GameSetup_Header_ScoringMode" android:layout_marginTop="-5dp">
@@ -69,6 +69,6 @@
 	<!-- Select number of turns -->
 	
 	<com.siramix.phrasecraze.AntonButton android:id="@+id/GameSetup_StartGameButton"
-		android:text="@string/gamesetup_button_startgame" android:layout_width="fill_parent" style="@style/PhraseCrazeButton" android:layout_height="50dp" android:textSize="22dp"></com.siramix.phrasecraze.AntonButton>
+		android:text="@string/gamesetup_button_startgame" android:layout_width="fill_parent" style="@style/PhraseCrazeButton" android:layout_height="50dp" android:textSize="22dp" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
 
 </LinearLayout>

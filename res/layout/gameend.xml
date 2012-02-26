@@ -42,8 +42,8 @@
         <TextView android:layout_height="wrap_content" android:id="@+id/GameEnd_Winner" android:layout_width="wrap_content" android:text="Winner:" android:textSize="32dp" android:layout_above="@id/GameEnd_WinnerText" android:layout_centerHorizontal="true" android:textColor="@color/white"></TextView>
     </RelativeLayout>
     <RelativeLayout android:layout_height="wrap_content" android:id="@+id/GameEnd_ButtonLayout" android:layout_width="fill_parent">
-        <com.siramix.phrasecraze.AntonButton android:layout_alignParentLeft="true" android:layout_height="60dp" android:id="@+id/GameEnd_MainMenu" android:text="Main Menu" android:layout_width="100dp"></com.siramix.phrasecraze.AntonButton>
-        <com.siramix.phrasecraze.AntonButton android:layout_alignBaseline="@+id/GameEnd_MainMenu" android:layout_height="60dp" android:id="@+id/GameEnd_Rematch" android:text="Rematch" android:layout_alignParentRight="true" android:layout_width="100dp"></com.siramix.phrasecraze.AntonButton>
+        <com.siramix.phrasecraze.AntonButton android:layout_alignParentLeft="true" android:layout_height="60dp" android:id="@+id/GameEnd_MainMenu" android:text="Main Menu" android:layout_width="100dp" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
+        <com.siramix.phrasecraze.AntonButton android:layout_alignBaseline="@+id/GameEnd_MainMenu" android:layout_height="60dp" android:id="@+id/GameEnd_Rematch" android:text="Rematch" android:layout_alignParentRight="true" android:layout_width="100dp" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
     </RelativeLayout>
     
 </LinearLayout>

@@ -135,7 +135,7 @@
         <com.siramix.phrasecraze.AntonButton
             android:id="@+id/PackPurchase_Button_Next"
             android:layout_width="fill_parent"
-            android:text="@string/packpurchase_button" android:textSize="22dp" android:layout_height="50dp"></com.siramix.phrasecraze.AntonButton>
+            android:text="@string/packpurchase_button" android:textSize="22dp" android:layout_height="50dp" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
     </LinearLayout>
 
 </LinearLayout>

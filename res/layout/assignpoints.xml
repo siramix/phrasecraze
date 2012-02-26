@@ -34,8 +34,8 @@
 		</LinearLayout>
 	</LinearLayout>
 	<RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/AssignPoints_Buttons" android:layout_marginTop="10dp">
-		<com.siramix.phrasecraze.AntonButton android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:text="@string/assignpoints_buttoncancel" android:layout_height="wrap_content" android:id="@+id/AssignPoints_ButtonCancel" android:layout_width="wrap_content" style="@style/PhraseCrazeButton"></com.siramix.phrasecraze.AntonButton>
-		<com.siramix.phrasecraze.AntonButton android:layout_alignBaseline="@+id/AssignPoints_ButtonCancel" android:layout_alignParentTop="true" android:text="@string/assignpoints_buttonconfirm" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/AssignPoints_ButtonConfirm" android:layout_alignParentRight="true" style="@style/PhraseCrazeButton"></com.siramix.phrasecraze.AntonButton>
+		<com.siramix.phrasecraze.AntonButton android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:text="@string/assignpoints_buttoncancel" android:layout_height="wrap_content" android:id="@+id/AssignPoints_ButtonCancel" android:layout_width="wrap_content" style="@style/PhraseCrazeButton" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
+		<com.siramix.phrasecraze.AntonButton android:layout_alignBaseline="@+id/AssignPoints_ButtonCancel" android:layout_alignParentTop="true" android:text="@string/assignpoints_buttonconfirm" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/AssignPoints_ButtonConfirm" android:layout_alignParentRight="true" style="@style/PhraseCrazeButton" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
 	</RelativeLayout>
 	
 </LinearLayout>
