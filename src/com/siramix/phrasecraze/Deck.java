@@ -42,6 +42,7 @@ import org.xml.sax.SAXException;
 import com.siramix.phrasecraze.Consts.PurchaseState;
 
 import android.R.string;
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -50,6 +51,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -137,7 +139,7 @@ public class Deck {
     } else {
       ret = mFrontCache.removeFirst();
     }
-    Log.d(TAG, " Delt " + ret.getTitle() + " from phrasesInPlay");
+    Log.i(TAG, " Delt " + ret.getTitle() + " from phrasesInPlay");
     return ret;
   }
   
@@ -221,10 +223,6 @@ public class Deck {
                                   Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
     Map<String, ?> packSelections = new HashMap<String, Boolean>();
     packSelections = packPrefs.getAll();
-    SharedPreferences prefs = PreferenceManager
-        .getDefaultSharedPreferences(mContext);
-    
-    int difficulty = prefs.getInt("difficulty", 2); 
     
     // 1. Use the preferences to find the chosen packs to pull from 
     LinkedList<String> selectedPacks = new LinkedList<String>();
@@ -241,15 +239,17 @@ public class Deck {
     
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
     for ( String packFileName : selectedPacks ) {
-      mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, 
-                              BACK_CACHE_MAXSIZE, mFrontCache, mTotalSelectedCards, difficulty));
+      mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, mFrontCache, 
+                                                    mTotalSelectedCards));
     }
     
     // 4. Now shuffle
     Collections.shuffle(mBackupCache);
     
     mDatabaseOpenHelper.close();
-  }  
+  }
+  
+
   
   /**
    * Debugging function.  Can be removed later.
@@ -339,7 +339,10 @@ public class Deck {
       //Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
           //PhraseColumns.PACK_ID + " IN (?)", packIds, null, null, null);
       
-      Cursor countQuery = mDatabase.rawQuery("SELECT * FROM phrases where pack_id in (" + packIds[0] + ")", null);
+      Cursor countQuery = mDatabase.rawQuery("SELECT * " + 
+          " FROM " + PhraseColumns.TABLE_NAME + 
+          " WHERE " + PhraseColumns.PACK_ID + " IN (" + packIds[0] + ")" + 
+          "   AND " + PhraseColumns.DIFFICULTY + " IN (" + buildDifficultyString() + ")", null);
       int count = countQuery.getCount();
 
       return count;
@@ -594,24 +597,24 @@ public class Deck {
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, 
-                                         LinkedList<Card> frontCache, long TOTAL_SELECTED, 
-                                         int difficulty) {
+    public LinkedList<Card> pullFromPack(String packname, LinkedList<Card> frontCache, 
+                                          long TOTAL_SELECTED) {
       Log.d(TAG, "pullFromPack(" + packname + ")");
       mDatabase = getWritableDatabase();
       
       LinkedList<Card> returnCards = new LinkedList<Card>();
       int packid = getPackId(packname);
       
-      String[] args = new String[3];
+      String[] args = new String[2];
       args[0] = String.valueOf(packid);
-      args[1] = getIdString(frontCache);
-      args[2] = String.valueOf(difficulty);
+      args[1] = buildIdString(frontCache);
+      String dif = buildDifficultyString();
       
+      Log.d(TAG, "*** " + dif + " ***");
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
           PhraseColumns.PACK_ID + " = ? AND " + PhraseColumns._ID + " NOT IN (?) AND + " +
-          PhraseColumns.DIFFICULTY + " <= ?", args, 
+          PhraseColumns.DIFFICULTY + " IN (" + dif + ")", args, 
           null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
@@ -619,12 +622,12 @@ public class Deck {
       // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
       int packsize = res.getCount();
       float weight = (float) packsize / (float) TOTAL_SELECTED;      
-      int targetnum = (int) Math.ceil(CACHE_SIZE * weight);
+      int targetnum = (int) Math.ceil(Deck.BACK_CACHE_MAXSIZE * weight);
       int surplusnum = (int) Math.ceil( (float) targetnum * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
       
       Log.d(TAG, "Calculations:");
       Log.d(TAG, "** Total Selected Cards: " + TOTAL_SELECTED);
-      Log.d(TAG, "** cache size: " + CACHE_SIZE);      
+      Log.d(TAG, "** backup cache size: " + Deck.BACK_CACHE_MAXSIZE);      
       Log.d(TAG, "** pack size: " + packsize);
       Log.d(TAG, "** weight: " + weight);
       Log.d(TAG, "** targetnum: " + targetnum);
@@ -660,20 +663,51 @@ public class Deck {
      * Helper class to convert a linked list of cards to a 
      * comma-delimited string of card Ids.
      * @param cardList
-     * @return packIds - 
+     * @return cardIds - 
      */
-    public String getIdString(LinkedList<Card> cardList) {
-      String packIds = "";
+    private String buildIdString(LinkedList<Card> cardList) {
+      String cardIds = "";
       
-      // TODO Should it be an exception if pack isn't found?
       for (int i=0; i< cardList.size(); ++i) {
         // Protect against packs not found (-1 is ID returned)
-        packIds += (String.valueOf(getPackId(cardList.get(i).getTitle())));
+        cardIds += (String.valueOf(cardList.get(i).getId()));
         if (i < cardList.size()-1) {
-          packIds += (",");
+          cardIds += (",");
         }
       }
-      return packIds;
+      return cardIds;
+    }
+    
+    /**
+     * Helper method to build a comma-delimited string of the enabled
+     * difficulties
+     * @return Comma-delimited string of difficulties for db args
+     */
+    private String buildDifficultyString() {
+      SharedPreferences prefs = PreferenceManager
+          .getDefaultSharedPreferences(mHelperContext);
+      
+      Boolean easy = prefs.getBoolean("easy_phrases", true);
+      Boolean medium = prefs.getBoolean("medium_phrases", true);
+      Boolean hard = prefs.getBoolean("hard_phrases", true);
+      
+      String ret = "";
+      if (easy && medium && hard) {
+        ret = "0,1,2";
+      } else if (easy && hard) {
+        ret = "0,2";
+      } else if (easy && medium) {
+        ret = "0,1";
+      } else if (medium && hard) {
+        ret = "1,2";
+      } else if (easy) {
+        ret = "0";
+      } else if (medium) {
+        ret = "1";
+      } else if (hard) {
+        ret = "2";
+      }
+      return ret;
     }
     
     //TODO Let's reconsider if this is the best thing to do after we figure out 

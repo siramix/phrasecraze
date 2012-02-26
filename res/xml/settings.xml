@@ -37,16 +37,8 @@
 			android:title="Turn Timer Length"
 			android:entryValues="@array/turntime_values" 
 			android:entries="@array/turntimes"
-			android:summary="" android:defaultValue="60" 
-			/>
-		
-		<ListPreference
-			android:key="difficulty"
-			android:title="Highest Phrase Difficulty"
-			android:entryValues="@array/difficulty_values"
-			android:entries="@array/difficulties"
 			android:summary="" 
-			android:defaultValue="2"
+			android:defaultValue="60" 
 			/>
 
 		<CheckBoxPreference 
@@ -62,6 +54,28 @@
 			android:defaultValue="true"
 			android:summary="Swipe up for correct, down for wrong, left for skip, and right for back."
 			/>			
+
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="Game Difficulty">
+		
+		<CheckBoxPreference 
+			android:key="easy_phrases"
+			android:title="Easy Phrases"
+			android:defaultValue="true"
+			/>
+			
+		<CheckBoxPreference 
+			android:key="medium_phrases"
+			android:title="Medium Phrases"
+			android:defaultValue="true"
+			/>
+			
+		<CheckBoxPreference 
+			android:key="hard_phrases"
+			android:title="Hard Phrases"
+			android:defaultValue="true"
+			/>
 
 	</PreferenceCategory>
 
