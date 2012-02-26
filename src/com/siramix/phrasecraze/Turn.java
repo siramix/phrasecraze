@@ -1234,10 +1234,18 @@ public class Turn extends Activity {
     }
     mIsPaused = false;
 
-    if(!mAssistedScoringEnabled)
+    // Allow timer click to pause again
+    mTimerGroup.setOnClickListener(mTimerClickListener);
+    
+    // Un-Dim background
+    if(mAssistedScoringEnabled)
     {
-      //this.findViewById(R.id.Turn_Root).setBackgroundResource(
-      //    curTeam.getGradient());
+      Team curTeam = mGameManager.getActiveTeam();
+      this.findViewById(R.id.Turn_Root).setBackgroundResource(
+          curTeam.getGradient());
+    }
+    else
+    {
       this.findViewById(R.id.Turn_Root).setBackgroundResource(R.drawable.bg_freeplaygradient);
     }
     
@@ -1279,6 +1287,10 @@ public class Turn extends Activity {
         .findViewById(R.id.Turn_PauseText);
     mPauseTextLayout.setVisibility(View.VISIBLE);
 
+    // Make the timer bar resume when clicked during pause
+    mTimerGroup.setOnClickListener(mPauseListener);
+    
+    
     // Stop music
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
@@ -1287,12 +1299,15 @@ public class Turn extends Activity {
       mp.pause();
     }
     
-    Team curTeam = mGameManager.getActiveTeam();
-
-    if(!mAssistedScoringEnabled)
+    // Dim background
+    if(mAssistedScoringEnabled)
     {
-      //this.findViewById(R.id.Turn_Root).setBackgroundResource(
-      //    curTeam.getGradient());
+      Team curTeam = mGameManager.getActiveTeam();
+      this.findViewById(R.id.Turn_Root).setBackgroundResource(
+          curTeam.getGradient());
+    }
+    else
+    {
       this.findViewById(R.id.Turn_Root).setBackgroundResource(R.drawable.bg_freeplaygradient_paused);
     }
     
