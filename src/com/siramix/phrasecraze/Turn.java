@@ -760,13 +760,9 @@ public class Turn extends Activity {
     // Hide timer bar and time
     ImageView timerFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
     timerFill.setVisibility(View.INVISIBLE);
-    RelativeLayout timerGroup = (RelativeLayout) this
-        .findViewById(R.id.Turn_TimerBar);
-    timerGroup.startAnimation(this.showTimerAnim(false));
+    mTimerGroup.startAnimation(this.showTimerAnim(false));
     // Hide buttons
-    RelativeLayout buttonGroup = (RelativeLayout) this
-        .findViewById(R.id.Turn_LowBar);
-    buttonGroup.startAnimation(this.showButtonsAnim(false));
+    mButtonGroup.startAnimation(this.showButtonsAnim(false));
 
     // Only play gong if music is off
     if (!mMusicEnabled) {
