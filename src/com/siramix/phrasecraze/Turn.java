@@ -136,16 +136,16 @@ public class Turn extends Activity {
    * getprefs
    */
   private boolean mGesturesEnabled;
-  
+
   /**
-   * Boolean representing whether or not assisted scoring is enabled. Reduces calls
-   * to getprefs
+   * Boolean representing whether or not assisted scoring is enabled. Reduces
+   * calls to getprefs
    */
   private boolean mAssistedScoringEnabled;
-  
+
   /**
-   * Boolean representing whether or not the timer is visible. Reduces calls
-   * to getprefs
+   * Boolean representing whether or not the timer is visible. Reduces calls to
+   * getprefs
    */
   private boolean mIsTimerShown;
 
@@ -154,9 +154,9 @@ public class Turn extends Activity {
    * getprefs
    */
   private boolean mSkipEnabled;
-  
+
   /**
-   * Boolean representing whether correct is enabled. 
+   * Boolean representing whether correct is enabled.
    */
   private boolean mCorrectEnabled;
 
@@ -300,9 +300,9 @@ public class Turn extends Activity {
     switch (item.getItemId()) {
     case R.string.menu_EndRound:
       // Play confirmation sound
-	  sm.playSound(SoundManager.Sound.CONFIRM);
-	  this.showDialog(DIALOG_ENDROUND_ID);
-	  return true;
+      sm.playSound(SoundManager.Sound.CONFIRM);
+      this.showDialog(DIALOG_ENDROUND_ID);
+      return true;
     case R.string.menu_EndGame:
       // Play confirmation sound
       sm.playSound(SoundManager.Sound.CONFIRM);
@@ -575,7 +575,6 @@ public class Turn extends Activity {
     flipper.showNext();
     mGameManager.processCard(Card.RIGHT);
 
-    
     // Mark the card with an icon
     mCardStatus.setBackgroundResource(Card.getCardMarkDrawableId(Card.RIGHT));
     mCardStatus.setVisibility(View.VISIBLE);
@@ -586,7 +585,7 @@ public class Turn extends Activity {
 
     // Show the next card
     showCard(false);
-    
+
     mIsBack = false;
   }
 
@@ -608,14 +607,14 @@ public class Turn extends Activity {
 
     mCardStatus.setBackgroundResource(Card.getCardMarkDrawableId(Card.SKIP));
     mCardStatus.setVisibility(View.VISIBLE);
-    
+
     // Only play sound once card has been processed so we don't confuse the user
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
     sm.playSound(SoundManager.Sound.SKIP);
 
     // Show the next card
     showCard(false);
-    
+
     mIsBack = false;
   }
 
@@ -645,7 +644,7 @@ public class Turn extends Activity {
     mViewFlipper.setOutAnimation(outToLeftAnimation());
 
     mGameManager.processBack();
-    
+
     this.showCard(true);
 
     // Play back sound
@@ -667,7 +666,7 @@ public class Turn extends Activity {
       curStatus = R.id.Turn_StatusImageA;
     } else {
       curTitle = R.id.Turn_CardTitleB;
-      curStatus = R.id.Turn_StatusImageB; 
+      curStatus = R.id.Turn_StatusImageB;
     }
 
     mCardTitle = (TextView) this.findViewById(curTitle);
@@ -687,53 +686,51 @@ public class Turn extends Activity {
 
     Card curCard = mGameManager.getCurrentCard();
     mCardTitle.setText(curCard.getTitle());
-    if(showCardStatus)
-    	mCardStatus.setVisibility(View.VISIBLE);
+    if (showCardStatus)
+      mCardStatus.setVisibility(View.VISIBLE);
     else
-        // Hide the card status until marked
-        mCardStatus.setVisibility(View.INVISIBLE);
-    
+      // Hide the card status until marked
+      mCardStatus.setVisibility(View.INVISIBLE);
+
     // Change team colors only in assisted scoring mode
-    if(mAssistedScoringEnabled)
-    {
+    if (mAssistedScoringEnabled) {
       updateTeamColoring();
     }
   }
-  
+
   /**
    * Helper function that colors elements based on the current team
    */
-  protected void updateTeamColoring()
-  {
+  protected void updateTeamColoring() {
     // Change views to appropriate team color
     Team curTeam = mGameManager.getActiveTeam();
     ImageView barFill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
     barFill.setImageResource(curTeam.getPrimaryColor());
-    
+
     this.findViewById(R.id.Turn_Root).setBackgroundResource(
-    curTeam.getGradient());
+        curTeam.getGradient());
 
   }
-  
+
   /**
-   * Helper function to color the scoreboard elements based
-   * on the participating teams
+   * Helper function to color the scoreboard elements based on the participating
+   * teams
    */
-  protected void updateScoreboard()
-  {
+  protected void updateScoreboard() {
     List<Team> teams = mGameManager.getTeams();
     // Update scoreboard colors
-    int[] scoreTextViews = {R.id.Turn_ScoreA, R.id.Turn_ScoreB};
-    int[] scoreTextBGs = {R.id.Turn_ScoreABG, R.id.Turn_ScoreBBG};
-    int[] scoreFrameLayouts = {R.id.Turn_ScoreA_Frame, R.id.Turn_ScoreB_Frame};
-    for(int i = 0; i < scoreTextViews.length; i++)
-    {
+    int[] scoreTextViews = { R.id.Turn_ScoreA, R.id.Turn_ScoreB };
+    int[] scoreTextBGs = { R.id.Turn_ScoreABG, R.id.Turn_ScoreBBG };
+    int[] scoreFrameLayouts = { R.id.Turn_ScoreA_Frame, R.id.Turn_ScoreB_Frame };
+    for (int i = 0; i < scoreTextViews.length; i++) {
       TextView score = (TextView) this.findViewById(scoreTextViews[i]);
       score.setText(Integer.toString((teams.get(i).getScore())));
       View scoreBG = (View) this.findViewById(scoreTextBGs[i]);
-      scoreBG.setBackgroundColor(this.getResources().getColor(teams.get(i).getPrimaryColor()));
+      scoreBG.setBackgroundColor(this.getResources().getColor(
+          teams.get(i).getPrimaryColor()));
       FrameLayout frame = (FrameLayout) this.findViewById(scoreFrameLayouts[i]);
-      frame.setBackgroundColor(this.getResources().getColor(teams.get(i).getComplementaryColor()));
+      frame.setBackgroundColor(this.getResources().getColor(
+          teams.get(i).getComplementaryColor()));
     }
   }
 
@@ -794,7 +791,7 @@ public class Turn extends Activity {
     }
     mGameManager.processCard(Card.WRONG);
     mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
-    
+
     startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
         .getData()));
   }
@@ -812,7 +809,8 @@ public class Turn extends Activity {
         .getApplication();
     mGameManager = application.getGameManager();
 
-    mPauseOverlay = (RelativeLayout) this.findViewById(R.id.Turn_PauseTextGroup);
+    mPauseOverlay = (RelativeLayout) this
+        .findViewById(R.id.Turn_PauseTextGroup);
     mCountdownText = (TextView) findViewById(R.id.Turn_Timer);
     mViewFlipper = (ViewFlipper) this.findViewById(R.id.Turn_ViewFlipper);
     mTimesUpText = (TextView) this.findViewById(R.id.Turn_TimesUp);
@@ -821,8 +819,7 @@ public class Turn extends Activity {
     mSkipButton = (ImageButton) this.findViewById(R.id.Turn_ButtonSkip);
 
     mTimerfill = (ImageView) this.findViewById(R.id.Turn_TimerFill);
-    mPauseTextLayout = (LinearLayout) this
-        .findViewById(R.id.Turn_PauseText);
+    mPauseTextLayout = (LinearLayout) this.findViewById(R.id.Turn_PauseText);
 
     mTimerGroup = (RelativeLayout) this.findViewById(R.id.Turn_TimerBar);
     mButtonGroup = (RelativeLayout) this.findViewById(R.id.Turn_LowBar);
@@ -839,9 +836,8 @@ public class Turn extends Activity {
     mPauseOverlay.setOnClickListener(mPauseListener);
 
     mTimerGroup.setOnClickListener(mTimerClickListener);
-    
-    if(!mIsTimerShown)
-    {
+
+    if (!mIsTimerShown) {
       mTimerGroup.setVisibility(View.GONE);
     }
 
@@ -850,22 +846,18 @@ public class Turn extends Activity {
 
     mCorrectButton.setOnClickListener(mCorrectListener);
     mSkipButton.setOnClickListener(mSkipListener);
- 
-    if(mCorrectEnabled)
-    {
-        // Set visibility and control of Skip Button
-        if (mSkipEnabled) {
-          mSkipButton.setVisibility(View.VISIBLE);
-        } else {
-          mSkipButton.setVisibility(View.GONE);
-        }
-        mCorrectButton.setVisibility(View.VISIBLE);
-    }
-    else
-    {
-    	mCorrectButton.setVisibility(View.GONE);
-    }
 
+    if (mCorrectEnabled) {
+      // Set visibility and control of Skip Button
+      if (mSkipEnabled) {
+        mSkipButton.setVisibility(View.VISIBLE);
+      } else {
+        mSkipButton.setVisibility(View.GONE);
+      }
+      mCorrectButton.setVisibility(View.VISIBLE);
+    } else {
+      mCorrectButton.setVisibility(View.GONE);
+    }
 
     // Listen for all gestures
     mSwipeDetector = new GestureDetector(mSwipeListener);
@@ -893,20 +885,19 @@ public class Turn extends Activity {
         mGestureListener);
 
     Typeface font = Typeface.createFromAsset(getAssets(),
-    "fonts/FrancoisOne.ttf");
+        "fonts/FrancoisOne.ttf");
     titleA.setTypeface(font);
     titleB.setTypeface(font);
     TextView text = (TextView) this.findViewById(R.id.Turn_PausedHeaderText);
     text.setTypeface(font);
     text = (TextView) this.findViewById(R.id.Turn_PausedSubText);
     text.setTypeface(font);
-    
-    // Only change team color in assisted scoring mode  
-    if( mAssistedScoringEnabled)
-    {
+
+    // Only change team color in assisted scoring mode
+    if (mAssistedScoringEnabled) {
       updateTeamColoring();
     }
-    
+
     updateScoreboard();
   }
 
@@ -967,14 +958,14 @@ public class Turn extends Activity {
     final float scale = Turn.this.getResources().getDisplayMetrics().density;
     mGestureThreshold = (int) (SWIPE_MIN_DISTANCE_DP * scale + 0.5f);
     mGestureVelocityThreshold = (int) (SWIPE_THRESHOLD_VELOCITY_DP * scale + 0.5f);
-    
-    // Set local variable for assisted scoring so that we don't have 
+
+    // Set local variable for assisted scoring so that we don't have
     // to make many calls to game manager
     PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
         .getApplication();
     GameManager curGame = application.getGameManager();
     mAssistedScoringEnabled = curGame.isAssistedScoringEnabled();
-    
+
     // Capture our preference variable for music, skip, and gestures once
     SharedPreferences sp = PreferenceManager
         .getDefaultSharedPreferences(getBaseContext());
@@ -997,10 +988,9 @@ public class Turn extends Activity {
       mGesturesEnabled = false;
 
     mIsTimerShown = sp.getBoolean("turn_showtimer", false);
-    
+
     mCorrectEnabled = mAssistedScoringEnabled;
-    
-    
+
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -1041,7 +1031,7 @@ public class Turn extends Activity {
    */
   @Override
   public boolean onSearchRequested() {
-    if(PhraseCrazeApplication.DEBUG) {
+    if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onSearchRequested()");
     }
     return false;
@@ -1070,12 +1060,12 @@ public class Turn extends Activity {
               sm.playSound(SoundManager.Sound.CONFIRM);
 
               // Set the current team as the buzzed team and auto assign points
-              // We auto assign points so that some score exists, though 
+              // We auto assign points so that some score exists, though
               // we could end in tie.
               mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
               mGameManager.setAutoAssignedRoundScores();
               mGameManager.endGame();
-              
+
               startActivity(new Intent(getString(R.string.IntentEndGame),
                   getIntent().getData()));
             }
@@ -1092,48 +1082,44 @@ public class Turn extends Activity {
       dialog = builder.create();
       break;
     case DIALOG_ENDROUND_ID:
-        builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to forfeit the round?")
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int id) {
-                // Play confirmation sound
-                SoundManager sm = SoundManager.getInstance(Turn.this
-                    .getBaseContext());
-                sm.playSound(SoundManager.Sound.CONFIRM);
+      builder = new AlertDialog.Builder(this);
+      builder.setMessage("Are you sure you want to forfeit the round?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              // Play confirmation sound
+              SoundManager sm = SoundManager.getInstance(Turn.this
+                  .getBaseContext());
+              sm.playSound(SoundManager.Sound.CONFIRM);
 
-                Turn.this.endTurn();
-              }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int id) {
-                // Play confirmation sound
-                SoundManager sm = SoundManager.getInstance(Turn.this
-                    .getBaseContext());
-                sm.playSound(SoundManager.Sound.BACK);
+              Turn.this.endTurn();
+            }
+          }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              // Play confirmation sound
+              SoundManager sm = SoundManager.getInstance(Turn.this
+                  .getBaseContext());
+              sm.playSound(SoundManager.Sound.BACK);
 
-                dialog.cancel();
-              }
-            });
-        dialog = builder.create();
-        break;
+              dialog.cancel();
+            }
+          });
+      dialog = builder.create();
+      break;
     case DIALOG_READY_ID:
       // Play team ready sound
       SoundManager sm = SoundManager.getInstance(Turn.this.getBaseContext());
       sm.playSound(SoundManager.Sound.TEAMREADY);
 
       String readyPrompt;
-      if( mAssistedScoringEnabled)
-      {
+      if (mAssistedScoringEnabled) {
         String curTeam = mGameManager.getActiveTeam().getName();
         readyPrompt = "Ready " + curTeam + "?";
-      }
-      else
-      {
+      } else {
         readyPrompt = "Ready?";
       }
-      
+
       builder = new AlertDialog.Builder(this);
-      builder.setMessage(readyPrompt)
-          .setCancelable(false)
+      builder.setMessage(readyPrompt).setCancelable(false)
           .setPositiveButton("Start!", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
@@ -1169,8 +1155,8 @@ public class Turn extends Activity {
                 }
               }
 
-              MediaPlayer mp = application.createMusicPlayer(Turn.this
-                  .getBaseContext(), musicId);
+              MediaPlayer mp = application.createMusicPlayer(
+                  Turn.this.getBaseContext(), musicId);
               // If music is not enabled, it will start the countdown track at
               // 10 seconds
               if (mMusicEnabled) {
@@ -1181,12 +1167,13 @@ public class Turn extends Activity {
           });
       dialog = builder.create();
 
-      // We add an onDismiss listener to handle the case in which a user attempts
+      // We add an onDismiss listener to handle the case in which a user
+      // attempts
       // to search on the ready dialog
       dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
         public void onDismiss(DialogInterface dialog) {
-          if(mIsPaused) {
+          if (mIsPaused) {
             showDialog(DIALOG_READY_ID);
           }
         }
@@ -1232,20 +1219,17 @@ public class Turn extends Activity {
 
     // Allow timer click to pause again
     mTimerGroup.setOnClickListener(mTimerClickListener);
-    
+
     // Un-Dim background
-    if(mAssistedScoringEnabled)
-    {
+    if (mAssistedScoringEnabled) {
       Team curTeam = mGameManager.getActiveTeam();
       this.findViewById(R.id.Turn_Root).setBackgroundResource(
           curTeam.getGradient());
+    } else {
+      this.findViewById(R.id.Turn_Root).setBackgroundResource(
+          R.drawable.bg_freeplaygradient);
     }
-    else
-    {
-      this.findViewById(R.id.Turn_Root).setBackgroundResource(R.drawable.bg_freeplaygradient);
-    }
-    
-    
+
     if (!mTurnIsOver) {
       this.resumeTurnTimer();
 
@@ -1279,14 +1263,12 @@ public class Turn extends Activity {
     mIsPaused = true;
     mPauseOverlay.setVisibility(View.VISIBLE);
 
-    mPauseTextLayout = (LinearLayout) this
-        .findViewById(R.id.Turn_PauseText);
+    mPauseTextLayout = (LinearLayout) this.findViewById(R.id.Turn_PauseText);
     mPauseTextLayout.setVisibility(View.VISIBLE);
 
     // Make the timer bar resume when clicked during pause
     mTimerGroup.setOnClickListener(mPauseListener);
-    
-    
+
     // Stop music
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
@@ -1294,20 +1276,17 @@ public class Turn extends Activity {
     if (mp.isPlaying()) {
       mp.pause();
     }
-    
+
     // Dim background
-    if(mAssistedScoringEnabled)
-    {
+    if (mAssistedScoringEnabled) {
       Team curTeam = mGameManager.getActiveTeam();
       this.findViewById(R.id.Turn_Root).setBackgroundResource(
           curTeam.getGradient());
+    } else {
+      this.findViewById(R.id.Turn_Root).setBackgroundResource(
+          R.drawable.bg_freeplaygradient_paused);
     }
-    else
-    {
-      this.findViewById(R.id.Turn_Root).setBackgroundResource(R.drawable.bg_freeplaygradient_paused);
-    }
-    
-    
+
     // Play ready sound since it indicates a wait.
     // This is the menu method that is called on every menu push
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
