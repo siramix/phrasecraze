@@ -47,6 +47,11 @@ public class Card implements Serializable {
    * The title of the card, the word to be guessed
    */
   private String mTitle;
+  
+  /**
+   * The difficulty of the card, 0-easy, 1-medium, 2-hard
+   */
+  private int mDifficulty;
 
   /**
    * Function for breaking a string into an array list of strings based on the
@@ -98,7 +103,7 @@ public class Card implements Serializable {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card()");
     }
-    this.init(NOTSET, NOTSET, "", null);
+    this.init(NOTSET, NOTSET, "", NOTSET, null);
   }
 
   /**
@@ -108,7 +113,7 @@ public class Card implements Serializable {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Card( Card )");
     }
-    this.init(rhs.getId(), rhs.getRws(), rhs.getTitle(), rhs.getCreditedTeam());
+    this.init(rhs.getId(), rhs.getRws(), rhs.getTitle(), rhs.getDifficulty(), rhs.getCreditedTeam());
   }
 
 
@@ -118,8 +123,8 @@ public class Card implements Serializable {
    * @param id
    * @param title
    */
-  public Card(int id, String title) {
-    this.init(id, Card.NOTSET, title, null);
+  public Card(int id, String title, int difficulty) {
+    this.init(id, Card.NOTSET, title, difficulty, null);
   }
 
   /**
@@ -145,11 +150,12 @@ public class Card implements Serializable {
   /**
    * Function for initializing card state
    */
-  private void init(int id, int rws, String title, Team team) {
+  private void init(int id, int rws, String title, int difficulty, Team team) {
     Log.d(TAG, "init(" + title +")");
     mId = id;
     mRws = rws;
     mTitle = title;
+    mDifficulty = difficulty;
     mTeamCredited = team;
   }
 
@@ -174,6 +180,22 @@ public class Card implements Serializable {
   }
 
   /**
+   * Get a reference to the title string
+   * 
+   * @return
+   */
+  public String getTitle() {
+    return mTitle;
+  }
+
+  /**
+   * Get the difficulty of the card, 0-easy, 1-medium, 2-hard
+   * @return
+   */
+  public int getDifficulty() {
+    return mDifficulty;
+  }
+  /**
    * Set the right/wrong/skip state as an integer
    * 
    * @param rws
@@ -186,14 +208,6 @@ public class Card implements Serializable {
     mTeamCredited = team;
   }
 
-  /**
-   * Get a reference to the title string
-   * 
-   * @return
-   */
-  public String getTitle() {
-    return mTitle;
-  }
 
   /**
    * Set the title as a string

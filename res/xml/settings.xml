@@ -39,6 +39,15 @@
 			android:entries="@array/turntimes"
 			android:summary="" android:defaultValue="60" 
 			/>
+		
+		<ListPreference
+			android:key="difficulty"
+			android:title="Highest Phrase Difficulty"
+			android:entryValues="@array/difficulty_values"
+			android:entries="@array/difficulties"
+			android:summary="" 
+			android:defaultValue="2"
+			/>
 
 		<CheckBoxPreference 
 			android:key="allow_skip"

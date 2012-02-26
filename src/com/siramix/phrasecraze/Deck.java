@@ -50,6 +50,8 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -219,6 +221,10 @@ public class Deck {
                                   Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
     Map<String, ?> packSelections = new HashMap<String, Boolean>();
     packSelections = packPrefs.getAll();
+    SharedPreferences prefs = PreferenceManager
+        .getDefaultSharedPreferences(mContext);
+    
+    int difficulty = prefs.getInt("difficulty", 2); 
     
     // 1. Use the preferences to find the chosen packs to pull from 
     LinkedList<String> selectedPacks = new LinkedList<String>();
@@ -235,7 +241,8 @@ public class Deck {
     
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
     for ( String packFileName : selectedPacks ) {
-      mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, BACK_CACHE_MAXSIZE, mFrontCache, mTotalSelectedCards));
+      mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(packFileName, 
+                              BACK_CACHE_MAXSIZE, mFrontCache, mTotalSelectedCards, difficulty));
     }
     
     // 4. Now shuffle
@@ -378,7 +385,12 @@ public class Deck {
         e.printStackTrace();
       }
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
-      digestPackInternal(db, packName, 0, cardItr);
+      
+      // TODO This random number is a random ID for any resource packs.  These
+      // are only called during testing so before release we should remove this code.
+      Random r = new Random();
+      Pack insertPack = new Pack(r.nextInt(2000), packName, "RESOURCE PACK", packName, 0, 1000);
+      digestPackInternal(db, insertPack, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "DONE loading words.");
@@ -396,7 +408,7 @@ public class Deck {
         clearPack(packId, mDatabase);
       }
       CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
-      digestPackInternal(mDatabase, pack.getName(), pack.getVersion(), cardItr);
+      digestPackInternal(mDatabase, pack, cardItr);
     }
 
     /**
@@ -408,17 +420,17 @@ public class Deck {
      * @param packVersion
      * @param cardItr
      */
-    private static void digestPackInternal(SQLiteDatabase db, String packName, int packVersion, CardJSONIterator cardItr) {
-      Log.d(TAG, "digestPackInternal: " + packName + "v" + String.valueOf(packVersion));
+    private static void digestPackInternal(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
+      Log.d(TAG, "digestPackInternal: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
  
       // Add the pack and all cards in a single transaction.
       try {
         db.beginTransaction();
-        int packId = (int) insertPack(packName, "starter.json", packVersion, db);
+        upsertPack(pack, db);
         Card curCard = null;
         while(cardItr.hasNext()) {
           curCard = cardItr.next();
-          upsertPhrase(curCard.getId(), curCard.getTitle(), 1, packId, db);
+          upsertPhrase(curCard, pack.getId(), db);
         }
         db.setTransactionSuccessful();
       } finally {
@@ -431,32 +443,34 @@ public class Deck {
      * 
      * @return rowId or -1 if failed
      */
-    public static long upsertPhrase(int id, String phrase, int difficulty, int packId, SQLiteDatabase db) {
+    public static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       Log.d(TAG, "upsertPhrase(" + phrase + ")");
       
       ContentValues initialValues = new ContentValues();
-      initialValues.put(PhraseColumns._ID, id);
-      initialValues.put(PhraseColumns.PHRASE, phrase);
-      initialValues.put(PhraseColumns.DIFFICULTY, difficulty);
+      initialValues.put(PhraseColumns._ID, phrase.getId());
+      initialValues.put(PhraseColumns.PHRASE, phrase.getTitle());
+      initialValues.put(PhraseColumns.DIFFICULTY, phrase.getDifficulty());
       initialValues.put(PhraseColumns.PLAY_DATE, 0);
       initialValues.put(PhraseColumns.PACK_ID, packId);
       return db.replace(PhraseColumns.TABLE_NAME, null, initialValues);
     }
     
     /**
-     * Insert a new pack into the Pack table of a given database.
-     * @param packname The name of the pack to insert
+     * Either insert a new pack into the Pack table of a given database or replace
+     * one that e 
+     * @param pack The pack object to insert into db
      * @param db The db in which to insert the new pack
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public static long insertPack(String packName, String path, int packVersion, SQLiteDatabase db) {
+    public static long upsertPack(Pack pack, SQLiteDatabase db) {
       Log.d(TAG, "insertPack()");
       
       ContentValues packValues = new ContentValues();
-      packValues.put(PackColumns.NAME, packName);
-      packValues.put(PackColumns.PATH, path);
-      packValues.put(PackColumns.VERSION, packVersion);
-      return db.insert(PackColumns.TABLE_NAME, null, packValues);
+      packValues.put(PackColumns._ID, pack.getId());
+      packValues.put(PackColumns.NAME, pack.getName());
+      packValues.put(PackColumns.PATH, pack.getPath());
+      packValues.put(PackColumns.VERSION, pack.getVersion());
+      return db.replace(PackColumns.TABLE_NAME, null, packValues);
     }
     
     /**
@@ -514,7 +528,7 @@ public class Deck {
         if (PhraseCrazeApplication.DEBUG) {
           Log.d(TAG, res.getString(1));
         }
-        ret.add(new Card(res.getInt(0), res.getString(1)));
+        ret.add(new Card(res.getInt(0), res.getString(1), res.getInt(2)));
         res.moveToNext();
       }
       res.close();
@@ -580,20 +594,24 @@ public class Deck {
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, LinkedList<Card> frontCache, long TOTAL_SELECTED) {
+    public LinkedList<Card> pullFromPack(String packname, int CACHE_SIZE, 
+                                         LinkedList<Card> frontCache, long TOTAL_SELECTED, 
+                                         int difficulty) {
       Log.d(TAG, "pullFromPack(" + packname + ")");
       mDatabase = getWritableDatabase();
       
       LinkedList<Card> returnCards = new LinkedList<Card>();
       int packid = getPackId(packname);
       
-      String[] args = new String[2];
+      String[] args = new String[3];
       args[0] = String.valueOf(packid);
       args[1] = getIdString(frontCache);
+      args[2] = String.valueOf(difficulty);
       
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          PhraseColumns.PACK_ID + " = ? AND " + PhraseColumns._ID + " NOT IN (?)", args, 
+          PhraseColumns.PACK_ID + " = ? AND " + PhraseColumns._ID + " NOT IN (?) AND + " +
+          PhraseColumns.DIFFICULTY + " <= ?", args, 
           null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
@@ -616,7 +634,7 @@ public class Deck {
 
       // Add cards to what will be the Cache, including a surplus 
       while (!res.isAfterLast() && res.getPosition() < (targetnum + surplusnum)) {
-        returnCards.add(new Card(res.getInt(0), res.getString(1)));
+        returnCards.add(new Card(res.getInt(0), res.getString(1), res.getInt(2)));
         res.moveToNext();
       }
       Log.d(TAG, "**" + returnCards.size() + " phrases added.");
