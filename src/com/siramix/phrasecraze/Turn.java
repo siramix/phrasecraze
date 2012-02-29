@@ -44,6 +44,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -84,6 +85,7 @@ public class Turn extends Activity {
   private int mGestureVelocityThreshold;
 
   private RelativeLayout mPauseOverlay;
+  private Button mMenuButton;
   private ImageButton mCorrectButton;
   private ImageButton mSkipButton;
   private TextView mCountdownText;
@@ -318,6 +320,18 @@ public class Turn extends Activity {
       return super.onOptionsItemSelected(item);
     }
   }
+  
+  /**
+   * Listener for menu button
+   */
+  private final OnClickListener mMenuListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "mMenuListener OnClick()");
+      }
+      Turn.this.openOptionsMenu();
+    }
+  };
 
   /**
    * Listener for click on the timer to pause
@@ -815,6 +829,7 @@ public class Turn extends Activity {
     mViewFlipper = (ViewFlipper) this.findViewById(R.id.Turn_ViewFlipper);
     mTimesUpText = (TextView) this.findViewById(R.id.Turn_TimesUp);
 
+    mMenuButton = (Button) this.findViewById(R.id.Turn_MenuBar_Menu);
     mCorrectButton = (ImageButton) this.findViewById(R.id.Turn_ButtonCorrect);
     mSkipButton = (ImageButton) this.findViewById(R.id.Turn_ButtonSkip);
 
@@ -844,6 +859,7 @@ public class Turn extends Activity {
     mViewFlipper.setInAnimation(inFromRightAnimation());
     mViewFlipper.setOutAnimation(outToLeftAnimation());
 
+    mMenuButton.setOnClickListener(mMenuListener);
     mCorrectButton.setOnClickListener(mCorrectListener);
     mSkipButton.setOnClickListener(mSkipListener);
 
