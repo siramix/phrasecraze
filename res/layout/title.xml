@@ -20,8 +20,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent" 
-	android:background="@drawable/bg_generic"
-	android:clipChildren="false">
+	android:clipChildren="false" android:background="@color/genericBG_trimDark">
 
 	<ImageButton android:id="@+id/Title_AboutUs" 
 		android:layout_width="wrap_content"
@@ -32,162 +31,29 @@
 		android:layout_marginBottom="5dp" 
 		android:background="@drawable/title_logo_mini_selector"
 		/>
-
-	<LinearLayout android:id="@+id/Title_Banner"
-		android:layout_width="wrap_content"
-		android:orientation="horizontal" 
-		android:layout_height="fill_parent">
-		
-		<View android:id="@+id/Title_Banner_Trim1" 
-			android:layout_height="wrap_content" 
-			android:background="@color/genericBG_trim"
-			android:layout_width="5dp"
-			/>
-			
-		<View android:id="@+id/Title_Banner_BG" 
-			android:layout_height="fill_parent"
-			android:layout_width="60dp" 
-			android:background="@color/black"
-			/>
-			
-		<View android:id="@+id/Title_Banner_Trim2" 
-			android:layout_height="wrap_content" 
-			android:background="@color/genericBG_trim"
-			android:layout_width="5dp"
-			/>
-			
+	<LinearLayout android:layout_height="fill_parent" android:id="@+id/Title_Menu" android:layout_width="fill_parent" android:clipToPadding="false" android:clipChildren="false" android:orientation="vertical">
+		<View android:layout_weight="1" android:layout_width="wrap_content" android:id="@+id/view1" android:layout_height="wrap_content"></View>
+		<View android:layout_weight="1" android:layout_width="wrap_content" android:id="@+id/view2" android:layout_height="wrap_content"></View>
+		<FrameLayout android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/frameLayout4" android:layout_height="fill_parent">
+			<ImageView android:id="@+id/Title_Starburst" android:src="@drawable/title_starburst" android:layout_gravity="center" android:layout_width="700dp" android:layout_height="700dp"></ImageView>
+			<ImageButton android:background="@drawable/title_button_play" android:layout_width="wrap_content" android:id="@+id/Title_Button_Play" android:layout_height="wrap_content" android:layout_gravity="center"></ImageButton>
+		</FrameLayout>
+		<LinearLayout android:layout_weight="1" android:layout_gravity="center" android:layout_width="fill_parent" android:id="@+id/Title_Menu_MinorButtons" android:layout_height="fill_parent">
+			<FrameLayout android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/frameLayout1" android:layout_height="fill_parent">
+				<ImageButton android:background="@drawable/title_button_settings" android:layout_width="wrap_content" android:id="@+id/Title_Button_Settings" android:layout_height="wrap_content" android:layout_gravity="center"></ImageButton>
+			</FrameLayout>
+			<FrameLayout android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/frameLayout2" android:layout_height="fill_parent">
+				<ImageButton android:background="@drawable/title_button_packs" android:layout_width="wrap_content" android:id="@+id/Title_Button_Packs" android:layout_height="wrap_content" android:layout_gravity="center"></ImageButton>
+			</FrameLayout>
+			<FrameLayout android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/frameLayout3" android:layout_height="fill_parent">
+				<ImageButton android:background="@drawable/title_button_rules" android:layout_width="wrap_content" android:id="@+id/Title_Button_Rules" android:layout_height="wrap_content" android:layout_gravity="center"></ImageButton>
+			</FrameLayout>
+		</LinearLayout>
 	</LinearLayout>
-	
-	<LinearLayout android:id="@+id/Title_Menu"
-		android:orientation="vertical" 
-		android:clipChildren="false"
-		android:layout_width="fill_parent" 
-		android:layout_centerVertical="true"
-		android:layout_height="fill_parent">
-
-		<ImageView android:id="@+id/Title_Title"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content"
-			android:background="@drawable/title_title" 
-			android:layout_gravity="center"
-			android:layout_marginTop="20dp" 
-			android:layout_marginBottom="15dp"
-			/>
-			
-		<RelativeLayout android:id="@+id/Title_Menu_1"
-			android:layout_height="fill_parent" 
-			android:layout_weight="1"
-			android:layout_width="wrap_content" 
-			android:layout_marginLeft="30dp">
-			
-			<TextView android:id="@+id/Title_PlayText"
-				android:text="Play" 
-				android:textColor="@color/teamB_primary" 
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content" 
-				android:layout_marginLeft="80dp"
-				android:layout_marginTop="10dp" 
-				android:gravity="center"
-				android:textSize="42dp" 
-				android:layout_centerVertical="true"
-				/>
-				
-			<ImageButton android:id="@+id/Title_PlayButton"
-				android:background="@drawable/title_play"
-				android:layout_centerVertical="true" 
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"/>
-
-			<View android:id="@+id/Title_PlayDelegate"
-				android:layout_height="fill_parent" 
-				android:layout_width="180dp"
-				android:soundEffectsEnabled="false"/>
-
-		</RelativeLayout>
-		
-		<RelativeLayout android:id="@+id/Title_Menu_3"
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent"
-			android:layout_weight="1" 
-			android:layout_marginLeft="30dp">
-			
-			<TextView android:layout_width="wrap_content"
-				android:textSize="42dp" 
-				android:id="@+id/Title_SettingsText"
-				android:text="Settings" 
-				android:textColor="@color/teamD_primary"
-				android:gravity="center_vertical" 
-				android:layout_height="wrap_content" 
-				android:layout_marginLeft="80dp"
-				android:layout_marginTop="10dp" 
-				android:layout_centerVertical="true"
-				/>
-				
-			<ImageButton android:id="@+id/Title_SettingsButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" 
-				android:background="@drawable/title_settings"
-				android:layout_centerVertical="true"
-				android:soundEffectsEnabled="false"/>
-				
-			<View android:id="@+id/Title_SettingsDelegate"
-				android:layout_width="240dp" 
-				android:layout_height="fill_parent"
-				android:soundEffectsEnabled="false"/>
-
-		</RelativeLayout>
-		
-		<RelativeLayout android:id="@+id/Title_Menu_4"
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent"
-			android:layout_weight="1" 
-			android:layout_marginLeft="30dp">
-			
-			<TextView android:id="@+id/Title_RulesText"
-				android:text="Rules" 
-				android:textSize="42dp" 
-				android:textColor="@color/teamA_primary"
-				android:layout_height="wrap_content" 
-				android:layout_width="wrap_content"
-				android:layout_marginLeft="80dp" 
-				android:layout_marginTop="10dp" 
-				android:gravity="center_vertical"
-				android:layout_centerVertical="true"
-				/>
-				
-			<ImageButton android:id="@+id/Title_RulesButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" 
-				android:background="@drawable/title_rules"
-				android:layout_centerVertical="true"/>
-				
-			<View  android:id="@+id/Title_RulesDelegate"
-				android:layout_height="fill_parent"
-				android:layout_width="200dp"
-				android:soundEffectsEnabled="false"/>
-
-		</RelativeLayout>
-
-	</LinearLayout>
-	
-	<LinearLayout android:id="@+id/Title_Banner_Hider" 
-		android:layout_width="wrap_content"
-		android:orientation="horizontal" 
-		android:layout_height="fill_parent"
-		android:layout_alignLeft="@id/Title_Banner">
-		
-		<View android:id="@+id/Title_Banner_Hider_BG"
-			android:layout_height="wrap_content"
-			android:background="@color/genericBG_trim"
-			android:layout_width="5dp"
-			/>
-			
-		<View android:id="@+id/Title_Banner_Hider_BG" 
-			android:background="@color/black" 
-			android:layout_width="25dp" 
-			android:layout_height="wrap_content"
-			/>
-
-	</LinearLayout>
+	<ImageView android:layout_width="wrap_content" android:layout_marginTop="5dp" android:id="@+id/Title_Title" android:background="@drawable/title_title" android:layout_height="wrap_content" android:layout_centerHorizontal="true"></ImageView>
+	<ImageView android:layout_height="wrap_content" android:id="@+id/imageView4" android:layout_width="wrap_content" android:src="@drawable/title_faced" android:layout_alignBottom="@+id/imageView3" android:layout_alignParentRight="true" android:layout_marginBottom="29dp"></ImageView>
+	<ImageView android:layout_height="wrap_content" android:id="@+id/imageView3" android:layout_width="wrap_content" android:src="@drawable/title_facec" android:layout_below="@+id/Title_Title" android:layout_toLeftOf="@+id/imageView4"></ImageView>
+	<ImageView android:layout_height="wrap_content" android:id="@+id/imageView2" android:layout_width="wrap_content" android:src="@drawable/title_faceb" android:layout_alignTop="@+id/imageView3" android:layout_toRightOf="@+id/imageView1"></ImageView>
+	<ImageView android:layout_height="wrap_content" android:id="@+id/imageView1" android:layout_width="wrap_content" android:src="@drawable/title_facea" android:layout_alignBottom="@+id/imageView4" android:layout_alignLeft="@+id/Title_Title" android:layout_marginBottom="18dp"></ImageView>
 
 </RelativeLayout>

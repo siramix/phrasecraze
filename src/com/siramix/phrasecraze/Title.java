@@ -23,24 +23,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.TranslateAnimation;
 
 /**
  * This is the activity class that kicks off PhraseCraze and displays a nice title
@@ -70,97 +61,6 @@ public class Title extends Activity {
    * Dialog constant for second Rate Us message
    */
   static final int DIALOG_RATEUS_SECOND = 1;
-    
-  /**
-   * PlayGameListener is used for the start game button. It launches the next
-   * activity.
-   */
-  private OnTouchListener mTouchPlayListener = new OnTouchListener() {
-
-    public boolean onTouch(View v, MotionEvent event) {
-      // return out if views are not enabled
-      if (!v.isEnabled()) {
-        return true;
-      }
-      // Make this seem like a button OnClick for both the label and the button
-      int action = event.getAction();
-      if (action == MotionEvent.ACTION_DOWN) {
-        highlightDelegateItems(v.getId(), true);
-      } else if (action == MotionEvent.ACTION_MOVE) {
-        // Check if the move happened in the bounds of this view
-        Rect bounds = new Rect();
-        v.getHitRect(bounds);
-        // If in bounds, we have to re-highlight in case we went out of bounds
-        // previously
-        if (bounds.contains((int) event.getX(), (int) event.getY())) {
-          highlightDelegateItems(v.getId(), true);
-        } else {
-          highlightDelegateItems(v.getId(), false);
-        }
-      } else {
-        highlightDelegateItems(v.getId(), false);
-      }
-
-      return false;
-    }
-  };
-
-  /**
-   * Helper function to highlight a view given its Id
-   * 
-   * @param id
-   */
-  private void highlightDelegateItems(int id, boolean on) {
-    ImageButton button = (ImageButton) Title.this
-        .findViewById(R.id.Title_PlayButton);
-    TextView label = (TextView) Title.this.findViewById(R.id.Title_PlayText);
-    switch (id) {
-    case R.id.Title_PlayDelegate:
-      button = (ImageButton) Title.this.findViewById(R.id.Title_PlayButton);
-      label = (TextView) Title.this.findViewById(R.id.Title_PlayText);
-      if (on) {
-        button.setBackgroundResource(R.drawable.title_play_onclick);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.play_highlight));
-      } else {
-        button.setBackgroundResource(R.drawable.title_play);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamB_primary));
-      }
-      break;
-    case R.id.Title_SettingsDelegate:
-      button = (ImageButton) Title.this.findViewById(R.id.Title_SettingsButton);
-      label = (TextView) Title.this.findViewById(R.id.Title_SettingsText);
-      if (on) {
-        button.setBackgroundResource(R.drawable.title_settings_onclick);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.settings_highlight));
-      } else {
-        button.setBackgroundResource(R.drawable.title_settings);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamD_primary));
-      }
-      break;
-    case R.id.Title_RulesDelegate:
-      button = (ImageButton) Title.this.findViewById(R.id.Title_RulesButton);
-      label = (TextView) Title.this.findViewById(R.id.Title_RulesText);
-      if (on) {
-        button.setBackgroundResource(R.drawable.title_rules_onclick);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.rules_highlight));
-      } else {
-        button.setBackgroundResource(R.drawable.title_rules);
-        label.setTextColor(Title.this.getResources().getColor(
-            R.color.teamA_primary));
-      }
-      break;
-    }
-    if (on) {
-      label.setTextSize(45);
-    } else {
-      label.setTextSize(42);
-    }
-  }
 
   /**
    * PlayGameListener plays an animation on the view that will result in
@@ -268,54 +168,6 @@ public class Title extends Activity {
   }; // End AboutUsListener
 
   /**
-   * Returns the animation that brings in the buttons screen
-   * 
-   * @return The animation that brings in the buttons screen
-   */
-  private Animation translateButtons(int buttonNum) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "TranslateButtons()");
-    }
-
-    final int MOVETIME = 600;
-
-    // Slide in from off-screen
-    TranslateAnimation slideIn = new TranslateAnimation(
-        Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-        Animation.ABSOLUTE, (-600f), Animation.RELATIVE_TO_PARENT, 0.0f);
-    slideIn.setDuration(MOVETIME + (200 * buttonNum));
-    slideIn.setInterpolator(new DecelerateInterpolator());
-    return slideIn;
-  }
-
-  /**
-   * Returns the animation that brings in labels screen
-   * 
-   * @return The animation that brings in labels screen
-   */
-  private AnimationSet translateLabels(int labelNum) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "TranslateLabels()");
-    }
-
-    final int MOVETIME = 800;
-    AnimationSet set = new AnimationSet(true);
-
-    // Define the translate animation
-    TranslateAnimation slideIn = new TranslateAnimation(
-        Animation.RELATIVE_TO_PARENT, (-1.0f * labelNum),
-        Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-        (0.0f), Animation.RELATIVE_TO_PARENT, 0.0f);
-    slideIn.setDuration(MOVETIME);
-    slideIn.setInterpolator(new DecelerateInterpolator());
-    slideIn.setStartOffset(300 * (labelNum + 1));
-
-    // Create entire sequence
-    set.addAnimation(slideIn);
-    return set;
-  }
-
-  /**
    * Initializes a welcome screen that starts the game.
    */
   @Override
@@ -359,48 +211,26 @@ public class Title extends Activity {
     // Setup the Main Title Screen view
     this.setContentView(R.layout.title);
 
-    // Assign listeners to the delegate buttons
-    View delegate = (View) this.findViewById(R.id.Title_PlayDelegate);
-    delegate.setOnTouchListener(mTouchPlayListener);
-    delegate.setOnClickListener(mPhrasesListener);
+    // Assign listeners to the buttons
+    ImageButton playButton = (ImageButton) this
+        .findViewById(R.id.Title_Button_Play);
+    playButton.setOnClickListener(mPlayGameListener);
 
-    delegate = (View) this.findViewById(R.id.Title_SettingsDelegate);
-    delegate.setOnTouchListener(mTouchPlayListener);
-    delegate.setOnClickListener(mSettingsListener);
-
-    delegate = (View) this.findViewById(R.id.Title_RulesDelegate);
-    delegate.setOnTouchListener(mTouchPlayListener);
-    delegate.setOnClickListener(mRulesListener);
-
+    ImageButton settingsButton = (ImageButton) this
+        .findViewById(R.id.Title_Button_Settings);
+    settingsButton.setOnClickListener(mSettingsListener);
+    
+    ImageButton packsButton = (ImageButton) this
+        .findViewById(R.id.Title_Button_Packs);
+    packsButton.setOnClickListener(mPhrasesListener);
+    
     ImageButton rulesButton = (ImageButton) this
-        .findViewById(R.id.Title_RulesButton);
+        .findViewById(R.id.Title_Button_Rules);
     rulesButton.setOnClickListener(mRulesListener);
-
+    
     ImageButton aboutusButton = (ImageButton) this
         .findViewById(R.id.Title_AboutUs);
     aboutusButton.setOnClickListener(mAboutUsListener);
-
-    View button = (View) this.findViewById(R.id.Title_PlayButton);
-    button.startAnimation(this.translateButtons(3));
-    button = (View) this.findViewById(R.id.Title_SettingsButton);
-    button.startAnimation(this.translateButtons(2));
-    button = (View) this.findViewById(R.id.Title_RulesButton);
-    button.startAnimation(this.translateButtons(1));
-
-    // set font
-    Typeface antonFont = Typeface.createFromAsset(getAssets(),
-        "fonts/Anton.ttf");
-
-    TextView label = (TextView) this.findViewById(R.id.Title_PlayText);
-    label.startAnimation(this.translateLabels(3));
-    label.setTypeface(antonFont);
-    label = (TextView) this.findViewById(R.id.Title_SettingsText);
-    label.startAnimation(this.translateLabels(2));
-    label.setTypeface(antonFont);
-    label = (TextView) this.findViewById(R.id.Title_RulesText);
-    label.startAnimation(this.translateLabels(1));
-    label.setTypeface(antonFont);
-
   }
 
   /**
