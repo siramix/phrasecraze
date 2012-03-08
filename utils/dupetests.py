@@ -1,19 +1,35 @@
 import sys
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 1:
     print "Usage: %s <logcat file>" % sys.argv[0]
-    print "Make sure you reference a logcat output (adb logcat -d > outfile.txt)"
+    print "Make sure you stream the logcat output to this script (adb logcat | python dupetests.py)"
     sys.exit()
 
-f = open(sys.argv[1], 'r')
-
 list = []
+numlines = 0
+for line in sys.stdin.readlines():
+    if "Dealing" in line:
+        parts = line.partition('::')
+        word = parts[2].partition('::')
+        list.append(word[0])
+        numlines += 1
 
-for line in f.readlines():
-    if " Delt " in line:
-        words = line.split()
-        list.append(words[4])
-
+counts = {}
+sum = 0
 for word in list:
-    print word, ":", list.count(word)
+    count = list.count(word)
+    counts[word] = count
+    sum += 1
 
+subcounts = {}
+for word in counts:
+    countkey = counts[word]
+    print "%s : %s" % (word, counts[word])
+    if countkey in subcounts:
+        subcounts[countkey] += 1
+    else:
+        subcounts[countkey] = 1
+print "TOTAL: %d" % numlines
+print "SUM: %d" % sum
+print subcounts
+    
