@@ -120,8 +120,6 @@ public class TurnSummary extends Activity {
       Log.d(TAG, "onCreate()");
     }
     
-    Log.i(TAG, "TOTAL COUNT: " + Card.count);
-    Log.i(TAG, "TOTAL DEAL COUNT: " + Card.dealcount);
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);

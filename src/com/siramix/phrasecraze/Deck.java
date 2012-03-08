@@ -148,7 +148,6 @@ public class Deck {
     Log.i(TAG, " Dealing ::" + ret.getTitle() + ":: Difficulty- " + ret.getDifficulty() 
           + " Pack: ???");
     mSeenCards.add(ret);
-    Card.dealcount++;
     return ret;
   }
   
