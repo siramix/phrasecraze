@@ -135,7 +135,7 @@ public class GameManager {
    */
   public Card dealNextCard() {
     if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getNextCard()");
+      Log.d(TAG, "dealNextCard()");
     }
     ++mCardPosition;
     if (mCardPosition >= mCurrentCards.size()) {
@@ -183,7 +183,7 @@ public class GameManager {
     }
     mTeams = teams;
     Iterator<Team> itr = teams.iterator();
-	Team teamAtItr;
+    Team teamAtItr;
     for (itr = teams.iterator(); itr.hasNext();) {
       teamAtItr = itr.next();
       teamAtItr.setScore(0);
@@ -343,19 +343,12 @@ public class GameManager {
   }
   
   /**
-   * If there aren't enough cards in the backup cache to fill the 
-   * front-facing cache, fill up all of the back-end cache.  This
-   * should be called during downtime since it could be a costly
-   * database pull.
+   * Checks on the deck's caches to make sure enough cards have been
+   * stored to play a turn.
    */
-  public void fillCacheIfLow() {
-    Log.d(TAG, "fillCacheIfLow()");
-    mDeck.topOffFrontCache();
-    if (mDeck.getBackupCacheSize() < Deck.FRONT_CACHE_MAXSIZE) {
-      Log.d(TAG, "...Back Cache size was low (" + mDeck.getBackupCacheSize() + "), filling...");
-      mDeck.fillBackupCache();
-      Log.d(TAG, "...filled. Back Cache size is now " + mDeck.getBackupCacheSize());
-    }
+  public void maintainDeck() {
+    Log.d(TAG, "maintainDeck()");
+    mDeck.fillCachesIfLow();
   }
 
   /**

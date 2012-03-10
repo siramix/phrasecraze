@@ -63,7 +63,7 @@ public class TurnSummary extends Activity {
   // Create a therad for updating the playcount for each card
   private Thread mUpdateThread;
   
-  private List<Card> mCardList;
+  private LinkedList<Card> mCardList;
   private List<ImageView> mCardViewList;
   private List<View> mCardLineList;
 
@@ -119,6 +119,7 @@ public class TurnSummary extends Activity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
+    
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -200,14 +201,14 @@ public class TurnSummary extends Activity {
       public void run() {
       Deck.DeckOpenHelper helper = new Deck.DeckOpenHelper(
           TurnSummary.this);      
-      helper.updatePlaydate(ids);
+      helper.updatePlaydate(mCardList);
       helper.close();
         }
       });
     mUpdateThread.start();
     
     // TODO This should be in a thread, but I'm not sure how to access the game from inside the thread
-    game.fillCacheIfLow();
+    game.maintainDeck();
     
     // Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
     list.post(new Runnable() {
