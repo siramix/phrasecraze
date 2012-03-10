@@ -208,7 +208,7 @@ public class TurnSummary extends Activity {
     mUpdateThread.start();
     
     // TODO This should be in a thread, but I'm not sure how to access the game from inside the thread
-    game.fillCacheIfLow();
+    game.maintainDeck();
     
     // Force Scrollview to the bottom, since the top really doesn't matter in Phrasecraze 
     list.post(new Runnable() {

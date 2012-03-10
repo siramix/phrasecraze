@@ -75,8 +75,8 @@ public class Deck {
 
   private static final String DATABASE_NAME = "phrasecraze";
   private static final int DATABASE_VERSION = 1;
-  protected static final int BACK_CACHE_MAXSIZE = 3;
-  protected static final int FRONT_CACHE_MAXSIZE = 3;
+  protected static final int BACK_CACHE_MAXSIZE = 10;
+  protected static final int FRONT_CACHE_MAXSIZE = 5;
   
   private static final int PACK_CURRENT = -1;
   private static final int PACK_NOT_PRESENT = -2;
@@ -87,7 +87,7 @@ public class Deck {
   private int mTotalSelectedCards;
   
   // After taking the top 1/DIVSOR phrases from a pack, throw back a percentage of them 
-  private static final int THROW_BACK_PERCENTAGE = 20;
+  private static final int THROW_BACK_PERCENTAGE = 0;
   
   // A list of backup cards used for refreshing the deck.  Will be filled after it reaches 0.
   private LinkedList<Card> mBackupCache;
@@ -116,21 +116,7 @@ public class Deck {
     mSeenCards = new LinkedList<Card>();
     mDatabaseOpenHelper.close();
   }
-  
-  public void topOffFrontCache() {
-    Log.d(TAG, "topOffFrontCache()");
-    int lack = FRONT_CACHE_MAXSIZE - mFrontCache.size();
-    Log.d(TAG, "*** FRONT CACHE MAX SIZE: " + FRONT_CACHE_MAXSIZE);
-    Log.d(TAG, "*** Front Cache Size: " + mFrontCache.size());
-    Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
-    Log.d(TAG, "*** Current Back Cache Size: " + String.valueOf(mBackupCache.size()));
-    
-    
-    for (int i=0; i<lack; ++i) {
-      mFrontCache.add(getPhraseFromBackupCache());
-    }
-  }
-  
+
   /**
    * Get a card from the top of the Front Cache queue.  Once
    * this reaches the bottom of the deck, we should top off the Deck which
@@ -150,20 +136,35 @@ public class Deck {
     mSeenCards.add(ret);
     return ret;
   }
-  
+
+  public void topOffFrontCache() {
+    Log.d(TAG, "topOffFrontCache()");
+    int lack = FRONT_CACHE_MAXSIZE - mFrontCache.size();
+    Log.d(TAG, "*** FRONT CACHE MAX SIZE: " + FRONT_CACHE_MAXSIZE);
+    Log.d(TAG, "*** Front Cache Size: " + mFrontCache.size());
+    Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
+    Log.d(TAG, "*** Current Back Cache Size: " + String.valueOf(mBackupCache.size()));
+    
+    
+    for (int i=0; i<lack; ++i) {
+      mFrontCache.add(popBackupCache());
+    }
+    printCaches();
+  }
+
   /**
    * Get the card from the top of the cache
    * 
    * @return a card reference
    */
-  private Card getPhraseFromBackupCache() {
+  private Card popBackupCache() {
     Card ret;
     // If we reach this scenario it means a lot of cards were looked at during a turn
     // Otherwise it should be filled by a GameManager.fillbackupifLow call
-    if (mBackupCache.isEmpty()) { 
+    if (mBackupCache.isEmpty()) {
+      mDatabaseOpenHelper.updatePlaydate(mSeenCards);
       this.fillBackupCache();
       ret = mBackupCache.removeFirst();
-      mDatabaseOpenHelper.updatePlaydate(mSeenCards);
       mSeenCards.clear();
     } else {
       ret = mBackupCache.removeFirst();
@@ -173,19 +174,20 @@ public class Deck {
   }
   
   /**
-   * Return the current size of the Back-end Cache
-   * @return
+   * If there aren't enough cards in the backup cache to fill the 
+   * front-facing cache at least once, fill up both caches.  This
+   * should be called during downtime since it could be a costly
+   * database pull.
    */
-  protected int getBackupCacheSize() {
-    return mBackupCache.size();
-  }
-  
-  /**
-   * Return the current size of the Front-facing Cache
-   * @return
-   */
-  protected int getFrontCacheSize() {
-    return mFrontCache.size();
+  public void fillCachesIfLow() {
+    Log.d(TAG, "fillCachesIfLow()");
+    topOffFrontCache();
+    if (mBackupCache.size() < FRONT_CACHE_MAXSIZE) {
+      Log.d(TAG, "...Back Cache size was low (" + mBackupCache.size() + "), filling...");
+      mBackupCache.clear();
+      fillBackupCache();
+      Log.d(TAG, "...filled. Back Cache size is now " + mBackupCache.size());
+    }
   }
   
   /**
@@ -230,6 +232,7 @@ public class Deck {
    */
   protected void fillBackupCache() {
     Log.d(TAG, "fillBackupCache()");
+    printCaches();
     Log.i(TAG, "filling backup cache...");
     mDatabaseOpenHelper = new DeckOpenHelper(mContext);
     SharedPreferences packPrefs = mContext.getSharedPreferences(
@@ -256,6 +259,7 @@ public class Deck {
     float[] remainderWeights = new float[numSelectedPacks];
     int[] targetNumForPacks = new int[numSelectedPacks];
     int targetNumSum = 0;
+    int lack = 0;
     
     // 2.a. Calculate targetNumForPacks
     for (int i=0; i<numSelectedPacks; ++i) {
@@ -267,7 +271,8 @@ public class Deck {
       Log.d(TAG, "** pack: " + packName.get(0));
       Log.d(TAG, "** pack size: " + packSize);
       Log.d(TAG, "** pack weight: " + remainderWeights[i]);
-      float portion = Deck.BACK_CACHE_MAXSIZE * remainderWeights[i];
+      lack = Deck.BACK_CACHE_MAXSIZE - mBackupCache.size();
+      float portion = lack * remainderWeights[i];
       targetNumForPacks[i] = (int) Math.floor(portion);
       targetNumSum += targetNumForPacks[i];
       remainderWeights[i] = portion - targetNumForPacks[i];
@@ -276,7 +281,7 @@ public class Deck {
     }
     
     // 2.b. Allocate remainder based on the "cut off floor"
-    int remainder = Deck.BACK_CACHE_MAXSIZE - targetNumSum;
+    int remainder = lack - targetNumSum;
     Log.d(TAG, "Assigning remainder of " + remainder + " cards.");
     Random randomizer = new Random();
     
@@ -305,6 +310,7 @@ public class Deck {
       // iterate through pack remainderWeights to see which pack rand landed on
       if ( rand <= odds[0]) {
         ++targetNumForPacks[0];
+        Log.d(TAG, "...assigned a remainder to: " + selectedPacks.get(0));
       }
       else {  
         for (int j=1; j<remainderWeights.length; ++j) {
@@ -320,6 +326,7 @@ public class Deck {
     }
     
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
+    Log.d(TAG, "3. Pull Calculations: ");
     for (int i=0; i<numSelectedPacks; ++i) {
       mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(selectedPacks.get(i), mFrontCache, 
                                                     targetNumForPacks[i]));
@@ -330,6 +337,7 @@ public class Deck {
     
     mDatabaseOpenHelper.close();
     Log.i(TAG, "filled.");
+    printCaches();
   }
   
 
@@ -338,20 +346,22 @@ public class Deck {
    * Debugging function.  Can be removed later.
    */
   public void printCaches() {
-    Log.d(TAG, "printing caches...");
-    Log.d(TAG, "BACK CACHE: ");
-    Log.d(TAG, "Back Cache Size is " + mBackupCache.size());    
+    Log.d(TAG, "printCaches...");
+    Log.d(TAG, "========================");
+    Log.d(TAG, "BACKUP CACHE: ");
+    Log.d(TAG, "Backup Cache Size is " + mBackupCache.size());
     for (int i=0; i<mBackupCache.size(); ++i) {
       Log.d(TAG, "..." + mBackupCache.get(i).getTitle());
     }
-    Log.d(TAG, "END BACK CACHE");
-    
+    Log.d(TAG, "END BACKUP CACHE");
+    Log.d(TAG, "------------------------");
     Log.d(TAG, "FRONT CACHE: ");
-    Log.d(TAG, "Front Cache Size is " + mFrontCache.size());    
+    Log.d(TAG, "Front Cache Size is " + mFrontCache.size());
     for (int i=0; i<mFrontCache.size(); ++i) {
       Log.d(TAG, "..." + mFrontCache.get(i).getTitle());
     }
     Log.d(TAG, "END FRONT CACHE");
+    Log.d(TAG, "========================");
   }
   
   /**
@@ -656,7 +666,7 @@ public class Deck {
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(String packname, LinkedList<Card> frontCache, 
+    public LinkedList<Card> pullFromPack(String packname, LinkedList<Card> cardsToExclude, 
                                           int targetNum) {
       Log.d(TAG, "pullFromPack(" + packname + ")");
       mDatabase = getWritableDatabase();
@@ -666,13 +676,13 @@ public class Deck {
       
       String[] args = new String[2];
       args[0] = String.valueOf(packid);
-      args[1] = buildIdString(frontCache);
+      args[1] = buildIdString(cardsToExclude);
       String dif = buildDifficultyString();
-
+      Log.d(TAG, "-- exclude str: " + args[1]);
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          PhraseColumns.PACK_ID + " = ? AND " + PhraseColumns._ID + " NOT IN (?) AND + " +
-          PhraseColumns.DIFFICULTY + " IN (" + dif + ")", args, 
+          PhraseColumns.PACK_ID + " = " + args[0] + " AND " + PhraseColumns._ID + " NOT IN (" + args[1] + ") AND " +
+          PhraseColumns.DIFFICULTY + " IN (" + dif + ")", null, 
           null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
@@ -680,8 +690,7 @@ public class Deck {
       // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
       int packSize = res.getCount();
       int surplusNum = (int) Math.floor( (float) targetNum * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
-      
-      Log.d(TAG, "3. Pull Calculations: ");
+
       Log.d(TAG, "** backup cache size: " + Deck.BACK_CACHE_MAXSIZE);      
       Log.d(TAG, "** pack size: " + packSize);
       Log.d(TAG, "** targetnum: " + targetNum);
