@@ -364,7 +364,6 @@ public class Turn extends Activity {
    */
   private final OnClickListener mSkipListener = new OnClickListener() {
     public void onClick(View v) {
-
       Turn.this.doSkip();
     }
   }; // End SkipListener

@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import com.siramix.phrasecraze.Consts.PurchaseState;
@@ -75,8 +76,8 @@ public class Deck {
 
   private static final String DATABASE_NAME = "phrasecraze";
   private static final int DATABASE_VERSION = 1;
-  protected static final int BACK_CACHE_MAXSIZE = 10;
-  protected static final int FRONT_CACHE_MAXSIZE = 5;
+  protected static final int BACK_CACHE_MAXSIZE = 200;
+  protected static final int FRONT_CACHE_MAXSIZE = 20;
   
   private static final int PACK_CURRENT = -1;
   private static final int PACK_NOT_PRESENT = -2;
@@ -156,10 +157,27 @@ public class Deck {
     }
   }
 
+  /**
+   * Take a Pack object and pull in cards from the server into the database. 
+   * @param pack
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  public synchronized void digestPack(Pack pack) throws RuntimeException {
+    try {
+      mDatabaseOpenHelper.digestPackFromServer(pack);
+    } catch (IOException e) {
+      RuntimeException userException = new RuntimeException(e);
+      throw userException;
+    } catch (URISyntaxException e) {
+      RuntimeException userException = new RuntimeException(e);
+      throw userException;
+    }
+  }
+  
   private void topOffFrontCache() {
     Log.d(TAG, "topOffFrontCache()");
     int lack = FRONT_CACHE_MAXSIZE - mFrontCache.size();
-    Log.d(TAG, "*** FRONT CACHE MAX SIZE: " + FRONT_CACHE_MAXSIZE);
     Log.d(TAG, "*** Front Cache Size: " + mFrontCache.size());
     Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
     Log.d(TAG, "*** Current Back Cache Size: " + String.valueOf(mBackCache.size()));
@@ -189,24 +207,13 @@ public class Deck {
     return ret;
   }
   
-  /**
-   * Take a Pack object and pull in cards from the server into the database. 
-   * @param pack
-   * @throws IOException
-   * @throws URISyntaxException
-   */
-  public synchronized void digestPack(Pack pack) throws RuntimeException {
-    try {
-      mDatabaseOpenHelper.digestPackFromServer(pack);
-    } catch (IOException e) {
-      RuntimeException userException = new RuntimeException(e);
-      throw userException;
-    } catch (URISyntaxException e) {
-      RuntimeException userException = new RuntimeException(e);
-      throw userException;
-    }
-  }
 
+  /**
+   * Instantiate the list of Selected Packs and then modify any
+   * member variables of Pack that can be determined at time of
+   * Deck creation.  This includes number of playable phrases
+   * and pack weights.
+   */
   private void setPackData() {
     instantiateSelectedPacks();
     mTotalPlayableCards = 0;
@@ -234,11 +241,14 @@ public class Deck {
     
     // 2. Fill our cache up with cards from all selected packs (using sorting algorithm)
     Log.d(TAG, "2. Pull Calculations ");
+    LinkedList<Card> activeCards = new LinkedList<Card>();
+    activeCards.addAll(mFrontCache);
+    activeCards.addAll(mBackCache);
     for (int i=0; i<mSelectedPacks.size(); ++i) {
-      mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), mFrontCache));
+      mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), activeCards));
     }
     
-    // 4. Now shuffle
+    // 3. Now shuffle
     Collections.shuffle(mBackCache);
     
     mDatabaseOpenHelper.close();
@@ -246,6 +256,11 @@ public class Deck {
     printDeck();
   }
   
+  /**
+   * Parse our Pack Selection Preferences to find active packs.  For
+   * each of these packs, instantiate a Pack as part of our mSelectedPacks 
+   * in the Deck object.
+   */
   private void instantiateSelectedPacks() {
     Log.d(TAG, "instantiateSelectedPacks()");
     SharedPreferences packPrefs = mContext.getSharedPreferences(
@@ -271,7 +286,11 @@ public class Deck {
     }
   }
   
-  // 2. Count how many phrases are selected and determine weights
+
+  /**
+   * Set the weight of each pack relative to the total number of
+   * playable cards selected by the user.
+   */
   private void setPackWeights() {
     Log.d(TAG, "setPackWeights()");
     Log.d(TAG, "** mTotalPlayableCards: " + mTotalPlayableCards);
@@ -311,6 +330,7 @@ public class Deck {
       int packIndex = randomizer.nextInt(mSelectedPacks.size()-1);
       Pack pack = mSelectedPacks.get(packIndex);
       pack.setNumToPullNext(pack.getNumToPullNext()+1);
+      Log.d(TAG, "..added a remainder to " + pack.getName());
     }
   }
   
@@ -679,33 +699,36 @@ public class Deck {
       
       LinkedList<Card> returnCards = new LinkedList<Card>();
       int packid = pack.getId();
+      int targetNum = pack.getNumToPullNext();
+      int surplusNum = (int) Math.floor(
+                (float) targetNum * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
       
+      // Build our arguments for SQL
       String[] args = new String[3];
       args[0] = String.valueOf(packid);
       args[1] = buildCardIdString(cardsToExclude);
       args[2] = buildDifficultyString();
-      Log.d(TAG, "-- exclude str: " + args[1]);
-      // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
+      
+      // Get the playable phrases from pack, sorted by playdate
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          PhraseColumns.PACK_ID + " = " + args[0] + " AND " + PhraseColumns._ID + " NOT IN (" + args[1] + ") AND " +
-          PhraseColumns.DIFFICULTY + " IN (" + args[2] + ")", null, 
-          null, null, PhraseColumns.PLAY_DATE + " asc");
+            PhraseColumns.PACK_ID + " = " + args[0] + " AND " +
+            PhraseColumns._ID + " NOT IN (" + args[1] + ") AND " +
+            PhraseColumns.DIFFICULTY + " IN (" + args[2] + ")",
+            null, null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
       // The number of cards to return from any given pack will use the following formula:
-      // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
-      int packSize = res.getCount();
-      int surplusNum = (int) Math.floor( (float) pack.getNumToPullNext() * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
-
-      Log.d(TAG, "** back cache size: " + Deck.BACK_CACHE_MAXSIZE);      
-      Log.d(TAG, "** pack size: " + packSize);
-      Log.d(TAG, "** targetnum: " + pack.getNumToPullNext());
-      Log.d(TAG, "** surplusnum: " + surplusNum);
+      // (WEIGHT OF PACK) * lack + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
       
+      Log.d(TAG, "** Deck.BackCacheSize: " + Deck.BACK_CACHE_MAXSIZE);
+      Log.d(TAG, "** Pack.numToPullNext: " + targetNum);
+      Log.d(TAG, "** this.surplusnum: " + surplusNum);
+      Log.d(TAG, "** this.numPlayable (excludes active): " + res.getCount());
+      Log.d(TAG, "** Pack.numPlayable: " + pack.getNumPlayablePhrases());
       Log.d(TAG, "** ADDING PHRASES");
 
       // Add cards to what will be the Cache, including a surplus 
-      while (!res.isAfterLast() && res.getPosition() < (pack.getNumToPullNext() + surplusNum)) {
+      while (!res.isAfterLast() && res.getPosition() < (targetNum + surplusNum)) {
         returnCards.add(new Card(res.getInt(0), res.getString(1), res.getInt(2)));
         res.moveToNext();
       }
@@ -730,34 +753,34 @@ public class Deck {
     
     /**
      * Helper class to convert a linked list of cards to a 
-     * comma-delimited string of card Ids.
-     * @param cardList
-     * @return cardIds - 
+     * comma-delimited String of Card Ids.
+     * @param cardList a list of Cards
+     * @return a comma-delimited string of Ids ex. 1,20,22
      */
     private String buildCardIdString(LinkedList<Card> cardList) {
       Log.d(TAG, "buildCardIdString(cardList)");
+      String[] ids = new String[cardList.size()];
       
-      String cardIds = "";
-      //TODO JOIN THIS
       for (int i=0; i< cardList.size(); ++i) {
-        // Protect against packs not found (-1 is ID returned)
-        cardIds += (String.valueOf(cardList.get(i).getId()));
-        if (i < cardList.size()-1) {
-          cardIds += (",");
-        }
+        ids[i] = String.valueOf(cardList.get(i).getId());
       }
-      return cardIds;
+      return TextUtils.join(",", ids);
     }
     
+    /**
+     * Helper class to convert a linked list of packs to 
+     * a comma-delimited String of Pack Ids.
+     * @param packList a list of Packs
+     * @return a comma-delimited string of Ids ex. 1,20,22
+     */
     private String buildPackIdString(LinkedList<Pack> packList) {
       Log.d(TAG, "buildPackIdString(packList)");
       String[] ids = new String[packList.size()];
+      
       for (int i=0; i<packList.size(); ++i) {
         ids[i] = String.valueOf(packList.get(i).getId());
-        Log.d(TAG, "** " + ids[i]);
       }
-      String ret = TextUtils.join(",", ids);
-      return ret;
+      return TextUtils.join(",", ids);
     }
     
     /**

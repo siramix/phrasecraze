@@ -18,7 +18,6 @@
 package com.siramix.phrasecraze;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 
 import android.util.Log;
 
@@ -199,7 +198,6 @@ public class Pack implements Serializable {
     ret += "   pack.Weight: " + String.valueOf(mWeight) + "\n";
     ret += "   pack.NumPlayablePhrases: " + String.valueOf(mNumPlayablePhrases) + "\n";
     ret += "   pack.NumToPullNext: " + String.valueOf(mNumToPullNext) + "\n";
-    ret += "=====   ====\n";
     return ret;
   }
 }
