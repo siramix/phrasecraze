@@ -30,7 +30,8 @@ public class SoundManager {
   private static SoundPool mSoundPool;
 
   public static enum Sound {
-    RIGHT, WRONG, SKIP, TEAMREADY, WIN, BACK, CONFIRM, GONG, BUZZ,
+    RIGHT, WRONG, SKIP, TEAMREADY, WIN, BACK, CONFIRM, GONG, BUZZ, TICK_NORMAL,
+    TICK_FAST, TICK_FASTER, TICK_FASTEST
   };
 
   /**
@@ -104,6 +105,14 @@ public class SoundManager {
         R.raw.fx_countdown_gong, 1);
     mSoundIds[Sound.BUZZ.ordinal()] = mSoundPool.load(mContext,
         R.raw.fx_buzzer, 1);
+    mSoundIds[Sound.TICK_NORMAL.ordinal()] = mSoundPool.load(mContext,
+        R.raw.fx_tick_normal, 1);
+    mSoundIds[Sound.TICK_FAST.ordinal()] = mSoundPool.load(mContext,
+        R.raw.fx_tick_fast, 1);
+    mSoundIds[Sound.TICK_FASTER.ordinal()] = mSoundPool.load(mContext,
+        R.raw.fx_tick_faster, 1);
+    mSoundIds[Sound.TICK_FASTEST.ordinal()] = mSoundPool.load(mContext,
+        R.raw.fx_tick_fastest, 1);
   }
 
   /**

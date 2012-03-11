@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -46,11 +45,6 @@ public class Title extends Activity {
    */
   public static String TAG = "Title";
 
-  /**
-   * flag used for stopping music OnStop() event.
-   */
-  private boolean mContinueMusic;
-
 
   /**
    * Dialog constant for first Rate Us message
@@ -71,7 +65,6 @@ public class Title extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "PlayGameListener OnClick()");
       }
-      mContinueMusic = true;
 
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
@@ -92,7 +85,6 @@ public class Title extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "PhrasesListener OnClick()");
       }
-      mContinueMusic = true;
 
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
@@ -112,7 +104,6 @@ public class Title extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "SettingsListener OnClick()");
       }
-      mContinueMusic = true;
 
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
@@ -132,8 +123,7 @@ public class Title extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "RulesListener OnClick()");
       }
-      mContinueMusic = true;
-
+      
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
       sm.playSound(SoundManager.Sound.CONFIRM);
@@ -154,7 +144,6 @@ public class Title extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "AboutUsListener OnClick()");
       }
-      mContinueMusic = false;
 
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(Title.this.getBaseContext());
@@ -180,19 +169,9 @@ public class Title extends Activity {
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.createMusicPlayer(this.getBaseContext(),
-        R.raw.mus_title);
-
-    mp.setLooping(true);
+    // Capture our play count to decide whether to show the Rate Us dialog
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
         .getBaseContext());
-    if (sp.getBoolean("music_enabled", true)) {
-      mp.start();
-    }
-
-    // Capture our play count to decide whether to show the Rate Us dialog
     int playCount = sp.getInt(getResources().getString(R.string.PREFKEY_PLAYCOUNT), 0);
     boolean showReminder = sp.getBoolean(getResources().getString(R.string.PREFKEY_SHOWREMINDER), false);
     
@@ -205,8 +184,6 @@ public class Title extends Activity {
         showDialog(DIALOG_RATEUS_SECOND);
       }
     }
-
-    mContinueMusic = false;
 
     // Setup the Main Title Screen view
     this.setContentView(R.layout.title);
@@ -231,53 +208,6 @@ public class Title extends Activity {
     ImageButton aboutusButton = (ImageButton) this
         .findViewById(R.id.Title_AboutUs);
     aboutusButton.setOnClickListener(mAboutUsListener);
-  }
-
-  /**
-   * Override onPause to prevent activity specific processes from running while
-   * app is in background
-   */
-  @Override
-  public void onPause() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onPause()");
-    }
-    super.onPause();
-    if (!mContinueMusic) {
-      PhraseCrazeApplication application = (PhraseCrazeApplication) this
-          .getApplication();
-      MediaPlayer mp = application.getMusicPlayer();
-      SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-          .getBaseContext());
-      if (mp.isPlaying() && sp.getBoolean("music_enabled", true)) {
-        mp.pause();
-      }
-    }
-  }
-
-  /**
-   * Override OnResume to resume activity specific processes
-   */
-  @Override
-  public void onResume() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onResume()");
-    }
-    super.onResume();
-
-    // Resume Title Music
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-        .getBaseContext());
-    if (sp.getBoolean("music_enabled", true)) {
-      if (!mp.isPlaying()) {
-        mp.start();
-      }
-    }
-    // set flag to let onStop handle music
-    mContinueMusic = false;
   }
 
   /**

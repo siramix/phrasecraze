@@ -19,17 +19,19 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+<!-- Commented out until we decide to do this
 	<PreferenceCategory android:title="Audio">
 	
 		<CheckBoxPreference 
-			android:title="Music"
-			android:summary="Enable all music"
+			android:title="Turn Ticks"
+			android:summary="Enable ticking during the turn."
 			android:defaultValue="true" 
-			android:key="music_enabled"
+			android:key="ticking_enabled"
 			/>
 			
 	</PreferenceCategory>
-
+-->
+ 
 	<PreferenceCategory android:title="Game">
 
 		<ListPreference 

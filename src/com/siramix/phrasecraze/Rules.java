@@ -20,11 +20,9 @@ package com.siramix.phrasecraze;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.TextView;
 
 /**
@@ -39,8 +37,6 @@ public class Rules extends Activity {
    */
   public static String TAG = "Rules";
 
-  private boolean mIsMusicPaused = false;
-  private boolean mContinueMusic = false;
 
   /**
    * onCreate - initializes the activity to display the rules.
@@ -51,8 +47,6 @@ public class Rules extends Activity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
-
-    mContinueMusic = false;
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -81,68 +75,4 @@ public class Rules extends Activity {
     rulePrefs.setText(prefBuilder);
   }
 
-  /**
-   * Override back button to carry music on back to the Title activity
-   */
-  @Override
-  public boolean onKeyUp(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
-        && !event.isCanceled()) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "BackKeyUp()");
-      }
-      // Flag to keep music playing
-      mContinueMusic = true;
-    }
-
-    return super.onKeyUp(keyCode, event);
-  }
-
-  /**
-   * Override onPause to prevent activity specific processes from running while
-   * app is in background
-   */
-  @Override
-  public void onPause() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onPause()");
-    }
-    super.onPause();
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    // If music is playing, we must pause it and flag to resume it onResume().
-    // This solves the problem where Rules was never playing music to begin with
-    // (which happens
-    // when entering Rules from Turn or TurnSummary
-    if (!mContinueMusic && mp.isPlaying()) {
-      mp.pause();
-      mIsMusicPaused = true;
-    }
-  }
-
-  /**
-   * Override OnResume to resume activity specific processes
-   */
-  @Override
-  public void onResume() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onResume()");
-    }
-    super.onResume();
-
-    // Resume Title Music -- Only do this if we paused DURING rules
-    if (mIsMusicPaused) {
-      PhraseCrazeApplication application = (PhraseCrazeApplication) this
-          .getApplication();
-      MediaPlayer mp = application.getMusicPlayer();
-      SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-          .getBaseContext());
-      if (!mp.isPlaying() && sp.getBoolean("music_enabled", true)) {
-        mp.start();
-      }
-    }
-
-    mContinueMusic = false;
-  }
 }

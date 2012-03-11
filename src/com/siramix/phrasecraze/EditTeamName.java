@@ -19,13 +19,9 @@ package com.siramix.phrasecraze;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -54,11 +50,6 @@ public class EditTeamName extends Activity {
   private Button mButtonAccept;
 
   /**
-   * flag used for stopping music OnStop() event.
-   */
-  private boolean mContinueMusic;
-
-  /**
    * Set the references to the elements from the layout file
    */
   private void setupViewReferences() {
@@ -78,8 +69,6 @@ public class EditTeamName extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Cancel onClick()");
       }
-      // Keep music playing
-      mContinueMusic = true;
       finish();
     }
   };
@@ -96,9 +85,6 @@ public class EditTeamName extends Activity {
 
       // Cache the team name
       String teamName = mEditTeamName.getText().toString();
-
-      // Keep music playing
-      mContinueMusic = true;
 
       // Pass back the team and the name
       Intent curIntent = new Intent();
@@ -150,64 +136,4 @@ public class EditTeamName extends Activity {
     mButtonAccept.setOnClickListener(mAcceptListener);
   }
 
-  /**
-   * Override back button to carry music on back to previous activity
-   */
-  @Override
-  public boolean onKeyUp(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
-        && !event.isCanceled()) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "BackKeyUp()");
-      }
-      // Keep music playing
-      mContinueMusic = true;
-    }
-    return super.onKeyUp(keyCode, event);
-  }
-
-  /**
-   * Override onPause to prevent music from playing while backgrounded
-   */
-  @Override
-  public void onPause() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onPause()");
-    }
-    super.onPause();
-    if (!mContinueMusic) {
-      PhraseCrazeApplication application = (PhraseCrazeApplication) this
-          .getApplication();
-      MediaPlayer mp = application.getMusicPlayer();
-      SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-          .getBaseContext());
-      if (mp.isPlaying() && sp.getBoolean("music_enabled", true)) {
-        mp.pause();
-      }
-    }
-  }
-
-  /**
-   * Override OnResume to resume activity specific processes
-   */
-  @Override
-  public void onResume() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onResume()");
-    }
-    super.onResume();
-
-    // Resume Title Music
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-        .getBaseContext());
-    if (!mp.isPlaying() && sp.getBoolean("music_enabled", true)) {
-      mp.start();
-    }
-
-    // set flag to let onPause handle music
-    mContinueMusic = false;
-  }
 }

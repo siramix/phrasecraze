@@ -21,14 +21,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
 
 /**
  * The Settings class handles the setting of exposed preferences
@@ -36,13 +34,9 @@ import android.view.KeyEvent;
  * @author Siramix Labs
  */
 public class Settings extends PreferenceActivity {
-
-  private boolean mContinueMusic = false; // Flag to continue music across
-                                          // Activities
   
   /**
-   * Watch the settings to update any changes (like start up music, reset
-   * subtext, etc.)
+   * Watch the settings to update any changes (reset subtext, etc.)
    */
   private OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -50,23 +44,7 @@ public class Settings extends PreferenceActivity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "onSharedPreferencesChanged()");
       }
-      if (key.equals("music_enabled")) {
-        // Start or stop the music
-        PhraseCrazeApplication application = (PhraseCrazeApplication) Settings.this
-            .getApplication();
-        MediaPlayer mp = application.getMusicPlayer();
-        if (sharedPreferences.getBoolean("music_enabled", true)) {
-          if (!mp.isPlaying()) {
-            mp.start();
-          }
-        } else {
-          if (mp.isPlaying()) {
-            mp.pause();
-          }
-        }
-      }
-
-      else if (key.equals("turn_timer")) {
+      if (key.equals("turn_timer")) {
         // When turn timer is changed, update the caption
         Settings.this.updateTimerLabel();
       }
@@ -87,8 +65,6 @@ public class Settings extends PreferenceActivity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
-
-    mContinueMusic = false;
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -122,23 +98,6 @@ public class Settings extends PreferenceActivity {
   }
 
   /**
-   * Override back button to carry music on back to the Title activity
-   */
-  @Override
-  public boolean onKeyUp(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
-        && !event.isCanceled()) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "BackKeyUp()");
-      }
-      // Keep music playing
-      mContinueMusic = true;
-    }
-
-    return super.onKeyUp(keyCode, event);
-  }
-
-  /**
    * Override onPause to prevent activity specific processes from running while
    * app is in background
    */
@@ -154,13 +113,6 @@ public class Settings extends PreferenceActivity {
         .getBaseContext());
     sp.unregisterOnSharedPreferenceChangeListener(mPrefListener);
 
-    // Pause music
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    if (!mContinueMusic && mp.isPlaying()) {
-      mp.pause();
-    }
   }
 
   /**
@@ -173,19 +125,10 @@ public class Settings extends PreferenceActivity {
     }
     super.onResume();
 
-    // Resume Title Music
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
         .getBaseContext());
-    if (!mp.isPlaying() && sp.getBoolean("music_enabled", true)) {
-      mp.start();
-    }
-
     // Register preference listener with SharedPreferences
     sp.registerOnSharedPreferenceChangeListener(mPrefListener);
 
-    mContinueMusic = false;
   }
 }
