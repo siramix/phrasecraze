@@ -412,15 +412,14 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
           .getApplication();
       GameManager game = application.getGameManager();
       Pack curPack = mSocialPacks.get(requestCode);
-      String packName = curPack.getName();
       // TODO: Catch the runtime exception
       
       game.getDeck().digestPack(curPack);
       showToast(mSocialPacks.get(requestCode).getName());
-      if (getPackPref(packName)) {
-        setPackPref(packName, false);
+      if (getPackPref(curPack)) {
+        setPackPref(curPack, false);
       } else {
-        setPackPref(packName, true);
+        setPackPref(curPack, true);
       }
     }
 
@@ -437,13 +436,12 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     //Tweet button handler
     public void onClick(View v) {
       Pack curPack = (Pack) v.getTag();
-      String packName = curPack.getName();
       mBillingService.requestPurchase(curPack.getPath(), "payload_test");
       
-      if (getPackPref(packName)) {
-        setPackPref(packName, false);
+      if (getPackPref(curPack)) {
+        setPackPref(curPack, false);
       } else {
-        setPackPref(packName, true);
+        setPackPref(curPack, true);
       }
       
       
@@ -514,27 +512,27 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
    * @param packName
    * @return
    */
-  public boolean getPackPref(String packName) {
+  public boolean getPackPref(Pack pack) {
     if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getPackPref(" + packName + ")");
+      Log.d(TAG, "getPackPref(" + pack.getName() + ")");
     }
     SharedPreferences packPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
-    return packPrefs.getBoolean(packName, false);
+    return packPrefs.getBoolean(String.valueOf(pack.getId()), false);
   }
   
   /**
    * Change the pack preference for the passed in pack to either on or off.
    * @param curPack the pack whose preference will be changed
    */
-  public void setPackPref(String packName, boolean onoff) {
+  public void setPackPref(Pack pack, boolean onoff) {
     if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "setPackPref(" + packName + "," + onoff + ")");
+      Log.d(TAG, "setPackPref(" + pack.getName() + "," + onoff + ")");
     }
     // Store the pack's boolean in the preferences file for pack preferences
     SharedPreferences packPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
     SharedPreferences.Editor packPrefsEdit = packPrefs.edit();
     
-    packPrefsEdit.putBoolean(packName, onoff);
+    packPrefsEdit.putBoolean(String.valueOf(pack.getId()), onoff);
     if (PhraseCrazeApplication.DEBUG && onoff == false) {
       Log.d(TAG, "pref set to false");
     } 

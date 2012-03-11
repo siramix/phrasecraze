@@ -111,16 +111,12 @@ public class ResponseHandler {
         // first.
         new Thread(new Runnable() {
             public void run() {
-                Deck deck = new Deck(context);
-                int quantity = deck.updatePurchase(
-                        orderId, productId, purchaseState, purchaseTime, developerPayload);
-
                 // This needs to be synchronized because the UI thread can change the
                 // value of sPurchaseObserver.
                 synchronized(ResponseHandler.class) {
                     if (sPurchaseObserver != null) {
                         sPurchaseObserver.postPurchaseStateChange(
-                                purchaseState, productId, quantity, purchaseTime, developerPayload);
+                                purchaseState, productId, 0, purchaseTime, developerPayload);
                     }
                 }
             }

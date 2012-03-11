@@ -193,10 +193,7 @@ public class GameManager {
     mCurrentTeam = mTeamIterator.next();
     mCurrentRound = 0;
     mScoreLimit = score;
-    //TODO put this in the right place (after pack select) -- 
-    // actually this will be problematic because we won't "know" which packs they want to 
-    // stick with until they hit start, unless we ask for packs before game settings
-    mDeck.topOffFrontCache();
+
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
   }
@@ -337,7 +334,7 @@ public class GameManager {
     }
     mTeamIterator = mTeams.iterator();
     //TODO Another questionable location for topping off the front cache
-    mDeck.topOffFrontCache();
+    maintainDeck();
     // clear current cards so that scoreboards don't add turn score in
     mCurrentCards.clear();
   }

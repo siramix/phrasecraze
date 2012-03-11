@@ -18,57 +18,68 @@
 package com.siramix.phrasecraze;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 
 import android.util.Log;
 
 /**
  * Helpful structure for holding pack metadata. You can also attach cards to
  * it, but that is not a requirement.
+ * 
+ * Two uses for Pack objects -- database inserts and as a helper during playtime.
+ * Refer to the member variables to see which fields are relevant for the database
+ * and which are relevant to playtime.
+ * 
  * @author Siramix Labs
  */
 public class Pack implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -3764144456280008930L;
+  
+  // Model fields for database
   private int mId;
   private String mName;
-  private String mUpdateMessage;
   private String mPath;
+  private String mDescription;
   private int mVersion;
-  private int mSize;
-  private LinkedList<Card> mCardList;
 
+  // Model fields for app at playtime
+  private int mSize;
+  private String mUpdateMessage;
+  private float mWeight;
+  private int mNumPlayablePhrases;
+  private int mNumToPullNext;
+  
   private static final String TAG = "Pack";
-  /**
   
   /**
    * Default constructor
    */
   public Pack() {
-    this(-1, "","","",-1,-1);
-    Log.d(TAG, "consructor Pack()");
+    this(-1, "","", "","",-1,-1);
+    Log.d(TAG, "null consructor Pack()");
   }
 
   /**
    * Standard constructor
    * @param name
    * @param updateMessage
+   * @param description 
    * @param path
    * @param version
    * @param size
    */
-  public Pack(int id, String name, String updateMessage, String path, int version, int size) {
+  public Pack(int id, String name, String path, String description,
+                      String updateMessage, int version, int size) {
     Log.d(TAG, "constructor Pack(args)");
     mId = id;
     mName = name;
-    mUpdateMessage = updateMessage;
     mPath = path;
+    mDescription = description;
+    mUpdateMessage = updateMessage;
     mVersion = version;
     mSize = size;
-    mCardList = null;
+    mWeight = -1;
+    mNumPlayablePhrases = -1;
   }
   
   /**
@@ -105,22 +116,88 @@ public class Pack implements Serializable {
   public int getVersion() {
     return mVersion;
   }
-
+  
   /**
-   * @return the number of cards that should be in the pack
+   * @return the description string of the pack
+   */
+  public String getDescription() {
+    return mDescription;
+  }
+  
+  /**
+   * @return the total number of phrases in the pack
    */
   public int getSize() {
     return mSize;
   }
-
+  
   /**
-   * @return the list of all cards attached to this pack (no promises).
+   * @return the weight of the pack relative to the entire deck
    */
-  public LinkedList<Card> getCardList() {
-    if(mCardList == null) {
-      mCardList = new LinkedList<Card>();
-    }
-    return mCardList;
+  public float getWeight() {
+    return mWeight;
   }
-
+  
+  /**
+   * @return the number of phrases in the pack that are playable
+   */
+  public int getNumPlayablePhrases() {
+    return mNumPlayablePhrases;
+  }
+  
+  /**
+   * @return the number of phrases to pull from the pack next
+   */
+  public int getNumToPullNext() {
+    return mNumToPullNext;
+  }
+  
+  /**
+   * @return the number of phrases "in play" at a
+   */
+  
+  /**
+   * Set the weight of the pack
+   * @param weight of the pack relative to all selected packs
+   */
+  public void setWeight(float weight) {
+    mWeight = weight;
+  }
+  
+  /**
+   * Set the number of playable phrases in the pack
+   * @param numPhrases number of phrases that are playable in the pack
+   */
+  public void setNumPlayablePhrases(int numPhrases) {
+    mNumPlayablePhrases = numPhrases;
+  }
+  /**
+   * Set the number of playable phrases in the pack
+   * @param numPhrases number of phrases that are playable in the pack
+   */
+  public void setNumToPullNext(int numPhrases) {
+    mNumToPullNext = numPhrases;
+  }
+  
+  /**
+   * Return a string representation of all pack data.
+   */
+  @Override
+  public String toString() {
+    String ret = "";
+    ret += "===== PACK DATA  ====\n";
+    ret += "---- db fields --\n";
+    ret += "   pack.Id: " + String.valueOf(mId) + "\n";
+    ret += "   pack.Name: " + mName + "\n";
+    ret += "   pack.Path: " + mPath + "\n";
+    ret += "   pack.Description: " + mDescription + "\n";
+    ret += "   pack.Size: " + String.valueOf(mSize) + "\n";
+    ret += "   pack.Version: " + String.valueOf(mVersion) + "\n";
+    ret += "---- runtime fields --\n";
+    ret += "   pack.UpdateMessage: " + mUpdateMessage + "\n";
+    ret += "   pack.Weight: " + String.valueOf(mWeight) + "\n";
+    ret += "   pack.NumPlayablePhrases: " + String.valueOf(mNumPlayablePhrases) + "\n";
+    ret += "   pack.NumToPullNext: " + String.valueOf(mNumToPullNext) + "\n";
+    return ret;
+  }
 }

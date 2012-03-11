@@ -9,17 +9,26 @@ list = []
 numlines = 0
 for line in sys.stdin.readlines():
     if "Dealing" in line:
-        parts = line.partition('::')
-        word = parts[2].partition('::')
-        list.append(word[0])
+        # Add our word to the list of words encountered
+        rhs = line.partition('::')[2]
+        word = rhs.partition('::')[0]
+        list.append(word)
         numlines += 1
 
 counts = {}
-sum = 0
+packs = {}
+wordsum = 0
 for word in list:
+    # Count each occurrance of each distinct word
     count = list.count(word)
     counts[word] = count
-    sum += 1
+    wordsum += 1
+    # Count each occurance of each distinct pack
+    packId = word.partition('PACK ')[2]
+    if packId in packs:
+        packs[packId] += 1
+    else:
+        packs[packId] = 0
 
 subcounts = {}
 for word in counts:
@@ -29,7 +38,8 @@ for word in counts:
         subcounts[countkey] += 1
     else:
         subcounts[countkey] = 1
-print "TOTAL: %d" % numlines
-print "SUM: %d" % sum
-print subcounts
+
+print "TOTAL WORDS: %d" % wordsum
+print "PACK COUNTS: ", packs
+print "DISTRIBUTION OF WORD_COUNTS: ", subcounts
     
