@@ -631,30 +631,7 @@ public class Deck {
       db.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
       db.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
     }
-    
-    /**
-     * Return the id a provided pack
-     * @param packName A string that matches a pack for which an ID is needed
-     * @return
-     */
-    public int getPackId(String packName) {
-      Log.d(TAG, "getPackId(" + packName + ")");
-      
-      mDatabase = getWritableDatabase();
-      
-      // TODO: Question for code review.  Better to do a join or two separate 
-      // Get our pack ID
-      String[] name = {packName};
-      Cursor res = mDatabase.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS, 
-          PackColumns.NAME + " = ?", name, null, null, null);
-      
-      int packid = -1;
-      if (res.moveToFirst()) {
-        packid = res.getInt(0);
-      }
-      res.close();
-      return packid;
-    }
+
     /**
      * Update playdate for all passed in phrase ids to current time
      * @param ids
