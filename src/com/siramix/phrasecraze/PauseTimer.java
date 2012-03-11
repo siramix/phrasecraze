@@ -35,7 +35,7 @@ public abstract class PauseTimer {
   /**
    * Tick frequencey of the timer
    */
-  private static final int TICK = 200;
+  private static final int TICK = 125;
   private boolean mTimerActive = false;
   private long mTimeRemaining;
   private CountDownTimer mTimer;

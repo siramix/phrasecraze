@@ -897,20 +897,44 @@ public class Turn extends Activity {
         // Update our text each second
         long shownTime = (mCounter.getTimeRemaining() / 1000) + 1;
         mCountdownText.setText(Long.toString(shownTime));
-
-        if (mCounter.getTimeRemaining() <= 30000
+        
+        if (mCounter.getTimeRemaining() <= 30020
             && mCounter.getTimeRemaining() > 15000) {
+          // Max and min response prevent "flam-tap" in ticks
+          // where a new tick plays too fast after the previous tap
+          long MIN_RESPONSE = 20;
+          long MAX_RESPONSE = 950;
+          long timeSinceTurnover = 30020 - mCounter.getTimeRemaining();
+          if (timeSinceTurnover > MAX_RESPONSE || timeSinceTurnover < MIN_RESPONSE )
+          {
           if (mTicker.getTickState() != TickStateMachine.TickStates.FAST) {
             mTicker.goToState(TickStateMachine.TickStates.FAST);
           }
-        } else if (mCounter.getTimeRemaining() <= 15000
+          }
+        } else if (mCounter.getTimeRemaining() <= 15020
             && mCounter.getTimeRemaining() > 5000) {
+          // Max and min response prevent "flam-tap" in ticks
+          // where a new tick plays too fast after the previous tap
+          long MIN_RESPONSE = 20;
+          long MAX_RESPONSE = 450;
+          long timeSinceTurnover = 15020 - mCounter.getTimeRemaining();
+          if (timeSinceTurnover > MAX_RESPONSE || timeSinceTurnover < MIN_RESPONSE )
+          {
           if (mTicker.getTickState() != TickStateMachine.TickStates.FASTER) {
             mTicker.goToState(TickStateMachine.TickStates.FASTER);
           }
-        } else if (mCounter.getTimeRemaining() <= 5000) {
+          }
+        } else if (mCounter.getTimeRemaining() <= 5020) {
+          long timeSinceTurnover = 5020 - mCounter.getTimeRemaining();
+          // Max and min response prevent "flam-tap" in ticks
+          // where a new tick plays too fast after the previous tap
+          long MIN_RESPONSE = 20;
+          long MAX_RESPONSE = 250;
+          if (timeSinceTurnover > MAX_RESPONSE || timeSinceTurnover < MIN_RESPONSE )
+          {
           if (mTicker.getTickState() != TickStateMachine.TickStates.FASTEST) {
             mTicker.goToState(TickStateMachine.TickStates.FASTEST);
+          }
           }
         }
         else
