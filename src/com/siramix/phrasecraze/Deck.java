@@ -589,12 +589,13 @@ public class Deck {
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
     public static long upsertPack(Pack pack, SQLiteDatabase db) {
-      Log.d(TAG, "insertPack()");
-      
+      Log.d(TAG, "upsertPack()");
       ContentValues packValues = new ContentValues();
       packValues.put(PackColumns._ID, pack.getId());
       packValues.put(PackColumns.NAME, pack.getName());
       packValues.put(PackColumns.PATH, pack.getPath());
+      packValues.put(PackColumns.DESCRIPTION, pack.getDescription());
+      packValues.put(PackColumns.SIZE, pack.getSize());
       packValues.put(PackColumns.VERSION, pack.getVersion());
       return db.replace(PackColumns.TABLE_NAME, null, packValues);
     }
