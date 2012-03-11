@@ -84,7 +84,7 @@ public class Deck {
   // TODO We need to look at ALL OF THE QUERIES in this class.
 
   // This is the sum of all cards in selected packs
-  private int mTotalSelectedCards;
+  private int mTotalPlayableCards;
   
   // After taking the top 1/DIVSOR phrases from a pack, throw back a percentage of them 
   private static final int THROW_BACK_PERCENTAGE = 0;
@@ -118,8 +118,7 @@ public class Deck {
     mFrontCache = new LinkedList<Card>();
     mSeenCards = new LinkedList<Card>();
     mSelectedPacks = new LinkedList<Pack>();
-    // Set all our deck properties to use for later calculations
-    setDeckProperties();
+    setPackData();
   }
 
   /**
@@ -208,8 +207,14 @@ public class Deck {
     }
   }
 
-  private void setDeckProperties() {
-
+  private void setPackData() {
+    instantiateSelectedPacks();
+    mTotalPlayableCards = 0;
+    for (Pack pack : mSelectedPacks) {
+      mTotalPlayableCards += pack.getNumPlayablePhrases();
+    }
+    
+    setPackWeights();
   }
   
   /**
@@ -222,85 +227,15 @@ public class Deck {
     Log.i(TAG, "filling back cache...");
     mDatabaseOpenHelper = new DeckOpenHelper(mContext);
     
-    // 1. Use the preferences to find the chosen packs to pull from 
-    setSelectedPacks();
+    // 1. Allocate lack to all selected packs
+    Log.d(TAG, "1. Allocate lack ");
+    int lack = Deck.BACK_CACHE_MAXSIZE - mBackCache.size();
+    allocatePhrasesToPull(lack);
     
-    // 2. Count how many phrases are selected and determine weights
-    Log.d(TAG, "2. Weight Calculations:");
-    mTotalSelectedCards = mDatabaseOpenHelper.countEligiblePhrases(mSelectedPacks);
-    int numSelectedPacks = mSelectedPacks.size();
-    float[] remainderWeights = new float[numSelectedPacks];
-    int[] targetNumForPacks = new int[numSelectedPacks];
-    int targetNumSum = 0;
-    int lack = 0;
-    
-    // 2.a. Calculate targetNumForPacks
-    for (int i=0; i<numSelectedPacks; ++i) {
-      int packSize = mDatabaseOpenHelper.countEligiblePhrases(mSelectedPacks.get(i));
-      remainderWeights[i] = (float) packSize / (float) mTotalSelectedCards;
-      Log.d(TAG, "** Total Selected Cards: " + mTotalSelectedCards);
-      Log.d(TAG, "** pack: " + mSelectedPacks.get(0).getName());
-      Log.d(TAG, "** pack size: " + packSize);
-      Log.d(TAG, "** pack weight: " + remainderWeights[i]);
-      lack = Deck.BACK_CACHE_MAXSIZE - mBackCache.size();
-      float portion = lack * remainderWeights[i];
-      targetNumForPacks[i] = (int) Math.floor(portion);
-      targetNumSum += targetNumForPacks[i];
-      remainderWeights[i] = portion - targetNumForPacks[i];
-      Log.d(TAG, "** remainder weight: " + remainderWeights[i]);
-      Log.d(TAG, "** target num: " + targetNumForPacks[i]);
-    }
-    
-    // 2.b. Allocate remainder based on the "cut off floor"
-    int remainder = lack - targetNumSum;
-    Log.d(TAG, "Assigning remainder of " + remainder + " cards.");
-    Random randomizer = new Random();
-    
-    // Build our array for determining odds
-    // ex:
-    //  0: 0.3 (30%)
-    //  1: 0.3-0.7 (40%)
-    //  2: 0.7-1.0 (30%)
-    final int RAND_PRECISION = 1000;
-    int[] odds = new int[numSelectedPacks];
-    odds[0] = (int) (remainderWeights[0]*RAND_PRECISION);
-    Log.d(TAG, "..first odds range: 0-" + odds[0]);
-    for (int i=1; i<odds.length; ++i) {
-      odds[i] = (int) ((remainderWeights[i-1] + remainderWeights[i])*RAND_PRECISION);
-      Log.d(TAG, "..next odds range at: " + odds[i-1] + "-" + odds[i]);
-    }
-    int rand = 0;
-    
-    // For each remaining card, randomly choose a pack to 
-    // pull from, weighting based on the floor weight
-    for (int i=0; i<remainder; ++i) {
-      // Use a precision of 3 decimals when selecting a pack
-      rand = randomizer.nextInt(remainder*RAND_PRECISION);
-      Log.d(TAG, "** random number is: " + rand);
-      
-      // iterate through pack remainderWeights to see which pack rand landed on
-      if ( rand <= odds[0]) {
-        ++targetNumForPacks[0];
-        Log.d(TAG, "...assigned a remainder to: " + mSelectedPacks.get(0));
-      }
-      else {  
-        for (int j=1; j<remainderWeights.length; ++j) {
-          int low = odds[j-1];
-          int high = odds[j];
-          if (rand > low && rand <= high)
-          {
-            ++targetNumForPacks[j];
-            Log.d(TAG, "...assigned a remainder to: " + mSelectedPacks.get(j));
-          }
-        }
-      }
-    }
-    
-    // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
-    Log.d(TAG, "3. Pull Calculations: ");
-    for (int i=0; i<numSelectedPacks; ++i) {
-      mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), mFrontCache, 
-                                                    targetNumForPacks[i]));
+    // 2. Fill our cache up with cards from all selected packs (using sorting algorithm)
+    Log.d(TAG, "2. Pull Calculations ");
+    for (int i=0; i<mSelectedPacks.size(); ++i) {
+      mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), mFrontCache));
     }
     
     // 4. Now shuffle
@@ -311,7 +246,8 @@ public class Deck {
     printDeck();
   }
   
-  private void setSelectedPacks() {
+  private void instantiateSelectedPacks() {
+    Log.d(TAG, "instantiateSelectedPacks()");
     SharedPreferences packPrefs = mContext.getSharedPreferences(
             Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
     Map<String, ?> packSelections = new HashMap<String, Boolean>();
@@ -322,18 +258,60 @@ public class Deck {
     //selectedPacks.add("allphrases");
     Pack pack1 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack1));
     Pack pack2 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack2));
+    pack1.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(pack1));
+    pack2.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(pack2));
     mSelectedPacks.add(pack1);
     mSelectedPacks.add(pack2);
     for (String packId : packSelections.keySet()) {
       if (packPrefs.getBoolean(packId, false) == true) {
-        mSelectedPacks.add(mDatabaseOpenHelper.getPackFromDB(packId));
+        Pack newPack = mDatabaseOpenHelper.getPackFromDB(packId);
+        newPack.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(newPack));
+        mSelectedPacks.add(newPack);
       }
     }
   }
   
+  // 2. Count how many phrases are selected and determine weights
+  private void setPackWeights() {
+    Log.d(TAG, "setPackWeights()");
+    Log.d(TAG, "** mTotalPlayableCards: " + mTotalPlayableCards);
 
-  private void calculateWeightings() {
+    for (Pack curPack : mSelectedPacks) {
+      curPack.setWeight((float) curPack.getNumPlayablePhrases() / (float) mTotalPlayableCards);
+      Log.d(TAG, curPack.toString());
+    }
+  }
+  
+  /**
+   * Determine based on a lack in the Back Cache how many
+   * cards should be pulled from each deck.  After determining
+   * the portion each Pack should pull, return the number of
+   * remaining unallocated cards.
+   * @param lack the number of cards the Back Cache is short by
+   * @return
+   */
+  private void allocatePhrasesToPull(int lack) {
+    Log.d(TAG, "allocatePhrasesToPull()");
+    Log.d(TAG, "** lack: " + lack);
     
+    // Divide up evenly the lack
+    int allocated = 0;
+    for (Pack curPack : mSelectedPacks) {
+      int numToPull = (int) Math.floor(lack * curPack.getWeight());
+      curPack.setNumToPullNext(numToPull);
+      allocated += numToPull;
+      Log.d(TAG, curPack.toString());
+    }
+    
+    // Allocate randomly any of the lack that remains
+    Random randomizer = new Random();
+    int remainder = lack - allocated;
+    Log.d(TAG, "Assigning remainder of " + remainder + " cards.");
+    for (int i=0; i<remainder; ++i) {
+      int packIndex = randomizer.nextInt(mSelectedPacks.size()-1);
+      Pack pack = mSelectedPacks.get(packIndex);
+      pack.setNumToPullNext(pack.getNumToPullNext()+1);
+    }
   }
   
   /**
@@ -408,8 +386,8 @@ public class Deck {
      * @param packFileNames The filenames of all packs to be counted
      * @return -1 if no phrases found, otherwise the number of phrases found
      */
-    public int countEligiblePhrases(LinkedList<Pack> packs) {
-      Log.d(TAG, "countEligiblePhrases(LinkedList<String>)");
+    public int countPlayablePhrases(LinkedList<Pack> packs) {
+      Log.d(TAG, "countPlayablePhrases(LinkedList<String>)");
       String[] args = new String[2];
 
       args[0] = buildPackIdString(packs);
@@ -435,8 +413,8 @@ public class Deck {
      * @param packFileNames The filenames of all packs to be counted
      * @return -1 if no phrases found, otherwise the number of phrases found
      */
-    public int countEligiblePhrases(Pack pack) {
-      Log.d(TAG, "countEligiblePhrases(pack");
+    public int countPlayablePhrases(Pack pack) {
+      Log.d(TAG, "countPlayablePhrases(pack");
       String[] args = new String[2];
 
       args[0] = String.valueOf(pack.getId());
@@ -695,8 +673,7 @@ public class Deck {
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(Pack pack, LinkedList<Card> cardsToExclude, 
-                                          int targetNum) {
+    public LinkedList<Card> pullFromPack(Pack pack, LinkedList<Card> cardsToExclude) {
       Log.d(TAG, "pullFromPack(" + pack.getName() + ")");
       mDatabase = getWritableDatabase();
       
@@ -718,17 +695,17 @@ public class Deck {
       // The number of cards to return from any given pack will use the following formula:
       // (WEIGHT OF PACK) * CACHE_SIZE + SURPLUS --> Then we randomly take out X cards where X = SURPLUS
       int packSize = res.getCount();
-      int surplusNum = (int) Math.floor( (float) targetNum * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
+      int surplusNum = (int) Math.floor( (float) pack.getNumToPullNext() * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
 
       Log.d(TAG, "** back cache size: " + Deck.BACK_CACHE_MAXSIZE);      
       Log.d(TAG, "** pack size: " + packSize);
-      Log.d(TAG, "** targetnum: " + targetNum);
+      Log.d(TAG, "** targetnum: " + pack.getNumToPullNext());
       Log.d(TAG, "** surplusnum: " + surplusNum);
       
       Log.d(TAG, "** ADDING PHRASES");
 
       // Add cards to what will be the Cache, including a surplus 
-      while (!res.isAfterLast() && res.getPosition() < (targetNum + surplusNum)) {
+      while (!res.isAfterLast() && res.getPosition() < (pack.getNumToPullNext() + surplusNum)) {
         returnCards.add(new Card(res.getInt(0), res.getString(1), res.getInt(2)));
         res.moveToNext();
       }

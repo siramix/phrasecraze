@@ -46,8 +46,9 @@ public class Pack implements Serializable {
   // Model fields for app at playtime
   private int mSize;
   private String mUpdateMessage;
-  private int mWeight;
+  private float mWeight;
   private int mNumPlayablePhrases;
+  private int mNumToPullNext;
   
   private static final String TAG = "Pack";
   
@@ -73,9 +74,9 @@ public class Pack implements Serializable {
     Log.d(TAG, "constructor Pack(args)");
     mId = id;
     mName = name;
-    mUpdateMessage = updateMessage;
-    mDescription = description;
     mPath = path;
+    mDescription = description;
+    mUpdateMessage = updateMessage;
     mVersion = version;
     mSize = size;
     mWeight = -1;
@@ -134,7 +135,7 @@ public class Pack implements Serializable {
   /**
    * @return the weight of the pack relative to the entire deck
    */
-  public int getWeight() {
+  public float getWeight() {
     return mWeight;
   }
   
@@ -146,10 +147,21 @@ public class Pack implements Serializable {
   }
   
   /**
+   * @return the number of phrases to pull from the pack next
+   */
+  public int getNumToPullNext() {
+    return mNumToPullNext;
+  }
+  
+  /**
+   * @return the number of phrases "in play" at a
+   */
+  
+  /**
    * Set the weight of the pack
    * @param weight of the pack relative to all selected packs
    */
-  public void setWeight(int weight) {
+  public void setWeight(float weight) {
     mWeight = weight;
   }
   
@@ -159,5 +171,35 @@ public class Pack implements Serializable {
    */
   public void setNumPlayablePhrases(int numPhrases) {
     mNumPlayablePhrases = numPhrases;
+  }
+  /**
+   * Set the number of playable phrases in the pack
+   * @param numPhrases number of phrases that are playable in the pack
+   */
+  public void setNumToPullNext(int numPhrases) {
+    mNumToPullNext = numPhrases;
+  }
+  
+  /**
+   * Return a string representation of all pack data.
+   */
+  @Override
+  public String toString() {
+    String ret = "";
+    ret += "===== PACK DATA  ====\n";
+    ret += "---- db fields --\n";
+    ret += "   pack.Id: " + String.valueOf(mId) + "\n";
+    ret += "   pack.Name: " + mName + "\n";
+    ret += "   pack.Path: " + mPath + "\n";
+    ret += "   pack.Description: " + mDescription + "\n";
+    ret += "   pack.Size: " + String.valueOf(mSize) + "\n";
+    ret += "   pack.Version: " + String.valueOf(mVersion) + "\n";
+    ret += "---- runtime fields --\n";
+    ret += "   pack.UpdateMessage: " + mUpdateMessage + "\n";
+    ret += "   pack.Weight: " + String.valueOf(mWeight) + "\n";
+    ret += "   pack.NumPlayablePhrases: " + String.valueOf(mNumPlayablePhrases) + "\n";
+    ret += "   pack.NumToPullNext: " + String.valueOf(mNumToPullNext) + "\n";
+    ret += "=====   ====\n";
+    return ret;
   }
 }
