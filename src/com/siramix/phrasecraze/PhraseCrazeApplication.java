@@ -18,8 +18,6 @@
 package com.siramix.phrasecraze;
 
 import android.app.Application;
-import android.content.Context;
-import android.media.MediaPlayer;
 import android.util.Log;
 
 /**
