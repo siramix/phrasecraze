@@ -10,14 +10,20 @@ public class PackColumns implements BaseColumns {
 
   public static final String PATH = "path";
 
+  public static final String DESCRIPTION = "description";
+
+  public static final String SIZE = "size";
+
   public static final String VERSION = "version";
 
-  public static final String[] COLUMNS = {_ID, NAME, PATH, VERSION};
+  public static final String[] COLUMNS = {_ID, NAME, DESCRIPTION, SIZE, PATH, VERSION};
 
   public static final String TABLE_CREATE = "CREATE TABLE " 
-      + TABLE_NAME + "( " + 
+      + TABLE_NAME + "( " +
           _ID + " INTEGER PRIMARY KEY, " +
-          NAME + " TEXT, " + 
-          PATH + " TEXT, " + 
+          NAME + " TEXT, " +
+          PATH + " TEXT, " +
+          DESCRIPTION + " TEXT, " +
+          SIZE + " INTEGER, " +
           VERSION + " INTEGER );";
 }

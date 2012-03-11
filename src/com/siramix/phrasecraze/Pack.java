@@ -25,50 +25,61 @@ import android.util.Log;
 /**
  * Helpful structure for holding pack metadata. You can also attach cards to
  * it, but that is not a requirement.
+ * 
+ * Two uses for Pack objects -- database inserts and as a helper during playtime.
+ * Refer to the member variables to see which fields are relevant for the database
+ * and which are relevant to playtime.
+ * 
  * @author Siramix Labs
  */
 public class Pack implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -3764144456280008930L;
+  
+  // Model fields for database
   private int mId;
   private String mName;
-  private String mUpdateMessage;
   private String mPath;
+  private String mDescription;
   private int mVersion;
-  private int mSize;
-  private LinkedList<Card> mCardList;
 
+  // Model fields for app at playtime
+  private int mSize;
+  private String mUpdateMessage;
+  private int mWeight;
+  private int mNumPlayablePhrases;
+  
   private static final String TAG = "Pack";
-  /**
   
   /**
    * Default constructor
    */
   public Pack() {
-    this(-1, "","","",-1,-1);
-    Log.d(TAG, "consructor Pack()");
+    this(-1, "","", "","",-1,-1);
+    Log.d(TAG, "null consructor Pack()");
   }
 
   /**
    * Standard constructor
    * @param name
    * @param updateMessage
+   * @param description 
    * @param path
    * @param version
    * @param size
    */
-  public Pack(int id, String name, String updateMessage, String path, int version, int size) {
+  public Pack(int id, String name, String path, String description,
+                      String updateMessage, int version, int size) {
     Log.d(TAG, "constructor Pack(args)");
     mId = id;
     mName = name;
     mUpdateMessage = updateMessage;
+    mDescription = description;
     mPath = path;
     mVersion = version;
     mSize = size;
-    mCardList = null;
+    mWeight = -1;
+    mNumPlayablePhrases = -1;
   }
   
   /**
@@ -105,22 +116,48 @@ public class Pack implements Serializable {
   public int getVersion() {
     return mVersion;
   }
-
+  
   /**
-   * @return the number of cards that should be in the pack
+   * @return the description string of the pack
+   */
+  public String getDescription() {
+    return mDescription;
+  }
+  
+  /**
+   * @return the total number of phrases in the pack
    */
   public int getSize() {
     return mSize;
   }
-
+  
   /**
-   * @return the list of all cards attached to this pack (no promises).
+   * @return the weight of the pack relative to the entire deck
    */
-  public LinkedList<Card> getCardList() {
-    if(mCardList == null) {
-      mCardList = new LinkedList<Card>();
-    }
-    return mCardList;
+  public int getWeight() {
+    return mWeight;
   }
-
+  
+  /**
+   * @return the number of phrases in the pack that are playable
+   */
+  public int getNumPlayablePhrases() {
+    return mNumPlayablePhrases;
+  }
+  
+  /**
+   * Set the weight of the pack
+   * @param weight of the pack relative to all selected packs
+   */
+  public void setWeight(int weight) {
+    mWeight = weight;
+  }
+  
+  /**
+   * Set the number of playable phrases in the pack
+   * @param numPhrases number of phrases that are playable in the pack
+   */
+  public void setNumPlayablePhrases(int numPhrases) {
+    mNumPlayablePhrases = numPhrases;
+  }
 }

@@ -89,14 +89,17 @@ public class Deck {
   // After taking the top 1/DIVSOR phrases from a pack, throw back a percentage of them 
   private static final int THROW_BACK_PERCENTAGE = 0;
   
-  // A list of backup cards used for refreshing the deck.  Will be filled after it reaches 0.
-  private LinkedList<Card> mBackupCache;
+  // A list of back cards used for refreshing the deck.  Will be filled after it reaches 0.
+  private LinkedList<Card> mBackCache;
   
   // Front Cache will be topped off every turn
   private LinkedList<Card> mFrontCache;
   
-  // Should be wiped every time the mBackupCache is cleared
+  // Should be wiped every time the mbackCache is cleared
   private LinkedList<Card> mSeenCards;
+  
+  // List of all packs selected for the Deck
+  private LinkedList<Pack> mSelectedPacks;
   
   private Context mContext;
   
@@ -111,10 +114,12 @@ public class Deck {
   public Deck(Context context) {
     mContext = context;
     mDatabaseOpenHelper = new DeckOpenHelper(context);
-    mBackupCache = new LinkedList<Card>();
+    mBackCache = new LinkedList<Card>();
     mFrontCache = new LinkedList<Card>();
     mSeenCards = new LinkedList<Card>();
-    mDatabaseOpenHelper.close();
+    mSelectedPacks = new LinkedList<Pack>();
+    // Set all our deck properties to use for later calculations
+    setDeckProperties();
   }
 
   /**
@@ -127,54 +132,16 @@ public class Deck {
     Card ret;
     if (mFrontCache.isEmpty()) {
       this.topOffFrontCache();
-      ret = mFrontCache.removeFirst();
-    } else {
-      ret = mFrontCache.removeFirst();
     }
+    ret = mFrontCache.removeFirst();
     Log.i(TAG, " Dealing ::" + ret.getTitle() + ":: Difficulty- " + ret.getDifficulty() 
           + " Pack: ???");
     mSeenCards.add(ret);
     return ret;
   }
-
-  public void topOffFrontCache() {
-    Log.d(TAG, "topOffFrontCache()");
-    int lack = FRONT_CACHE_MAXSIZE - mFrontCache.size();
-    Log.d(TAG, "*** FRONT CACHE MAX SIZE: " + FRONT_CACHE_MAXSIZE);
-    Log.d(TAG, "*** Front Cache Size: " + mFrontCache.size());
-    Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
-    Log.d(TAG, "*** Current Back Cache Size: " + String.valueOf(mBackupCache.size()));
-    
-    
-    for (int i=0; i<lack; ++i) {
-      mFrontCache.add(popBackupCache());
-    }
-    printCaches();
-  }
-
-  /**
-   * Get the card from the top of the cache
-   * 
-   * @return a card reference
-   */
-  private Card popBackupCache() {
-    Card ret;
-    // If we reach this scenario it means a lot of cards were looked at during a turn
-    // Otherwise it should be filled by a GameManager.fillbackupifLow call
-    if (mBackupCache.isEmpty()) {
-      mDatabaseOpenHelper.updatePlaydate(mSeenCards);
-      this.fillBackupCache();
-      ret = mBackupCache.removeFirst();
-      mSeenCards.clear();
-    } else {
-      ret = mBackupCache.removeFirst();
-    }
-    Log.d(TAG, " Grabbed " + ret.getTitle() + " from cache.");
-    return ret;
-  }
   
   /**
-   * If there aren't enough cards in the backup cache to fill the 
+   * If there aren't enough cards in the back cache to fill the 
    * front-facing cache at least once, fill up both caches.  This
    * should be called during downtime since it could be a costly
    * database pull.
@@ -182,12 +149,45 @@ public class Deck {
   public void fillCachesIfLow() {
     Log.d(TAG, "fillCachesIfLow()");
     topOffFrontCache();
-    if (mBackupCache.size() < FRONT_CACHE_MAXSIZE) {
-      Log.d(TAG, "...Back Cache size was low (" + mBackupCache.size() + "), filling...");
-      mBackupCache.clear();
-      fillBackupCache();
-      Log.d(TAG, "...filled. Back Cache size is now " + mBackupCache.size());
+    if (mBackCache.size() < FRONT_CACHE_MAXSIZE) {
+      Log.d(TAG, "...Back Cache size was low (" + mBackCache.size() + "), filling...");
+      mBackCache.clear();
+      fillBackCache();
+      Log.d(TAG, "...filled. Back Cache size is now " + mBackCache.size());
     }
+  }
+
+  private void topOffFrontCache() {
+    Log.d(TAG, "topOffFrontCache()");
+    int lack = FRONT_CACHE_MAXSIZE - mFrontCache.size();
+    Log.d(TAG, "*** FRONT CACHE MAX SIZE: " + FRONT_CACHE_MAXSIZE);
+    Log.d(TAG, "*** Front Cache Size: " + mFrontCache.size());
+    Log.d(TAG, "*** Lack: " + String.valueOf(lack));    
+    Log.d(TAG, "*** Current Back Cache Size: " + String.valueOf(mBackCache.size()));
+    
+    for (int i=0; i<lack; ++i) {
+      mFrontCache.add(popBackCache());
+    }
+    printDeck();
+  }
+
+  /**
+   * Get the card from the top of the cache
+   * 
+   * @return a card reference
+   */
+  private Card popBackCache() {
+    Card ret;
+    // If we reach this scenario it means a lot of cards were looked at during a turn
+    // Otherwise it should be filled by a GameManager.maintainDeck call
+    if (mBackCache.isEmpty()) {
+      mDatabaseOpenHelper.updatePlaydate(mSeenCards);
+      mSeenCards.clear();
+      this.fillBackCache();
+    }
+    ret = mBackCache.removeFirst();
+    Log.d(TAG, " Popped " + ret.getTitle() + " from cache.");
+    return ret;
   }
   
   /**
@@ -207,55 +207,28 @@ public class Deck {
       throw userException;
     }
   }
-  
-  // TODO This doesn't look like it's in use to me.  Just a bunch of Log statements.
-  /**
-   * Add a pack to the system
-   * @return an integer indicating the number of packs processed
-   */
-  public synchronized int updatePurchase(String orderId, String productId,
-          PurchaseState purchaseState, long purchaseTime, String developerPayload) {
-    Log.d(TAG, "updatePurchase()");
-    Log.d(TAG, "STUB");
-    Log.d(TAG, orderId);
-    Log.d(TAG, productId);
-    Log.d(TAG, purchaseState.name());
-    Log.d(TAG, Long.toString(purchaseTime));
-    Log.d(TAG, Long.toString(purchaseTime));
-    Log.d(TAG, developerPayload);
-    return 0;
-  }
 
+  private void setDeckProperties() {
+
+  }
+  
   /**
    * Prepare for a game by caching the phrases necessary for the entire game.  
    * Ideally we should only do this in between games. 
    */
-  protected void fillBackupCache() {
-    Log.d(TAG, "fillBackupCache()");
-    printCaches();
-    Log.i(TAG, "filling backup cache...");
+  private void fillBackCache() {
+    Log.d(TAG, "fillBackCache()");
+    printDeck();
+    Log.i(TAG, "filling back cache...");
     mDatabaseOpenHelper = new DeckOpenHelper(mContext);
-    SharedPreferences packPrefs = mContext.getSharedPreferences(
-                                  Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
-    Map<String, ?> packSelections = new HashMap<String, Boolean>();
-    packSelections = packPrefs.getAll();
     
     // 1. Use the preferences to find the chosen packs to pull from 
-    LinkedList<String> selectedPacks = new LinkedList<String>();
-    // TODO starter.json should be selected through the front end, not hard-coded here
-//  selectedPacks.add("starter");
-//  selectedPacks.add("allphrases");
-    selectedPacks.add("pack1");
-    selectedPacks.add("pack2");
-    for (String packPath : packSelections.keySet())
-      if (packPrefs.getBoolean(packPath, false) == true) {
-        selectedPacks.add(packPath);
-      }
+    setSelectedPacks();
     
     // 2. Count how many phrases are selected and determine weights
     Log.d(TAG, "2. Weight Calculations:");
-    mTotalSelectedCards = mDatabaseOpenHelper.countEligiblePhrases(selectedPacks);    
-    int numSelectedPacks = selectedPacks.size();
+    mTotalSelectedCards = mDatabaseOpenHelper.countEligiblePhrases(mSelectedPacks);
+    int numSelectedPacks = mSelectedPacks.size();
     float[] remainderWeights = new float[numSelectedPacks];
     int[] targetNumForPacks = new int[numSelectedPacks];
     int targetNumSum = 0;
@@ -263,15 +236,13 @@ public class Deck {
     
     // 2.a. Calculate targetNumForPacks
     for (int i=0; i<numSelectedPacks; ++i) {
-      LinkedList<String> packName = new LinkedList<String>();
-      packName.add(selectedPacks.get(i));
-      int packSize = mDatabaseOpenHelper.countEligiblePhrases(packName);
+      int packSize = mDatabaseOpenHelper.countEligiblePhrases(mSelectedPacks.get(i));
       remainderWeights[i] = (float) packSize / (float) mTotalSelectedCards;
       Log.d(TAG, "** Total Selected Cards: " + mTotalSelectedCards);
-      Log.d(TAG, "** pack: " + packName.get(0));
+      Log.d(TAG, "** pack: " + mSelectedPacks.get(0).getName());
       Log.d(TAG, "** pack size: " + packSize);
       Log.d(TAG, "** pack weight: " + remainderWeights[i]);
-      lack = Deck.BACK_CACHE_MAXSIZE - mBackupCache.size();
+      lack = Deck.BACK_CACHE_MAXSIZE - mBackCache.size();
       float portion = lack * remainderWeights[i];
       targetNumForPacks[i] = (int) Math.floor(portion);
       targetNumSum += targetNumForPacks[i];
@@ -310,7 +281,7 @@ public class Deck {
       // iterate through pack remainderWeights to see which pack rand landed on
       if ( rand <= odds[0]) {
         ++targetNumForPacks[0];
-        Log.d(TAG, "...assigned a remainder to: " + selectedPacks.get(0));
+        Log.d(TAG, "...assigned a remainder to: " + mSelectedPacks.get(0));
       }
       else {  
         for (int j=1; j<remainderWeights.length; ++j) {
@@ -319,7 +290,7 @@ public class Deck {
           if (rand > low && rand <= high)
           {
             ++targetNumForPacks[j];
-            Log.d(TAG, "...assigned a remainder to: " + selectedPacks.get(j));
+            Log.d(TAG, "...assigned a remainder to: " + mSelectedPacks.get(j));
           }
         }
       }
@@ -328,39 +299,62 @@ public class Deck {
     // 3. Fill our cache up with cards from all selected packs (using sorting algorithm)
     Log.d(TAG, "3. Pull Calculations: ");
     for (int i=0; i<numSelectedPacks; ++i) {
-      mBackupCache.addAll(mDatabaseOpenHelper.pullFromPack(selectedPacks.get(i), mFrontCache, 
+      mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), mFrontCache, 
                                                     targetNumForPacks[i]));
     }
     
     // 4. Now shuffle
-    Collections.shuffle(mBackupCache);
+    Collections.shuffle(mBackCache);
     
     mDatabaseOpenHelper.close();
     Log.i(TAG, "filled.");
-    printCaches();
+    printDeck();
+  }
+  
+  private void setSelectedPacks() {
+    SharedPreferences packPrefs = mContext.getSharedPreferences(
+            Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+    Map<String, ?> packSelections = new HashMap<String, Boolean>();
+    packSelections = packPrefs.getAll();
+    
+    // TODO starter.json should be selected through the front end, not hard-coded here
+    //selectedPacks.add("starter");
+    //selectedPacks.add("allphrases");
+    Pack pack1 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack1));
+    Pack pack2 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack2));
+    mSelectedPacks.add(pack1);
+    mSelectedPacks.add(pack2);
+    for (String packId : packSelections.keySet()) {
+      if (packPrefs.getBoolean(packId, false) == true) {
+        mSelectedPacks.add(mDatabaseOpenHelper.getPackFromDB(packId));
+      }
+    }
   }
   
 
+  private void calculateWeightings() {
+    
+  }
   
   /**
    * Debugging function.  Can be removed later.
    */
-  public void printCaches() {
-    Log.d(TAG, "printCaches...");
+  public void printDeck() {
+    Log.d(TAG, "printDeck...");
     Log.d(TAG, "========================");
-    Log.d(TAG, "BACKUP CACHE: ");
-    Log.d(TAG, "Backup Cache Size is " + mBackupCache.size());
-    for (int i=0; i<mBackupCache.size(); ++i) {
-      Log.d(TAG, "..." + mBackupCache.get(i).getTitle());
-    }
-    Log.d(TAG, "END BACKUP CACHE");
-    Log.d(TAG, "------------------------");
     Log.d(TAG, "FRONT CACHE: ");
     Log.d(TAG, "Front Cache Size is " + mFrontCache.size());
     for (int i=0; i<mFrontCache.size(); ++i) {
       Log.d(TAG, "..." + mFrontCache.get(i).getTitle());
     }
     Log.d(TAG, "END FRONT CACHE");
+    Log.d(TAG, "------------------------");
+    Log.d(TAG, "BACK CACHE: ");
+    Log.d(TAG, "Back Cache Size is " + mBackCache.size());
+    for (int i=0; i<mBackCache.size(); ++i) {
+      Log.d(TAG, "..." + mBackCache.get(i).getTitle());
+    }
+    Log.d(TAG, "END BACK CACHE");
     Log.d(TAG, "========================");
   }
   
@@ -414,48 +408,88 @@ public class Deck {
      * @param packFileNames The filenames of all packs to be counted
      * @return -1 if no phrases found, otherwise the number of phrases found
      */
-    public int countEligiblePhrases(LinkedList<String> packNames) {
-      Log.d(TAG, "countPhrases(LinkedList<String>)");
-      String[] packIds = {""};
+    public int countEligiblePhrases(LinkedList<Pack> packs) {
+      Log.d(TAG, "countEligiblePhrases(LinkedList<String>)");
+      String[] args = new String[2];
 
-      // TODO Should it be an exception if pack isn't found?
-      for (int i=0; i< packNames.size(); ++i) {
-        // Protect against packs not found (-1 is ID returned)
-        packIds[0] += (String.valueOf(getPackId(packNames.get(i))));
-        if (i < packNames.size()-1) {
-          packIds[0] += (",");
-        }
-      }
-
-      //TODO Just a thought, but if this is slowing things down a lot to have to find pack
-      // id frequently, maybe we can make the packID a fixed ID like we are doing with phrases§
+      args[0] = buildPackIdString(packs);
+      args[1] = buildDifficultyString();
+      
       mDatabase = getWritableDatabase();
       
       //TODO WHy the HELL didn't that work?
-      //Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
-          //PhraseColumns.PACK_ID + " IN (?)", packIds, null, null, null);
+//      Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+//          PhraseColumns.PACK_ID + " IN (?)", packIds, null, null, null);
       
       Cursor countQuery = mDatabase.rawQuery("SELECT * " + 
           " FROM " + PhraseColumns.TABLE_NAME + 
-          " WHERE " + PhraseColumns.PACK_ID + " IN (" + packIds[0] + ")" + 
-          "   AND " + PhraseColumns.DIFFICULTY + " IN (" + buildDifficultyString() + ")", null);
+          " WHERE " + PhraseColumns.PACK_ID + " IN (" + args[0] + ")" + 
+          "   AND " + PhraseColumns.DIFFICULTY + " IN (" + args[1] + ")", null);
       int count = countQuery.getCount();
 
       return count;
     }
 
     /**
+     * Returns an integer count of all phrases associated with the passed in pack names
+     * @param packFileNames The filenames of all packs to be counted
+     * @return -1 if no phrases found, otherwise the number of phrases found
+     */
+    public int countEligiblePhrases(Pack pack) {
+      Log.d(TAG, "countEligiblePhrases(pack");
+      String[] args = new String[2];
+
+      args[0] = String.valueOf(pack.getId());
+      args[1] = buildDifficultyString();
+      
+      mDatabase = getWritableDatabase();
+      
+      //TODO WHy the HELL didn't that work?
+//      Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+//          PhraseColumns.PACK_ID + " IN (?)", packIds, null, null, null);
+      
+      Cursor countQuery = mDatabase.rawQuery("SELECT * " + 
+          " FROM " + PhraseColumns.TABLE_NAME + 
+          " WHERE " + PhraseColumns.PACK_ID + " IN (" + args[0] + ")" + 
+          "   AND " + PhraseColumns.DIFFICULTY + " IN (" + args[1] + ")", null);
+      int count = countQuery.getCount();
+      
+      return count;
+    }
+    
+    /**
      * Count the number of packs which will likely be needed for setting up views
      * 
      * @return the number of packs
      */
     public int countPacks() {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "countPacks()");
-      }
+      Log.d(TAG, "countPacks()");
+
       mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PackColumns.TABLE_NAME);
       return ret;
+    }
+
+    /**
+     * Return a Pack instantiated using the entry in the Pack database.
+     * @param packId of the pack you wish to instantiate
+     * @return
+     */
+    public Pack getPackFromDB(String packId) {
+      Log.d(TAG, "getPackFromDB(" + String.valueOf(packId) + ")");
+      mDatabase = getReadableDatabase();
+      String[] id = new String[] {packId};
+      
+      Cursor packQuery = mDatabase.query(PackColumns.TABLE_NAME,PackColumns.COLUMNS, 
+          PackColumns._ID + "=?", id, null, null, null);
+      
+      Pack pack = null;
+      if (packQuery.moveToFirst()) {
+        pack = new Pack(packQuery.getInt(0), packQuery.getString(1), packQuery.getString(2),
+                        packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5));
+      }
+      packQuery.close();
+      return pack;
     }
 
     /**
@@ -467,9 +501,7 @@ public class Deck {
      * @param resId the resource of the pack file to digest
      */
     private void digestPackFromResource(SQLiteDatabase db, String packName, int resId) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Digesting pack from resource " + String.valueOf(resId));
-      }
+      Log.d(TAG, "Digesting pack from resource " + String.valueOf(resId));
 
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(
           mHelperContext.getResources().openRawResource(resId)));
@@ -485,10 +517,7 @@ public class Deck {
       }
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       
-      // TODO This random number is a random ID for any resource packs.  These
-      // are only called during testing so before release we should remove this code.
-      Random r = new Random();
-      Pack insertPack = new Pack(r.nextInt(2000), packName, "RESOURCE PACK", packName, 0, 1000);
+      Pack insertPack = new Pack(resId, packName, "RESOURCE PACK", "From Resource", null, 0, 1000);
       digestPackInternal(db, insertPack, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
@@ -639,7 +668,7 @@ public class Deck {
         Log.d(TAG, "updatePlaydate()");
       }
       
-      String ids = buildIdString(cardList);
+      String ids = buildCardIdString(cardList);
       
       //TODO for code review:  For some reason the database.update command was interpreting the
       // playcount+1 as a string and inserting that string instead of actually incrementing
@@ -666,23 +695,23 @@ public class Deck {
      * @param TOTAL_SELECTED
      * @return
      */
-    public LinkedList<Card> pullFromPack(String packname, LinkedList<Card> cardsToExclude, 
+    public LinkedList<Card> pullFromPack(Pack pack, LinkedList<Card> cardsToExclude, 
                                           int targetNum) {
-      Log.d(TAG, "pullFromPack(" + packname + ")");
+      Log.d(TAG, "pullFromPack(" + pack.getName() + ")");
       mDatabase = getWritableDatabase();
       
       LinkedList<Card> returnCards = new LinkedList<Card>();
-      int packid = getPackId(packname);
+      int packid = pack.getId();
       
-      String[] args = new String[2];
+      String[] args = new String[3];
       args[0] = String.valueOf(packid);
-      args[1] = buildIdString(cardsToExclude);
-      String dif = buildDifficultyString();
+      args[1] = buildCardIdString(cardsToExclude);
+      args[2] = buildDifficultyString();
       Log.d(TAG, "-- exclude str: " + args[1]);
       // Get the phrases from pack, sorted by playdate, and no need to get more than the CACHE_SIZE      
       Cursor res = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
           PhraseColumns.PACK_ID + " = " + args[0] + " AND " + PhraseColumns._ID + " NOT IN (" + args[1] + ") AND " +
-          PhraseColumns.DIFFICULTY + " IN (" + dif + ")", null, 
+          PhraseColumns.DIFFICULTY + " IN (" + args[2] + ")", null, 
           null, null, PhraseColumns.PLAY_DATE + " asc");
       res.moveToFirst();
       
@@ -691,7 +720,7 @@ public class Deck {
       int packSize = res.getCount();
       int surplusNum = (int) Math.floor( (float) targetNum * ((float) Deck.THROW_BACK_PERCENTAGE / 100.00));
 
-      Log.d(TAG, "** backup cache size: " + Deck.BACK_CACHE_MAXSIZE);      
+      Log.d(TAG, "** back cache size: " + Deck.BACK_CACHE_MAXSIZE);      
       Log.d(TAG, "** pack size: " + packSize);
       Log.d(TAG, "** targetnum: " + targetNum);
       Log.d(TAG, "** surplusnum: " + surplusNum);
@@ -728,9 +757,11 @@ public class Deck {
      * @param cardList
      * @return cardIds - 
      */
-    private String buildIdString(LinkedList<Card> cardList) {
-      String cardIds = "";
+    private String buildCardIdString(LinkedList<Card> cardList) {
+      Log.d(TAG, "buildCardIdString(cardList)");
       
+      String cardIds = "";
+      //TODO JOIN THIS
       for (int i=0; i< cardList.size(); ++i) {
         // Protect against packs not found (-1 is ID returned)
         cardIds += (String.valueOf(cardList.get(i).getId()));
@@ -741,12 +772,24 @@ public class Deck {
       return cardIds;
     }
     
+    private String buildPackIdString(LinkedList<Pack> packList) {
+      Log.d(TAG, "buildPackIdString(packList)");
+      String[] ids = new String[packList.size()];
+      for (int i=0; i<packList.size(); ++i) {
+        ids[i] = String.valueOf(packList.get(i).getId());
+        Log.d(TAG, "** " + ids[i]);
+      }
+      String ret = TextUtils.join(",", ids);
+      return ret;
+    }
+    
     /**
      * Helper method to build a comma-delimited string of the enabled
      * difficulties
      * @return Comma-delimited string of difficulties for db args
      */
     private String buildDifficultyString() {
+      Log.d(TAG, "buildDifficultyString()");
       SharedPreferences prefs = PreferenceManager
           .getDefaultSharedPreferences(mHelperContext);
       

@@ -143,6 +143,7 @@ public class GameSetup extends Activity {
       while (keepLooping) {
         try {
           GameManager gm = new GameManager(GameSetup.this);
+          gm.maintainDeck();
           gm.startGame(mTeamList, mScoreLimit, isScoringModeAssisted());
           application.setGameManager(gm);
           keepLooping = false;

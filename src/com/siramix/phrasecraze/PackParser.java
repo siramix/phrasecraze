@@ -70,9 +70,10 @@ public class PackParser {
     String curName = curPack.getString("name");
     String curPath = curPack.getString("path");
     String curUpdateMessage = curPack.getString("update_message");
+    String curDescription = curPack.getString("description");
     int curVersion = curPack.getInt("version");
     int curSize = curPack.getInt("size");
-    Pack pack = new Pack(curId, curName, curUpdateMessage, curPath, curVersion, curSize);
+    Pack pack = new Pack(curId, curName, curUpdateMessage, curDescription, curPath, curVersion, curSize);
     return pack;
   }
 
