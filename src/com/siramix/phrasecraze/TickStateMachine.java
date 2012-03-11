@@ -52,38 +52,43 @@ public class TickStateMachine {
     SoundManager sm = SoundManager.getInstance(mContext);
     if (mTimerSoundId > 0)
     {
-      sm.stopSound(mTimerSoundId);
+      sm.stopTick(mTimerSoundId);
       mTimerSoundId = -1;
     }
     // Start next sound
     switch(state)
     {
       case NORMAL:
-        Log.d("StateMachine", "GoTo Normal");
-        mTimerSoundId = sm.playLoop(SoundManager.Sound.TICK_NORMAL);
+        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Normal");
+        mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_NORMAL);
         break;
       case FAST:
-        Log.d("StateMachine", "GoTo Fast");
-        mTimerSoundId = sm.playLoop(SoundManager.Sound.TICK_FAST);
+        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Fast");
+        mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_FAST);
         break;
       case FASTER:
-        Log.d("StateMachine", "GoTo Faster");
-        mTimerSoundId = sm.playLoop(SoundManager.Sound.TICK_FASTER);
+        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Faster");
+        mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_FASTER);
         break;
       case FASTEST:
-        Log.d("StateMachine", "GoTo Fastest");
-        mTimerSoundId = sm.playLoop(SoundManager.Sound.TICK_FASTEST);
+        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Fastest");
+        mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_FASTEST);
         break;
     }
   }
   
   public void pause()
   {
-    mResumeToState = mTickState;
-    mTickState = TickStates.PAUSED;
-    SoundManager sm = SoundManager.getInstance(mContext);
-    sm.stopSound(mTimerSoundId);
-    mTimerSoundId = -1;
+    // Don't try to repause if paused
+    if( mTickState != TickStates.PAUSED)
+    {
+      Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo PAUSED");
+      mResumeToState = mTickState;
+      mTickState = TickStates.PAUSED;
+      SoundManager sm = SoundManager.getInstance(mContext);
+      sm.stopTick(mTimerSoundId);
+      mTimerSoundId = -1;
+    }
   }
   
   public void resume()

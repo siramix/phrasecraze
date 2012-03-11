@@ -897,54 +897,88 @@ public class Turn extends Activity {
         // Update our text each second
         long shownTime = (mCounter.getTimeRemaining() / 1000) + 1;
         mCountdownText.setText(Long.toString(shownTime));
-        
-        if (mCounter.getTimeRemaining() <= 30020
-            && mCounter.getTimeRemaining() > 15000) {
-          // Max and min response prevent "flam-tap" in ticks
-          // where a new tick plays too fast after the previous tap
-          long MIN_RESPONSE = 20;
-          long MAX_RESPONSE = 950;
-          long timeSinceTurnover = 30020 - mCounter.getTimeRemaining();
-          if (timeSinceTurnover > MAX_RESPONSE || timeSinceTurnover < MIN_RESPONSE )
-          {
-          if (mTicker.getTickState() != TickStateMachine.TickStates.FAST) {
-            mTicker.goToState(TickStateMachine.TickStates.FAST);
+
+        if (mCounter.getTimeRemaining() <= 60020
+            && mCounter.getTimeRemaining() > 30020) {
+          if (mTicker.getTickState() == TickStateMachine.TickStates.PAUSED) {
+            long millis = mCounter.getTimeRemaining() % 2000;
+            // resume when near 1s marks
+            if (millis > 1900 || millis < 100) {
+              mTicker.resume();
+            }
+          } else {
+            // Max and min response prevent "flam-tap" in ticks
+            // where a new tick plays too fast after the previous tap
+            long MIN_RESPONSE = 20;
+            long MAX_RESPONSE = 950;
+            long timeSinceTurnover = 30020 - mCounter.getTimeRemaining();
+            if (timeSinceTurnover > MAX_RESPONSE
+                || timeSinceTurnover < MIN_RESPONSE) {
+              if (mTicker.getTickState() != TickStateMachine.TickStates.NORMAL) {
+                mTicker.goToState(TickStateMachine.TickStates.NORMAL);
+              }
+            }
           }
+        } else if (mCounter.getTimeRemaining() <= 30020
+            && mCounter.getTimeRemaining() > 15020) {
+          if (mTicker.getTickState() == TickStateMachine.TickStates.PAUSED) {
+            long millis = mCounter.getTimeRemaining() % 1000;
+            // resume when near second marks
+            if (millis > 900 || millis < 100) {
+              mTicker.resume();
+            }
+          } else {
+            long MIN_RESPONSE = 20;
+            long MAX_RESPONSE = 950;
+            long timeSinceTurnover = 30020 - mCounter.getTimeRemaining();
+            if (timeSinceTurnover > MAX_RESPONSE
+                || timeSinceTurnover < MIN_RESPONSE) {
+              if (mTicker.getTickState() != TickStateMachine.TickStates.FAST) {
+                mTicker.goToState(TickStateMachine.TickStates.FAST);
+              }
+            }
           }
         } else if (mCounter.getTimeRemaining() <= 15020
-            && mCounter.getTimeRemaining() > 5000) {
-          // Max and min response prevent "flam-tap" in ticks
-          // where a new tick plays too fast after the previous tap
-          long MIN_RESPONSE = 20;
-          long MAX_RESPONSE = 450;
-          long timeSinceTurnover = 15020 - mCounter.getTimeRemaining();
-          if (timeSinceTurnover > MAX_RESPONSE || timeSinceTurnover < MIN_RESPONSE )
-          {
-          if (mTicker.getTickState() != TickStateMachine.TickStates.FASTER) {
-            mTicker.goToState(TickStateMachine.TickStates.FASTER);
-          }
+            && mCounter.getTimeRemaining() > 5020) {
+          if (mTicker.getTickState() == TickStateMachine.TickStates.PAUSED) {
+            long millis = mCounter.getTimeRemaining() % 500;
+            // resume when near half second marks
+            if (millis > 450 || millis < 50) {
+              mTicker.resume();
+            }
+          } else {
+            long MIN_RESPONSE = 20;
+            long MAX_RESPONSE = 450;
+            long timeSinceTurnover = 15020 - mCounter.getTimeRemaining();
+            if (timeSinceTurnover > MAX_RESPONSE
+                || timeSinceTurnover < MIN_RESPONSE) {
+              if (mTicker.getTickState() != TickStateMachine.TickStates.FASTER) {
+                mTicker.goToState(TickStateMachine.TickStates.FASTER);
+              }
+            }
           }
         } else if (mCounter.getTimeRemaining() <= 5020) {
-          long timeSinceTurnover = 5020 - mCounter.getTimeRemaining();
-          // Max and min response prevent "flam-tap" in ticks
-          // where a new tick plays too fast after the previous tap
-          long MIN_RESPONSE = 20;
-          long MAX_RESPONSE = 250;
-          if (timeSinceTurnover > MAX_RESPONSE || timeSinceTurnover < MIN_RESPONSE )
-          {
-          if (mTicker.getTickState() != TickStateMachine.TickStates.FASTEST) {
-            mTicker.goToState(TickStateMachine.TickStates.FASTEST);
+          if (mTicker.getTickState() == TickStateMachine.TickStates.PAUSED) {
+            long millis = mCounter.getTimeRemaining() % 250;
+            // resume when near quarter second marks
+            if (millis > 200 || millis < 50) {
+              mTicker.resume();
+            }
+          } else {
+            long timeSinceTurnover = 5020 - mCounter.getTimeRemaining();
+            long MIN_RESPONSE = 20;
+            long MAX_RESPONSE = 250;
+            if (timeSinceTurnover > MAX_RESPONSE
+                || timeSinceTurnover < MIN_RESPONSE) {
+              if (mTicker.getTickState() != TickStateMachine.TickStates.FASTEST) {
+                mTicker.goToState(TickStateMachine.TickStates.FASTEST);
+              }
+            }
           }
-          }
+
         }
-        else
-        {
-          if (mTicker.getTickState() != TickStateMachine.TickStates.NORMAL) {
-            mTicker.goToState(TickStateMachine.TickStates.NORMAL);
-          }
-        }
-        
-        }
+
+      }
 
     };
 
@@ -1196,7 +1230,8 @@ public class Turn extends Activity {
       sm.playSound(SoundManager.Sound.BACK);
       
       // Resume sounds
-      mTicker.resume();
+      // Sounds resume at good intervals on timer tick
+      //mTicker.resume();
 
       mViewFlipper.setVisibility(View.VISIBLE);
 
