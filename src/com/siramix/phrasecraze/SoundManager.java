@@ -28,9 +28,14 @@ public class SoundManager {
   private static AudioManager mAudioManager;
   private static Context mContext;
   private static SoundPool mSoundPool;
+  private static SoundPool mTickSoundPool;
 
   public static enum Sound {
-    RIGHT, WRONG, SKIP, TEAMREADY, WIN, BACK, CONFIRM, GONG, BUZZ,
+    RIGHT, WRONG, SKIP, TEAMREADY, WIN, BACK, CONFIRM, GONG, BUZZ
+  };
+  
+  public static enum Ticks {
+    TICK_NORMAL, TICK_FAST, TICK_FASTER, TICK_FASTEST
   };
 
   /**
@@ -42,6 +47,11 @@ public class SoundManager {
    * Array for storing system sound ids for the sounds loaded into the pool
    */
   private static int[] mSoundIds;
+  
+  /**
+   * Array for storing tick sound ids
+   */
+  private static int[] mTickIds;
 
   /**
    * Default constructor
@@ -77,6 +87,7 @@ public class SoundManager {
     mAudioManager = (AudioManager) mContext
         .getSystemService(Context.AUDIO_SERVICE);
     mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+    mTickSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 100);
   }
 
   /**
@@ -104,6 +115,16 @@ public class SoundManager {
         R.raw.fx_countdown_gong, 1);
     mSoundIds[Sound.BUZZ.ordinal()] = mSoundPool.load(mContext,
         R.raw.fx_buzzer, 1);
+    
+    mTickIds = new int[Ticks.values().length];
+    mTickIds[Ticks.TICK_NORMAL.ordinal()] = mTickSoundPool.load(mContext,
+        R.raw.fx_tick_normal, 1);
+    mTickIds[Ticks.TICK_FAST.ordinal()] = mTickSoundPool.load(mContext,
+        R.raw.fx_tick_fast, 1);
+    mTickIds[Ticks.TICK_FASTER.ordinal()] = mTickSoundPool.load(mContext,
+        R.raw.fx_tick_faster, 1);
+    mTickIds[Ticks.TICK_FASTEST.ordinal()] = mTickSoundPool.load(mContext,
+        R.raw.fx_tick_fastest, 1);
   }
 
   /**
@@ -146,5 +167,27 @@ public class SoundManager {
    */
   public void stopSound(int soundId) {
     mSoundPool.stop(soundId);
+  }
+  
+  /*
+   * Plays the specified Tick sound effect looped on the TickSoundPool.
+   * @param tick - Tick sound effect to play
+   */
+  public int playTickLooped(Ticks tick)
+  {
+    // Volume% = current volume / max volume
+    float volume = (float) mAudioManager
+        .getStreamVolume(AudioManager.STREAM_MUSIC)
+        / mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    return mTickSoundPool.play(mTickIds[tick.ordinal()], volume, volume, 1, -1,
+        1.0f);
+  }
+
+  /*
+   * Stops specified Tick sound effect on the TickSoundPool
+   * @param soundId - tick sound effect ID to stop
+   */
+  public void stopTick(int soundId) {
+    mTickSoundPool.stop(soundId);
   }
 }

@@ -28,11 +28,8 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -74,9 +71,6 @@ public class GameSetup extends Activity {
 
   // Preference keys (indicating quadrant)
   public static final String PREFS_NAME = "gamesetupprefs";
-
-  // Flag to play music into the next Activity
-  private boolean mContinueMusic = false;
   
   private Toast mHelpToast = null;
 
@@ -155,10 +149,6 @@ public class GameSetup extends Activity {
       // Launch into Turn activity
       startActivity(new Intent(getApplication().getString(R.string.IntentTurn),
           getIntent().getData()));
-
-      // Stop the music
-      MediaPlayer mp = application.getMusicPlayer();
-      mp.stop();
     }
   };
 
@@ -253,8 +243,6 @@ public class GameSetup extends Activity {
           getString(R.string.IntentEditTeamName), getIntent().getData());
       editTeamNameIntent.putExtra(getString(R.string.teamBundleKey), team);
       startActivityForResult(editTeamNameIntent, EDITTEAMNAME_REQUEST_CODE);
-
-      mContinueMusic = true;
     }
   };
 
@@ -363,9 +351,6 @@ public class GameSetup extends Activity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreate()");
     }
-
-    // Initialize flag to carry music from one activity to the next
-    mContinueMusic = false;
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -488,27 +473,7 @@ public class GameSetup extends Activity {
   }
 
   /**
-   * Override back button to carry music on back to the Title activity
-   * 
-   * @return whether the event has been consumed or not
-   */
-  @Override
-  public boolean onKeyUp(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
-        && !event.isCanceled()) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "BackKeyUp()");
-      }
-      // Flag to keep music playing
-      GameSetup.this.mContinueMusic = true;
-    }
-
-    return super.onKeyUp(keyCode, event);
-  }
-
-  /**
-   * Override onPause to prevent activity specific processes from running while
-   * app is in background
+   * Handles storing preferences when paused
    */
   @Override
   public void onPause() {
@@ -519,40 +484,8 @@ public class GameSetup extends Activity {
     }
     super.onPause();
 
-    // Pause the music unless going to an Activity where it is supposed to
-    // continue through
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    if (!mContinueMusic && mp.isPlaying()) {
-      mp.pause();
-    }
-
     // Store off game's attributes as preferences. This is done in Pause to
     // maintain selections when they press "back" to main title then return.
     savePreferences();
-  }
-
-  /**
-   * Override OnResume to resume activity specific processes
-   */
-  @Override
-  public void onResume() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "onResume()");
-    }
-    super.onResume();
-
-    // Resume Title Music
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-        .getBaseContext());
-    if (!mp.isPlaying() && sp.getBoolean("music_enabled", true)) {
-      mp.start();
-    }
-
-    mContinueMusic = false;
   }
 }

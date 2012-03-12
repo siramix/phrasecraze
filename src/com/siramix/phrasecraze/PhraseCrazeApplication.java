@@ -18,8 +18,6 @@
 package com.siramix.phrasecraze;
 
 import android.app.Application;
-import android.content.Context;
-import android.media.MediaPlayer;
 import android.util.Log;
 
 /**
@@ -44,11 +42,6 @@ public class PhraseCrazeApplication extends Application {
    * The GameManager for all of PhraseCraze
    */
   private GameManager mGameManager;
-
-  /**
-   * MediaPlayer for music
-   */
-  private MediaPlayer mMediaPlayer;
 
   /**
    * Default constructor
@@ -83,36 +76,6 @@ public class PhraseCrazeApplication extends Application {
       Log.d(TAG, "SetGameManager()");
     }
     this.mGameManager = gm;
-  }
-
-  /**
-   * @param context
-   *          in which to create the media player
-   * @param id
-   *          of the music to play
-   * @return a reference to the media player
-   */
-  public MediaPlayer createMusicPlayer(Context context, int id) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "CreateMusicPlayer(" + context + "," + id + ")");
-    }
-    // Clean up resources. This fixed a leak issue caused by starting many games
-    // over and over.
-    if (mMediaPlayer != null) {
-      mMediaPlayer.release();
-    }
-    mMediaPlayer = MediaPlayer.create(context, id);
-    return mMediaPlayer;
-  }
-
-  /**
-   * @return a reference to the current media player
-   */
-  public MediaPlayer getMusicPlayer() {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "GetMusicPlayer()");
-    }
-    return mMediaPlayer;
   }
 
 }

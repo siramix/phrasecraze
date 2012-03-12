@@ -18,7 +18,6 @@
 package com.siramix.phrasecraze;
 
 import java.util.List;
-
 import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,8 +32,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.GestureDetector;
@@ -128,12 +125,6 @@ public class Turn extends Activity {
   private boolean mIsBack;
 
   /**
-   * Boolean representing whether music is enabled or not. Reduces calls to
-   * getprefs
-   */
-  private boolean mMusicEnabled;
-
-  /**
    * Boolean representing whether gestures are enabled or not. Reduces calls to
    * getprefs
    */
@@ -163,14 +154,9 @@ public class Turn extends Activity {
   private boolean mCorrectEnabled;
 
   /**
-   * Boolean representing whether the countdown ticking has already been
-   * started.
-   */
-  private boolean mIsTicking = false;
-
-  /**
-   * The time in miliseconds left when the ticking music began.
-   */
+   * Object that tracks ticking state
+   */  
+  private TickStateMachine mTicker;
 
   /**
    * Unique IDs for Options menu
@@ -377,39 +363,7 @@ public class Turn extends Activity {
         Log.d(TAG, "PauseListener OnClick()");
       }
 
-      // If music is disabled, just resume the game immediately (don't wait for
-      // music to seek unless it's begun)
-      if (mTurnIsOver || (!mMusicEnabled && !mIsTicking)) {
-        // Turn is over when timer reaches 0. At that point, we should just not
-        // resume music
-        Turn.this.resumeGame();
-      } else if (mMusicEnabled || mIsTicking) {
-        if (PhraseCrazeApplication.DEBUG) {
-          Log.d(TAG, "unpause_OnClick ()");
-        }
-        // Resume must wait for music to seek back to the correct elapsed time
-        PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
-            .getApplication();
-        MediaPlayer mp = application.getMusicPlayer();
-        int elapsedtime;
-        if (mMusicEnabled) {
-          elapsedtime = mGameManager.getTurnTime()
-              - (int) mCounter.getTimeRemaining();
-        } else {
-          elapsedtime = 10000 - (int) mCounter.getTimeRemaining();
-          if (PhraseCrazeApplication.DEBUG) {
-            Log.d(TAG, "Resume ticking at " + elapsedtime);
-          }
-        }
-        // Return to the elapsed time
-        mp.seekTo(elapsedtime);
-        mp.setOnSeekCompleteListener(new TurnMusicListener());
-      }
-
-      // Hide overlays here so that they can't report multiple OnClick'ed while
-      // music seeks
-      mPauseOverlay.setVisibility(View.INVISIBLE);
-      mPauseTextLayout.setVisibility(View.INVISIBLE);
+      Turn.this.resumeGame();
     }
   }; // End CorrectListener
 
@@ -774,11 +728,13 @@ public class Turn extends Activity {
     // Hide buttons
     mButtonGroup.startAnimation(this.showButtonsAnim(false));
 
-    // Only play gong if music is off
-    if (!mMusicEnabled) {
-      SoundManager sm = SoundManager.getInstance(this.getBaseContext());
-      sm.playSound(SoundManager.Sound.GONG);
-    }
+    // Stop ticker
+    mTicker.pause();
+    
+    // Play gong at end
+    SoundManager sm = SoundManager.getInstance(this.getBaseContext());
+    sm.playSound(SoundManager.Sound.GONG);
+
 
     TextView timer = (TextView) this.findViewById(R.id.Turn_Timer);
     timer.setVisibility(View.INVISIBLE);
@@ -940,22 +896,56 @@ public class Turn extends Activity {
         // Update our text each second
         long shownTime = (mCounter.getTimeRemaining() / 1000) + 1;
         mCountdownText.setText(Long.toString(shownTime));
+        long[] VAMPTIMES = {60020, 30020, 15020, 5020};
+        
+        // Check if time remaining warrants tick changes
+        if (mCounter.getTimeRemaining() <= VAMPTIMES[0]
+            && mCounter.getTimeRemaining() > VAMPTIMES[1]) {
+          checkChangeState(2000, VAMPTIMES[0], TickStateMachine.TickStates.NORMAL);
+        } else if (mCounter.getTimeRemaining() <= VAMPTIMES[1]
+            && mCounter.getTimeRemaining() > VAMPTIMES[2]) {
+          checkChangeState(1000, VAMPTIMES[1], TickStateMachine.TickStates.FAST);
+        } else if (mCounter.getTimeRemaining() <= VAMPTIMES[2]
+            && mCounter.getTimeRemaining() > VAMPTIMES[3]) {
+          checkChangeState(500, VAMPTIMES[2], TickStateMachine.TickStates.FASTER);
+        } else if (mCounter.getTimeRemaining() <= VAMPTIMES[3]) {
+          checkChangeState(250, VAMPTIMES[3], TickStateMachine.TickStates.FASTEST);
+        }
 
-        // When music is not enabled, use the ticking sound
-        if (!mMusicEnabled && !mIsTicking) {
-          if (shownTime == 10) {
-            if (PhraseCrazeApplication.DEBUG) {
-              Log.d(TAG, "Queue tick 'music' ");
+      }
+      
+      /**
+       * Helper function to check if the timer is in a valid range that the TickStateMachine
+       * can change states.
+       * @param interval - interval between ticks, based on the duration of the sound loop.
+       * @param changeTime - the target time at which the state should change, based on the interval.
+       * @param newState - the state to change to
+       */
+      private void checkChangeState(long interval, long changeTime, TickStateMachine.TickStates newState)
+      {
+        // When the state machine is paused, we want to resume it at a known good time, based
+        // on the sound effect's interval. So if a sound loops every 2s, we should try to start
+        // the sound effect again when the timer is close to a multiple of 2.
+        if (mTicker.getTickState() == TickStateMachine.TickStates.PAUSED) {
+          long millis = mCounter.getTimeRemaining() % interval;
+          // resume when near 1s marks
+          if (millis > interval*0.95 || millis < interval*0.05) {
+            mTicker.resume();
+          }
+        } else {
+          // Max and min response prevent "flam-tap" in ticks
+          // where a new tick plays too fast after the previous tap
+          float MIN_RESPONSE = 20;
+          float MAX_RESPONSE = interval*0.95f;
+          long timeSinceTurnover = changeTime - mCounter.getTimeRemaining();
+          if (timeSinceTurnover > MAX_RESPONSE
+              || timeSinceTurnover < MIN_RESPONSE) {
+            if (mTicker.getTickState() != newState) {
+              mTicker.goToState(newState);
             }
-            mIsTicking = true;
-            PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
-                .getApplication();
-            MediaPlayer mp = application.getMusicPlayer();
-            mp.start();
           }
         }
       }
-
     };
 
   }
@@ -981,14 +971,9 @@ public class Turn extends Activity {
     GameManager curGame = application.getGameManager();
     mAssistedScoringEnabled = curGame.isAssistedScoringEnabled();
 
-    // Capture our preference variable for music, skip, and gestures once
+    // Capture our preference variable for skip, and gestures once
     SharedPreferences sp = PreferenceManager
         .getDefaultSharedPreferences(getBaseContext());
-
-    if (sp.getBoolean("music_enabled", true))
-      mMusicEnabled = true;
-    else
-      mMusicEnabled = false;
 
     // Set local variable for skip preference to reduce calls to get
     if (sp.getBoolean("allow_skip", true))
@@ -1023,7 +1008,8 @@ public class Turn extends Activity {
     this.showDialog(DIALOG_READY_ID);
 
     this.mCounter = setupTurnTimer();
-
+    
+    mTicker = new TickStateMachine(getBaseContext());
   }
 
   /**
@@ -1149,35 +1135,6 @@ public class Turn extends Activity {
                   .getBaseContext());
               sm.playSound(SoundManager.Sound.BACK);
 
-              // Start the turn music
-              PhraseCrazeApplication application = (PhraseCrazeApplication) Turn.this
-                  .getApplication();
-              GameManager gm = application.getGameManager();
-
-              int musicId = R.raw.mus_countdown;
-              // If music is enabled, select the appropriate track
-              if (mMusicEnabled) {
-                switch (gm.getTurnTime()) {
-                case 30000:
-                  musicId = R.raw.mus_round_30;
-                  break;
-                case 60000:
-                  musicId = R.raw.mus_round_60;
-                  break;
-                case 90000:
-                  musicId = R.raw.mus_round_90;
-                  break;
-                }
-              }
-
-              MediaPlayer mp = application.createMusicPlayer(
-                  Turn.this.getBaseContext(), musicId);
-              // If music is not enabled, it will start the countdown track at
-              // 10 seconds
-              if (mMusicEnabled) {
-                mp.start();
-              }
-
             }
           });
       dialog = builder.create();
@@ -1203,26 +1160,6 @@ public class Turn extends Activity {
   }
 
   /**
-   * Class tracks the seek time on the music realignment that happens on every
-   * resume.
-   */
-  private class TurnMusicListener implements OnSeekCompleteListener {
-    public void onSeekComplete(MediaPlayer mp) {
-
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "onSeekComplete");
-      }
-      // Resume the game on seek complete
-      Turn.this.resumeGame();
-
-      // Resume the music
-      if (mMusicEnabled || (!mMusicEnabled && mIsTicking)) {
-        mp.start();
-      }
-    }
-  }
-
-  /**
    * Resume the game by showing/enabling the proper view elements and resuming
    * the turn timer.
    */
@@ -1231,6 +1168,10 @@ public class Turn extends Activity {
       Log.d(TAG, "resumeGameTurn()");
     }
     mIsPaused = false;
+    
+    // Hide pause overlays
+    mPauseOverlay.setVisibility(View.INVISIBLE);
+    mPauseTextLayout.setVisibility(View.INVISIBLE);
 
     // Allow timer click to pause again
     mTimerGroup.setOnClickListener(mTimerClickListener);
@@ -1253,6 +1194,10 @@ public class Turn extends Activity {
       // Play resume sound
       SoundManager sm = SoundManager.getInstance(this.getBaseContext());
       sm.playSound(SoundManager.Sound.BACK);
+      
+      // Resume sounds
+      // Sounds resume at good intervals on timer tick
+      //mTicker.resume();
 
       mViewFlipper.setVisibility(View.VISIBLE);
 
@@ -1283,14 +1228,9 @@ public class Turn extends Activity {
 
     // Make the timer bar resume when clicked during pause
     mTimerGroup.setOnClickListener(mPauseListener);
-
-    // Stop music
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    MediaPlayer mp = application.getMusicPlayer();
-    if (mp.isPlaying()) {
-      mp.pause();
-    }
+    
+    // Stop sounds
+    mTicker.pause();
 
     // Dim background
     if (mAssistedScoringEnabled) {
@@ -1304,7 +1244,7 @@ public class Turn extends Activity {
 
     // Play ready sound since it indicates a wait.
     // This is the menu method that is called on every menu push
-    SoundManager sm = SoundManager.getInstance(this.getBaseContext());
+    SoundManager sm = SoundManager.getInstance(Turn.this.getBaseContext());
     sm.playSound(SoundManager.Sound.TEAMREADY);
 
     if (!mTurnIsOver) {
