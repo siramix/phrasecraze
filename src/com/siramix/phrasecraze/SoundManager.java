@@ -169,7 +169,10 @@ public class SoundManager {
     mSoundPool.stop(soundId);
   }
   
-  
+  /*
+   * Plays the specified Tick sound effect looped on the TickSoundPool.
+   * @param tick - Tick sound effect to play
+   */
   public int playTickLooped(Ticks tick)
   {
     // Volume% = current volume / max volume
@@ -180,6 +183,10 @@ public class SoundManager {
         1.0f);
   }
 
+  /*
+   * Stops specified Tick sound effect on the TickSoundPool
+   * @param soundId - tick sound effect ID to stop
+   */
   public void stopTick(int soundId) {
     mTickSoundPool.stop(soundId);
   }
