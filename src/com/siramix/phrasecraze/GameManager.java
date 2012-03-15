@@ -95,6 +95,11 @@ public class GameManager {
   private int mTurnTime;
   
   /**
+   * Time per tick intensity
+   */
+  private int mTurnTimerBaseBlock;
+  
+  /**
    * Stores the context for the class
    */
   private Context mContext;
@@ -195,8 +200,16 @@ public class GameManager {
     mCurrentTeam = mTeamIterator.next();
     mCurrentRound = 0;
     mScoreLimit = score;
-    setTurnTime();
+    
+    // Get the turn timer base block once, each time a game starts.
+    // This would have to be moved if we are allowed to change settings mid-game.
+    SharedPreferences sp = PreferenceManager
+        .getDefaultSharedPreferences(mContext);
+    String[] defaultTime = mContext.getResources().getStringArray(R.array.turntime_values);
+    mTurnTimerBaseBlock = Integer.parseInt(sp.getString("turn_timer", defaultTime[0])) * 1000;
 
+    setTurnTime();
+    
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
   }
@@ -230,20 +243,23 @@ public class GameManager {
    */
   private void setTurnTime()
   {
-    // Turn time is random every turn. It must be recalculated every turn based on preferences.
-    SharedPreferences sp = PreferenceManager
-        .getDefaultSharedPreferences(mContext);
-
-    String[] defaultTime = mContext.getResources().getStringArray(R.array.turntime_values);
-    int baseTimeBlock = Integer.parseInt(sp.getString("turn_timer", defaultTime[0])) * 1000;
-    Random randomizer = new Random();    
+    int baseTimeBlock = getTimePerIntensity();
     final float RANDOM_MIN = 0.5f;
     final float RANDOM_MAX = 0.75f;
+    Random randomizer = new Random();    
     float randomizedSegment = (float)(randomizer.nextFloat()*(RANDOM_MAX-RANDOM_MIN)*baseTimeBlock);
     float finalTimeBlock = RANDOM_MIN*baseTimeBlock + randomizedSegment;
     final int NUM_BASEBLOCKS = 3;
     // Truncate decimal off millisecond timer is fine
     mTurnTime = ((int)(NUM_BASEBLOCKS*baseTimeBlock + finalTimeBlock));
+  }
+  
+ /**
+  * Returns the time in millis each tick intensity should last.
+  */
+  public int getTimePerIntensity()
+  {
+    return mTurnTimerBaseBlock;
   }
 
   /**

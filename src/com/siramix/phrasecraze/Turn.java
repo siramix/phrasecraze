@@ -896,20 +896,25 @@ public class Turn extends Activity {
         // Update our text each second
         long shownTime = (mCounter.getTimeRemaining() / 1000) + 1;
         mCountdownText.setText(Long.toString(shownTime));
-        long[] VAMPTIMES = {60020, 30020, 15020, 5020};
         
-        // Check if time remaining warrants tick changes
-        if (mCounter.getTimeRemaining() <= VAMPTIMES[0]
-            && mCounter.getTimeRemaining() > VAMPTIMES[1]) {
-          checkChangeState(2000, VAMPTIMES[0], TickStateMachine.TickStates.NORMAL);
-        } else if (mCounter.getTimeRemaining() <= VAMPTIMES[1]
-            && mCounter.getTimeRemaining() > VAMPTIMES[2]) {
-          checkChangeState(1000, VAMPTIMES[1], TickStateMachine.TickStates.FAST);
-        } else if (mCounter.getTimeRemaining() <= VAMPTIMES[2]
-            && mCounter.getTimeRemaining() > VAMPTIMES[3]) {
-          checkChangeState(500, VAMPTIMES[2], TickStateMachine.TickStates.FASTER);
-        } else if (mCounter.getTimeRemaining() <= VAMPTIMES[3]) {
-          checkChangeState(250, VAMPTIMES[3], TickStateMachine.TickStates.FASTEST);
+        // Set the Intensity Level
+        int timePerIntensity = mGameManager.getTimePerIntensity();
+        long elapsedTime = mCounter.getTimeElapsed();
+        int currentIntensity = (int) (elapsedTime / timePerIntensity);
+        switch (currentIntensity)
+        {
+          case 0:
+            attemptTickIntensityChange(2000, TickStateMachine.TickStates.NORMAL);
+            break;
+          case 1:
+            attemptTickIntensityChange(1000, TickStateMachine.TickStates.FAST);
+            break;
+          case 2:
+            attemptTickIntensityChange(500, TickStateMachine.TickStates.FASTER);
+            break;
+          case 3:
+            attemptTickIntensityChange(250,TickStateMachine.TickStates.FASTEST);
+            break;
         }
 
       }
@@ -918,10 +923,9 @@ public class Turn extends Activity {
        * Helper function to check if the timer is in a valid range that the TickStateMachine
        * can change states.
        * @param interval - interval between ticks, based on the duration of the sound loop.
-       * @param changeTime - the target time at which the state should change, based on the interval.
        * @param newState - the state to change to
        */
-      private void checkChangeState(long interval, long changeTime, TickStateMachine.TickStates newState)
+      private void attemptTickIntensityChange(long interval, TickStateMachine.TickStates newState)
       {
         // When the state machine is paused, we want to resume it at a known good time, based
         // on the sound effect's interval. So if a sound loops every 2s, we should try to start
@@ -937,7 +941,7 @@ public class Turn extends Activity {
           // where a new tick plays too fast after the previous tap
           float MIN_RESPONSE = 20;
           float MAX_RESPONSE = interval*0.95f;
-          long timeSinceTurnover = changeTime - mCounter.getTimeRemaining();
+          long timeSinceTurnover = mCounter.getTimeElapsed() % mGameManager.getTimePerIntensity();
           if (timeSinceTurnover > MAX_RESPONSE
               || timeSinceTurnover < MIN_RESPONSE) {
             if (mTicker.getTickState() != newState) {

@@ -38,6 +38,7 @@ public abstract class PauseTimer {
   private static final int TICK = 125;
   private boolean mTimerActive = false;
   private long mTimeRemaining;
+  private long mTimerLength;
   private CountDownTimer mTimer;
 
   /*
@@ -82,6 +83,7 @@ public abstract class PauseTimer {
     }
     this.mTimer = new InternalTimer(timeToCount, TICK);
     this.mTimeRemaining = timeToCount;
+    this.mTimerLength = timeToCount;
   }
 
   /**
@@ -152,5 +154,14 @@ public abstract class PauseTimer {
    */
   public long getTimeRemaining() {
     return this.mTimeRemaining;
+  }
+  
+  /**
+   * Get the time since this timer has been started.
+   * 
+   * @return long representing milliseconds elapsed
+   */
+  public long getTimeElapsed() {
+    return mTimerLength - getTimeRemaining();
   }
 }

@@ -59,19 +59,15 @@ public class TickStateMachine {
     switch(state)
     {
       case NORMAL:
-        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Normal");
         mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_NORMAL);
         break;
       case FAST:
-        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Fast");
         mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_FAST);
         break;
       case FASTER:
-        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Faster");
         mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_FASTER);
         break;
       case FASTEST:
-        Log.d("StateMachinnnnnnnnnnnnnnne", "GoTo Fastest");
         mTimerSoundId = sm.playTickLooped(SoundManager.Ticks.TICK_FASTEST);
         break;
     }
