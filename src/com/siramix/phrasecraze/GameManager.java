@@ -20,6 +20,7 @@ package com.siramix.phrasecraze;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -92,6 +93,11 @@ public class GameManager {
    * Time for the Timer in milliseconds
    */
   private int mTurnTime;
+  
+  /**
+   * Stores the context for the class
+   */
+  private Context mContext;
 
   /**
    * Standard Constructor
@@ -104,15 +110,10 @@ public class GameManager {
       Log.d(TAG, "GameManager()");
     }
 
-    SharedPreferences sp = PreferenceManager
-        .getDefaultSharedPreferences(context);
-
     mCurrentRound = -1;
     mCardPosition = -1;
     mScoreLimit = -1;
     mCurrentCards = new LinkedList<Card>();
-
-    mTurnTime = Integer.parseInt(sp.getString("turn_timer", "60")) * 1000;
 
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "Turn time is " + mTurnTime);
@@ -125,6 +126,7 @@ public class GameManager {
     mRwsValueRules[2] = 0; // set skip value to 0 if skip penalty is not on
 
     mDeck = new Deck(context);
+    mContext = context;
   }
 
   /**
@@ -193,6 +195,7 @@ public class GameManager {
     mCurrentTeam = mTeamIterator.next();
     mCurrentRound = 0;
     mScoreLimit = score;
+    setTurnTime();
 
     mIsAssistedScoringEnabled = assistedScoring;
     dealNextCard();
@@ -209,6 +212,8 @@ public class GameManager {
     mCurrentCards.clear();
     mCardPosition = -1;
 
+    setTurnTime();
+    
     dealNextCard();
     
     // Clear round scores
@@ -217,6 +222,28 @@ public class GameManager {
       itr.next().setRoundScore(0);
     }
     mCurrentRound++;
+  }
+  
+  /**
+   * Sets the timer for each round. It is calculated as a factor of BaseTimeBlocks, which are
+   * used to determine length of each ticking intensity.
+   */
+  private void setTurnTime()
+  {
+    // Turn time is random every turn. It must be recalculated every turn based on preferences.
+    SharedPreferences sp = PreferenceManager
+        .getDefaultSharedPreferences(mContext);
+
+    String[] defaultTime = mContext.getResources().getStringArray(R.array.turntime_values);
+    int baseTimeBlock = Integer.parseInt(sp.getString("turn_timer", defaultTime[0])) * 1000;
+    Random randomizer = new Random();    
+    final float RANDOM_MIN = 0.5f;
+    final float RANDOM_MAX = 0.75f;
+    float randomizedSegment = (float)(randomizer.nextFloat()*(RANDOM_MAX-RANDOM_MIN)*baseTimeBlock);
+    float finalTimeBlock = RANDOM_MIN*baseTimeBlock + randomizedSegment;
+    final int NUM_BASEBLOCKS = 3;
+    // Truncate decimal off millisecond timer is fine
+    mTurnTime = ((int)(NUM_BASEBLOCKS*baseTimeBlock + finalTimeBlock));
   }
 
   /**

@@ -40,7 +40,7 @@
 			android:entryValues="@array/turntime_values" 
 			android:entries="@array/turntimes"
 			android:summary="" 
-			android:defaultValue="60" 
+			android:defaultValue="15" 
 			/>
 
 		<CheckBoxPreference 

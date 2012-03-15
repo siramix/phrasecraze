@@ -94,7 +94,7 @@ public class Settings extends PreferenceActivity {
   private void updateTimerLabel() {
     // When turn timer is loaded, update the caption
     ListPreference lp = (ListPreference) findPreference("turn_timer");
-    lp.setSummary(lp.getValue() + " seconds");
+    lp.setSummary(lp.getEntry());
   }
 
   /**
