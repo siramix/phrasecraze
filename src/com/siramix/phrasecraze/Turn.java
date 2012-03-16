@@ -733,7 +733,7 @@ public class Turn extends Activity {
     
     // Play gong at end
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
-    sm.playSound(SoundManager.Sound.GONG);
+    sm.playSound(SoundManager.Sound.TIMEUP);
 
 
     TextView timer = (TextView) this.findViewById(R.id.Turn_Timer);

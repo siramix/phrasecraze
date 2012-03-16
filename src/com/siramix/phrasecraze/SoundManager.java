@@ -31,7 +31,7 @@ public class SoundManager {
   private static SoundPool mTickSoundPool;
 
   public static enum Sound {
-    RIGHT, WRONG, SKIP, TEAMREADY, WIN, BACK, CONFIRM, GONG, BUZZ
+    RIGHT, SKIP, TEAMREADY, WIN, BACK, CONFIRM, TIMEUP
   };
   
   public static enum Ticks {
@@ -100,8 +100,6 @@ public class SoundManager {
     mSoundIds = new int[Sound.values().length];
     mSoundIds[Sound.RIGHT.ordinal()] = mSoundPool.load(mContext,
         R.raw.fx_right, 1);
-    mSoundIds[Sound.WRONG.ordinal()] = mSoundPool.load(mContext,
-        R.raw.fx_wrong, 1);
     mSoundIds[Sound.SKIP.ordinal()] = mSoundPool.load(mContext, R.raw.fx_skip,
         1);
     mSoundIds[Sound.TEAMREADY.ordinal()] = mSoundPool.load(mContext,
@@ -111,10 +109,8 @@ public class SoundManager {
         1);
     mSoundIds[Sound.CONFIRM.ordinal()] = mSoundPool.load(mContext,
         R.raw.fx_confirm, 1);
-    mSoundIds[Sound.GONG.ordinal()] = mSoundPool.load(mContext,
-        R.raw.fx_countdown_gong, 1);
-    mSoundIds[Sound.BUZZ.ordinal()] = mSoundPool.load(mContext,
-        R.raw.fx_buzzer, 1);
+    mSoundIds[Sound.TIMEUP.ordinal()] = mSoundPool.load(mContext,
+        R.raw.fx_timeup, 1);
     
     mTickIds = new int[Ticks.values().length];
     mTickIds[Ticks.TICK_NORMAL.ordinal()] = mTickSoundPool.load(mContext,
