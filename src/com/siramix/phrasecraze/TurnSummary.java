@@ -131,17 +131,11 @@ public class TurnSummary extends Activity {
       // Update scoring team display
       TextView stoppedTeam = (TextView) TurnSummary.this
           .findViewById(R.id.TurnSummary_StoppedOn_Team);
-      if( game.isAssistedScoringEnabled())
-      {
-        stoppedTeam.setText(game.getBuzzedTeam().getName());
-        stoppedTeam.setTextColor(TurnSummary.this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor()));
-      }
-      else
-      {
-        // Hide Stopped Team views in Free Play 
-        stoppedTeam.setVisibility(View.INVISIBLE);
-        ((TextView) TurnSummary.this.findViewById(R.id.TurnSummary_StoppedOn)).setVisibility(View.INVISIBLE);
-      }
+
+      stoppedTeam.setVisibility(View.VISIBLE);
+      stoppedTeam.setText(game.getBuzzedTeam().getName());
+      stoppedTeam.setTextColor(TurnSummary.this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor()));
+      ((TextView) TurnSummary.this.findViewById(R.id.TurnSummary_StoppedOn)).setVisibility(View.VISIBLE);
       /*
       // Show Set Buzzed Team Dialog
       Intent intent = new Intent(getApplication().getString(
