@@ -284,8 +284,6 @@ public class Deck {
     Pack pack2 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack2));
     pack1.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(pack1));
     pack2.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(pack2));
-    mSelectedPacks.add(pack1);
-    mSelectedPacks.add(pack2);
     for (String packId : packSelections.keySet()) {
       if (packPrefs.getBoolean(packId, false) == true) {
         Pack newPack = mDatabaseOpenHelper.getPackFromDB(packId);
@@ -324,6 +322,7 @@ public class Deck {
     
     // Divide up evenly the lack
     int allocated = 0;
+    Log.d(TAG, "SELECTED PACKS LENGTH: " + mSelectedPacks.size());
     for (Pack curPack : mSelectedPacks) {
       int numToPull = (int) Math.floor(lack * curPack.getWeight());
       curPack.setNumToPullNext(numToPull);

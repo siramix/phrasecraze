@@ -72,7 +72,7 @@
   <string name="turnsummary_stoppedon">Stopped On:</string>
   <string name="turnsummary_nextbutton">Next Round</string>
   <string name="turnsummary_results">Game Results</string>
-  <string name="turnsummary_setstoppedteambutton">Set Stopped Team</string>
+  <string name="turnsummary_setstoppedteambutton">Switch Stopped Team</string>
   <string name="turnsummary_scoreheader">Total Scores</string>
   <string name="turnsummary_scorelimit">Score to Win: %dpts</string>
     
