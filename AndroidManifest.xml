@@ -74,7 +74,7 @@
 		</activity>
 		
     <activity android:name=".EditTeamName" android:label=""
-      android:theme="@style/EditTeamNameDialog"
+      android:theme="@style/NoTitleDialog"
       android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="com.siramix.phrasecraze.intent.action.EDITTEAMNAME"></action>
@@ -107,10 +107,19 @@
 		</activity>
 		
 		<activity android:name=".AssignPoints" android:label=""
-      android:theme="@style/AssignPointsDialog"
+      android:theme="@style/NoTitleDialog"
       android:screenOrientation="landscape">
       <intent-filter>
         <action android:name="com.siramix.phrasecraze.intent.action.ASSIGNPOINTS"></action>
+        <category android:name="android.intent.category.DEFAULT"></category>
+      </intent-filter>
+    </activity>
+    
+    <activity android:name=".SetBuzzedTeam" android:label=""
+      android:theme="@style/NoTitleDialog"
+      android:screenOrientation="landscape">
+      <intent-filter>
+        <action android:name="com.siramix.phrasecraze.intent.action.SETBUZZEDTEAM"></action>
         <category android:name="android.intent.category.DEFAULT"></category>
       </intent-filter>
     </activity>

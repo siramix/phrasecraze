@@ -72,6 +72,9 @@ public class Turn extends Activity {
   static final int TIMERANIM_PAUSE_ID = 0;
   static final int TIMERANIM_RESUME_ID = 1;
   static final int TIMERANIM_START_ID = 2;
+  
+  // Request code for AssignPoints activity result
+  static final int CHANGESCORES_REQUEST_CODE = 1;
 
   // Gesture thresholds expressed in dp
   private static final int SWIPE_MIN_DISTANCE_DP = 80;
@@ -157,13 +160,6 @@ public class Turn extends Activity {
    * Object that tracks ticking state
    */  
   private TickStateMachine mTicker;
-
-  /**
-   * Unique IDs for Options menu
-   */
-  protected static final int MENU_ENDGAME = 0;
-  protected static final int MENU_SCORE = 1;
-  protected static final int MENU_RULES = 2;
 
   /**
    * Swipe left for skip, right for back, up for right, and down for wrong.
@@ -268,6 +264,7 @@ public class Turn extends Activity {
       Log.d(TAG, "onCreateOptionsMenu()");
     }
 
+    menu.add(0, R.string.menu_ChangeScores, 0, "Change Scores");
     menu.add(0, R.string.menu_EndRound, 0, "Forfeit Round");
     menu.add(0, R.string.menu_EndGame, 0, "End Game");
     menu.add(0, R.string.menu_Rules, 0, "Rules");
@@ -302,9 +299,45 @@ public class Turn extends Activity {
       startActivity(new Intent(getString(R.string.IntentRules), getIntent()
           .getData()));
       return true;
+    case R.string.menu_ChangeScores:
+      // Play confirmation sound
+      sm.playSound(SoundManager.Sound.CONFIRM);
+      // Show Assign Points Dialog
+      Intent intent = new Intent(getApplication().getString(
+          R.string.IntentAssignPoints), getIntent().getData());
+      startActivityForResult(intent, CHANGESCORES_REQUEST_CODE);
+      return true;
     default:
       return super.onOptionsItemSelected(item);
     }
+  }
+  
+  /**
+   * This function is called when the AssignPoints activity finishes.
+   * It adds in the supplied points to each team's total score.
+   */
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == CHANGESCORES_REQUEST_CODE &&
+        resultCode == Activity.RESULT_OK &&
+        data.getExtras() != null) {
+      
+      // Get team scores from the dialog
+      int[] teamScores = data.getIntArrayExtra(getString(R.string.assignedPointsBundleKey));
+
+      // Assign scores to teams
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
+          .getApplication();
+      GameManager game = application.getGameManager();
+      List<Team> teams = game.getTeams();
+      for( int i = 0; i < teams.size(); i++)
+      {
+        teams.get(i).setScore(teamScores[i]);
+      }
+      
+      this.updateScoreboard();
+    }
+    super.onActivityResult(requestCode, resultCode, data);
   }
   
   /**

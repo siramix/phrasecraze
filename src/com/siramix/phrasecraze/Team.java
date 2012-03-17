@@ -31,16 +31,14 @@ import android.util.Log;
  * 
  */
 public enum Team implements Serializable {
-  TEAMA("Blue", R.color.teamA_secondary,
-      R.color.teamA_primary, R.color.teamA_complement, R.drawable.bg_bluegradient,
-      R.drawable.gameend_row_end_blue, "teamA_enabled", R.drawable.turnsum_row_end_blue), TEAMB("Green",
-      R.color.teamB_secondary, R.color.teamB_primary, R.color.teamB_complement,
-      R.drawable.bg_greengradient, R.drawable.gameend_row_end_green, "teamB_enabled", R.drawable.turnsum_row_end_green), TEAMC(
-      "Red", R.color.teamC_secondary, R.color.teamC_primary, R.color.teamC_complement,
-      R.drawable.bg_redgradient, R.drawable.gameend_row_end_red, "teamC_enabled", R.drawable.turnsum_row_end_red), TEAMD(
-      "Yellow", R.color.teamD_secondary,
-      R.color.teamD_primary, R.color.teamD_complement, R.drawable.bg_yellowgradient,
-      R.drawable.gameend_row_end_yellow, "teamD_enabled", R.drawable.turnsum_row_end_yellow);
+  TEAMA("Blue", R.color.teamA_secondary, R.color.teamA_primary, R.color.teamA_complement,
+      R.drawable.bg_bluegradient, R.drawable.gameend_row_end_blue, "teamA_enabled", R.drawable.turnsum_row_end_blue),
+  TEAMB("Green", R.color.teamB_secondary, R.color.teamB_primary, R.color.teamB_complement,
+      R.drawable.bg_greengradient, R.drawable.gameend_row_end_green, "teamB_enabled", R.drawable.turnsum_row_end_green),
+  TEAMC("Red", R.color.teamC_secondary, R.color.teamC_primary, R.color.teamC_complement,
+      R.drawable.bg_redgradient, R.drawable.gameend_row_end_red, "teamC_enabled", R.drawable.turnsum_row_end_red),
+  TEAMD("Yellow", R.color.teamD_secondary, R.color.teamD_primary, R.color.teamD_complement,
+      R.drawable.bg_yellowgradient, R.drawable.gameend_row_end_yellow, "teamD_enabled", R.drawable.turnsum_row_end_yellow);
 
   // Team name
   private String mName;

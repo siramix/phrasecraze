@@ -268,6 +268,13 @@ public class GameManager {
    */
   public void setBuzzedTeam(Team team)
   {
+    // Need to change active team when buzzed team is not what
+    // we've already set as buzzed team.
+    if (mBuzzedTeam != null && !mBuzzedTeam.equals(team))
+    {
+      // Note this doesn't work with more than 2 teams.
+      this.incrementActiveTeamIndex();
+    }
 	  mBuzzedTeam = team;
   }
   

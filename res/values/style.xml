@@ -25,10 +25,7 @@
     <item name="android:shadowDy">1</item>
     <item name="android:shadowRadius">1</item>
   </style>
-  <style name="EditTeamNameDialog" parent="android:style/Theme.Dialog">
-   <item name="android:windowNoTitle">true</item>
-  </style>
-    <style name="AssignPointsDialog" parent="android:style/Theme.Dialog">
+  <style name="NoTitleDialog" parent="android:style/Theme.Dialog">
    <item name="android:windowNoTitle">true</item>
   </style>
 </resources>

@@ -249,8 +249,8 @@ public class AssignPoints extends Activity {
     
     // Initialize scores to the round score of each team
     mScores = new int[teams.size()];
-    mScores[0] = team1.getRoundScore();
-    mScores[1] = team2.getRoundScore();
+    mScores[0] = team1.getScore();
+    mScores[1] = team2.getScore();
     
     // Set initial values of each element based on its corresponding team
     TextView score = (TextView) this.findViewById(R.id.AssignPoints_Team1_Score);
@@ -284,10 +284,10 @@ public class AssignPoints extends Activity {
   {
 	  Typeface antonFont = Typeface.createFromAsset(getAssets(),
 			  "fonts/Anton.ttf");
-	  teamNameView.setBackgroundResource(team.getComplementaryColor());
+	  teamNameView.setBackgroundColor(this.getResources().getColor(team.getComplementaryColor()));
 	  teamNameView.setText(team.getName());
 	  teamNameView.setTextColor(this.getResources().getColor(team.getPrimaryColor()));
 	  teamNameView.setTypeface(antonFont);
-	  scoreBackground.setBackgroundResource(team.getPrimaryColor());
+	  scoreBackground.setBackgroundColor(this.getResources().getColor(team.getPrimaryColor()));
   }
 }

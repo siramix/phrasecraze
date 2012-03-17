@@ -42,7 +42,7 @@
     <LinearLayout android:id="@+id/TurnSummary_BottomGroup"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
-        <com.siramix.phrasecraze.AntonButton android:layout_height="60dp" android:text="@string/turnsummary_assignpointsbutton" android:id="@+id/TurnSummary_AssignPoints" android:layout_gravity="center" android:layout_width="100dp" android:soundEffectsEnabled="false"></com.siramix.phrasecraze.AntonButton>
+        <com.siramix.phrasecraze.AntonButton android:layout_height="60dp" android:id="@+id/TurnSummary_AssignPoints" android:layout_gravity="center" android:layout_width="100dp" android:soundEffectsEnabled="false" android:text="@string/turnsummary_setstoppedteambutton"></com.siramix.phrasecraze.AntonButton>
         <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:orientation="vertical" android:layout_weight="1">
             <LinearLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TurnSummary_ScoreGroup" android:orientation="vertical" android:padding="3dp">
                 <com.siramix.phrasecraze.ScoreboardRowLayout android:layout_height="30dp" android:layout_width="fill_parent" android:id="@+id/TurnSummary_Scores_TeamA"></com.siramix.phrasecraze.ScoreboardRowLayout>

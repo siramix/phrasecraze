@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+	<RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/SetBuzzedTeam_Header">
+		<View android:layout_centerVertical="true" android:layout_height="4dp" android:layout_width="fill_parent"
+			android:layout_centerHorizontal="true" android:background="@color/genericBG_trim" android:id="@+id/SetBuzzedTeam_TitleBar"></View>
+		<TextView android:layout_marginLeft="10dp" android:gravity="center"
+			android:textSize="24dp" android:layout_centerVertical="true"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:textColor="@color/white" android:text="@string/setbuzzedteam_title" android:id="@+id/SetBuzzedTeam_Title"></TextView>
+	</RelativeLayout>
+	<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical" android:layout_margin="2dp" android:id="@+id/SetBuzzedTeam_TeamLayout">
+		<RelativeLayout android:layout_width="fill_parent" android:layout_weight="1" android:background="@color/teamC_primary" android:layout_height="wrap_content" android:id="@+id/SetBuzzedTeam_Team1">
+			<TextView android:includeFontPadding="false" android:layout_alignParentLeft="true" android:scrollHorizontally="true" android:ellipsize="end" android:gravity="left|center_vertical" android:textColor="@color/teamC_secondary" android:layout_width="wrap_content" android:layout_centerVertical="true" android:maxLines="1" android:text="Red Team" android:width="420dp" android:layout_height="wrap_content" android:textSize="28dp" android:id="@+id/SetBuzzedTeam_Team1_Name" android:paddingLeft="5dp"></TextView>
+			<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:src="@drawable/turnsum_row_end_red" android:layout_centerVertical="true" android:id="@+id/SetBuzzedTeam_Team1_RowEnd"></ImageView>
+			<ImageView android:src="@drawable/turnend_stamp_wrong" android:layout_height="48dp" android:layout_width="48dp" android:layout_alignRight="@+id/SetBuzzedTeam_Team1_RowEnd" android:layout_alignTop="@+id/SetBuzzedTeam_Team1_RowEnd" android:id="@+id/SetBuzzedTeam_Team1_RowEndStamp" android:layout_marginRight="10dp"></ImageView>
+		</RelativeLayout>
+		<RelativeLayout android:layout_weight="1" android:layout_width="fill_parent" android:background="@color/teamA_primary" android:layout_marginTop="2dp" android:layout_height="wrap_content" android:id="@+id/SetBuzzedTeam_Team2">
+			<TextView android:layout_alignParentLeft="true" android:text="Blue Team" android:ellipsize="end" android:scrollHorizontally="true" android:includeFontPadding="false" android:textColor="@color/teamA_secondary" android:gravity="left|center_vertical" android:layout_centerVertical="true" android:width="420dp" android:layout_width="wrap_content" android:maxLines="1" android:layout_height="wrap_content" android:textSize="28dp" android:id="@+id/SetBuzzedTeam_Team2_Name" android:paddingLeft="5dp"></TextView>
+			<ImageView android:layout_width="wrap_content" android:src="@drawable/turnsum_row_end_blue" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_height="wrap_content" android:id="@+id/SetBuzzedTeam_Team2_RowEnd"></ImageView>
+			<ImageView android:src="@drawable/turnend_stamp_wrong" android:layout_height="48dp" android:layout_width="48dp" android:layout_alignTop="@+id/SetBuzzedTeam_Team2_RowEnd" android:layout_alignRight="@+id/SetBuzzedTeam_Team2_RowEnd" android:id="@+id/SetBuzzedTeam_Team2_RowEndStamp" android:layout_marginRight="10dp"></ImageView>
+		</RelativeLayout>
+	</LinearLayout>
+	<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/SetBuzzedTeam_Buttons">
+		<com.siramix.phrasecraze.AntonButton android:layout_weight="1" android:layout_height="wrap_content" android:layout_margin="10dp" android:layout_width="fill_parent" style="@style/PhraseCrazeButton" android:layout_gravity="center" android:text="@string/assignpoints_buttoncancel" android:soundEffectsEnabled="false" android:id="@+id/SetBuzzedTeam_Buttons_Cancel"></com.siramix.phrasecraze.AntonButton>
+		<com.siramix.phrasecraze.AntonButton android:layout_weight="1" android:layout_height="wrap_content" style="@style/PhraseCrazeButton" android:layout_gravity="center" android:text="@string/assignpoints_buttonconfirm" android:soundEffectsEnabled="false" android:layout_width="fill_parent" android:layout_margin="10dp" android:id="@+id/SetBuzzedTeam_Buttons_Confirm"></com.siramix.phrasecraze.AntonButton>
+	</LinearLayout>
+	
+</LinearLayout>

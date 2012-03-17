@@ -18,6 +18,7 @@
   <string name="IntentEditTeamName">com.siramix.phrasecraze.intent.action.EDITTEAMNAME</string>
   <string name="IntentAssignPoints">com.siramix.phrasecraze.intent.action.ASSIGNPOINTS</string>
   <string name="IntentPackPurchase">com.siramix.phrasecraze.intent.action.PHRASEPACKPURCHASE</string>
+  <string name="IntentSetBuzzedTeam">com.siramix.phrasecraze.intent.action.SETBUZZEDTEAM</string>
 
   <!-- Global Prefkey IDs -->
   <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>
@@ -29,6 +30,7 @@
   <string name="menu_EndGame">MENU_ENDGAME</string>
   <string name="menu_Rules">MENU_RULES</string>
   <string name="menu_EndRound">MENU_ENDROUND</string>
+  <string name="menu_ChangeScores">MENU_CHANGESCORES</string>
 
   <!-- Team names -->
   <string name="teamnameA">Blue</string>
@@ -46,6 +48,7 @@
   <string name="teamBundleKey">com.siramix.phrasecraze.team</string>
   <string name="teamNameBundleKey">com.siramix.phrasecraze.teamName</string>
   <string name="assignedPointsBundleKey">com.siramix.phrasecraze.assignedPoints</string>
+  <string name="buzzedTeamBundleKey">com.siramix.phrasecraze.newBuzzedTeam</string>
 
   <!-- Pack Purchasing dialog strings -->
   <string name="packpurchase_title">Phrase Packs</string>
@@ -69,14 +72,19 @@
   <string name="turnsummary_stoppedon">Stopped On:</string>
   <string name="turnsummary_nextbutton">Next Round</string>
   <string name="turnsummary_results">Game Results</string>
-  <string name="turnsummary_assignpointsbutton">Assign Points</string>
+  <string name="turnsummary_setstoppedteambutton">Set Stopped Team</string>
   <string name="turnsummary_scoreheader">Total Scores</string>
   <string name="turnsummary_scorelimit">Score to Win: %dpts</string>
     
-  <!-- Assign Points dialog strings -->
-  <string name="assignpoints_title">Assign Round Scores</string>
+  <!-- Set Scores dialog strings -->
+  <string name="assignpoints_title">Total Scores</string>
   <string name="assignpoints_buttoncancel">Cancel</string>
   <string name="assignpoints_buttonconfirm">Confirm</string>
+  
+    <!-- Set BuzzedTeam dialog strings -->
+  <string name="setbuzzedteam_title">Which Team got Buzzed?</string>
+  <string name="setbuzzedteam_buttoncancel">Cancel</string>
+  <string name="setbuzzedteam_buttonconfirm">Confirm</string>
 
   <!-- For EditTeamName dialog -->
   <string name="editTeamName_hint">Choose a new name for %s team.</string>

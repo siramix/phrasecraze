@@ -23,7 +23,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,7 +57,9 @@ public class TurnSummary extends Activity {
   static final int DIALOG_GAMEOVER_ID = 0;
   
   // Request code for AssignPoints activity result
-  static final int ASSIGNPOINTS_REQUEST_CODE = 1;
+  static final int CHANGESCORES_REQUEST_CODE = 1;
+  // Request code for SetBuzzedTeam activity result
+  static final int SETBUZZEDTEAM_REQUEST_CODE = 1;
 
   // Create a therad for updating the playcount for each card
   private Thread mUpdateThread;
@@ -97,15 +98,56 @@ public class TurnSummary extends Activity {
   /**
    * Watches the button that handles assigning team points.
    */
-  private final OnClickListener mAssignPointsListener = new OnClickListener() {
+  private final OnClickListener mSetStoppedTeamListener = new OnClickListener() {
     public void onClick(View v) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "AssignPoints OnClick()");
+        Log.d(TAG, "SetStoppedTeamListener OnClick()");
       }
-      Intent intent = new Intent(getApplication().getString(
-              R.string.IntentAssignPoints), getIntent().getData());
+      // Play confirmation sound
+      SoundManager sm = SoundManager.getInstance(TurnSummary.this
+          .getBaseContext());
+      sm.playSound(SoundManager.Sound.CONFIRM);
+     
+      // HACK - Until I get the dialog working, just switch the team
+      PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
+          .getApplication();
+      GameManager game = application.getGameManager();
+      int buzzedTeamIndex = 0;
+      List<Team> teams = game.getTeams();
+      if( game.getBuzzedTeam().equals(teams.get(0)))
+      {
+         buzzedTeamIndex = 1;
+      }
+      Team newBuzzedTeam = game.getTeams().get(buzzedTeamIndex);
+      // Assign new buzzed team and recalculate scores and turns
 
-      startActivityForResult(intent, ASSIGNPOINTS_REQUEST_CODE);
+      game.setBuzzedTeam(newBuzzedTeam);
+      game.setAutoAssignedRoundScores();
+      TurnSummary.this.updateScoreViews();
+      // Buttons could change based on new scores
+      refreshButtons();
+      
+      // TODO: Move this to a function
+      // Update scoring team display
+      TextView stoppedTeam = (TextView) TurnSummary.this
+          .findViewById(R.id.TurnSummary_StoppedOn_Team);
+      if( game.isAssistedScoringEnabled())
+      {
+        stoppedTeam.setText(game.getBuzzedTeam().getName());
+        stoppedTeam.setTextColor(TurnSummary.this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor()));
+      }
+      else
+      {
+        // Hide Stopped Team views in Free Play 
+        stoppedTeam.setVisibility(View.INVISIBLE);
+        ((TextView) TurnSummary.this.findViewById(R.id.TurnSummary_StoppedOn)).setVisibility(View.INVISIBLE);
+      }
+      /*
+      // Show Set Buzzed Team Dialog
+      Intent intent = new Intent(getApplication().getString(
+          R.string.IntentSetBuzzedTeam), getIntent().getData());
+      startActivityForResult(intent, SETBUZZEDTEAM_REQUEST_CODE);
+      */
     }
   };
 
@@ -136,6 +178,7 @@ public class TurnSummary extends Activity {
     {
     	game.setAutoAssignedRoundScores();
     }
+    
     // Populate and display list of cards
     ScrollView list = (ScrollView) findViewById(R.id.TurnSummary_CardList);
     LinearLayout layout = new LinearLayout(this.getBaseContext());
@@ -252,7 +295,7 @@ public class TurnSummary extends Activity {
     // Bind Assign Points button
     Button assignPointsButton = (Button) this
         .findViewById(R.id.TurnSummary_AssignPoints);
-    assignPointsButton.setOnClickListener(mAssignPointsListener);
+    assignPointsButton.setOnClickListener(mSetStoppedTeamListener);
 
     // Handle Activity changes for final turn
     refreshButtons();
@@ -260,7 +303,6 @@ public class TurnSummary extends Activity {
     // Set the score limit display
     TextView scoreLimit = (TextView) findViewById(R.id.TurnSummary_ScoreLimit);
     scoreLimit.setText(getString(R.string.turnsummary_scorelimit, game.getScoreLimit()));
-    
     
   }
   
@@ -287,12 +329,12 @@ public class TurnSummary extends Activity {
   }
   
   /**
-   * This function is called when the AssignPoints activity finishes.
+   * This function is called when the ChangeScores activity finishes.
    * It adds in the supplied points to each team's total score.
    */
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == ASSIGNPOINTS_REQUEST_CODE &&
+    if (requestCode == CHANGESCORES_REQUEST_CODE &&
         resultCode == Activity.RESULT_OK &&
         data.getExtras() != null) {
       
@@ -303,12 +345,39 @@ public class TurnSummary extends Activity {
       PhraseCrazeApplication application = (PhraseCrazeApplication) this
           .getApplication();
       GameManager game = application.getGameManager();
-      game.setNewRoundScores(teamScores);
+      List<Team> teams = game.getTeams();
+      for( int i = 0; i < teams.size(); i++)
+      {
+        teams.get(i).setScore(teamScores[i]);
+      }
       
       this.updateScoreViews();
       
       // Buttons could change based on new scores
       refreshButtons();
+    }
+    else if (requestCode == SETBUZZEDTEAM_REQUEST_CODE &&
+        resultCode == Activity.RESULT_OK &&
+        data.getExtras() != null) {
+    
+      // Get BuzzedTeam from bundle
+      //Bundle buzzedTeamBundle = data.getExtras();
+      //Team newBuzzedTeam = (Team) buzzedTeamBundle.getSerializable(getString(R.string.buzzedTeamBundleKey));
+      // HACK - Until I get the above working, just switch the team
+      PhraseCrazeApplication application = (PhraseCrazeApplication) this
+          .getApplication();
+      GameManager game = application.getGameManager();
+      int buzzedTeamIndex = 0;
+      List<Team> teams = game.getTeams();
+      if( game.getBuzzedTeam().equals(teams.get(0)))
+      {
+         buzzedTeamIndex = 1;
+      }
+      Team newBuzzedTeam = game.getTeams().get(buzzedTeamIndex);
+      // Assign new buzzed team and recalculate scores and turns
+
+      game.setBuzzedTeam(newBuzzedTeam);
+      game.setAutoAssignedRoundScores();
     }
     super.onActivityResult(requestCode, resultCode, data);
   }
@@ -321,6 +390,7 @@ public class TurnSummary extends Activity {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onCreateOptionsMenu()");
     }
+    menu.add(0, R.string.menu_ChangeScores, 0, "Change Scores");
     menu.add(0, R.string.menu_EndGame, 0, "End Game");
     menu.add(0, R.string.menu_Rules, 0, "Rules");
 
@@ -338,6 +408,14 @@ public class TurnSummary extends Activity {
     SoundManager sm = SoundManager.getInstance(this.getBaseContext());
     // Handle item selection
     switch (item.getItemId()) {
+    case R.string.menu_ChangeScores:
+      // Play confirmation sound
+      sm.playSound(SoundManager.Sound.CONFIRM);
+      // Show Assign Points Dialog
+      Intent intent = new Intent(getApplication().getString(
+          R.string.IntentAssignPoints), getIntent().getData());
+      startActivityForResult(intent, CHANGESCORES_REQUEST_CODE);
+      return true;
     case R.string.menu_EndGame:
       // Play confirmation sound
       sm.playSound(SoundManager.Sound.CONFIRM);
