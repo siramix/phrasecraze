@@ -514,6 +514,14 @@ public class GameManager {
   }
 
   /**
+   * Return a Linked List of all Packs that are currently installed.
+   * @return
+   */
+  public LinkedList<Pack> getInstalledPacks() {
+    return mDeck.retrieveLocalPacks();
+  }
+  
+  /**
    * @return The current deck
    */
   public Deck getDeck() {

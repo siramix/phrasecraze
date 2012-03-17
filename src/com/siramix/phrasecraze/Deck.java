@@ -158,6 +158,14 @@ public class Deck {
   }
 
   /**
+   * Retrieve a Linked List of all Packs that a user has installed in their database.
+   * @return Linked List of all local Packs
+   */
+  public LinkedList<Pack> retrieveLocalPacks() {
+    return mDatabaseOpenHelper.getAllPacksFromDB();
+  }
+  
+  /**
    * Take a Pack object and pull in cards from the server into the database. 
    * @param pack
    * @throws IOException
@@ -248,8 +256,9 @@ public class Deck {
       mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), activeCards));
     }
     
+    // TODO Uncomment this before release!!!!!
     // 3. Now shuffle
-    Collections.shuffle(mBackCache);
+    //Collections.shuffle(mBackCache);
     
     mDatabaseOpenHelper.close();
     Log.i(TAG, "filled.");
@@ -469,6 +478,31 @@ public class Deck {
     }
 
     /**
+     * Return a linked list of instantiated Packs that exist in the Pack db table.
+     * @return LinkedList of Packs that use has already installed
+     */
+    public LinkedList<Pack> getAllPacksFromDB() {
+      Log.d(TAG, "getAllPacksFromDB()");
+      mDatabase = getReadableDatabase();
+      
+      Cursor packQuery = mDatabase.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
+          null, null, null, null, null);
+      
+      Pack pack = null;
+      LinkedList<Pack> ret = new LinkedList<Pack>();
+      if (packQuery.moveToFirst()) {
+        while (!packQuery.isAfterLast()) {
+          pack = new Pack(packQuery.getInt(0), packQuery.getString(1), packQuery.getString(2),
+              packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5), true);
+          ret.add(pack);
+          packQuery.moveToNext();
+        }
+      }
+      
+      return ret;
+    }
+    
+    /**
      * Return a Pack instantiated using the entry in the Pack database.
      * @param packId of the pack you wish to instantiate
      * @return
@@ -484,7 +518,7 @@ public class Deck {
       Pack pack = null;
       if (packQuery.moveToFirst()) {
         pack = new Pack(packQuery.getInt(0), packQuery.getString(1), packQuery.getString(2),
-                        packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5));
+                        packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5), true);
       }
       packQuery.close();
       return pack;
@@ -515,7 +549,8 @@ public class Deck {
       }
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       
-      Pack insertPack = new Pack(resId, packName, "RESOURCE PACK", "From Resource", null, 0, 1000);
+      Pack insertPack = new Pack(resId, packName, "RESOURCE PACK", 
+                                  "From Resource", null, 0, 1000, true);
       digestPackInternal(db, insertPack, cardItr);
 
       if (PhraseCrazeApplication.DEBUG) {
@@ -583,13 +618,14 @@ public class Deck {
     
     /**
      * Either insert a new pack into the Pack table of a given database or replace
-     * one that e 
+     * one that already exist in the table.
      * @param pack The pack object to insert into db
      * @param db The db in which to insert the new pack
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
     public static long upsertPack(Pack pack, SQLiteDatabase db) {
-      Log.d(TAG, "upsertPack()");
+      Log.d(TAG, "upsertPack(" + pack.getName() + ")");
+      
       ContentValues packValues = new ContentValues();
       packValues.put(PackColumns._ID, pack.getId());
       packValues.put(PackColumns.NAME, pack.getName());

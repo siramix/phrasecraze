@@ -46,12 +46,12 @@
             android:orientation="vertical" >
 
             <RelativeLayout
-                android:id="@+id/PackPurchase_FreePackHeader"
+                android:id="@+id/PackPurchase_UnlockedPackHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <View
-                    android:id="@+id/PackPurchase_FreePackHeaderBar"
+                    android:id="@+id/PackPurchase_UnlockedPackHeaderBar"
                     android:layout_width="fill_parent"
                     android:layout_height="4dp"
                     android:layout_centerHorizontal="true"
@@ -59,25 +59,25 @@
                     android:background="@color/genericBG_trim" />
 
                 <Button
-                    android:id="@+id/PackPurchase_FreePackHelpButton"
+                    android:id="@+id/PackPurchase_UnlockedPackHelpButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/button_info" android:layout_alignRight="@id/PackPurchase_FreePackHeaderBar" android:layout_marginRight="5dp"/>
+                    android:background="@drawable/button_info" android:layout_alignRight="@id/PackPurchase_UnlockedPackHeaderBar" android:layout_marginRight="5dp"/>
 
                 <TextView
-                    android:id="@+id/PackPurchase_FreePackTitle"
+                    android:id="@+id/PackPurchase_UnlockedPackTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/packpurchase_unlockedheader"
                     android:textColor="@color/white"
-                    android:textSize="24dp" android:layout_toLeftOf="@id/PackPurchase_FreePackHelpButton" android:layout_marginRight="10dp"/>
+                    android:textSize="24dp" android:layout_toLeftOf="@id/PackPurchase_UnlockedPackHelpButton" android:layout_marginRight="10dp"/>
 
             </RelativeLayout>                
                 
             <LinearLayout
-                android:id="@+id/PackPurchase_FreePackSets"
+                android:id="@+id/PackPurchase_UnlockedPackSets"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:longClickable="false"

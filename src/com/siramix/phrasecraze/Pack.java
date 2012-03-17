@@ -48,6 +48,7 @@ public class Pack implements Serializable {
   private float mWeight;
   private int mNumPlayablePhrases;
   private int mNumToPullNext;
+  private boolean mInstalled;
   
   private static final String TAG = "Pack";
   
@@ -55,7 +56,7 @@ public class Pack implements Serializable {
    * Default constructor
    */
   public Pack() {
-    this(-1, "","", "","",-1,-1);
+    this(-1, "","", "","",-1,-1, false);
     Log.d(TAG, "null consructor Pack()");
   }
 
@@ -69,7 +70,7 @@ public class Pack implements Serializable {
    * @param size
    */
   public Pack(int id, String name, String path, String description,
-                      String updateMessage, int version, int size) {
+                      String updateMessage, int version, int size, boolean installed) {
     Log.d(TAG, "constructor Pack(args)");
     mId = id;
     mName = name;
@@ -80,6 +81,7 @@ public class Pack implements Serializable {
     mSize = size;
     mWeight = -1;
     mNumPlayablePhrases = -1;
+    mInstalled = installed;
   }
   
   /**
@@ -150,6 +152,11 @@ public class Pack implements Serializable {
    */
   public int getNumToPullNext() {
     return mNumToPullNext;
+  }
+  
+  // TODO This may need to tie to purchase status instead of "in db" or not.
+  public boolean isInstalled() {
+    return mInstalled;
   }
   
   /**

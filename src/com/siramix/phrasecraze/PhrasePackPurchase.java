@@ -2,6 +2,7 @@ package com.siramix.phrasecraze;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -210,13 +211,13 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         "fonts/Anton.ttf");
     TextView header = (TextView) this.findViewById(R.id.PackPurchase_Title);
     header.setTypeface(antonFont);
-    header = (TextView) this.findViewById(R.id.PackPurchase_FreePackTitle);
+    header = (TextView) this.findViewById(R.id.PackPurchase_UnlockedPackTitle);
     header.setTypeface(antonFont);
     header = (TextView) this.findViewById(R.id.PackPurchase_PaidPackTitle);
     header.setTypeface(antonFont);
     
     // Populate and display list of cards
-    LinearLayout freePackLayout = (LinearLayout) findViewById(R.id.PackPurchase_FreePackSets);
+    LinearLayout unlockedPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_UnlockedPackSets);
     LinearLayout paidPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_PaidPackSets);
     
     // Instantiate all of our lists for programmatic adding of packs to view
@@ -228,20 +229,26 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     PackClient client = PackClient.getInstance();
     LinkedList<Pack> socialPacks;
     LinkedList<Pack> paidPacks;
+    LinkedList<Pack> localPacks;
+    localPacks = game.getInstalledPacks();
     mSocialPacks = new HashMap<Integer, Pack>();
     
     try {
       socialPacks = client.getSocialPacks();
       paidPacks = client.getPayPacks();
-      populatePackLayout(socialPacks, freePackLayout);
+      paidPacks.addAll(socialPacks);
+      populatePackLayout(localPacks, unlockedPackLayout);
       populatePackLayout(paidPacks, paidPackLayout);
     } catch (IOException e1) {
-      // TODO Auto-generated catch block
+      populatePackLayout(localPacks, unlockedPackLayout);
+      showToast(getString(R.string.toast_packpurchase_nointerneterror));
       e1.printStackTrace();
     } catch (URISyntaxException e1) {
-      // TODO Auto-generated catch block
+      populatePackLayout(localPacks, unlockedPackLayout);
+      showToast(getString(R.string.toast_packpurchase_siramixdownerror));
       e1.printStackTrace();
-    } catch (JSONException e1) {
+    }
+    catch (JSONException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
@@ -319,6 +326,9 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
         packRow.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       }
+      else if (curPack.isInstalled()){
+        packRow.setOnClickListener(mInstalledPackListener);
+      }
       else {
         packRow.setOnClickListener(mPremiumPackListener);
       }
@@ -335,18 +345,17 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     //Tweet button handler
     public void onClick(View v) {
       ComponentName targetComponent = getClientComponentName(mFoundTwitterClients);
-
-      //TODO intent is a stupid name
+      
       if (targetComponent != null) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setComponent(targetComponent);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setComponent(targetComponent);
         String intentType = (targetComponent.getClassName().contains("com.twidroid")) ?
             "application/twitter" : "text/plain";
-        intent.setType(intentType);
-        intent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
+        shareIntent.setType(intentType);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
         Pack curPack = (Pack) v.getTag();
-        intent.putExtra(getString(R.string.packBundleKey), curPack);
-        startActivityForResult(intent, TWITTER_REQUEST_CODE);
+        shareIntent.putExtra(getString(R.string.packBundleKey), curPack);
+        startActivityForResult(shareIntent, TWITTER_REQUEST_CODE);
       } else {
         showToast(getString(R.string.toast_packpurchase_notwitter));
       }
@@ -437,14 +446,20 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     public void onClick(View v) {
       Pack curPack = (Pack) v.getTag();
       mBillingService.requestPurchase(curPack.getPath(), "payload_test");
+    }
+  };
+  
+  private final OnClickListener mInstalledPackListener = new OnClickListener() {
+    
+    @Override
+    public void onClick(View v) {
+      Pack curPack = (Pack) v.getTag();
       
       if (getPackPref(curPack)) {
         setPackPref(curPack, false);
       } else {
         setPackPref(curPack, true);
-      }
-      
-      
+      }      
     }
   };
   
@@ -539,7 +554,8 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     else if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "pref set to true");
     }
-    packPrefsEdit.commit();      
+    showToast(pack.getName() + " set to " + onoff);
+    packPrefsEdit.commit();
   }
   
   /**
