@@ -280,10 +280,6 @@ public class Deck {
     // TODO starter.json should be selected through the front end, not hard-coded here
     //selectedPacks.add("starter");
     //selectedPacks.add("allphrases");
-    Pack pack1 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack1));
-    Pack pack2 = mDatabaseOpenHelper.getPackFromDB(String.valueOf(R.raw.pack2));
-    pack1.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(pack1));
-    pack2.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(pack2));
     for (String packId : packSelections.keySet()) {
       if (packPrefs.getBoolean(packId, false) == true) {
         Pack newPack = mDatabaseOpenHelper.getPackFromDB(packId);
@@ -473,6 +469,7 @@ public class Deck {
 
       mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PackColumns.TABLE_NAME);
+      mDatabase.close();
       return ret;
     }
 
@@ -498,6 +495,7 @@ public class Deck {
         }
       }
       
+      mDatabase.close();
       return ret;
     }
     
