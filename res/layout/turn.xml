@@ -76,15 +76,36 @@
             <ViewFlipper android:layout_height="fill_parent" android:id="@+id/Turn_ViewFlipper" android:layout_width="fill_parent">
                 <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center" android:id="@+id/Turn_CardLayoutA">
                     <ImageView android:layout_height="50dip" android:layout_alignParentRight="true" android:id="@+id/Turn_StatusImageA" android:layout_alignParentTop="true" android:layout_width="50dip"></ImageView>
+
+                    <TextView
+                        android:id="@+id/Turn_DifficultyA"
+                        android:layout_alignParentLeft="true" 
+                        android:text="difficulty" 
+                        style="@style/CardTitle" 
+                        android:textSize="14dp" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" android:layout_marginLeft="10dp"/>
+
                     <LinearLayout android:layout_height="wrap_content" android:id="@+id/Turn_CardA_Words" android:layout_centerInParent="true" android:layout_width="wrap_content" android:orientation="vertical">
                         <TextView android:id="@+id/Turn_CardTitleA" style="@style/CardTitle"></TextView>
                     </LinearLayout>
+
                 </RelativeLayout>
                 <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center" android:id="@+id/Turn_CardLayoutB">
                     <ImageView android:layout_height="50dip" android:layout_alignParentRight="true" android:id="@+id/Turn_StatusImageB" android:layout_alignParentTop="true" android:layout_width="50dip"></ImageView>
+
+                    <TextView
+                        android:id="@+id/Turn_DifficultyB"
+                        style="@style/CardTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="difficulty"
+                        android:textSize="14dp" android:layout_marginLeft="10dp" android:layout_alignParentLeft="true"/>
+
                     <LinearLayout android:layout_height="wrap_content" android:id="@+id/Turn_CardB_Words" android:layout_centerInParent="true" android:layout_width="wrap_content" android:orientation="vertical">
                         <TextView android:id="@+id/Turn_CardTitleB" style="@style/CardTitle"></TextView>
                     </LinearLayout>
+
                 </RelativeLayout>
             </ViewFlipper>
         </RelativeLayout>

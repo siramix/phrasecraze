@@ -55,7 +55,7 @@
   <string name="packpurchase_unlockedheader">Unlocked</string>
   <string name="packpurchase_lockedheader">Locked</string>
   <string name="packpurchase_button">Confirm</string>
-      
+  
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>
   <string name="gamesetup_teams">Teams</string>
@@ -116,6 +116,7 @@
 	<string name="toast_packpurchase_nogoogleplus">Sorry, we could not detect any Google+ clients.</string>
   <string name="toast_packpurchase_nointerneterror">No internet connection detected.  We can only show your purchased packs.</string>
   <string name="toast_packpurchase_siramixdownerror">Sorry, there were problems connecting to our store.  We can only show your purchased packs.</string>
+  <string name="toast_packpurchase_nopackselected">Please select at least one pack to play.</string>
   <!--  Rate Us URI for app store -->
   <string name="rateUs_URI">http://www.siramix.com/phrasecrazeappstore</string>
 

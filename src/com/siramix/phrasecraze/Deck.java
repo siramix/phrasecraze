@@ -277,9 +277,6 @@ public class Deck {
     Map<String, ?> packSelections = new HashMap<String, Boolean>();
     packSelections = packPrefs.getAll();
     
-    // TODO starter.json should be selected through the front end, not hard-coded here
-    //selectedPacks.add("starter");
-    //selectedPacks.add("allphrases");
     for (String packId : packSelections.keySet()) {
       if (packPrefs.getBoolean(packId, false) == true) {
         Pack newPack = mDatabaseOpenHelper.getPackFromDB(packId);
@@ -386,11 +383,10 @@ public class Deck {
     public void onCreate(SQLiteDatabase db) {
       db.execSQL(PackColumns.TABLE_CREATE);
       db.execSQL(PhraseColumns.TABLE_CREATE);
-//      digestPackFromResource(db, "starter", R.raw.starter);
-//      digestPackFromResource(db, "allphrases", R.raw.allphrases);
 
       digestPackFromResource(db, "pack1", R.raw.pack1);
       digestPackFromResource(db, "pack2", R.raw.pack2);
+      digestPackFromResource(db, "party", R.raw.party);
     }
 
     /**

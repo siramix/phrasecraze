@@ -96,6 +96,9 @@ public class Turn extends Activity {
   private ImageView mTimerfill;
 
   private TextView mCardTitle;
+  
+  //TODO This is for debugging.  We probably want to hide it eventually
+  private TextView mCardDifficulty;
   private ImageView mCardStatus;
 
   private RelativeLayout mTimerGroup;
@@ -661,17 +664,21 @@ public class Turn extends Activity {
     }
     int curTitle;
     int curStatus;
+    int curDifficulty;
     if (mAIsActive) {
       curTitle = R.id.Turn_CardTitleA;
       curStatus = R.id.Turn_StatusImageA;
+      curDifficulty = R.id.Turn_DifficultyA;
+      
     } else {
       curTitle = R.id.Turn_CardTitleB;
       curStatus = R.id.Turn_StatusImageB;
+      curDifficulty = R.id.Turn_DifficultyB;
     }
 
     mCardTitle = (TextView) this.findViewById(curTitle);
     mCardStatus = (ImageView) this.findViewById(curStatus);
-
+    mCardDifficulty = (TextView) this.findViewById(curDifficulty);
   }
 
   /**
@@ -686,6 +693,7 @@ public class Turn extends Activity {
 
     Card curCard = mGameManager.getCurrentCard();
     mCardTitle.setText(curCard.getTitle());
+    mCardDifficulty.setText(String.valueOf(curCard.getDifficulty()));
     if (showCardStatus)
       mCardStatus.setVisibility(View.VISIBLE);
     else
@@ -1062,6 +1070,8 @@ public class Turn extends Activity {
     if (!mIsPaused && !mTurnIsOver) {
       this.pauseGame();
     }
+
+    //TODO Update the playdate for cards in play when app closes or pauses.
   }
 
   /**

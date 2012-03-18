@@ -1,0 +1,837 @@
+{"phrase": "ajar", "_id": 30, "difficulty": 0}
+{"phrase": "arctic", "_id": 55, "difficulty": 0}
+{"phrase": "artistic", "_id": 58, "difficulty": 0}
+{"phrase": "blissful", "_id": 100, "difficulty": 0}
+{"phrase": "blue", "_id": 102, "difficulty": 0}
+{"phrase": "careless", "_id": 141, "difficulty": 0}
+{"phrase": "cavernous", "_id": 144, "difficulty": 0}
+{"phrase": "clean", "_id": 154, "difficulty": 0}
+{"phrase": "cloudy", "_id": 159, "difficulty": 0}
+{"phrase": "constant", "_id": 179, "difficulty": 0}
+{"phrase": "dapper", "_id": 214, "difficulty": 0}
+{"phrase": "drab", "_id": 270, "difficulty": 0}
+{"phrase": "empty", "_id": 297, "difficulty": 0}
+{"phrase": "energetic", "_id": 300, "difficulty": 0}
+{"phrase": "enlightened", "_id": 301, "difficulty": 0}
+{"phrase": "expensive", "_id": 324, "difficulty": 0}
+{"phrase": "flustered", "_id": 375, "difficulty": 0}
+{"phrase": "glamorous", "_id": 422, "difficulty": 0}
+{"phrase": "glorious", "_id": 428, "difficulty": 0}
+{"phrase": "granular", "_id": 439, "difficulty": 0}
+{"phrase": "greedy", "_id": 443, "difficulty": 0}
+{"phrase": "hairy", "_id": 461, "difficulty": 0}
+{"phrase": "humongous", "_id": 503, "difficulty": 0}
+{"phrase": "idealistic", "_id": 510, "difficulty": 0}
+{"phrase": "impolite", "_id": 530, "difficulty": 0}
+{"phrase": "infamous", "_id": 543, "difficulty": 0}
+{"phrase": "jagged", "_id": 566, "difficulty": 0}
+{"phrase": "jovial", "_id": 573, "difficulty": 0}
+{"phrase": "kindhearted", "_id": 587, "difficulty": 0}
+{"phrase": "late", "_id": 600, "difficulty": 0}
+{"phrase": "mediocre", "_id": 660, "difficulty": 0}
+{"phrase": "naughty", "_id": 700, "difficulty": 0}
+{"phrase": "nice", "_id": 712, "difficulty": 0}
+{"phrase": "nifty", "_id": 713, "difficulty": 0}
+{"phrase": "old-fashioned", "_id": 738, "difficulty": 0}
+{"phrase": "optimal", "_id": 741, "difficulty": 0}
+{"phrase": "parallel", "_id": 765, "difficulty": 0}
+{"phrase": "poor", "_id": 794, "difficulty": 0}
+{"phrase": "pricey", "_id": 807, "difficulty": 0}
+{"phrase": "puny", "_id": 821, "difficulty": 0}
+{"phrase": "pushy", "_id": 824, "difficulty": 0}
+{"phrase": "rotten", "_id": 880, "difficulty": 0}
+{"phrase": "rural", "_id": 890, "difficulty": 0}
+{"phrase": "shocking", "_id": 933, "difficulty": 0}
+{"phrase": "smooth", "_id": 960, "difficulty": 0}
+{"phrase": "smug", "_id": 961, "difficulty": 0}
+{"phrase": "snoopy", "_id": 966, "difficulty": 0}
+{"phrase": "sophisticated", "_id": 973, "difficulty": 0}
+{"phrase": "spicy", "_id": 983, "difficulty": 0}
+{"phrase": "squiggly", "_id": 991, "difficulty": 0}
+{"phrase": "stable", "_id": 992, "difficulty": 0}
+{"phrase": "suburban", "_id": 1021, "difficulty": 0}
+{"phrase": "trusty", "_id": 1090, "difficulty": 0}
+{"phrase": "tubby", "_id": 1092, "difficulty": 0}
+{"phrase": "uniform", "_id": 1110, "difficulty": 0}
+{"phrase": "unwitting", "_id": 1135, "difficulty": 0}
+{"phrase": "urban", "_id": 1140, "difficulty": 0}
+{"phrase": "violet", "_id": 1165, "difficulty": 0}
+{"phrase": "welcome", "_id": 1194, "difficulty": 0}
+{"phrase": "whopping", "_id": 1207, "difficulty": 0}
+{"phrase": "wiggly", "_id": 1211, "difficulty": 0}
+{"phrase": "windy", "_id": 1215, "difficulty": 0}
+{"phrase": "witty", "_id": 1219, "difficulty": 0}
+{"phrase": "dastardly", "_id": 1364, "difficulty": 0}
+{"phrase": "haphazardly", "_id": 1476, "difficulty": 0}
+{"phrase": "bad blood", "_id": 1901, "difficulty": 0}
+{"phrase": "big bang theory", "_id": 1912, "difficulty": 0}
+{"phrase": "big brother", "_id": 1913, "difficulty": 0}
+{"phrase": "big bucks", "_id": 1914, "difficulty": 0}
+{"phrase": "bottom of the barrel", "_id": 1921, "difficulty": 0}
+{"phrase": "code of conduct", "_id": 1937, "difficulty": 0}
+{"phrase": "flight of fancy", "_id": 1971, "difficulty": 0}
+{"phrase": "forgive and forget", "_id": 1973, "difficulty": 0}
+{"phrase": "hard headed", "_id": 1992, "difficulty": 0}
+{"phrase": "hem and haw", "_id": 1998, "difficulty": 0}
+{"phrase": "peer pressure", "_id": 2047, "difficulty": 0}
+{"phrase": "Peter Pan", "_id": 2051, "difficulty": 0}
+{"phrase": "quality over quantity", "_id": 2066, "difficulty": 0}
+{"phrase": "rabble rouser", "_id": 2067, "difficulty": 0}
+{"phrase": "rave reviews", "_id": 2070, "difficulty": 0}
+{"phrase": "rock 'n roll", "_id": 2074, "difficulty": 0}
+{"phrase": "safe and sound", "_id": 2080, "difficulty": 0}
+{"phrase": "Simon says...", "_id": 2086, "difficulty": 0}
+{"phrase": "spoonful of sugar", "_id": 2098, "difficulty": 0}
+{"phrase": "swan song", "_id": 2107, "difficulty": 0}
+{"phrase": "sweet smell of success", "_id": 2110, "difficulty": 0}
+{"phrase": "tea time", "_id": 2114, "difficulty": 0}
+{"phrase": "tip toe", "_id": 2121, "difficulty": 0}
+{"phrase": "waste not, want not", "_id": 2137, "difficulty": 0}
+{"phrase": "wild west", "_id": 2147, "difficulty": 0}
+{"phrase": "word to the wise", "_id": 2153, "difficulty": 0}
+{"phrase": "army of frogs", "_id": 2159, "difficulty": 0}
+{"phrase": "bearded dragon", "_id": 2241, "difficulty": 0}
+{"phrase": "grub", "_id": 2300, "difficulty": 0}
+{"phrase": "locust", "_id": 2313, "difficulty": 0}
+{"phrase": "sealion", "_id": 2363, "difficulty": 0}
+{"phrase": "water moccasin", "_id": 2390, "difficulty": 0}
+{"phrase": "weevil", "_id": 2391, "difficulty": 0}
+{"phrase": "wren", "_id": 2392, "difficulty": 0}
+{"phrase": "chicanery", "_id": 2760, "difficulty": 0}
+{"phrase": "prank", "_id": 2788, "difficulty": 0}
+{"phrase": "ruse", "_id": 2792, "difficulty": 0}
+{"phrase": "tomfoolery", "_id": 2799, "difficulty": 0}
+{"phrase": "airbrush", "_id": 2805, "difficulty": 0}
+{"phrase": "architecture", "_id": 2807, "difficulty": 0}
+{"phrase": "brush", "_id": 2818, "difficulty": 0}
+{"phrase": "canvas", "_id": 2820, "difficulty": 0}
+{"phrase": "glassblowing", "_id": 2865, "difficulty": 0}
+{"phrase": "paint roller", "_id": 2908, "difficulty": 0}
+{"phrase": "pounce", "_id": 2923, "difficulty": 0}
+{"phrase": "sculptor", "_id": 2935, "difficulty": 0}
+{"phrase": "sketchbook", "_id": 2942, "difficulty": 0}
+{"phrase": "deep space", "_id": 3000, "difficulty": 0}
+{"phrase": "helium", "_id": 3037, "difficulty": 0}
+{"phrase": "ice giant", "_id": 3043, "difficulty": 0}
+{"phrase": "wormhole", "_id": 3143, "difficulty": 0}
+{"phrase": "persimmon", "_id": 3162, "difficulty": 0}
+{"phrase": "flower garden", "_id": 3188, "difficulty": 0}
+{"phrase": "terrace", "_id": 3229, "difficulty": 0}
+{"phrase": "fastball", "_id": 3270, "difficulty": 0}
+{"phrase": "knuckleball", "_id": 3286, "difficulty": 0}
+{"phrase": "switch hitter", "_id": 3329, "difficulty": 0}
+{"phrase": "visiting team", "_id": 3337, "difficulty": 0}
+{"phrase": "bath towel", "_id": 3348, "difficulty": 0}
+{"phrase": "bathtub", "_id": 3349, "difficulty": 0}
+{"phrase": "bubble bath", "_id": 3351, "difficulty": 0}
+{"phrase": "bubbles", "_id": 3352, "difficulty": 0}
+{"phrase": "cotton balls", "_id": 3357, "difficulty": 0}
+{"phrase": "lavatory", "_id": 3375, "difficulty": 0}
+{"phrase": "make-up", "_id": 3378, "difficulty": 0}
+{"phrase": "moisturizer", "_id": 3383, "difficulty": 0}
+{"phrase": "Q-tips", "_id": 3395, "difficulty": 0}
+{"phrase": "toothbrush", "_id": 3419, "difficulty": 0}
+{"phrase": "toothpaste", "_id": 3420, "difficulty": 0}
+{"phrase": "dive", "_id": 3454, "difficulty": 0}
+{"phrase": "hermit crab", "_id": 3467, "difficulty": 0}
+{"phrase": "life jacket", "_id": 3479, "difficulty": 0}
+{"phrase": "low tide", "_id": 3483, "difficulty": 0}
+{"phrase": "pelican", "_id": 3489, "difficulty": 0}
+{"phrase": "salt water", "_id": 3498, "difficulty": 0}
+{"phrase": "sand", "_id": 3500, "difficulty": 0}
+{"phrase": "sunburn", "_id": 3523, "difficulty": 0}
+{"phrase": "sun hat", "_id": 3525, "difficulty": 0}
+{"phrase": "avian", "_id": 3553, "difficulty": 0}
+{"phrase": "crest", "_id": 3586, "difficulty": 0}
+{"phrase": "fledgling", "_id": 3594, "difficulty": 0}
+{"phrase": "grackle", "_id": 3605, "difficulty": 0}
+{"phrase": "grosbeak", "_id": 3607, "difficulty": 0}
+{"phrase": "lark", "_id": 3618, "difficulty": 0}
+{"phrase": "nutcracker", "_id": 3626, "difficulty": 0}
+{"phrase": "pygmy owl", "_id": 3633, "difficulty": 0}
+{"phrase": "songbird", "_id": 3652, "difficulty": 0}
+{"phrase": "habitat", "_id": 3691, "difficulty": 0}
+{"phrase": "peat swamp", "_id": 3719, "difficulty": 0}
+{"phrase": "quagmire", "_id": 3724, "difficulty": 0}
+{"phrase": "birthday", "_id": 3752, "difficulty": 0}
+{"phrase": "clown", "_id": 3764, "difficulty": 0}
+{"phrase": "frosting", "_id": 3773, "difficulty": 0}
+{"phrase": "lollipop", "_id": 3789, "difficulty": 0}
+{"phrase": "pizza", "_id": 3797, "difficulty": 0}
+{"phrase": "thank you", "_id": 3803, "difficulty": 0}
+{"phrase": "treat", "_id": 3807, "difficulty": 0}
+{"phrase": "aft", "_id": 3815, "difficulty": 0}
+{"phrase": "battlecruiser", "_id": 3827, "difficulty": 0}
+{"phrase": "boom", "_id": 3836, "difficulty": 0}
+{"phrase": "canoe", "_id": 3841, "difficulty": 0}
+{"phrase": "dugout", "_id": 3869, "difficulty": 0}
+{"phrase": "engine room", "_id": 3871, "difficulty": 0}
+{"phrase": "fishing boat", "_id": 3877, "difficulty": 0}
+{"phrase": "onboard", "_id": 3943, "difficulty": 0}
+{"phrase": "pirate", "_id": 3954, "difficulty": 0}
+{"phrase": "whaler", "_id": 4008, "difficulty": 0}
+{"phrase": "oceanic trench", "_id": 4061, "difficulty": 0}
+{"phrase": "tributary", "_id": 4083, "difficulty": 0}
+{"phrase": "bladder", "_id": 4102, "difficulty": 0}
+{"phrase": "cervical vertebrae", "_id": 4115, "difficulty": 0}
+{"phrase": "endocrine system", "_id": 4128, "difficulty": 0}
+{"phrase": "esophagus", "_id": 4129, "difficulty": 0}
+{"phrase": "eyebrow", "_id": 4131, "difficulty": 0}
+{"phrase": "eyelid", "_id": 4133, "difficulty": 0}
+{"phrase": "liver", "_id": 4168, "difficulty": 0}
+{"phrase": "phalanges", "_id": 4190, "difficulty": 0}
+{"phrase": "respiratory system", "_id": 4199, "difficulty": 0}
+{"phrase": "shoulder blade", "_id": 4207, "difficulty": 0}
+{"phrase": "throat", "_id": 4224, "difficulty": 0}
+{"phrase": "trachea", "_id": 4235, "difficulty": 0}
+{"phrase": "aqueduct", "_id": 4253, "difficulty": 0}
+{"phrase": "armory", "_id": 4255, "difficulty": 0}
+{"phrase": "barracks", "_id": 4258, "difficulty": 0}
+{"phrase": "boathouse", "_id": 4260, "difficulty": 0}
+{"phrase": "chateau", "_id": 4276, "difficulty": 0}
+{"phrase": "dormitory", "_id": 4292, "difficulty": 0}
+{"phrase": "duplex", "_id": 4294, "difficulty": 0}
+{"phrase": "foundry", "_id": 4310, "difficulty": 0}
+{"phrase": "hut", "_id": 4330, "difficulty": 0}
+{"phrase": "monument", "_id": 4353, "difficulty": 0}
+{"phrase": "motel", "_id": 4355, "difficulty": 0}
+{"phrase": "nursing home", "_id": 4357, "difficulty": 0}
+{"phrase": "post office", "_id": 4371, "difficulty": 0}
+{"phrase": "shrine", "_id": 4391, "difficulty": 0}
+{"phrase": "split-level house", "_id": 4398, "difficulty": 0}
+{"phrase": "theater", "_id": 4414, "difficulty": 0}
+{"phrase": "boss", "_id": 4448, "difficulty": 0}
+{"phrase": "bottom line", "_id": 4449, "difficulty": 0}
+{"phrase": "briefcase", "_id": 4451, "difficulty": 0}
+{"phrase": "budget", "_id": 4452, "difficulty": 0}
+{"phrase": "buy", "_id": 4455, "difficulty": 0}
+{"phrase": "contract", "_id": 4477, "difficulty": 0}
+{"phrase": "corner office", "_id": 4482, "difficulty": 0}
+{"phrase": "dismiss", "_id": 4498, "difficulty": 0}
+{"phrase": "employ", "_id": 4510, "difficulty": 0}
+{"phrase": "letterhead", "_id": 4556, "difficulty": 0}
+{"phrase": "notebook", "_id": 4581, "difficulty": 0}
+{"phrase": "offer", "_id": 4585, "difficulty": 0}
+{"phrase": "overdraft", "_id": 4591, "difficulty": 0}
+{"phrase": "password", "_id": 4596, "difficulty": 0}
+{"phrase": "perk", "_id": 4599, "difficulty": 0}
+{"phrase": "receipt", "_id": 4621, "difficulty": 0}
+{"phrase": "sell", "_id": 4637, "difficulty": 0}
+{"phrase": "win-win", "_id": 4686, "difficulty": 0}
+{"phrase": "climb", "_id": 4704, "difficulty": 0}
+{"phrase": "hike", "_id": 4709, "difficulty": 0}
+{"phrase": "lantern", "_id": 4715, "difficulty": 0}
+{"phrase": "scenery", "_id": 4723, "difficulty": 0}
+{"phrase": "sleeping bag", "_id": 4724, "difficulty": 0}
+{"phrase": "contest", "_id": 4748, "difficulty": 0}
+{"phrase": "frolic", "_id": 4765, "difficulty": 0}
+{"phrase": "fun house", "_id": 4767, "difficulty": 0}
+{"phrase": "juggler", "_id": 4776, "difficulty": 0}
+{"phrase": "Lent", "_id": 4778, "difficulty": 0}
+{"phrase": "alarm", "_id": 4819, "difficulty": 0}
+{"phrase": "baby car seat", "_id": 4829, "difficulty": 0}
+{"phrase": "catalytic converter", "_id": 4843, "difficulty": 0}
+{"phrase": "crankshaft", "_id": 4850, "difficulty": 0}
+{"phrase": "diesel engine", "_id": 4855, "difficulty": 0}
+{"phrase": "door handle", "_id": 4859, "difficulty": 0}
+{"phrase": "headlamp", "_id": 4893, "difficulty": 0}
+{"phrase": "rear-view mirror", "_id": 4936, "difficulty": 0}
+{"phrase": "roof", "_id": 4940, "difficulty": 0}
+{"phrase": "seat", "_id": 4943, "difficulty": 0}
+{"phrase": "side airbags", "_id": 4947, "difficulty": 0}
+{"phrase": "tachometer", "_id": 4960, "difficulty": 0}
+{"phrase": "trailer hitch", "_id": 4965, "difficulty": 0}
+{"phrase": "low-rider", "_id": 4999, "difficulty": 0}
+{"phrase": "solar powered", "_id": 5010, "difficulty": 0}
+{"phrase": "taxi", "_id": 5018, "difficulty": 0}
+{"phrase": "birthright", "_id": 5032, "difficulty": 0}
+{"phrase": "chain mail", "_id": 5034, "difficulty": 0}
+{"phrase": "scepter", "_id": 5090, "difficulty": 0}
+{"phrase": "jaguar", "_id": 5123, "difficulty": 0}
+{"phrase": "kitty", "_id": 5127, "difficulty": 0}
+{"phrase": "boar", "_id": 5166, "difficulty": 0}
+{"phrase": "good luck", "_id": 5189, "difficulty": 0}
+{"phrase": "incense", "_id": 5194, "difficulty": 0}
+{"phrase": "knife thrower", "_id": 5262, "difficulty": 0}
+{"phrase": "lion tamer", "_id": 5264, "difficulty": 0}
+{"phrase": "somersault", "_id": 5279, "difficulty": 0}
+{"phrase": "spectator", "_id": 5280, "difficulty": 0}
+{"phrase": "thrill ride", "_id": 5289, "difficulty": 0}
+{"phrase": "beanie", "_id": 5310, "difficulty": 0}
+{"phrase": "button-down shirt", "_id": 5329, "difficulty": 0}
+{"phrase": "flak jacket", "_id": 5358, "difficulty": 0}
+{"phrase": "flannel shirt", "_id": 5360, "difficulty": 0}
+{"phrase": "handbag", "_id": 5373, "difficulty": 0}
+{"phrase": "slacks", "_id": 5447, "difficulty": 0}
+{"phrase": "sundress", "_id": 5460, "difficulty": 0}
+{"phrase": "tank top", "_id": 5467, "difficulty": 0}
+{"phrase": "trench coat", "_id": 5473, "difficulty": 0}
+{"phrase": "turtleneck", "_id": 5474, "difficulty": 0}
+{"phrase": "waistcoat", "_id": 5492, "difficulty": 0}
+{"phrase": "wedding gown", "_id": 5493, "difficulty": 0}
+{"phrase": "cinnamon", "_id": 5515, "difficulty": 0}
+{"phrase": "navy blue", "_id": 5546, "difficulty": 0}
+{"phrase": "rust", "_id": 5558, "difficulty": 0}
+{"phrase": "saffron", "_id": 5559, "difficulty": 0}
+{"phrase": "taupe", "_id": 5571, "difficulty": 0}
+{"phrase": "admiral", "_id": 5585, "difficulty": 0}
+{"phrase": "Asia", "_id": 5587, "difficulty": 0}
+{"phrase": "King Ferdinand", "_id": 5625, "difficulty": 0}
+{"phrase": "trade route", "_id": 5656, "difficulty": 0}
+{"phrase": "trade winds", "_id": 5657, "difficulty": 0}
+{"phrase": "bagpipes", "_id": 5692, "difficulty": 0}
+{"phrase": "bedtime", "_id": 5708, "difficulty": 0}
+{"phrase": "beeswax", "_id": 5710, "difficulty": 0}
+{"phrase": "candlestick", "_id": 5758, "difficulty": 0}
+{"phrase": "clockwork", "_id": 5776, "difficulty": 0}
+{"phrase": "copycat", "_id": 5779, "difficulty": 0}
+{"phrase": "copywriter", "_id": 5782, "difficulty": 0}
+{"phrase": "crossroad", "_id": 5802, "difficulty": 0}
+{"phrase": "dimwit", "_id": 5817, "difficulty": 0}
+{"phrase": "downwind", "_id": 5840, "difficulty": 0}
+{"phrase": "footwear", "_id": 5914, "difficulty": 0}
+{"phrase": "foreclose", "_id": 5916, "difficulty": 0}
+{"phrase": "fruitcake", "_id": 5929, "difficulty": 0}
+{"phrase": "gentleman", "_id": 5933, "difficulty": 0}
+{"phrase": "ghostwriter", "_id": 5935, "difficulty": 0}
+{"phrase": "goalpost", "_id": 5939, "difficulty": 0}
+{"phrase": "hairline", "_id": 5974, "difficulty": 0}
+{"phrase": "halfhearted", "_id": 5976, "difficulty": 0}
+{"phrase": "handshake", "_id": 5982, "difficulty": 0}
+{"phrase": "handwriting", "_id": 5985, "difficulty": 0}
+{"phrase": "hangman", "_id": 5987, "difficulty": 0}
+{"phrase": "hangout", "_id": 5989, "difficulty": 0}
+{"phrase": "hardheaded", "_id": 5990, "difficulty": 0}
+{"phrase": "headdress", "_id": 5997, "difficulty": 0}
+{"phrase": "hilltop", "_id": 6022, "difficulty": 0}
+{"phrase": "hindsight", "_id": 6024, "difficulty": 0}
+{"phrase": "housekeeper", "_id": 6055, "difficulty": 0}
+{"phrase": "hovercraft", "_id": 6059, "difficulty": 0}
+{"phrase": "huckleberry", "_id": 6060, "difficulty": 0}
+{"phrase": "hummingbird", "_id": 6064, "difficulty": 0}
+{"phrase": "inchworm", "_id": 6068, "difficulty": 0}
+{"phrase": "ladybug", "_id": 6099, "difficulty": 0}
+{"phrase": "lipstick", "_id": 6121, "difficulty": 0}
+{"phrase": "mastermind", "_id": 6146, "difficulty": 0}
+{"phrase": "nearsighted", "_id": 6170, "difficulty": 0}
+{"phrase": "newsworthy", "_id": 6178, "difficulty": 0}
+{"phrase": "nosedive", "_id": 6188, "difficulty": 0}
+{"phrase": "offspring", "_id": 6196, "difficulty": 0}
+{"phrase": "outburst", "_id": 6209, "difficulty": 0}
+{"phrase": "oversleep", "_id": 6251, "difficulty": 0}
+{"phrase": "pigtail", "_id": 6289, "difficulty": 0}
+{"phrase": "pitchfork", "_id": 6302, "difficulty": 0}
+{"phrase": "playground", "_id": 6304, "difficulty": 0}
+{"phrase": "pushover", "_id": 6328, "difficulty": 0}
+{"phrase": "rattlesnake", "_id": 6338, "difficulty": 0}
+{"phrase": "redhead", "_id": 6339, "difficulty": 0}
+{"phrase": "saucepan", "_id": 6368, "difficulty": 0}
+{"phrase": "shutdown", "_id": 6399, "difficulty": 0}
+{"phrase": "sidecar", "_id": 6402, "difficulty": 0}
+{"phrase": "sidekick", "_id": 6403, "difficulty": 0}
+{"phrase": "sidestroke", "_id": 6406, "difficulty": 0}
+{"phrase": "sideswipe", "_id": 6407, "difficulty": 0}
+{"phrase": "slipknot", "_id": 6428, "difficulty": 0}
+{"phrase": "snowstorm", "_id": 6443, "difficulty": 0}
+{"phrase": "soundproof", "_id": 6453, "difficulty": 0}
+{"phrase": "stepfather", "_id": 6489, "difficulty": 0}
+{"phrase": "stockbroker", "_id": 6495, "difficulty": 0}
+{"phrase": "storekeeper", "_id": 6500, "difficulty": 0}
+{"phrase": "sunspot", "_id": 6520, "difficulty": 0}
+{"phrase": "sweetheart", "_id": 6529, "difficulty": 0}
+{"phrase": "timekeeper", "_id": 6560, "difficulty": 0}
+{"phrase": "tiptoe", "_id": 6564, "difficulty": 0}
+{"phrase": "tombstone", "_id": 6566, "difficulty": 0}
+{"phrase": "tryout", "_id": 6577, "difficulty": 0}
+{"phrase": "turnpike", "_id": 6583, "difficulty": 0}
+{"phrase": "underhand", "_id": 6597, "difficulty": 0}
+{"phrase": "undertaker", "_id": 6601, "difficulty": 0}
+{"phrase": "walkout", "_id": 6635, "difficulty": 0}
+{"phrase": "wallflower", "_id": 6636, "difficulty": 0}
+{"phrase": "watchdog", "_id": 6645, "difficulty": 0}
+{"phrase": "waterfowl", "_id": 6647, "difficulty": 0}
+{"phrase": "weatherman", "_id": 6655, "difficulty": 0}
+{"phrase": "wheelbarrow", "_id": 6664, "difficulty": 0}
+{"phrase": "wiretap", "_id": 6695, "difficulty": 0}
+{"phrase": "withstand", "_id": 6702, "difficulty": 0}
+{"phrase": "wolfsbane", "_id": 6704, "difficulty": 0}
+{"phrase": "worldwide", "_id": 6722, "difficulty": 0}
+{"phrase": "checks and balances", "_id": 6740, "difficulty": 0}
+{"phrase": "Commander in Chief", "_id": 6745, "difficulty": 0}
+{"phrase": "regulation", "_id": 6802, "difficulty": 0}
+{"phrase": "bag", "_id": 6830, "difficulty": 0}
+{"phrase": "goblet", "_id": 6865, "difficulty": 0}
+{"phrase": "grocery bag", "_id": 6866, "difficulty": 0}
+{"phrase": "lunchbox", "_id": 6875, "difficulty": 0}
+{"phrase": "chop", "_id": 6924, "difficulty": 0}
+{"phrase": "drizzle", "_id": 6943, "difficulty": 0}
+{"phrase": "pan fry", "_id": 6985, "difficulty": 0}
+{"phrase": "pickle", "_id": 6990, "difficulty": 0}
+{"phrase": "simmer", "_id": 7023, "difficulty": 0}
+{"phrase": "skewer", "_id": 7024, "difficulty": 0}
+{"phrase": "skim", "_id": 7025, "difficulty": 0}
+{"phrase": "egg beater", "_id": 7087, "difficulty": 0}
+{"phrase": "gelatine mold", "_id": 7095, "difficulty": 0}
+{"phrase": "pizza cutter", "_id": 7130, "difficulty": 0}
+{"phrase": "pressure cooker", "_id": 7137, "difficulty": 0}
+{"phrase": "rice cooker", "_id": 7142, "difficulty": 0}
+{"phrase": "teakettle", "_id": 7166, "difficulty": 0}
+{"phrase": "Antigua and Barbuda", "_id": 7184, "difficulty": 0}
+{"phrase": "Austria", "_id": 7188, "difficulty": 0}
+{"phrase": "Belarus", "_id": 7193, "difficulty": 0}
+{"phrase": "Ethiopia", "_id": 7233, "difficulty": 0}
+{"phrase": "Guatemala", "_id": 7244, "difficulty": 0}
+{"phrase": "Iceland", "_id": 7250, "difficulty": 0}
+{"phrase": "Japan", "_id": 7256, "difficulty": 0}
+{"phrase": "Kenya", "_id": 7259, "difficulty": 0}
+{"phrase": "New Zealand", "_id": 7296, "difficulty": 0}
+{"phrase": "Nigeria", "_id": 7299, "difficulty": 0}
+{"phrase": "Paraguay", "_id": 7306, "difficulty": 0}
+{"phrase": "Philippines", "_id": 7308, "difficulty": 0}
+{"phrase": "Poland", "_id": 7309, "difficulty": 0}
+{"phrase": "Saudi Arabia", "_id": 7320, "difficulty": 0}
+{"phrase": "South Africa", "_id": 7330, "difficulty": 0}
+{"phrase": "Trinidad and Tobago", "_id": 7343, "difficulty": 0}
+{"phrase": "Tunisia", "_id": 7344, "difficulty": 0}
+{"phrase": "United Arab Emirates", "_id": 7350, "difficulty": 0}
+{"phrase": "ballet", "_id": 7364, "difficulty": 0}
+{"phrase": "cha-cha", "_id": 7379, "difficulty": 0}
+{"phrase": "fandango", "_id": 7388, "difficulty": 0}
+{"phrase": "lambada", "_id": 7411, "difficulty": 0}
+{"phrase": "line dance", "_id": 7415, "difficulty": 0}
+{"phrase": "pasodoble", "_id": 7427, "difficulty": 0}
+{"phrase": "slow dance", "_id": 7437, "difficulty": 0}
+{"phrase": "baby teeth", "_id": 7461, "difficulty": 0}
+{"phrase": "exam", "_id": 7475, "difficulty": 0}
+{"phrase": "false teeth", "_id": 7477, "difficulty": 0}
+{"phrase": "gargle", "_id": 7480, "difficulty": 0}
+{"phrase": "pain", "_id": 7493, "difficulty": 0}
+{"phrase": "plaque", "_id": 7497, "difficulty": 0}
+{"phrase": "tooth fairy", "_id": 7509, "difficulty": 0}
+{"phrase": "angelfood cake", "_id": 7515, "difficulty": 0}
+{"phrase": "apple crisp", "_id": 7517, "difficulty": 0}
+{"phrase": "baklava", "_id": 7521, "difficulty": 0}
+{"phrase": "biscotti", "_id": 7524, "difficulty": 0}
+{"phrase": "coffee cake", "_id": 7546, "difficulty": 0}
+{"phrase": "Key lime pie", "_id": 7565, "difficulty": 0}
+{"phrase": "oatmeal cookie", "_id": 7576, "difficulty": 0}
+{"phrase": "strudel", "_id": 7603, "difficulty": 0}
+{"phrase": "sugar cookie", "_id": 7604, "difficulty": 0}
+{"phrase": "guard dog", "_id": 7647, "difficulty": 0}
+{"phrase": "hunting dog", "_id": 7649, "difficulty": 0}
+{"phrase": "lap dog", "_id": 7653, "difficulty": 0}
+{"phrase": "Newfoundland", "_id": 7659, "difficulty": 0}
+{"phrase": "contusion", "_id": 7725, "difficulty": 0}
+{"phrase": "disease", "_id": 7737, "difficulty": 0}
+{"phrase": "disinfect", "_id": 7738, "difficulty": 0}
+{"phrase": "disorder", "_id": 7739, "difficulty": 0}
+{"phrase": "fracture", "_id": 7750, "difficulty": 0}
+{"phrase": "immunization", "_id": 7759, "difficulty": 0}
+{"phrase": "laryngitis", "_id": 7767, "difficulty": 0}
+{"phrase": "malignant", "_id": 7768, "difficulty": 0}
+{"phrase": "therapy", "_id": 7824, "difficulty": 0}
+{"phrase": "vaccination", "_id": 7831, "difficulty": 0}
+{"phrase": "asphalt", "_id": 7963, "difficulty": 0}
+{"phrase": "back seat", "_id": 7966, "difficulty": 0}
+{"phrase": "crash", "_id": 7981, "difficulty": 0}
+{"phrase": "dead end", "_id": 7985, "difficulty": 0}
+{"phrase": "double parked", "_id": 7992, "difficulty": 0}
+{"phrase": "emergency", "_id": 7998, "difficulty": 0}
+{"phrase": "exit ramp", "_id": 8003, "difficulty": 0}
+{"phrase": "global positioning system", "_id": 8011, "difficulty": 0}
+{"phrase": "highway patrol", "_id": 8020, "difficulty": 0}
+{"phrase": "parking lot", "_id": 8053, "difficulty": 0}
+{"phrase": "parking meter", "_id": 8054, "difficulty": 0}
+{"phrase": "rest stop", "_id": 8069, "difficulty": 0}
+{"phrase": "rollover", "_id": 8076, "difficulty": 0}
+{"phrase": "test drive", "_id": 8098, "difficulty": 0}
+{"phrase": "yellow light", "_id": 8118, "difficulty": 0}
+{"phrase": "Adam and Eve", "_id": 8121, "difficulty": 0}
+{"phrase": "bed and breakfast", "_id": 8128, "difficulty": 0}
+{"phrase": "Bert and Ernie", "_id": 8130, "difficulty": 0}
+{"phrase": "fire and brimstone", "_id": 8152, "difficulty": 0}
+{"phrase": "Lewis and Clark", "_id": 8175, "difficulty": 0}
+{"phrase": "rock and a hard place", "_id": 8200, "difficulty": 0}
+{"phrase": "Romeo and Juliet", "_id": 8202, "difficulty": 0}
+{"phrase": "Oxygen (O)", "_id": 8341, "difficulty": 0}
+{"phrase": "anguish", "_id": 8402, "difficulty": 0}
+{"phrase": "crazed", "_id": 8422, "difficulty": 0}
+{"phrase": "defeat", "_id": 8424, "difficulty": 0}
+{"phrase": "disappointment", "_id": 8430, "difficulty": 0}
+{"phrase": "dissatisfied", "_id": 8439, "difficulty": 0}
+{"phrase": "distraction", "_id": 8440, "difficulty": 0}
+{"phrase": "enraptured", "_id": 8450, "difficulty": 0}
+{"phrase": "enthusiasm", "_id": 8452, "difficulty": 0}
+{"phrase": "euphoria", "_id": 8455, "difficulty": 0}
+{"phrase": "exuberant", "_id": 8457, "difficulty": 0}
+{"phrase": "frustration", "_id": 8463, "difficulty": 0}
+{"phrase": "guilt", "_id": 8468, "difficulty": 0}
+{"phrase": "laid back", "_id": 8484, "difficulty": 0}
+{"phrase": "loneliness", "_id": 8488, "difficulty": 0}
+{"phrase": "remorse", "_id": 8510, "difficulty": 0}
+{"phrase": "satisfaction", "_id": 8516, "difficulty": 0}
+{"phrase": "sentimentality", "_id": 8518, "difficulty": 0}
+{"phrase": "triumph", "_id": 8534, "difficulty": 0}
+{"phrase": "absorb", "_id": 8545, "difficulty": 0}
+{"phrase": "alternating current", "_id": 8548, "difficulty": 0}
+{"phrase": "carbon tax", "_id": 8561, "difficulty": 0}
+{"phrase": "environment", "_id": 8582, "difficulty": 0}
+{"phrase": "magnetic energy", "_id": 8614, "difficulty": 0}
+{"phrase": "nuclear energy", "_id": 8621, "difficulty": 0}
+{"phrase": "oil rig", "_id": 8626, "difficulty": 0}
+{"phrase": "steam engine", "_id": 8650, "difficulty": 0}
+{"phrase": "first born", "_id": 8693, "difficulty": 0}
+{"phrase": "matriarch", "_id": 8732, "difficulty": 0}
+{"phrase": "niece", "_id": 8739, "difficulty": 0}
+{"phrase": "quadruplets", "_id": 8748, "difficulty": 0}
+{"phrase": "triplets", "_id": 8768, "difficulty": 0}
+{"phrase": "duck", "_id": 8792, "difficulty": 0}
+{"phrase": "ewe", "_id": 8795, "difficulty": 0}
+{"phrase": "fertilizer", "_id": 8799, "difficulty": 0}
+{"phrase": "piglet", "_id": 8829, "difficulty": 0}
+{"phrase": "swine", "_id": 8845, "difficulty": 0}
+{"phrase": "Dalmatian", "_id": 8865, "difficulty": 0}
+{"phrase": "fire extinguisher", "_id": 8873, "difficulty": 0}
+{"phrase": "smoke detector", "_id": 8897, "difficulty": 0}
+{"phrase": "azalea", "_id": 8970, "difficulty": 0}
+{"phrase": "camellia", "_id": 8983, "difficulty": 0}
+{"phrase": "carnation", "_id": 8985, "difficulty": 0}
+{"phrase": "dandelion", "_id": 8995, "difficulty": 0}
+{"phrase": "anise", "_id": 9061, "difficulty": 0}
+{"phrase": "cauliflower", "_id": 9100, "difficulty": 0}
+{"phrase": "caviar", "_id": 9101, "difficulty": 0}
+{"phrase": "chick peas", "_id": 9109, "difficulty": 0}
+{"phrase": "chives", "_id": 9112, "difficulty": 0}
+{"phrase": "coleslaw", "_id": 9122, "difficulty": 0}
+{"phrase": "crepe", "_id": 9129, "difficulty": 0}
+{"phrase": "cuisine", "_id": 9133, "difficulty": 0}
+{"phrase": "flax", "_id": 9156, "difficulty": 0}
+{"phrase": "garlic", "_id": 9160, "difficulty": 0}
+{"phrase": "iceberg lettuce", "_id": 9177, "difficulty": 0}
+{"phrase": "jalapeno", "_id": 9179, "difficulty": 0}
+{"phrase": "mushroom", "_id": 9227, "difficulty": 0}
+{"phrase": "papaya", "_id": 9246, "difficulty": 0}
+{"phrase": "pork chops", "_id": 9265, "difficulty": 0}
+{"phrase": "quiche", "_id": 9274, "difficulty": 0}
+{"phrase": "scallops", "_id": 9290, "difficulty": 0}
+{"phrase": "shrimp", "_id": 9295, "difficulty": 0}
+{"phrase": "succotash", "_id": 9319, "difficulty": 0}
+{"phrase": "tofu", "_id": 9335, "difficulty": 0}
+{"phrase": "whipped cream", "_id": 9354, "difficulty": 0}
+{"phrase": "photosynthesis", "_id": 9398, "difficulty": 0}
+{"phrase": "benefactor", "_id": 9432, "difficulty": 0}
+{"phrase": "compadre", "_id": 9445, "difficulty": 0}
+{"phrase": "mortal", "_id": 9480, "difficulty": 0}
+{"phrase": "sponsor", "_id": 9500, "difficulty": 0}
+{"phrase": "stranger", "_id": 9502, "difficulty": 0}
+{"phrase": "crabapple", "_id": 9519, "difficulty": 0}
+{"phrase": "mulberry", "_id": 9522, "difficulty": 0}
+{"phrase": "chandelier", "_id": 9549, "difficulty": 0}
+{"phrase": "cot", "_id": 9555, "difficulty": 0}
+{"phrase": "file cabinet", "_id": 9577, "difficulty": 0}
+{"phrase": "lawn chair", "_id": 9597, "difficulty": 0}
+{"phrase": "picnic table", "_id": 9614, "difficulty": 0}
+{"phrase": "rocking chair", "_id": 9617, "difficulty": 0}
+{"phrase": "nautical chart", "_id": 9677, "difficulty": 0}
+{"phrase": "Northern Hemisphere", "_id": 9679, "difficulty": 0}
+{"phrase": "ratio", "_id": 9685, "difficulty": 0}
+{"phrase": "road atlas", "_id": 9687, "difficulty": 0}
+{"phrase": "topography", "_id": 9696, "difficulty": 0}
+{"phrase": "capital letter", "_id": 9709, "difficulty": 0}
+{"phrase": "idiom", "_id": 9734, "difficulty": 0}
+{"phrase": "parentheses", "_id": 9750, "difficulty": 0}
+{"phrase": "omen", "_id": 9808, "difficulty": 0}
+{"phrase": "coffin", "_id": 9837, "difficulty": 0}
+{"phrase": "eyepatch", "_id": 9847, "difficulty": 0}
+{"phrase": "horrify", "_id": 9870, "difficulty": 0}
+{"phrase": "make-believe", "_id": 9873, "difficulty": 0}
+{"phrase": "mummy", "_id": 9879, "difficulty": 0}
+{"phrase": "unnerving", "_id": 9913, "difficulty": 0}
+{"phrase": "vanish", "_id": 9915, "difficulty": 0}
+{"phrase": "coonskin hat", "_id": 9933, "difficulty": 0}
+{"phrase": "nightcap", "_id": 9953, "difficulty": 0}
+{"phrase": "Boxing Day", "_id": 9978, "difficulty": 0}
+{"phrase": "Guy Fawkes Day", "_id": 9980, "difficulty": 0}
+{"phrase": "dish washer", "_id": 10008, "difficulty": 0}
+{"phrase": "foundation", "_id": 10025, "difficulty": 0}
+{"phrase": "picture frame", "_id": 10053, "difficulty": 0}
+{"phrase": "screen door", "_id": 10061, "difficulty": 0}
+{"phrase": "stairs", "_id": 10070, "difficulty": 0}
+{"phrase": "camera", "_id": 10092, "difficulty": 0}
+{"phrase": "electric razor", "_id": 10105, "difficulty": 0}
+{"phrase": "electric toothbrush", "_id": 10106, "difficulty": 0}
+{"phrase": "iron", "_id": 10116, "difficulty": 0}
+{"phrase": "sewing machine", "_id": 10126, "difficulty": 0}
+{"phrase": "stereo", "_id": 10128, "difficulty": 0}
+{"phrase": "television", "_id": 10130, "difficulty": 0}
+{"phrase": "double-wide", "_id": 10151, "difficulty": 0}
+{"phrase": "studio apartment", "_id": 10173, "difficulty": 0}
+{"phrase": "vacation house", "_id": 10182, "difficulty": 0}
+{"phrase": "bedbug", "_id": 10191, "difficulty": 0}
+{"phrase": "dung beetle", "_id": 10199, "difficulty": 0}
+{"phrase": "meadowhawk", "_id": 10217, "difficulty": 0}
+{"phrase": "animator", "_id": 10352, "difficulty": 0}
+{"phrase": "blacksmith", "_id": 10364, "difficulty": 0}
+{"phrase": "consul", "_id": 10385, "difficulty": 0}
+{"phrase": "contractor", "_id": 10386, "difficulty": 0}
+{"phrase": "cryptographer", "_id": 10390, "difficulty": 0}
+{"phrase": "deputy", "_id": 10393, "difficulty": 0}
+{"phrase": "dermatologist", "_id": 10394, "difficulty": 0}
+{"phrase": "detective", "_id": 10396, "difficulty": 0}
+{"phrase": "diver", "_id": 10399, "difficulty": 0}
+{"phrase": "educator", "_id": 10405, "difficulty": 0}
+{"phrase": "entomologist", "_id": 10408, "difficulty": 0}
+{"phrase": "garbage man", "_id": 10418, "difficulty": 0}
+{"phrase": "internist", "_id": 10434, "difficulty": 0}
+{"phrase": "journalist", "_id": 10442, "difficulty": 0}
+{"phrase": "landscaper", "_id": 10444, "difficulty": 0}
+{"phrase": "mason", "_id": 10455, "difficulty": 0}
+{"phrase": "monk", "_id": 10461, "difficulty": 0}
+{"phrase": "poet", "_id": 10487, "difficulty": 0}
+{"phrase": "security guard", "_id": 10513, "difficulty": 0}
+{"phrase": "street sweeper", "_id": 10519, "difficulty": 0}
+{"phrase": "technician", "_id": 10529, "difficulty": 0}
+{"phrase": "trader", "_id": 10534, "difficulty": 0}
+{"phrase": "aluminum foil", "_id": 10558, "difficulty": 0}
+{"phrase": "dish soap", "_id": 10577, "difficulty": 0}
+{"phrase": "measuring spoons", "_id": 10595, "difficulty": 0}
+{"phrase": "coastline", "_id": 10648, "difficulty": 0}
+{"phrase": "fissure", "_id": 10658, "difficulty": 0}
+{"phrase": "gap", "_id": 10660, "difficulty": 0}
+{"phrase": "ravine", "_id": 10683, "difficulty": 0}
+{"phrase": "Irish", "_id": 10747, "difficulty": 0}
+{"phrase": "Mandarin Chinese", "_id": 10767, "difficulty": 0}
+{"phrase": "Sanskrit", "_id": 10791, "difficulty": 0}
+{"phrase": "Spanish", "_id": 10800, "difficulty": 0}
+{"phrase": "commander", "_id": 10849, "difficulty": 0}
+{"phrase": "don", "_id": 10859, "difficulty": 0}
+{"phrase": "head honcho", "_id": 10869, "difficulty": 0}
+{"phrase": "headmistress", "_id": 10871, "difficulty": 0}
+{"phrase": "minister", "_id": 10882, "difficulty": 0}
+{"phrase": "overlord", "_id": 10886, "difficulty": 0}
+{"phrase": "provost", "_id": 10896, "difficulty": 0}
+{"phrase": "swami", "_id": 10909, "difficulty": 0}
+{"phrase": "affidavit", "_id": 10920, "difficulty": 0}
+{"phrase": "constitutional law", "_id": 10945, "difficulty": 0}
+{"phrase": "cross-examination", "_id": 10949, "difficulty": 0}
+{"phrase": "fraud", "_id": 10970, "difficulty": 0}
+{"phrase": "grievance", "_id": 10972, "difficulty": 0}
+{"phrase": "hearsay", "_id": 10977, "difficulty": 0}
+{"phrase": "ordinance", "_id": 11006, "difficulty": 0}
+{"phrase": "power of attorney", "_id": 11015, "difficulty": 0}
+{"phrase": "subpoena", "_id": 11041, "difficulty": 0}
+{"phrase": "beard", "_id": 11065, "difficulty": 0}
+{"phrase": "seethe", "_id": 11167, "difficulty": 0}
+{"phrase": "sheath", "_id": 11171, "difficulty": 0}
+{"phrase": "weave", "_id": 11201, "difficulty": 0}
+{"phrase": "fluke", "_id": 11218, "difficulty": 0}
+{"phrase": "shrewd", "_id": 11240, "difficulty": 0}
+{"phrase": "squirrel", "_id": 11262, "difficulty": 0}
+{"phrase": "arithmetic", "_id": 11269, "difficulty": 0}
+{"phrase": "divisor", "_id": 11281, "difficulty": 0}
+{"phrase": "parallelogram", "_id": 11341, "difficulty": 0}
+{"phrase": "perimeter", "_id": 11343, "difficulty": 0}
+{"phrase": "prime number", "_id": 11352, "difficulty": 0}
+{"phrase": "real number", "_id": 11361, "difficulty": 0}
+{"phrase": "right angle", "_id": 11365, "difficulty": 0}
+{"phrase": "Venn diagram", "_id": 11396, "difficulty": 0}
+{"phrase": "megapixel", "_id": 11459, "difficulty": 0}
+{"phrase": "millimeter", "_id": 11468, "difficulty": 0}
+{"phrase": "order of magnitude", "_id": 11475, "difficulty": 0}
+{"phrase": "stainless steel", "_id": 11521, "difficulty": 0}
+{"phrase": "battle", "_id": 11543, "difficulty": 0}
+{"phrase": "brigade", "_id": 11553, "difficulty": 0}
+{"phrase": "cannon ball", "_id": 11557, "difficulty": 0}
+{"phrase": "conquest", "_id": 11565, "difficulty": 0}
+{"phrase": "evacuate", "_id": 11580, "difficulty": 0}
+{"phrase": "insignia", "_id": 11600, "difficulty": 0}
+{"phrase": "Purple Heart", "_id": 11629, "difficulty": 0}
+{"phrase": "sniper", "_id": 11644, "difficulty": 0}
+{"phrase": "squadron", "_id": 11646, "difficulty": 0}
+{"phrase": "bass drum", "_id": 11728, "difficulty": 0}
+{"phrase": "bass guitar", "_id": 11729, "difficulty": 0}
+{"phrase": "bongo drum", "_id": 11731, "difficulty": 0}
+{"phrase": "moog synthesizer", "_id": 11772, "difficulty": 0}
+{"phrase": "string bass", "_id": 11793, "difficulty": 0}
+{"phrase": "circle of fifths", "_id": 11830, "difficulty": 0}
+{"phrase": "interval", "_id": 11867, "difficulty": 0}
+{"phrase": "notation", "_id": 11893, "difficulty": 0}
+{"phrase": "quarter rest", "_id": 11911, "difficulty": 0}
+{"phrase": "ritard", "_id": 11917, "difficulty": 0}
+{"phrase": "simile", "_id": 11927, "difficulty": 0}
+{"phrase": "sostenuto", "_id": 11932, "difficulty": 0}
+{"phrase": "whole step", "_id": 11959, "difficulty": 0}
+{"phrase": "whole tone scale", "_id": 11960, "difficulty": 0}
+{"phrase": "out with the old", "_id": 11974, "difficulty": 0}
+{"phrase": "stroke of midnight", "_id": 11977, "difficulty": 0}
+{"phrase": "despicable", "_id": 12008, "difficulty": 0}
+{"phrase": "malicious", "_id": 12033, "difficulty": 0}
+{"phrase": "repugnant", "_id": 12052, "difficulty": 0}
+{"phrase": "vice", "_id": 12076, "difficulty": 0}
+{"phrase": "blast", "_id": 12089, "difficulty": 0}
+{"phrase": "break", "_id": 12095, "difficulty": 0}
+{"phrase": "frown", "_id": 12136, "difficulty": 0}
+{"phrase": "guard", "_id": 12141, "difficulty": 0}
+{"phrase": "itch", "_id": 12153, "difficulty": 0}
+{"phrase": "fin", "_id": 12276, "difficulty": 0}
+{"phrase": "hammerhead shark", "_id": 12279, "difficulty": 0}
+{"phrase": "krill", "_id": 12285, "difficulty": 0}
+{"phrase": "pillage", "_id": 12352, "difficulty": 0}
+{"phrase": "raid", "_id": 12356, "difficulty": 0}
+{"phrase": "scar", "_id": 12361, "difficulty": 0}
+{"phrase": "alfalfa", "_id": 12373, "difficulty": 0}
+{"phrase": "botany", "_id": 12384, "difficulty": 0}
+{"phrase": "germinate", "_id": 12411, "difficulty": 0}
+{"phrase": "juniper", "_id": 12426, "difficulty": 0}
+{"phrase": "pollinate", "_id": 12457, "difficulty": 0}
+{"phrase": "prickle", "_id": 12458, "difficulty": 0}
+{"phrase": "tap root", "_id": 12484, "difficulty": 0}
+{"phrase": "woody", "_id": 12497, "difficulty": 0}
+{"phrase": "divine", "_id": 12522, "difficulty": 0}
+{"phrase": "innovative", "_id": 12541, "difficulty": 0}
+{"phrase": "legendary", "_id": 12549, "difficulty": 0}
+{"phrase": "paradise", "_id": 12562, "difficulty": 0}
+{"phrase": "prominent", "_id": 12569, "difficulty": 0}
+{"phrase": "stationery", "_id": 12648, "difficulty": 0}
+{"phrase": "Liberty Bell", "_id": 12715, "difficulty": 0}
+{"phrase": "Martha Washington", "_id": 12717, "difficulty": 0}
+{"phrase": "Revolutionary War", "_id": 12728, "difficulty": 0}
+{"phrase": "barrage", "_id": 12782, "difficulty": 0}
+{"phrase": "behave", "_id": 12788, "difficulty": 0}
+{"phrase": "choke", "_id": 12812, "difficulty": 0}
+{"phrase": "declare", "_id": 12849, "difficulty": 0}
+{"phrase": "deter", "_id": 12854, "difficulty": 0}
+{"phrase": "dote", "_id": 12861, "difficulty": 0}
+{"phrase": "elope", "_id": 12867, "difficulty": 0}
+{"phrase": "expel", "_id": 12888, "difficulty": 0}
+{"phrase": "immigrate", "_id": 12920, "difficulty": 0}
+{"phrase": "obtain", "_id": 12972, "difficulty": 0}
+{"phrase": "profess", "_id": 12992, "difficulty": 0}
+{"phrase": "recommend", "_id": 13006, "difficulty": 0}
+{"phrase": "rely", "_id": 13011, "difficulty": 0}
+{"phrase": "snicker", "_id": 13044, "difficulty": 0}
+{"phrase": "snooze", "_id": 13048, "difficulty": 0}
+{"phrase": "undress", "_id": 13100, "difficulty": 0}
+{"phrase": "wait", "_id": 13111, "difficulty": 0}
+{"phrase": "cafe", "_id": 13171, "difficulty": 0}
+{"phrase": "gourmet", "_id": 13183, "difficulty": 0}
+{"phrase": "to go", "_id": 13199, "difficulty": 0}
+{"phrase": "geode", "_id": 13247, "difficulty": 0}
+{"phrase": "geology", "_id": 13248, "difficulty": 0}
+{"phrase": "ballroom", "_id": 13322, "difficulty": 0}
+{"phrase": "control room", "_id": 13336, "difficulty": 0}
+{"phrase": "mailroom", "_id": 13361, "difficulty": 0}
+{"phrase": "newsroom", "_id": 13366, "difficulty": 0}
+{"phrase": "salesroom", "_id": 13378, "difficulty": 0}
+{"phrase": "solarium", "_id": 13385, "difficulty": 0}
+{"phrase": "waiting room", "_id": 13395, "difficulty": 0}
+{"phrase": "weight room", "_id": 13397, "difficulty": 0}
+{"phrase": "paper clip", "_id": 13631, "difficulty": 0}
+{"phrase": "thesaurus", "_id": 13645, "difficulty": 0}
+{"phrase": "atom", "_id": 13655, "difficulty": 0}
+{"phrase": "hypothesis", "_id": 13677, "difficulty": 0}
+{"phrase": "Petri dish", "_id": 13693, "difficulty": 0}
+{"phrase": "physical science", "_id": 13694, "difficulty": 0}
+{"phrase": "virologist", "_id": 13702, "difficulty": 0}
+{"phrase": "evolutionary biology", "_id": 13725, "difficulty": 0}
+{"phrase": "genomics", "_id": 13728, "difficulty": 0}
+{"phrase": "neurology", "_id": 13741, "difficulty": 0}
+{"phrase": "quantum physics", "_id": 13755, "difficulty": 0}
+{"phrase": "tectonics", "_id": 13760, "difficulty": 0}
+{"phrase": "m&ouml;bius strip", "_id": 13852, "difficulty": 0}
+{"phrase": "espadrilles", "_id": 13882, "difficulty": 0}
+{"phrase": "figure skates", "_id": 13883, "difficulty": 0}
+{"phrase": "golf shoes", "_id": 13884, "difficulty": 0}
+{"phrase": "inline skates", "_id": 13889, "difficulty": 0}
+{"phrase": "penny loafers", "_id": 13898, "difficulty": 0}
+{"phrase": "stiletto heels", "_id": 13914, "difficulty": 0}
+{"phrase": "equestrian", "_id": 13962, "difficulty": 0}
+{"phrase": "fencing", "_id": 13963, "difficulty": 0}
+{"phrase": "field hockey", "_id": 13964, "difficulty": 0}
+{"phrase": "figure skating", "_id": 13966, "difficulty": 0}
+{"phrase": "geocaching", "_id": 13969, "difficulty": 0}
+{"phrase": "home run", "_id": 13984, "difficulty": 0}
+{"phrase": "huddle", "_id": 13986, "difficulty": 0}
+{"phrase": "kneepads", "_id": 14002, "difficulty": 0}
+{"phrase": "lutz", "_id": 14007, "difficulty": 0}
+{"phrase": "Nordic skiing", "_id": 14013, "difficulty": 0}
+{"phrase": "rower", "_id": 14045, "difficulty": 0}
+{"phrase": "rowing", "_id": 14046, "difficulty": 0}
+{"phrase": "slalom", "_id": 14055, "difficulty": 0}
+{"phrase": "tug of war", "_id": 14083, "difficulty": 0}
+{"phrase": "ultramarathon", "_id": 14084, "difficulty": 0}
+{"phrase": "windsurfer", "_id": 14100, "difficulty": 0}
+{"phrase": "candy shop", "_id": 14141, "difficulty": 0}
+{"phrase": "convention center", "_id": 14152, "difficulty": 0}
+{"phrase": "department store", "_id": 14155, "difficulty": 0}
+{"phrase": "game store", "_id": 14175, "difficulty": 0}
+{"phrase": "grocery store", "_id": 14178, "difficulty": 0}
+{"phrase": "haberdashery", "_id": 14179, "difficulty": 0}
+{"phrase": "thrift store", "_id": 14214, "difficulty": 0}
+{"phrase": "toy store", "_id": 14216, "difficulty": 0}
+{"phrase": "train station", "_id": 14217, "difficulty": 0}
+{"phrase": "Dublin", "_id": 14251, "difficulty": 0}
+{"phrase": "wearing of the green", "_id": 14277, "difficulty": 0}
+{"phrase": "Pilgrim", "_id": 14298, "difficulty": 0}
+{"phrase": "cuckoo clock", "_id": 14323, "difficulty": 0}
+{"phrase": "decade", "_id": 14324, "difficulty": 0}
+{"phrase": "Greenwich Mean Time", "_id": 14336, "difficulty": 0}
+{"phrase": "high noon", "_id": 14337, "difficulty": 0}
+{"phrase": "tardy", "_id": 14372, "difficulty": 0}
+{"phrase": "trimester", "_id": 14375, "difficulty": 0}
+{"phrase": "hex wrench", "_id": 14401, "difficulty": 0}
+{"phrase": "poker", "_id": 14414, "difficulty": 0}
+{"phrase": "vise", "_id": 14432, "difficulty": 0}
+{"phrase": "covered wagon", "_id": 14457, "difficulty": 0}
+{"phrase": "express train", "_id": 14477, "difficulty": 0}
+{"phrase": "forklift", "_id": 14479, "difficulty": 0}
+{"phrase": "jet ski", "_id": 14502, "difficulty": 0}
+{"phrase": "magic carpet", "_id": 14508, "difficulty": 0}
+{"phrase": "minesweeper", "_id": 14510, "difficulty": 0}
+{"phrase": "pickup truck", "_id": 14520, "difficulty": 0}
+{"phrase": "skiff", "_id": 14538, "difficulty": 0}
+{"phrase": "birch", "_id": 14574, "difficulty": 0}
+{"phrase": "eucalyptus", "_id": 14588, "difficulty": 0}
+{"phrase": "Pledge of Allegiance", "_id": 14662, "difficulty": 0}
+{"phrase": "hiatus", "_id": 14685, "difficulty": 0}
+{"phrase": "visa", "_id": 14709, "difficulty": 0}
+{"phrase": "flirt", "_id": 14726, "difficulty": 0}
+{"phrase": "Saint Valentine", "_id": 14738, "difficulty": 0}
+{"phrase": "arugula", "_id": 14751, "difficulty": 0}
+{"phrase": "beets", "_id": 14752, "difficulty": 0}
+{"phrase": "overrun", "_id": 14779, "difficulty": 0}
+{"phrase": "diligence", "_id": 14798, "difficulty": 0}
+{"phrase": "humility", "_id": 14817, "difficulty": 0}
+{"phrase": "selflessness", "_id": 14853, "difficulty": 0}
+{"phrase": "tolerance", "_id": 14861, "difficulty": 0}
+{"phrase": "blowgun", "_id": 14893, "difficulty": 0}
+{"phrase": "brass knuckles", "_id": 14898, "difficulty": 0}
+{"phrase": "bullwhip", "_id": 14899, "difficulty": 0}
+{"phrase": "handgun", "_id": 14915, "difficulty": 0}
+{"phrase": "nuclear bomb", "_id": 14935, "difficulty": 0}
+{"phrase": "pepper spray", "_id": 14938, "difficulty": 0}
+{"phrase": "rapier", "_id": 14942, "difficulty": 0}
+{"phrase": "revolver", "_id": 14943, "difficulty": 0}
+{"phrase": "semiautomatic", "_id": 14947, "difficulty": 0}
+{"phrase": "stun gun", "_id": 14952, "difficulty": 0}
+{"phrase": "tripwire", "_id": 14959, "difficulty": 0}
+{"phrase": "balmy", "_id": 14977, "difficulty": 0}
+{"phrase": "cold front", "_id": 14989, "difficulty": 0}
+{"phrase": "cold snap", "_id": 14990, "difficulty": 0}
+{"phrase": "condensation", "_id": 14992, "difficulty": 0}
+{"phrase": "El Ni&ntilde;o", "_id": 15009, "difficulty": 0}
+{"phrase": "freezing rain", "_id": 15018, "difficulty": 0}
+{"phrase": "funnel cloud", "_id": 15019, "difficulty": 0}
+{"phrase": "partly cloudy", "_id": 15068, "difficulty": 0}
+{"phrase": "wind shear", "_id": 15127, "difficulty": 0}
+{"phrase": "flannel", "_id": 15140, "difficulty": 0}
+{"phrase": "ice cap", "_id": 15147, "difficulty": 0}
+{"phrase": "sniffle", "_id": 15154, "difficulty": 0}
+{"phrase": "zero degrees", "_id": 15164, "difficulty": 0}
+{"phrase": "Stay of Execution", "_id": 15165, "difficulty": 0}
+{"phrase": "Gobsmacked", "_id": 15166, "difficulty": 0}
+{"phrase": "Slap bracelet", "_id": 15167, "difficulty": 0}
+{"phrase": "Smallpox vaccine", "_id": 15168, "difficulty": 0}
+{"phrase": "Non-profit organization", "_id": 15169, "difficulty": 0}
+{"phrase": "Best-selling novel", "_id": 15170, "difficulty": 0}
+{"phrase": "solitary confinement", "_id": 15171, "difficulty": 0}

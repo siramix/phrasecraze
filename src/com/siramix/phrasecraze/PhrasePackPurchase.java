@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,8 +45,7 @@ import android.widget.Toast;
 public class PhrasePackPurchase extends Activity {
 
   private static final String TAG = "CardPackPurchase";
-
-public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALIZED";
+  public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALIZED";
   
   // To be used for tooltips to help guide users
   private Toast mHelpToast = null;
@@ -53,6 +53,8 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
   List<ImageView> mPackViewList;
   List<View> mPackLineList;
 
+  private SharedPreferences mPackPrefs;
+  
   private HashMap<Integer, Pack> mSocialPacks;
 
   /**
@@ -79,16 +81,30 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
    */
   private OnClickListener mGameSetupListener = new OnClickListener() {
     public void onClick(View v) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "PlayGameListener OnClick()");
-      }
+      Log.d(TAG, "PlayGameListener OnClick()");
       
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this.getBaseContext());
       sm.playSound(SoundManager.Sound.CONFIRM);
-
-      startActivity(new Intent(PhrasePackPurchase.this.getApplication().getString(
-          R.string.IntentGameSetup), getIntent().getData()));
+      
+      Map<String, ?> packSelections = new HashMap<String, Boolean>();
+      packSelections = mPackPrefs.getAll();
+      
+      boolean anyPackSelected = false;
+      for (String packId : packSelections.keySet()) {
+        if (mPackPrefs.getBoolean(packId, false) == true) {
+          anyPackSelected = true;
+        }
+      }
+      
+      // Only advance to next screen if a pack is selected
+      if (anyPackSelected == true) {
+        startActivity(new Intent(PhrasePackPurchase.this.getApplication().getString(
+            R.string.IntentGameSetup), getIntent().getData()));
+      }
+      else {
+        showToast(getString(R.string.toast_packpurchase_nopackselected));
+      }
     }
   };
   
@@ -188,23 +204,20 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "onCreate()");
-    }
+    Log.d(TAG, "onCreate()");
     
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+    
+    // Get our pack preferences
+    mPackPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+    
     // Setup the view
     this.setContentView(R.layout.packpurchase);
     
     // Detect Social Clients
     detectClients();
     
-    // Get our current context
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    GameManager game = application.getGameManager();
 
     // set fonts on titles
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
@@ -216,16 +229,35 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     header = (TextView) this.findViewById(R.id.PackPurchase_PaidPackTitle);
     header.setTypeface(antonFont);
     
-    // Populate and display list of cards
-    LinearLayout unlockedPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_UnlockedPackSets);
-    LinearLayout paidPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_PaidPackSets);
     
     // Instantiate all of our lists for programmatic adding of packs to view
     mPackViewList = new LinkedList<ImageView>();
     mPackLineList = new LinkedList<View>();
+    
+    refreshAllPackLayouts();
+    //mBillingService.requestPurchase("test_pack", "payload_test");
+  }
+  
+  @Override
+  public void onResume() {
+    super.onResume();
+    refreshAllPackLayouts();
+  }
+  
+  private void refreshAllPackLayouts() {
+    // Get our current context
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
+        .getApplication();
 
-    //TODO get this list from the database or marketplace if possible
-    //      this is the paid pack list
+    GameManager game = application.getGameManager();
+
+    // Populate and display list of cards
+    LinearLayout unlockedPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_UnlockedPackSets);
+    LinearLayout paidPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_PaidPackSets);
+
+    unlockedPackLayout.removeAllViewsInLayout();
+    paidPackLayout.removeAllViewsInLayout();
+    
     PackClient client = PackClient.getInstance();
     LinkedList<Pack> socialPacks;
     LinkedList<Pack> paidPacks;
@@ -233,6 +265,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     localPacks = game.getInstalledPacks();
     mSocialPacks = new HashMap<Integer, Pack>();
     
+    // First try to get the online packs, if no internet, just use local packs
     try {
       socialPacks = client.getSocialPacks();
       paidPacks = client.getPayPacks();
@@ -263,8 +296,6 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     
     Button btn = (Button) this.findViewById(R.id.PackPurchase_Button_Next);
     btn.setOnClickListener(mGameSetupListener);
-
-    //mBillingService.requestPurchase("test_pack", "payload_test");
   }
   
   /**
@@ -277,7 +308,6 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
    * @param insertionPoint  The linearlayout at which to insert the rows of packs
    */
   private void populatePackLayout(List<Pack> packlist, LinearLayout insertionPoint) {
-    String packname;
     int count = 0;
     
     // Instantiate all our views for programmatic layout creation    
@@ -286,8 +316,8 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
     
     for (Iterator<Pack> it = packlist.iterator(); it.hasNext();) {
       Pack curPack = it.next();
-      packname = curPack.getName();
-      Log.d(TAG, "Count: " + count + "\nPackname: " + packname);
+      
+      Log.d(TAG, "Count: " + count + "\nPackname: " + curPack.getName());
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
       RelativeLayout packRow = (RelativeLayout) line.getChildAt(count);
@@ -335,7 +365,6 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       count++;
     }
     insertionPoint.addView(layout);
-    
   }
   
   /**
@@ -528,11 +557,8 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
    * @return
    */
   public boolean getPackPref(Pack pack) {
-    if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "getPackPref(" + pack.getName() + ")");
-    }
-    SharedPreferences packPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
-    return packPrefs.getBoolean(String.valueOf(pack.getId()), false);
+    Log.d(TAG, "getPackPref(" + pack.getName() + ")");
+    return mPackPrefs.getBoolean(String.valueOf(pack.getId()), false);
   }
   
   /**
@@ -544,8 +570,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       Log.d(TAG, "setPackPref(" + pack.getName() + "," + onoff + ")");
     }
     // Store the pack's boolean in the preferences file for pack preferences
-    SharedPreferences packPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
-    SharedPreferences.Editor packPrefsEdit = packPrefs.edit();
+    SharedPreferences.Editor packPrefsEdit = mPackPrefs.edit();
     
     packPrefsEdit.putBoolean(String.valueOf(pack.getId()), onoff);
     if (PhraseCrazeApplication.DEBUG && onoff == false) {
@@ -597,6 +622,7 @@ public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALI
       mHelpToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
     } else {
       mHelpToast.setText(text);
+      //TODO Can we get these toasts to display in a different spot?
       mHelpToast.setDuration(Toast.LENGTH_LONG);
     }
     mHelpToast.show();
