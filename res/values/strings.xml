@@ -19,6 +19,7 @@
   <string name="IntentAssignPoints">com.siramix.phrasecraze.intent.action.ASSIGNPOINTS</string>
   <string name="IntentPackPurchase">com.siramix.phrasecraze.intent.action.PHRASEPACKPURCHASE</string>
   <string name="IntentSetBuzzedTeam">com.siramix.phrasecraze.intent.action.SETBUZZEDTEAM</string>
+  <string name="IntentCancellable">com.siramix.phrasecraze.intent.action.ISDIALOGCANCELLABLE</string>
 
   <!-- Global Prefkey IDs -->
   <string name="PREFKEY_SHOWREMINDER">com.siramix.phrasecraze.prefkey.SHOWREMINDER</string>
@@ -82,7 +83,7 @@
   <string name="assignpoints_buttonconfirm">Confirm</string>
   
     <!-- Set BuzzedTeam dialog strings -->
-  <string name="setbuzzedteam_title">Which Team got Buzzed?</string>
+  <string name="setbuzzedteam_title">Which Team Lost the Round?</string>
   <string name="setbuzzedteam_buttoncancel">Cancel</string>
   <string name="setbuzzedteam_buttonconfirm">Confirm</string>
 
@@ -92,6 +93,9 @@
   <!-- For end game dialog -->
   <string name="endGameDialog_title">Confirm End Game</string>
   <string name="endGameDialog_text">Are you sure you want to end the current game?</string>
+
+  <!--  For end round dialog -->
+  <string name="endRoundDialog_text">Are you sure you want to end the current round?</string>
 
   <!-- For pause game dialog -->
   <string name="pauseGameDialog_title">Game Paused</string>

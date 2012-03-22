@@ -107,43 +107,12 @@ public class TurnSummary extends Activity {
       SoundManager sm = SoundManager.getInstance(TurnSummary.this
           .getBaseContext());
       sm.playSound(SoundManager.Sound.CONFIRM);
-     
-      /*
-      // HACK - Until I get the dialog working, just switch the team
-      PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
-          .getApplication();
-      GameManager game = application.getGameManager();
-      int buzzedTeamIndex = 0;
-      List<Team> teams = game.getTeams();
-      if( game.getBuzzedTeam().equals(teams.get(0)))
-      {
-         buzzedTeamIndex = 1;
-      }
-      Team newBuzzedTeam = game.getTeams().get(buzzedTeamIndex);
-      // Assign new buzzed team and recalculate scores and turns
 
-      game.setBuzzedTeam(newBuzzedTeam);
-      game.setAutoAssignedRoundScores();
-      TurnSummary.this.updateScoreViews();
-      // Buttons could change based on new scores
-      refreshButtons();
-      
-      // TODO: Move this to a function
-      // Update scoring team display
-      TextView stoppedTeam = (TextView) TurnSummary.this
-          .findViewById(R.id.TurnSummary_StoppedOn_Team);
-
-      stoppedTeam.setVisibility(View.VISIBLE);
-      stoppedTeam.setText(game.getBuzzedTeam().getName());
-      stoppedTeam.setTextColor(TurnSummary.this.getResources().getColor(game.getBuzzedTeam().getPrimaryColor()));
-      ((TextView) TurnSummary.this.findViewById(R.id.TurnSummary_StoppedOn)).setVisibility(View.VISIBLE);
-      */    
-      
       // Show Set Buzzed Team Dialog
       Intent intent = new Intent(getApplication().getString(
           R.string.IntentSetBuzzedTeam), getIntent().getData());
+      intent.putExtra(getApplication().getString(R.string.IntentCancellable), false);
       startActivityForResult(intent, SETBUZZEDTEAM_REQUEST_CODE);
-      
     }
   };
 
@@ -170,7 +139,7 @@ public class TurnSummary extends Activity {
     // Automatically add in scores only in automatic scoring
     if( game.isAssistedScoringEnabled())
     {
-    	game.setAutoAssignedRoundScores();
+    	
     }
     
     // Populate and display list of cards
@@ -353,7 +322,6 @@ public class TurnSummary extends Activity {
 
     // Assign new buzzed team and recalculate scores and turns
     game.setBuzzedTeam(newTeam);
-    game.setAutoAssignedRoundScores();
     
     TurnSummary.this.updateScoreViews();
     TurnSummary.this.updateStoppedTeamViews();
@@ -364,7 +332,7 @@ public class TurnSummary extends Activity {
 
   
   /**
-   * This function is called when the ChangeScores activity finishes.
+   * This function is called when Change Scores and SetBuzzedTeams activities finish.
    * It adds in the supplied points to each team's total score.
    */
   @Override
@@ -394,9 +362,7 @@ public class TurnSummary extends Activity {
     else if (requestCode == SETBUZZEDTEAM_REQUEST_CODE &&
         resultCode == Activity.RESULT_OK &&
         data.getExtras() != null) {
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "OnActivity Result - SetBuzzedTeam!!()");
-      }
+      
       // Get BuzzedTeam from bundle
       Bundle buzzedTeamBundle = data.getExtras();
       Team newBuzzedTeam = (Team) buzzedTeamBundle.getSerializable(getString(R.string.buzzedTeamBundleKey));
@@ -471,7 +437,7 @@ public class TurnSummary extends Activity {
     switch (id) {
     case DIALOG_GAMEOVER_ID:
       builder = new AlertDialog.Builder(this);
-      builder.setMessage("Are you sure you want to end the current game?")
+      builder.setMessage(getString(R.string.endGameDialog_text))
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
               // Play confirmation sound
@@ -533,18 +499,6 @@ public class TurnSummary extends Activity {
         row.setActiveness(true);
       }
     }
-  }
-
-  /**
-   * Resume the activity when it comes to the foreground. If the calling Intent
-   * bundles a new card index and state the card in question is update
-   * accordingly.
-   */
-  @Override
-  protected void onResume() {
-
-    super.onResume();
-
   }
 
   /**

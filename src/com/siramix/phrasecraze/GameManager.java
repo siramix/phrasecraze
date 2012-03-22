@@ -281,6 +281,7 @@ public class GameManager {
       this.incrementActiveTeamIndex();
     }
 	  mBuzzedTeam = team;
+	  this.assignRoundScores();
   }
   
   /**
@@ -318,9 +319,11 @@ public class GameManager {
   }
   
   /*
-   * When no scores are supplied, simply give a point to all the teams that were not buzzed.
+   * Give a point to all times that were not buzzed. This adjusts round scores,
+   * so that if you change a buzzed team mid-turn, it simply swaps the points,
+   * rather than continually adding in points to both teams.
    */
-  public void setAutoAssignedRoundScores()
+  private void assignRoundScores()
   {
 	  Iterator<Team> itr = mTeams.iterator();
 	  Team teamAtItr;

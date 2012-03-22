@@ -74,7 +74,9 @@ public class Turn extends Activity {
   static final int TIMERANIM_START_ID = 2;
   
   // Request code for AssignPoints activity result
-  static final int CHANGESCORES_REQUEST_CODE = 1;
+  static final int CHANGESCORES_REQUEST_CODE = 1;  
+  // Request code for SetBuzzedTeam activity result
+  static final int SETBUZZEDTEAM_REQUEST_CODE = 2;
 
   // Gesture thresholds expressed in dp
   private static final int SWIPE_MIN_DISTANCE_DP = 80;
@@ -289,7 +291,7 @@ public class Turn extends Activity {
     case R.string.menu_EndRound:
       // Play confirmation sound
       sm.playSound(SoundManager.Sound.CONFIRM);
-      this.showDialog(DIALOG_ENDROUND_ID);
+      Turn.this.endTurn(false);
       return true;
     case R.string.menu_EndGame:
       // Play confirmation sound
@@ -339,6 +341,19 @@ public class Turn extends Activity {
       }
       
       this.updateScoreboard();
+    }
+    else if (requestCode == SETBUZZEDTEAM_REQUEST_CODE &&
+        resultCode == Activity.RESULT_OK &&
+        data.getExtras() != null) {
+      
+      // Get BuzzedTeam from bundle
+      Bundle buzzedTeamBundle = data.getExtras();
+      Team newBuzzedTeam = (Team) buzzedTeamBundle.getSerializable(getString(R.string.buzzedTeamBundleKey));
+      
+      mGameManager.setBuzzedTeam(newBuzzedTeam);
+      
+      startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
+          .getData()));
     }
     super.onActivityResult(requestCode, resultCode, data);
   }
@@ -752,7 +767,7 @@ public class Turn extends Activity {
     mResultsDelay = new PauseTimer(1500) {
       @Override
       public void onFinish() {
-        Turn.this.endTurn();
+        Turn.this.endTurn(true);
       }
 
       @Override
@@ -794,19 +809,32 @@ public class Turn extends Activity {
 
   /**
    * Hands off the intent to the next turn summary activity.
+   * You must specify whether or not the player must specify which
+   * team lost before advancing to the next activity.
    */
-  protected void endTurn() {
+  protected void endTurn(boolean forceSelectBuzzedTeam) {
     if (PhraseCrazeApplication.DEBUG) {
       Log.d(TAG, "onTurnEnd()");
     }
+    
+    // First always process the last card as wrong
     mGameManager.processCard(Card.WRONG);
+    
     if(mAssistedScoringEnabled)
     {
       mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
+      startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
+          .getData()));
+    }
+    else
+    {
+      // Show Dialog that prompts for the buzzed team
+      Intent intent = new Intent(getApplication().getString(
+          R.string.IntentSetBuzzedTeam), getIntent().getData());
+      intent.putExtra(getApplication().getString(R.string.IntentCancellable), forceSelectBuzzedTeam);
+      startActivityForResult(intent, SETBUZZEDTEAM_REQUEST_CODE);
     }
 
-    startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
-        .getData()));
   }
 
   /**
@@ -1102,7 +1130,7 @@ public class Turn extends Activity {
     switch (id) {
     case DIALOG_GAMEOVER_ID:
       builder = new AlertDialog.Builder(this);
-      builder.setMessage("Are you sure you want to end the current game?")
+      builder.setMessage(getString(R.string.endGameDialog_text))
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
               // Play confirmation sound
@@ -1114,35 +1142,10 @@ public class Turn extends Activity {
               // We auto assign points so that some score exists, though
               // we could end in tie.
               mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
-              mGameManager.setAutoAssignedRoundScores();
               mGameManager.endGame();
 
               startActivity(new Intent(getString(R.string.IntentEndGame),
                   getIntent().getData()));
-            }
-          }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-              // Play confirmation sound
-              SoundManager sm = SoundManager.getInstance(Turn.this
-                  .getBaseContext());
-              sm.playSound(SoundManager.Sound.BACK);
-
-              dialog.cancel();
-            }
-          });
-      dialog = builder.create();
-      break;
-    case DIALOG_ENDROUND_ID:
-      builder = new AlertDialog.Builder(this);
-      builder.setMessage("Are you sure you want to forfeit the round?")
-          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-              // Play confirmation sound
-              SoundManager sm = SoundManager.getInstance(Turn.this
-                  .getBaseContext());
-              sm.playSound(SoundManager.Sound.CONFIRM);
-
-              Turn.this.endTurn();
             }
           }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

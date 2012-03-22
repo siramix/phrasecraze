@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -49,6 +50,9 @@ public class SetBuzzedTeam extends Activity {
    */
   private Button mButtonCancel;
   private Button mButtonConfirm;
+  
+  // Store whether or not this dialog is cancellable, as passed in.
+  private Boolean mIsChoiceRequired;
   
   // New buzzed team is whatever team is confirmed
   private Team mNewBuzzedTeam;
@@ -106,6 +110,9 @@ public class SetBuzzedTeam extends Activity {
       sm.playSound(SoundManager.Sound.CONFIRM);
       
       mNewBuzzedTeam = clickedTeam;
+      
+      mButtonConfirm.setEnabled(true);
+      mButtonConfirm.setVisibility(View.VISIBLE);
       
       refreshTeamViews();
     }
@@ -171,6 +178,9 @@ public class SetBuzzedTeam extends Activity {
     }
 
     this.setContentView(R.layout.setbuzzedteam);
+    
+    // Set whether or not this activity is cancellable
+    mIsChoiceRequired = getIntent().getBooleanExtra(getApplication().getString(R.string.IntentCancellable), false);
 
     setupViewReferences();
 
@@ -190,6 +200,19 @@ public class SetBuzzedTeam extends Activity {
     mNewBuzzedTeam = mOldBuzzedTeam;
 
     refreshTeamViews();
+    
+    // Setup views according to whether or not the dialog is cancellable
+    if(mIsChoiceRequired)
+    {
+      mButtonCancel.setEnabled(false);
+      mButtonCancel.setVisibility(View.INVISIBLE);
+    }
+    // Disable Confirm until a selection has been made.
+    if(mNewBuzzedTeam == null)
+    {
+      mButtonConfirm.setEnabled(false);
+      mButtonConfirm.setVisibility(View.INVISIBLE);
+    }
     
     // Bind listeners
     mButtonCancel.setOnClickListener(mCancelListener);
@@ -245,6 +268,36 @@ public class SetBuzzedTeam extends Activity {
     } else {
       stamp.setVisibility(View.INVISIBLE);
     }
+  }
+  
+
+  /**
+   * Start tracking the back button so we can properly handle catching it in the
+   * onKeyUp
+   */
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Handle the back button
+    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+      event.startTracking();
+      return true;
+    }
+
+    return super.onKeyDown(keyCode, event);
+  }
+
+  /**
+   * Do not allow the user to go back with the back button from this activity
+   */
+  @Override
+  public boolean onKeyUp(int keyCode, KeyEvent event) {
+    // Make back do nothing on key-up instead of climb the action stack
+    if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
+        && !event.isCanceled() && mIsChoiceRequired) {
+      return true;
+    }
+
+    return super.onKeyUp(keyCode, event);
   }
 }
   
