@@ -200,6 +200,7 @@ public class GameManager {
     mCurrentTeam = mTeamIterator.next();
     mCurrentRound = 0;
     mScoreLimit = score;
+    mBuzzedTeam = null;
     
     // Get the turn timer base block once, each time a game starts.
     // This would have to be moved if we are allowed to change settings mid-game.
@@ -234,6 +235,10 @@ public class GameManager {
     for (itr = mTeams.iterator(); itr.hasNext();) {
       itr.next().setRoundScore(0);
     }
+    
+    // Clear buzzed team
+    mBuzzedTeam = null;
+    
     mCurrentRound++;
   }
   

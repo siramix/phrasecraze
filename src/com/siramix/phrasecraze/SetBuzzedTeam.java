@@ -52,10 +52,9 @@ public class SetBuzzedTeam extends Activity {
   
   // New buzzed team is whatever team is confirmed
   private Team mNewBuzzedTeam;
+  // Old buzzed team is what it came in as
+  private Team mOldBuzzedTeam;
   private List<Team> mTeams;
-  
-  // Dirty flag allows us to only send a result when the initial value has changed
-  private Boolean mIsDirty;
 
   /**
    * Set the references to the elements from the layout file
@@ -99,7 +98,7 @@ public class SetBuzzedTeam extends Activity {
    */
   private void onTeamClicked(Team clickedTeam)
   {
-    if(!mNewBuzzedTeam.equals(clickedTeam))
+    if(!clickedTeam.equals(mNewBuzzedTeam))
     {
       // play back sound
       SoundManager sm = SoundManager.getInstance(SetBuzzedTeam.this
@@ -109,8 +108,6 @@ public class SetBuzzedTeam extends Activity {
       mNewBuzzedTeam = clickedTeam;
       
       refreshTeamViews();
-      // Dirty value
-      mIsDirty = true;
     }
   }
   
@@ -144,10 +141,11 @@ public class SetBuzzedTeam extends Activity {
         Log.d(TAG, "Confirm onClick()");
       }
 
-      if (mIsDirty)
+      // Pass back the new buzzed team
+      Intent curIntent;
+      if (mNewBuzzedTeam != null && !mNewBuzzedTeam.equals(mOldBuzzedTeam))
       {
-        // Pass back the new buzzed team
-        Intent curIntent = new Intent();
+        curIntent = new Intent();
         curIntent.putExtra(getString(R.string.buzzedTeamBundleKey),
         mNewBuzzedTeam);
         SetBuzzedTeam.this.setResult(Activity.RESULT_OK, curIntent);
@@ -188,10 +186,8 @@ public class SetBuzzedTeam extends Activity {
         .getApplication();
     GameManager game = application.getGameManager();
     mTeams = game.getTeams();
-    mNewBuzzedTeam = game.getBuzzedTeam();
-    
-    // Initialize dirty flag false
-    mIsDirty = false;
+    mOldBuzzedTeam = game.getBuzzedTeam();
+    mNewBuzzedTeam = mOldBuzzedTeam;
 
     refreshTeamViews();
     

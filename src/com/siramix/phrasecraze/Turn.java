@@ -800,7 +800,10 @@ public class Turn extends Activity {
       Log.d(TAG, "onTurnEnd()");
     }
     mGameManager.processCard(Card.WRONG);
-    mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
+    if(mAssistedScoringEnabled)
+    {
+      mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
+    }
 
     startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
         .getData()));
