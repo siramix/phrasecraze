@@ -111,7 +111,14 @@ public class TurnSummary extends Activity {
       // Show Set Buzzed Team Dialog
       Intent intent = new Intent(getApplication().getString(
           R.string.IntentSetBuzzedTeam), getIntent().getData());
+      // Pass in that the choice is not required
       intent.putExtra(getApplication().getString(R.string.IntentCancellable), false);
+      PhraseCrazeApplication application = (PhraseCrazeApplication) TurnSummary.this
+          .getApplication();
+      GameManager game = application.getGameManager();
+      // Pass in current buzzed team by default
+      intent.putExtra(getString(R.string.buzzedTeamBundleKey),
+          game.getBuzzedTeam());
       startActivityForResult(intent, SETBUZZEDTEAM_REQUEST_CODE);
     }
   };

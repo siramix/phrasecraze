@@ -149,14 +149,10 @@ public class SetBuzzedTeam extends Activity {
       }
 
       // Pass back the new buzzed team
-      Intent curIntent;
-      if (mNewBuzzedTeam != null && !mNewBuzzedTeam.equals(mOldBuzzedTeam))
-      {
-        curIntent = new Intent();
-        curIntent.putExtra(getString(R.string.buzzedTeamBundleKey),
+      Intent curIntent = new Intent();
+      curIntent.putExtra(getString(R.string.buzzedTeamBundleKey),
         mNewBuzzedTeam);
-        SetBuzzedTeam.this.setResult(Activity.RESULT_OK, curIntent);
-      }
+      SetBuzzedTeam.this.setResult(Activity.RESULT_OK, curIntent);
       
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(SetBuzzedTeam.this
@@ -178,9 +174,9 @@ public class SetBuzzedTeam extends Activity {
     }
 
     this.setContentView(R.layout.setbuzzedteam);
-    
+    Intent inIntent = getIntent();
     // Set whether or not this activity is cancellable
-    mIsChoiceRequired = getIntent().getBooleanExtra(getApplication().getString(R.string.IntentCancellable), false);
+    mIsChoiceRequired = inIntent.getBooleanExtra(getApplication().getString(R.string.IntentCancellable), false);
 
     setupViewReferences();
 
@@ -190,15 +186,18 @@ public class SetBuzzedTeam extends Activity {
     TextView label = (TextView) this.findViewById(R.id.SetBuzzedTeam_Title);
     label.setTypeface(antonFont);
 
-    // Get teams from application. This should maybe be passed in as a
-    // serializable list of teams
+    // Get BuzzedTeam from bundle
+    Bundle buzzedTeamBundle = inIntent.getExtras();
+    mOldBuzzedTeam = (Team) buzzedTeamBundle.getSerializable(getString(R.string.buzzedTeamBundleKey));
+    mNewBuzzedTeam = mOldBuzzedTeam;
+    
+    // Get Teams from Application. Perhaps these should these be passed in?
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     GameManager game = application.getGameManager();
     mTeams = game.getTeams();
-    mOldBuzzedTeam = game.getBuzzedTeam();
-    mNewBuzzedTeam = mOldBuzzedTeam;
 
+    // Setup UI
     refreshTeamViews();
     
     // Setup views according to whether or not the dialog is cancellable

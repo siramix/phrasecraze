@@ -820,8 +820,9 @@ public class Turn extends Activity {
     // First always process the last card as wrong
     mGameManager.processCard(Card.WRONG);
     
-    if(mAssistedScoringEnabled)
+    if(forceSelectBuzzedTeam && mAssistedScoringEnabled)
     {
+      // No dialog necessary. Just set the buzzed team for them
       mGameManager.setBuzzedTeam(mGameManager.getActiveTeam());
       startActivity(new Intent(getString(R.string.IntentTurnSummary), getIntent()
           .getData()));
@@ -832,6 +833,13 @@ public class Turn extends Activity {
       Intent intent = new Intent(getApplication().getString(
           R.string.IntentSetBuzzedTeam), getIntent().getData());
       intent.putExtra(getApplication().getString(R.string.IntentCancellable), forceSelectBuzzedTeam);
+      // When assisted scoring is enabled, but team select is not mandatory,
+      // give them the current team as the default selection.
+      if(mAssistedScoringEnabled)
+      {
+        intent.putExtra(getString(R.string.buzzedTeamBundleKey),
+            mGameManager.getActiveTeam());
+      }
       startActivityForResult(intent, SETBUZZEDTEAM_REQUEST_CODE);
     }
 
