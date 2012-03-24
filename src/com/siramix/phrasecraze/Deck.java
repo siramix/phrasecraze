@@ -258,7 +258,7 @@ public class Deck {
     
     // TODO Uncomment this before release!!!!!
     // 3. Now shuffle
-    //Collections.shuffle(mBackCache);
+    Collections.shuffle(mBackCache);
     
     mDatabaseOpenHelper.close();
     Log.i(TAG, "filled.");
@@ -386,7 +386,8 @@ public class Deck {
 
       digestPackFromResource(db, "pack1", R.raw.pack1);
       digestPackFromResource(db, "pack2", R.raw.pack2);
-      digestPackFromResource(db, "party", R.raw.party);
+      digestPackFromResource(db, "pack3", R.raw.pack3);      
+      //digestPackFromResource(db, "party", R.raw.party);
     }
 
     /**
