@@ -8,7 +8,11 @@ if len(sys.argv) != 5:
 outfile = open(sys.argv[4], 'w')
 
 for i in range(int(sys.argv[1])):
-    phraseStr = '{"phrase": "WORD %d - PACK %d", "_id": %d, "difficulty": 1}\n' % (i+1, int(sys.argv[2]), int(sys.argv[3])+i+1)
-    outfile.write(phraseStr)
+  word = i+1
+  packid = int(sys.argv[2])
+  index = int(sys.argv[3])+word
+  diff = i%3
+  phraseStr = '{"phrase": "WORD %d - PACK %d", "_id": %d, "difficulty": %d}\n' % (word, packid, index, diff)
+  outfile.write(phraseStr)
 
 outfile.close()

@@ -71,7 +71,7 @@ public class Title extends Activity {
       sm.playSound(SoundManager.Sound.CONFIRM);
 
       startActivity(new Intent(Title.this.getApplication().getString(
-          R.string.IntentGameSetup), getIntent().getData()));
+          R.string.IntentPackPurchase), getIntent().getData()));
     }
   };
   
