@@ -45,7 +45,10 @@ public class GameManager {
    * The list of cardIds that we pull from (our "deck" of cards)
    */
   private Deck mDeck;
-
+  
+  // Create a thread for updating the playcount for each card
+  private Thread mUpdateThread;
+  
   /**
    * The position in the list of card ids (where we are in the "deck")
    */
@@ -406,6 +409,36 @@ public class GameManager {
     mDeck.fillCachesIfLow();
   }
 
+
+  /**
+   * The game manager will have the Deck update the play date for
+   * any cards the Deck has marked as "seen".  Runs inside a thread.
+   */
+  public void updatePlayDate() {
+    mUpdateThread = new Thread(new Runnable() {
+      public void run() {
+        mDeck.updatePlayDate();
+        }
+      });
+    mUpdateThread.start();
+  }
+  
+  /**
+   * The game manager will have the Deck update the play date for
+   * any cards passed into this method.  This is being used for
+   * Turn Summary which will have a list of seen cards to pass in.
+   * Runs inside a thread.
+   * @param cardsToUpdate - A linked list of cards to update
+   */
+  public void updatePlayDate(final LinkedList<Card> cardsToUpdate) {
+    mUpdateThread = new Thread(new Runnable() {
+      public void run() {
+        mDeck.updatePlayDate(cardsToUpdate);
+        }
+      });
+    mUpdateThread.start();
+  }
+  
   /**
    * Adds the current card to the active cards, attributing it to the current team
    * 

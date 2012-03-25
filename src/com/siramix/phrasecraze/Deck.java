@@ -156,7 +156,30 @@ public class Deck {
       Log.d(TAG, "...filled. Back Cache size is now " + mBackCache.size());
     }
   }
+  
+  /**
+   * Updates the playdate for any cards seen mid-turn to today's date.
+   * The list of seen cards will be cleared when the front cache is re-filled.
+   * cache.
+   */
+  public void updatePlayDate() {
+    this.updatePlayDate(mSeenCards);
+  }
 
+  /**
+   * Updates the playdate for any cards passed in.  This
+   * list of cards will be cleared 
+   * @param cardsToUpdate - a Linked List of cards that will have their playdate
+   *                        updated to today's date.
+   */
+  public void updatePlayDate(LinkedList<Card> cardsToUpdate) {
+    DeckOpenHelper helper = new Deck.DeckOpenHelper(
+        mContext);      
+    helper.updatePlayDate(cardsToUpdate);
+    helper.close();
+  }
+
+  
   /**
    * Retrieve a Linked List of all Packs that a user has installed in their database.
    * @return Linked List of all local Packs
@@ -206,7 +229,7 @@ public class Deck {
     // If we reach this scenario it means a lot of cards were looked at during a turn
     // Otherwise it should be filled by a GameManager.maintainDeck call
     if (mBackCache.isEmpty()) {
-      mDatabaseOpenHelper.updatePlaydate(mSeenCards);
+      mDatabaseOpenHelper.updatePlayDate(mSeenCards);
       mSeenCards.clear();
       this.fillBackCache();
     }
@@ -663,12 +686,12 @@ public class Deck {
     }
 
     /**
-     * Update playdate for all passed in phrase ids to current time
+     * Update play_date for all passed in phrase ids to current time
      * @param ids
      *          comma delimited set of phrase ids to incrment, ex. "1, 2, 4, 10"
      * @return
      */
-    public void updatePlaydate(LinkedList<Card> cardList) {
+    public void updatePlayDate(LinkedList<Card> cardList) {
       mDatabase = getWritableDatabase();
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "updatePlaydate()");

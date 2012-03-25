@@ -61,8 +61,7 @@ public class TurnSummary extends Activity {
   // Request code for SetBuzzedTeam activity result
   static final int SETBUZZEDTEAM_REQUEST_CODE = 2;
 
-  // Create a therad for updating the playcount for each card
-  private Thread mUpdateThread;
+
   
   private LinkedList<Card> mCardList;
   private List<ImageView> mCardViewList;
@@ -209,16 +208,7 @@ public class TurnSummary extends Activity {
     list.addView(layout);
     
     // Update our database in a thread to avoid crashes on fast next clicks and slow db writes
-    final String ids = idstring;
-    mUpdateThread = new Thread(new Runnable() {
-      public void run() {
-      Deck.DeckOpenHelper helper = new Deck.DeckOpenHelper(
-          TurnSummary.this);      
-      helper.updatePlaydate(mCardList);
-      helper.close();
-        }
-      });
-    mUpdateThread.start();
+    game.updatePlayDate(mCardList);
     
     // TODO This should be in a thread, but I'm not sure how to access the game from inside the thread
     game.maintainDeck();
