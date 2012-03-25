@@ -1109,8 +1109,7 @@ public class Turn extends Activity {
     if (!mIsPaused && !mTurnIsOver) {
       this.pauseGame();
     }
-
-    //TODO Update the playdate for cards in play when app closes or pauses.
+    mGameManager.updatePlayDate();
   }
 
   /**
