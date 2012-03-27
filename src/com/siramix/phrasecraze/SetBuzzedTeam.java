@@ -22,6 +22,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -261,7 +262,7 @@ public class SetBuzzedTeam extends Activity {
     teamNameView.setTypeface(antonFont);
     teamBackground.setBackgroundColor(this.getResources().getColor(
         team.getPrimaryColor()));
-    endPiece.setImageResource(team.getTurnSumRowEndPiece());
+    endPiece.setColorFilter(this.getResources().getColor(team.getComplementaryColor()), Mode.MULTIPLY);
     if (isTeamBuzzed) {
       stamp.setVisibility(View.VISIBLE);
     } else {

@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -185,15 +186,18 @@ public class TurnSummary extends Activity {
       TextView cardTitle = (TextView) realLine.getChildAt(1);
       cardTitle.setText(card.getTitle());
 
-      // Set Row end background according to team (if assisted, otherwise mark it neutral)
+      // Set Row end background according to team (if assisted, otherwise mark
+      // it neutral)
       ImageView rowBG = (ImageView) realLine.getChildAt(2);
-      if( game.isAssistedScoringEnabled())
+      rowBG.setImageResource(R.drawable.turnsum_row_end_white);
+      if (game.isAssistedScoringEnabled()) {
+        rowBG.setColorFilter(
+            this.getResources().getColor(
+                card.getCreditedTeam().getComplementaryColor()), Mode.MULTIPLY);
+      } else
       {
-    	  rowBG.setImageResource(card.getCreditedTeam().getTurnSumRowEndPiece());
-      }
-      else
-      {
-    	  rowBG.setImageResource(R.drawable.turnsum_row_end_noteam);
+        rowBG.setColorFilter(
+            this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
       }
       mCardViewList.add(rowBG);
       
