@@ -18,12 +18,15 @@
 package com.siramix.phrasecraze;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
@@ -138,10 +141,10 @@ public class ScoreboardRowLayout extends RelativeLayout {
 
     // Initialize Score view
     mScore = new TextView(mContext);
-    mScore.setBackgroundDrawable(getResources().getDrawable(
-        R.drawable.gameend_row_end_blank));
+    Drawable scoreBG = mContext.getResources().getDrawable(R.drawable.gameend_row_end_white);
+    mScore.setBackgroundDrawable(scoreBG);
     mScore.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-        LayoutParams.FILL_PARENT));
+        LayoutParams.WRAP_CONTENT));
     mScore.setText("0");
     mScore.setIncludeFontPadding(false);
     mScore.setPadding(0, 0, (int) (DENSITY * 5 + 0.5f), 0);
@@ -154,7 +157,6 @@ public class ScoreboardRowLayout extends RelativeLayout {
      * Typeface.createFromAsset(mContext.getAssets(), "fonts/Anton.ttf");
      * mScore.setTypeface(antonFont); }
      */
-
     // Add views to the contents layout
     mContents.addView(mStanding);
     mContents.addView(mTeamText);
@@ -210,18 +212,20 @@ public class ScoreboardRowLayout extends RelativeLayout {
       this.setVisibility(View.VISIBLE);
 
       mBackground.setBackgroundResource(mTeam.getPrimaryColor());
-      mScore.setBackgroundDrawable(getResources().getDrawable(
-          mTeam.getGameEndPiece()));
+      // Tint row end piece based on team color
+      Drawable scoreBG = mContext.getResources().getDrawable(R.drawable.gameend_row_end_white);
+      // Mutate call allows for different constant state on drawable, so we can affect
+      // each instance individually
+      scoreBG.mutate().setColorFilter(mContext.getResources().getColor(mTeam.getComplementaryColor()), Mode.MULTIPLY);
+      mScore.setBackgroundDrawable(scoreBG);
       // Show scores and team names
       mTeamText.setVisibility(View.VISIBLE);
       mScore.setVisibility(View.VISIBLE);
     } else {
+      // This doesn't really hit in Phrasecraze, because we limited it to two teams.
       this.setVisibility(View.GONE);
-
       mBackground.setBackgroundColor(getResources().getColor(
           R.color.gameend_blankrow));
-      mScore.setBackgroundDrawable(getResources().getDrawable(
-          R.drawable.gameend_row_end_blank));
       mTeamText.setVisibility(View.INVISIBLE);
       mScore.setVisibility(View.INVISIBLE);
     }
