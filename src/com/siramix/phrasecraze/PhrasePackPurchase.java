@@ -27,6 +27,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
+import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -338,7 +339,8 @@ public class PhrasePackPurchase extends Activity {
 
       // Set Row end icon
       ImageView packIcon = (ImageView) packRow.getChildAt(3);
-      packIcon.setImageResource(R.drawable.gameend_row_end_green);
+      packIcon.setImageResource(R.drawable.gameend_row_end_white);
+      packIcon.setColorFilter(this.getResources().getColor(R.color.teamA_primary), Mode.MULTIPLY);
       mPackViewList.add(packIcon);
       mPackLineList.add(packRow);
       

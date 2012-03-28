@@ -32,13 +32,13 @@ import android.util.Log;
  */
 public enum Team implements Serializable {
   TEAMA("Blue", R.color.teamA_secondary, R.color.teamA_primary, R.color.teamA_complement,
-      R.drawable.bg_bluegradient, R.drawable.gameend_row_end_blue, "teamA_enabled"),
+      R.drawable.bg_bluegradient, "teamA_enabled"),
   TEAMB("Green", R.color.teamB_secondary, R.color.teamB_primary, R.color.teamB_complement,
-      R.drawable.bg_greengradient, R.drawable.gameend_row_end_green, "teamB_enabled"),
+      R.drawable.bg_greengradient, "teamB_enabled"),
   TEAMC("Red", R.color.teamC_secondary, R.color.teamC_primary, R.color.teamC_complement,
-      R.drawable.bg_redgradient, R.drawable.gameend_row_end_red, "teamC_enabled"),
+      R.drawable.bg_redgradient, "teamC_enabled"),
   TEAMD("Yellow", R.color.teamD_secondary, R.color.teamD_primary, R.color.teamD_complement,
-      R.drawable.bg_yellowgradient, R.drawable.gameend_row_end_yellow, "teamD_enabled");
+      R.drawable.bg_yellowgradient, "teamD_enabled");
 
   // Team name
   private String mName;
@@ -50,7 +50,6 @@ public enum Team implements Serializable {
   private final int mSecondary;
   private final int mComplement;
   private final int mGradient;
-  private final int mGameEndBackground;
   // The team's running score
   private int mScore;
   // The team's score for a round
@@ -67,15 +66,13 @@ public enum Team implements Serializable {
   /*
    * Construct a Team
    */
-  private Team(String name, int secondary, int primary, int complement, int gradient,
-      int gameend_bg, String key) {
+  private Team(String name, int secondary, int primary, int complement, int gradient, String key) {
     mName = name;
     mDefaultName = name;
     mSecondary = secondary;
     mPrimary = primary;
     mComplement = complement;
     mGradient = gradient;
-    mGameEndBackground = gameend_bg;
     mPrefKey = key;
     this.setScore(0);
     this.setRoundScore(0);
@@ -139,15 +136,6 @@ public enum Team implements Serializable {
     return mGradient;
   }
 
-  /**
-   * Returns the id of the drawable that caps the end of a team themed row
-   * 
-   * @return the end piece for a game end row
-   */
-  public int getGameEndPiece() {
-    return mGameEndBackground;
-  }
-  
   /**
    * Returns the Team's preference key
    * 
