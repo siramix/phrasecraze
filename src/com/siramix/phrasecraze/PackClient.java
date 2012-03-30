@@ -45,8 +45,8 @@ public class PackClient {
    * URL Constants
    */
   private static final String URL_BASE = "http://siramix.com/phrasecraze/packs/";
-  private static final String PAY_LIST_URL = "list.json";
-  private static final String SOCIAL_LIST_URL = "social.json";
+  private static final String PAY_LIST_URL = "premiumpacks.json";
+  private static final String SOCIAL_LIST_URL = "freepacks.json";
   private static final String TAG = "PackClient";
   
   /**
