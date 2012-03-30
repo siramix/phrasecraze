@@ -19,46 +19,23 @@ package com.siramix.phrasecraze;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-
-import com.siramix.phrasecraze.Consts.PurchaseState;
-
-import android.R.string;
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.FloatMath;
 import android.util.Log;
 
 /**
@@ -279,7 +256,6 @@ public class Deck {
       mBackCache.addAll(mDatabaseOpenHelper.pullFromPack(mSelectedPacks.get(i), activeCards));
     }
     
-    // TODO Uncomment this before release!!!!!
     // 3. Now shuffle
     Collections.shuffle(mBackCache);
     
@@ -576,6 +552,7 @@ public class Deck {
     }
 
     public void digestPackFromServer(Pack pack) throws IOException, URISyntaxException {
+      Log.d(TAG, "digestPackFromServer(" + pack.getName() + ")");
       mDatabase = getWritableDatabase();
       // Don't add a pack if it's already there
       int packId = packInstalled(pack.getName(), pack.getVersion(), mDatabase);
@@ -623,14 +600,48 @@ public class Deck {
      */
     public static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       Log.d(TAG, "upsertPhrase(" + phrase + ")");
-      
+      String[] whereArgs = new String[] { String.valueOf(phrase.getId()) };
+      Cursor res = db.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+          PhraseColumns._ID + "= ?", whereArgs, null, null, null);
+      if (res.getCount() == 1) {
+        return updatePhrase(phrase, packId, db);
+      } else {
+        return insertPhrase(phrase, packId, db);
+      }
+    }
+    
+    /**
+     * Insert a new phrase into the phrases table
+     * @param phrase The phrase to insert
+     * @param packId The pack to which the phrase belongs
+     * @param db The database to insert the card into
+     * @return The new id of the row where the phrase was inserted, -1 if error
+     */
+    private static long insertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       ContentValues initialValues = new ContentValues();
       initialValues.put(PhraseColumns._ID, phrase.getId());
       initialValues.put(PhraseColumns.PHRASE, phrase.getTitle());
       initialValues.put(PhraseColumns.DIFFICULTY, phrase.getDifficulty());
       initialValues.put(PhraseColumns.PLAY_DATE, 0);
       initialValues.put(PhraseColumns.PACK_ID, packId);
-      return db.replace(PhraseColumns.TABLE_NAME, null, initialValues);
+      return db.insert(PhraseColumns.TABLE_NAME, null, initialValues);
+    }
+    
+    /**
+     * Update an existing phrase in the phrases table
+     * @param phrase The phrase to update
+     * @param packId The pack to which the phrase belongs
+     * @param db The database where the phrase exists
+     * @return The number of rows affected
+     */
+    private static long updatePhrase(Card phrase, int packId, SQLiteDatabase db) {
+      String[] whereArgs = new String[] { String.valueOf(phrase.getId()) };
+      ContentValues initialValues = new ContentValues();
+      initialValues.put(PhraseColumns.PHRASE, phrase.getTitle());
+      initialValues.put(PhraseColumns.DIFFICULTY, phrase.getDifficulty());
+      initialValues.put(PhraseColumns.PACK_ID, packId);
+      return db.update(PhraseColumns.TABLE_NAME, initialValues, 
+                       PhraseColumns._ID + " = ?", whereArgs);
     }
     
     /**
@@ -652,7 +663,7 @@ public class Deck {
       packValues.put(PackColumns.VERSION, pack.getVersion());
       return db.replace(PackColumns.TABLE_NAME, null, packValues);
     }
-    
+
     /**
      * Queries the Packs table and returns the packId if the pack requires updating, 
      * otherwise returns either PACK_CURRENT or PACK_NOT_PRESENT.
@@ -679,10 +690,15 @@ public class Deck {
       }
     }
 
+    /**
+     * Delete a pack from the database
+     * @param packId Pack id to delete
+     * @param db
+     */
     public static void clearPack(int packId, SQLiteDatabase db) {
       String[] whereArgs = new String[] { String.valueOf(packId) };
-      db.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
-      db.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
+      db.delete(PackColumns.TABLE_NAME, PackColumns._ID + " = ?", whereArgs);
+      db.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + " = ?", whereArgs);
     }
 
     /**
