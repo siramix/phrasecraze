@@ -68,6 +68,7 @@ public class Pack implements Serializable {
    * @param path
    * @param version
    * @param size
+   * @param installed (whether the pack has been installed yet)
    */
   public Pack(int id, String name, String path, String description,
                       String updateMessage, int version, int size, boolean installed) {

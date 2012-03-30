@@ -346,15 +346,15 @@ public class PhrasePackPurchase extends Activity {
       
       // Bind Listener
       //TODO this will need to be more specific later (to just free social apps)
-      if (curPack.getPath().equals("twitter.json")) {
+      if (curPack.getPath().equals("freepacks/twitter.json")) {
         packRow.setOnClickListener(mTweetListener);
         mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
       }
-      else if (curPack.getPath().equals("facebook.json")) {
+      else if (curPack.getPath().equals("freepacks/facebook.json")) {
         packRow.setOnClickListener(mFacebookListener);
         mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
       }
-      else if (curPack.getPath().equals("googleplus.json")) {
+      else if (curPack.getPath().equals("freepacks/googleplus.json")) {
         packRow.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       }
@@ -453,8 +453,12 @@ public class PhrasePackPurchase extends Activity {
       GameManager game = application.getGameManager();
       Pack curPack = mSocialPacks.get(requestCode);
       // TODO: Catch the runtime exception
+      try {
+        game.getDeck().digestPack(curPack);
+      } catch (RuntimeException e) {
+        e.printStackTrace();
+      }
       
-      game.getDeck().digestPack(curPack);
       showToast(mSocialPacks.get(requestCode).getName());
       if (getPackPref(curPack)) {
         setPackPref(curPack, false);
