@@ -37,6 +37,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -317,53 +318,94 @@ public class PhrasePackPurchase extends Activity {
     
     for (Iterator<Pack> it = packlist.iterator(); it.hasNext();) {
       Pack curPack = it.next();
+      Boolean isPackLocal = curPack.isInstalled();
       
       Log.d(TAG, "Count: " + count + "\nPackname: " + curPack.getName());
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
-      RelativeLayout packRow = (RelativeLayout) line.getChildAt(count);
+      RelativeLayout packRowFrame = (RelativeLayout) line.getChildAt(count);
+      RelativeLayout packRowContents = (RelativeLayout) packRowFrame.getChildAt(0);
 
       // Add the current pack object to the row so that the listener can get its
       // metadata
-      packRow.setTag(curPack);
+      packRowContents.setTag(curPack);
 
       // Make every line alternating color
       if (count % 2 == 0) {
-        View background = (View) packRow.getChildAt(0);
+        View background = (View) packRowContents;
         background.setBackgroundResource(R.color.genericBG_trim);
       }
       
       // Set Pack Title
-      TextView packTitle = (TextView) packRow.getChildAt(1);
+      TextView packTitle = (TextView) packRowContents.getChildAt(0);
       packTitle.setText(curPack.getName());
 
-      // Set Row end icon
-      ImageView packIcon = (ImageView) packRow.getChildAt(3);
-      packIcon.setImageResource(R.drawable.gameend_row_end_white);
-      packIcon.setColorFilter(this.getResources().getColor(R.color.teamA_primary), Mode.MULTIPLY);
+      // Set Row end icon and Price
+      ImageView packIcon = (ImageView) packRowContents.getChildAt(1);
+      TextView packPrice = (TextView) packRowContents.getChildAt(2);
+      CheckBox checkBox = (CheckBox) packRowContents.getChildAt(3);
+      packIcon.setImageResource(R.drawable.turnsum_row_end_white);
+      if(isPackLocal)
+      {
+        int rowEndColor;      
+        // Set Enabled / Disabled status for local packs
+        if( getPackPref(curPack))
+        {
+          checkBox.setChecked(true);
+          rowEndColor = R.color.teamA_primary;
+        }
+        else
+        {
+          checkBox.setChecked(false);
+          rowEndColor = R.color.teamB_primary;
+        }
+        packIcon.setColorFilter(this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
+        packPrice.setVisibility(View.INVISIBLE);     
+      }
+      else
+      {
+        packPrice.setVisibility(View.VISIBLE);
+        checkBox.setVisibility(View.INVISIBLE);
+        packIcon.setColorFilter(this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
+      }
+      
+      // Set pack price
+
+      //if( !isPackLocal )
+     // {
+
+     // }
+      
       mPackViewList.add(packIcon);
-      mPackLineList.add(packRow);
+      mPackLineList.add(packRowContents);
+      
+      // Set fonts on text
+      Typeface antonFont = Typeface.createFromAsset(getAssets(),
+          "fonts/Anton.ttf");
+      packTitle.setTypeface(antonFont);
+      packPrice.setTypeface(antonFont);
       
       // Bind Listener
       //TODO this will need to be more specific later (to just free social apps)
       if (curPack.getPath().equals("freepacks/twitter.json")) {
-        packRow.setOnClickListener(mTweetListener);
+        packRowFrame.setOnClickListener(mTweetListener);
         mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
       }
       else if (curPack.getPath().equals("freepacks/facebook.json")) {
-        packRow.setOnClickListener(mFacebookListener);
+        packRowFrame.setOnClickListener(mFacebookListener);
         mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
       }
       else if (curPack.getPath().equals("freepacks/googleplus.json")) {
-        packRow.setOnClickListener(mGoogleListener);
+        packRowFrame.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       }
       else if (curPack.isInstalled()){
-        packRow.setOnClickListener(mInstalledPackListener);
+        packRowContents.setOnClickListener(mInstalledPackListener);
       }
       else {
-        packRow.setOnClickListener(mPremiumPackListener);
+        packRowContents.setOnClickListener(mPremiumPackListener);
       }
+      
       count++;
     }
     insertionPoint.addView(layout);
