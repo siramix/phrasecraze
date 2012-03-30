@@ -81,7 +81,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:longClickable="false"
-                android:orientation="vertical" >
+                android:orientation="vertical">
             </LinearLayout>
 
             <RelativeLayout
@@ -122,11 +122,22 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:longClickable="false"
-                android:orientation="vertical" >
+                android:orientation="vertical">
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+    <View android:id="@+id/view1" android:layout_height="4dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent"></View>
+    <LinearLayout android:layout_width="fill_parent" android:id="@+id/LinearLayout1" android:layout_height="80dp">
+        <RelativeLayout android:id="@+id/relativeLayout2" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="center">
+            <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_alignParentTop="true" android:text="Selected Packs" android:textSize="20sp"></TextView>
+            <View android:id="@+id/view2" android:layout_height="30dp" android:layout_below="@+id/textView1" android:background="@color/teamA_primary" android:layout_width="210dp" android:layout_centerHorizontal="true"></View>
+        </RelativeLayout>
+        <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="wrap_content" android:layout_marginRight="5dp" android:layout_gravity="center">
+            <TextView android:textSize="40sp" android:layout_width="wrap_content" android:text="40%" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/PackPurchase_Percent" android:layout_gravity="center_horizontal"></TextView>
+            <TextView android:textSize="16sp" android:layout_width="wrap_content" android:text="UNLOCKED" android:layout_marginTop="-10dp" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/TextView01" android:layout_gravity="center_horizontal"></TextView>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/PackPurchase_Buttons"
