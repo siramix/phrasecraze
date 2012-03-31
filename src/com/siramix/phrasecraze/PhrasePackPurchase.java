@@ -323,8 +323,10 @@ public class PhrasePackPurchase extends Activity {
       Log.d(TAG, "Count: " + count + "\nPackname: " + curPack.getName());
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
-      RelativeLayout packRowFrame = (RelativeLayout) line.getChildAt(count);
-      RelativeLayout packRowContents = (RelativeLayout) packRowFrame.getChildAt(0);
+      RelativeLayout packRowContents = (RelativeLayout) line.getChildAt(count);
+      LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) packRowContents.getLayoutParams();
+      margin.setMargins(0, 0, 0, -1);
+      packRowContents.setLayoutParams(margin);
 
       // Add the current pack object to the row so that the listener can get its
       // metadata
@@ -337,30 +339,17 @@ public class PhrasePackPurchase extends Activity {
       }
       
       // Set Pack Title
-      TextView packTitle = (TextView) packRowContents.getChildAt(0);
+      TextView packTitle = (TextView) packRowContents.getChildAt(1);
       packTitle.setText(curPack.getName());
 
       // Set Row end icon and Price
-      ImageView packIcon = (ImageView) packRowContents.getChildAt(1);
-      TextView packPrice = (TextView) packRowContents.getChildAt(2);
-      CheckBox checkBox = (CheckBox) packRowContents.getChildAt(3);
+      ImageView packIcon = (ImageView) packRowContents.getChildAt(2);
+      TextView packPrice = (TextView) packRowContents.getChildAt(3);
+      CheckBox checkBox = (CheckBox) packRowContents.getChildAt(4);
       packIcon.setImageResource(R.drawable.turnsum_row_end_white);
       if(isPackLocal)
       {
-        int rowEndColor;      
-        // Set Enabled / Disabled status for local packs
-        if( getPackPref(curPack))
-        {
-          checkBox.setChecked(true);
-          rowEndColor = R.color.teamA_primary;
-        }
-        else
-        {
-          checkBox.setChecked(false);
-          rowEndColor = R.color.teamB_primary;
-        }
-        packIcon.setColorFilter(this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
-        packPrice.setVisibility(View.INVISIBLE);     
+        setLocalRowStatus(packRowContents,getPackPref(curPack));  
       }
       else
       {
@@ -388,15 +377,15 @@ public class PhrasePackPurchase extends Activity {
       // Bind Listener
       //TODO this will need to be more specific later (to just free social apps)
       if (curPack.getPath().equals("freepacks/twitter.json")) {
-        packRowFrame.setOnClickListener(mTweetListener);
+        packRowContents.setOnClickListener(mTweetListener);
         mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
       }
       else if (curPack.getPath().equals("freepacks/facebook.json")) {
-        packRowFrame.setOnClickListener(mFacebookListener);
+        packRowContents.setOnClickListener(mFacebookListener);
         mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
       }
       else if (curPack.getPath().equals("freepacks/googleplus.json")) {
-        packRowFrame.setOnClickListener(mGoogleListener);
+        packRowContents.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       }
       else if (curPack.isInstalled()){
@@ -531,12 +520,20 @@ public class PhrasePackPurchase extends Activity {
     @Override
     public void onClick(View v) {
       Pack curPack = (Pack) v.getTag();
+      Boolean newStatus = !getPackPref(curPack);
+      setPackPref(curPack, newStatus);
+      setLocalRowStatus((RelativeLayout) v, newStatus);
       
-      if (getPackPref(curPack)) {
-        setPackPref(curPack, false);
-      } else {
-        setPackPref(curPack, true);
-      }      
+      // play confirm sound when points are added
+      SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this.getBaseContext());
+      if(newStatus)
+      {
+        sm.playSound(SoundManager.Sound.CONFIRM);
+      }
+      else
+      {
+        sm.playSound(SoundManager.Sound.BACK);
+      }
     }
   };
   
@@ -628,6 +625,7 @@ public class PhrasePackPurchase extends Activity {
       Log.d(TAG, "pref set to true");
     }
     showToast(pack.getName() + " set to " + onoff);
+    
     packPrefsEdit.commit();
   }
   
@@ -657,6 +655,30 @@ public class PhrasePackPurchase extends Activity {
     return result;
   }
 
+  /**
+   * Updates the views for a pack purchase row to the specified state.
+   */
+  private void setLocalRowStatus(RelativeLayout row, Boolean isEnabled)
+  {
+    TextView packPrice = (TextView) row.getChildAt(3);
+    CheckBox checkBox = (CheckBox) row.getChildAt(4);
+    int rowEndColor;
+    if( isEnabled)
+    {
+      
+      checkBox.setChecked(true);
+      rowEndColor = R.color.teamA_primary;
+    }
+    else
+    {
+      checkBox.setChecked(false);
+      rowEndColor = R.color.teamA_complement;
+    }
+    ImageView rowEnd = (ImageView) row.getChildAt(2);
+    rowEnd.setColorFilter(this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
+    packPrice.setVisibility(View.INVISIBLE);  
+    
+  }
   
   /**
    * Handle showing a toast or refreshing an existing toast
