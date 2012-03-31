@@ -56,6 +56,7 @@ public class PhrasePackPurchase extends Activity {
 
   private SharedPreferences mPackPrefs;
   
+  // A map of request codes and their corresponding packs
   private HashMap<Integer, Pack> mSocialPacks;
 
   /**
@@ -260,19 +261,17 @@ public class PhrasePackPurchase extends Activity {
     paidPackLayout.removeAllViewsInLayout();
     
     PackClient client = PackClient.getInstance();
-    LinkedList<Pack> socialPacks;
-    LinkedList<Pack> paidPacks;
-    LinkedList<Pack> localPacks;
+    LinkedList<Pack> serverPacks = new LinkedList<Pack>();
+    LinkedList<Pack> localPacks = new LinkedList<Pack>();
     localPacks = game.getInstalledPacks();
     mSocialPacks = new HashMap<Integer, Pack>();
     
     // First try to get the online packs, if no internet, just use local packs
     try {
-      socialPacks = client.getSocialPacks();
-      paidPacks = client.getPayPacks();
-      paidPacks.addAll(socialPacks);
+      serverPacks.addAll(client.getPayPacks());
+      serverPacks.addAll(client.getFreePacks());
       populatePackLayout(localPacks, unlockedPackLayout);
-      populatePackLayout(paidPacks, paidPackLayout);
+      populatePackLayout(serverPacks, paidPackLayout);
     } catch (IOException e1) {
       populatePackLayout(localPacks, unlockedPackLayout);
       showToast(getString(R.string.toast_packpurchase_nointerneterror));
@@ -298,6 +297,7 @@ public class PhrasePackPurchase extends Activity {
     Button btn = (Button) this.findViewById(R.id.PackPurchase_Button_Next);
     btn.setOnClickListener(mGameSetupListener);
   }
+
   
   /**
    * Create dynamic rows of packs at runtime for pack purchase view.  This will

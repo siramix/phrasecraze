@@ -424,7 +424,8 @@ public class Deck {
           " WHERE " + PhraseColumns.PACK_ID + " IN (" + args[0] + ")" + 
           "   AND " + PhraseColumns.DIFFICULTY + " IN (" + args[1] + ")", null);
       int count = countQuery.getCount();
-
+      
+      countQuery.close();
       return count;
     }
 
@@ -452,6 +453,7 @@ public class Deck {
           "   AND " + PhraseColumns.DIFFICULTY + " IN (" + args[1] + ")", null);
       int count = countQuery.getCount();
       
+      countQuery.close();
       return count;
     }
     
@@ -491,6 +493,7 @@ public class Deck {
         }
       }
       
+      packQuery.close();
       mDatabase.close();
       return ret;
     }
@@ -514,6 +517,7 @@ public class Deck {
                         packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5), true);
       }
       packQuery.close();
+      mDatabase.close();
       return pack;
     }
 
@@ -564,6 +568,7 @@ public class Deck {
       }
       CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
       digestPackInternal(mDatabase, pack, cardItr);
+      mDatabase.close();
     }
 
     /**
@@ -600,14 +605,17 @@ public class Deck {
      */
     public static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       Log.d(TAG, "upsertPhrase(" + phrase + ")");
+      long ret;
       String[] whereArgs = new String[] { String.valueOf(phrase.getId()) };
-      Cursor res = db.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
+      Cursor cursor = db.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
           PhraseColumns._ID + "= ?", whereArgs, null, null, null);
-      if (res.getCount() == 1) {
-        return updatePhrase(phrase, packId, db);
+      if (cursor.getCount() == 1) {
+        ret = updatePhrase(phrase, packId, db);
       } else {
-        return insertPhrase(phrase, packId, db);
+        ret = insertPhrase(phrase, packId, db);
       }
+      cursor.close();
+      return ret;
     }
     
     /**

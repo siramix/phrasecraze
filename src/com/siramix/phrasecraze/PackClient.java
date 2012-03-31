@@ -46,7 +46,7 @@ public class PackClient {
    */
   private static final String URL_BASE = "http://siramix.com/phrasecraze/packs/";
   private static final String PAY_LIST_URL = "premiumpacks.json";
-  private static final String SOCIAL_LIST_URL = "freepacks.json";
+  private static final String FREE_LIST_URL = "freepacks.json";
   private static final String TAG = "PackClient";
   
   /**
@@ -83,17 +83,17 @@ public class PackClient {
   }
 
   /**
-   * Get all of the packs available on the server for social promotion
+   * Get all of the packs available on the server that don't go through the market (free)
    * @return a LinkedList of Packs representing the pack that is available
    * @throws IOException if the request to the server fails
    * @throws URISyntaxException if the uri is malformed
    * @throws JSONException if the JSON is invalid
    */
-  public LinkedList<Pack> getSocialPacks() throws IOException, URISyntaxException, JSONException {
-    Log.d(TAG, "getSocialPacks");
+  public LinkedList<Pack> getFreePacks() throws IOException, URISyntaxException, JSONException {
+    Log.d(TAG, "getFreePacks");
     StringBuilder in = null;
     LinkedList<Pack> ret = null;
-    in = doHTTPGet(URL_BASE+SOCIAL_LIST_URL);
+    in = doHTTPGet(URL_BASE+FREE_LIST_URL);
     ret = PackParser.parsePacks(in);
     return ret;
   }
