@@ -71,6 +71,13 @@ public class PhrasePackPurchase extends Activity {
   private static final int GOOGLEPLUS_REQUEST_CODE = 13;
 
   /**
+   * Supports in-app billing
+   */
+  private PhrasePackPurchaseObserver mPurchaseObserver;
+  private Handler mHandler;
+  private BillingService mBillingService;
+
+  /**
    * PlayGameListener plays an animation on the view that will result in
    * launching GameSetup
    */
@@ -192,10 +199,6 @@ public class PhrasePackPurchase extends Activity {
     }
   }
 
-  private PhrasePackPurchaseObserver mPurchaseObserver;
-  private Handler mHandler;
-  private BillingService mBillingService;
-
   /**
    * Create the packages screen from an XML layout and
    */
@@ -216,6 +219,15 @@ public class PhrasePackPurchase extends Activity {
 
     // Detect Social Clients
     detectClients();
+    
+    // Initialize billing service
+    mHandler = new Handler();
+    mPurchaseObserver = new PhrasePackPurchaseObserver(this,mHandler);
+    mBillingService = new BillingService();
+    mBillingService.setContext(this);
+    
+    // Check if billing is supported.
+    ResponseHandler.register(mPurchaseObserver);
 
     // set fonts on titles
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
@@ -247,6 +259,7 @@ public class PhrasePackPurchase extends Activity {
 
     GameManager game = application.getGameManager();
 
+    
     // Populate and display list of cards
     LinearLayout unlockedPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_UnlockedPackSets);
     LinearLayout paidPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_PaidPackSets);
@@ -278,15 +291,7 @@ public class PhrasePackPurchase extends Activity {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
-
-    mHandler = new Handler();
-    mPurchaseObserver = new PhrasePackPurchaseObserver(this, mHandler);
-    mBillingService = new BillingService();
-    mBillingService.setContext(this);
-
-    // Check if billing is supported.
-    ResponseHandler.register(mPurchaseObserver);
-
+    
     Button btn = (Button) this.findViewById(R.id.PackPurchase_Button_Next);
     btn.setOnClickListener(mGameSetupListener);
   }
