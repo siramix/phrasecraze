@@ -3,6 +3,7 @@ package com.siramix.phrasecraze;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,8 +20,12 @@ import com.siramix.phrasecraze.Consts.PurchaseState;
 import com.siramix.phrasecraze.Consts.ResponseCode;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -30,6 +35,8 @@ import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,14 +49,20 @@ public class PhrasePackPurchase extends Activity {
 
   private static final String TAG = "CardPackPurchase";
   public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALIZED";
-
+  
+  private ProgressDialog mInstallDialog;
+  
   // To be used for tooltips to help guide users
   private Toast mHelpToast = null;
 
   List<View> mPackLineList;
 
   private SharedPreferences mPackPrefs;
-
+  
+  // Our pack lists as retrieved from the server
+  private LinkedList<Pack> mFreePacks;
+  private LinkedList<Pack> mPayPacks;
+  
   // A map of request codes and their corresponding packs
   private HashMap<Integer, Pack> mSocialPacks;
 
@@ -132,25 +145,24 @@ public class PhrasePackPurchase extends Activity {
     }
 
     @Override
-    public void onPurchaseStateChange(PurchaseState purchaseState,
-        String itemId, int quantity, long purchaseTime, String developerPayload) {
-      if (Consts.DEBUG) {
-        Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
-            + purchaseState);
-      }
+    public void onPurchaseStateChange(PurchaseState purchaseState, String itemId,
+            int quantity, long purchaseTime, String developerPayload) {
+        if (Consts.DEBUG) {
+            Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " " + purchaseState);
+        }
 
-      if (developerPayload == null) {
-        // logProductActivity(itemId, purchaseState.toString());
-      } else {
-        // logProductActivity(itemId, purchaseState + "\n\t" +
-        // developerPayload);
-      }
+        if (developerPayload == null) {
+            //logProductActivity(itemId, purchaseState.toString());
+        } else {
+            //logProductActivity(itemId, purchaseState + "\n\t" + developerPayload);
+        }
 
-      if (purchaseState == PurchaseState.PURCHASED) {
-        // mOwnedItems.add(itemId);
-      }
-      // mCatalogAdapter.setOwnedItems(mOwnedItems);
-      // mOwnedItemsCursor.requery();
+        if (purchaseState == PurchaseState.PURCHASED) {
+            installPackById(Integer.parseInt(itemId));
+            //mOwnedItems.add(itemId);
+        }
+        //mCatalogAdapter.setOwnedItems(mOwnedItems);
+        //mOwnedItemsCursor.requery();
     }
 
     @Override
@@ -180,24 +192,23 @@ public class PhrasePackPurchase extends Activity {
 
     @Override
     public void onRestoreTransactionsResponse(RestoreTransactions request,
-        ResponseCode responseCode) {
+          ResponseCode responseCode) {
       if (responseCode == ResponseCode.RESULT_OK) {
-        if (Consts.DEBUG) {
           Log.d(TAG, "completed RestoreTransactions request");
-        }
-        // Update the shared preferences so that we don't perform
-        // a RestoreTransactions again.
-        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean(DB_INITIALIZED, true);
-        edit.commit();
+
+          // Update the shared preferences so that we don't perform
+          // a RestoreTransactions again.
+          SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+          SharedPreferences.Editor edit = prefs.edit();
+          edit.putBoolean(DB_INITIALIZED, true);
+          edit.commit();
       } else {
-        if (Consts.DEBUG) {
-          Log.d(TAG, "RestoreTransactions error: " + responseCode);
+          if (Consts.DEBUG) {
+              Log.d(TAG, "RestoreTransactions error: " + responseCode);
+          }
         }
       }
     }
-  }
 
   /**
    * Create the packages screen from an XML layout and
@@ -207,6 +218,10 @@ public class PhrasePackPurchase extends Activity {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate()");
 
+    // Initialize our packs
+    mFreePacks = new LinkedList<Pack>();
+    mPayPacks = new LinkedList<Pack>();
+    
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -259,26 +274,28 @@ public class PhrasePackPurchase extends Activity {
 
     GameManager game = application.getGameManager();
 
-    
     // Populate and display list of cards
     LinearLayout unlockedPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_UnlockedPackSets);
     LinearLayout paidPackLayout = (LinearLayout) findViewById(R.id.PackPurchase_PaidPackSets);
-
+    
     unlockedPackLayout.removeAllViewsInLayout();
     paidPackLayout.removeAllViewsInLayout();
 
     PackClient client = PackClient.getInstance();
-    LinkedList<Pack> serverPacks = new LinkedList<Pack>();
+    LinkedList<Pack> lockedPacks = new LinkedList<Pack>();
     LinkedList<Pack> localPacks = new LinkedList<Pack>();
     localPacks = game.getInstalledPacks();
     mSocialPacks = new HashMap<Integer, Pack>();
 
     // First try to get the online packs, if no internet, just use local packs
     try {
-      serverPacks.addAll(client.getPayPacks());
-      serverPacks.addAll(client.getFreePacks());
+      mFreePacks = client.getFreePacks();
+      mPayPacks = client.getPayPacks();
+      lockedPacks.addAll(mPayPacks);
+      lockedPacks.addAll(mFreePacks);
+      lockedPacks = removeLocalPacks(lockedPacks, localPacks);
       populatePackLayout(localPacks, unlockedPackLayout);
-      populatePackLayout(serverPacks, paidPackLayout);
+      populatePackLayout(lockedPacks, paidPackLayout);
     } catch (IOException e1) {
       populatePackLayout(localPacks, unlockedPackLayout);
       showToast(getString(R.string.toast_packpurchase_nointerneterror));
@@ -296,6 +313,24 @@ public class PhrasePackPurchase extends Activity {
     btn.setOnClickListener(mGameSetupListener);
   }
 
+  /**
+   * Remove from lockedPacks those packs that are already installed.
+   * @param lockedPacks
+   * @param localPacks
+   * @return
+   */
+  private LinkedList<Pack> removeLocalPacks(LinkedList<Pack> lockedPacks, LinkedList<Pack> localPacks) {
+    LinkedList<Pack> lockedPacksSubset = lockedPacks;
+    for (int i=0; i<lockedPacks.size(); ++i) {
+      for (int j=0; j<localPacks.size(); ++j) {
+        if (lockedPacks.get(i).getId() == localPacks.get(j).getId()) {
+          lockedPacksSubset.remove(i);
+        }
+      }
+    }
+    return lockedPacksSubset;
+  }
+  
   /**
    * Create dynamic rows of packs at runtime for pack purchase view. This will
    * set up the XML, bind listeners, and update pack titles, price, and images
@@ -324,6 +359,7 @@ public class PhrasePackPurchase extends Activity {
       // Create a new row for this pack
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
+
       PackPurchaseRowLayout row = (PackPurchaseRowLayout) line
           .getChildAt(count);
       row.setPack(curPack, getPackPref(curPack), count % 2 == 0);
@@ -335,24 +371,28 @@ public class PhrasePackPurchase extends Activity {
       margin.setMargins(0, (int) (-2 * DENSITY), 0, 0);
       row.setLayoutParams(margin);
       mPackLineList.add(row);
-
+      
       // Bind Listener
-      // TODO this will need to be more specific later (to just free social
-      // apps)
-      if (curPack.getPath().equals("freepacks/twitter.json")) {
+      //TODO this will need to be more specific later (to just free social apps)
+      // Attach Twitter Listener
+      if (curPack.getId() == 4 && curPack.isInstalled() == false) {
         row.setOnClickListener(mTweetListener);
         mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
-      } else if (curPack.getPath().equals("freepacks/facebook.json")) {
+      }
+      // Attach Facebook Listener
+      else if (curPack.getId() == 5 && curPack.isInstalled() == false) {
         row.setOnClickListener(mFacebookListener);
         mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
-      } else if (curPack.getPath().equals("freepacks/googleplus.json")) {
+      }
+      // Attach Google + Listener
+      else if (curPack.getId() == 6 && curPack.isInstalled() == false) {
         row.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       } else if (curPack.isInstalled()) {
         row.setOnPackSelectedListener(mSelectPackListener);
         row.setOnPackInfoRequestedListener(mPackInfoListener);
       } else {
-        row.setOnClickListener(mPremiumPackListener);
+        row.setOnClickListener(mPayPackListener);
       }
 
       count++;
@@ -360,6 +400,28 @@ public class PhrasePackPurchase extends Activity {
     insertionPoint.addView(layout);
   }
 
+  /**
+   * The market sends us the Product ID of a purchased item.  With that we 
+   * can infer which pack the user is requesting and get it from the server.
+   * @param id The pack Id of the pack that should be installed.
+   */
+  private void installPackById(int id) {
+    for (Pack curPack : mPayPacks) {
+      if (curPack.getId() == id) {
+        mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
+        PhraseCrazeApplication application = (PhraseCrazeApplication) this
+            .getApplication();
+        GameManager game = application.getGameManager();
+        // TODO: Catch the runtime exception correctly
+        try {
+          game.installPack(curPack, mInstallDialog);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+      }
+    }
+  }
+  
   /**
    * This listener is specifically for packs that require tweeting to get.
    */
@@ -371,8 +433,10 @@ public class PhrasePackPurchase extends Activity {
       if (targetComponent != null) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setComponent(targetComponent);
+
         String intentType = (targetComponent.getClassName()
             .contains("com.twidroid")) ? "application/twitter" : "text/plain";
+
         shareIntent.setType(intentType);
         shareIntent
             .putExtra(Intent.EXTRA_TEXT,
@@ -456,7 +520,8 @@ public class PhrasePackPurchase extends Activity {
       Pack curPack = mSocialPacks.get(requestCode);
       // TODO: Catch the runtime exception
       try {
-        game.getDeck().digestPack(curPack);
+        mInstallDialog = ProgressDialog.show(this, "WORKING", "CHANGEME");
+        game.installPack(curPack, mInstallDialog);
       } catch (RuntimeException e) {
         e.printStackTrace();
       }
@@ -478,11 +543,11 @@ public class PhrasePackPurchase extends Activity {
   /**
    * This listener is specifically for packs that require purchasing to get.
    */
-  private final OnClickListener mPremiumPackListener = new OnClickListener() {
-    // Tweet button handler
+  private final OnClickListener mPayPackListener = new OnClickListener() {    
+    //Tweet button handler
     public void onClick(View v) {
-      Pack curPack = ((PackPurchaseRowLayout) v).getPack();
-      mBillingService.requestPurchase(curPack.getPath(), "payload_test");
+      Pack curPack = (Pack) v.getTag();
+      mBillingService.requestPurchase(String.valueOf(curPack.getId()), "payload_test");
     }
   };
 

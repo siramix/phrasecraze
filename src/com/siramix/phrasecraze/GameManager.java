@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -48,6 +49,9 @@ public class GameManager {
   
   // Create a thread for updating the playcount for each card
   private Thread mUpdateThread;
+  
+  // A thread for installing new packs
+  private Thread mInstallThread;
   
   /**
    * The position in the list of card ids (where we are in the "deck")
@@ -421,6 +425,24 @@ public class GameManager {
         }
       });
     mUpdateThread.start();
+  }
+  
+  public void installLocalPacks() {
+    mDeck.digestLocalPacks();
+  }
+  
+  public void installPack(final Pack pack, final ProgressDialog installDialog) {
+    // TODO This should probably be in a thread (mInstallThread)
+    // Though I ran into problems with the database state 
+    try {
+      mDeck.digestPack(pack);
+    } catch (RuntimeException e) {
+      Log.e(TAG, "Unable to install pack: " + pack.getName());
+      e.printStackTrace();
+    }
+    if (installDialog != null) {
+      installDialog.dismiss();
+    }
   }
   
   /**

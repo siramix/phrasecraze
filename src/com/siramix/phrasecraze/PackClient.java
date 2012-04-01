@@ -111,8 +111,8 @@ public class PackClient {
     Log.d(TAG, "getCardsForPack");
     StringBuilder in = null;
     CardJSONIterator ret = null;
-    String packURL = pack.getPath();
-    in = doHTTPGet(URL_BASE+packURL);
+    String packPath = pack.getPath();
+    in = doHTTPGet(URL_BASE+packPath);
     ret = PackParser.parseCards(in);
     return ret;
   }

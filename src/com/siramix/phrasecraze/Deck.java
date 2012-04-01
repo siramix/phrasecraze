@@ -172,6 +172,7 @@ public class Deck {
    * @throws URISyntaxException
    */
   public synchronized void digestPack(Pack pack) throws RuntimeException {
+    Log.d(TAG, "INSTALLING PACK: \n" + pack.toString());
     try {
       mDatabaseOpenHelper.digestPackFromServer(pack);
     } catch (IOException e) {
@@ -181,6 +182,15 @@ public class Deck {
       RuntimeException userException = new RuntimeException(e);
       throw userException;
     }
+  }
+  
+  /**
+   * Install all of the packs that are in the app's local resources
+   * These packs **MUST** stay in sync with the server.
+   */
+  public synchronized void digestLocalPacks() {
+    Log.d(TAG, "INSTALLING ALL LOCAL PACKS");
+    mDatabaseOpenHelper.installLocalPacks();
   }
   
   private void topOffFrontCache() {
@@ -279,8 +289,12 @@ public class Deck {
     for (String packId : packSelections.keySet()) {
       if (packPrefs.getBoolean(packId, false) == true) {
         Pack newPack = mDatabaseOpenHelper.getPackFromDB(packId);
-        newPack.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(newPack));
-        mSelectedPacks.add(newPack);
+        if (newPack != null) {
+          newPack.setNumPlayablePhrases(mDatabaseOpenHelper.countPlayablePhrases(newPack));
+          mSelectedPacks.add(newPack);
+        } else {
+          Log.e(TAG, "Preference set for a pack that does not exist in the database.");
+        }
       }
     }
   }
@@ -382,13 +396,21 @@ public class Deck {
     public void onCreate(SQLiteDatabase db) {
       db.execSQL(PackColumns.TABLE_CREATE);
       db.execSQL(PhraseColumns.TABLE_CREATE);
-
-      digestPackFromResource(db, "pack1", R.raw.pack1);
-      digestPackFromResource(db, "pack2", R.raw.pack2);
-      digestPackFromResource(db, "pack3", R.raw.pack3);      
-      //digestPackFromResource(db, "party", R.raw.party);
     }
 
+    public void installLocalPacks() {
+      mDatabase = getWritableDatabase();
+      Pack pack1 = new Pack(1, "pack1", "freepacks/pack1.json", 
+                                  "Description of pack1", "first install", 0, 500, true);
+      Pack pack2 = new Pack(2, "pack2", "freepacks/pack2.json", 
+          "Description of pack2", "first install", 0, 500, true);
+      Pack pack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
+          "Description of pack3", "first install", 0, 250, true);
+      digestPackFromResource(mDatabase, pack1, R.raw.pack1);
+      digestPackFromResource(mDatabase, pack2, R.raw.pack2);
+      digestPackFromResource(mDatabase, pack3, R.raw.pack3);
+    }
+    
     /**
      * Count all phrases in the deck quickly
      * 
@@ -435,7 +457,7 @@ public class Deck {
      * @return -1 if no phrases found, otherwise the number of phrases found
      */
     public int countPlayablePhrases(Pack pack) {
-      Log.d(TAG, "countPlayablePhrases(pack");
+      Log.d(TAG, "countPlayablePhrases(" + pack.getName() + ")");
       String[] args = new String[2];
 
       args[0] = String.valueOf(pack.getId());
@@ -529,7 +551,7 @@ public class Deck {
      * @param packName the name of the file to digest
      * @param resId the resource of the pack file to digest
      */
-    private void digestPackFromResource(SQLiteDatabase db, String packName, int resId) {
+    private void digestPackFromResource(SQLiteDatabase db, Pack pack, int resId) {
       Log.d(TAG, "Digesting pack from resource " + String.valueOf(resId));
 
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(
@@ -541,25 +563,21 @@ public class Deck {
           packBuilder.append(line).append("\n");
         }
       } catch (IOException e) {
-        Log.e(TAG,"Problem Reading pack from Resource.");
+        Log.e(TAG,"Problem installing pack " + pack.getName() + " from resource.");
         e.printStackTrace();
       }
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       
-      Pack insertPack = new Pack(resId, packName, "RESOURCE PACK", 
-                                  "From Resource", null, 0, 1000, true);
-      digestPackInternal(db, insertPack, cardItr);
+      digestPackInternal(db, pack, cardItr);
 
-      if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "DONE loading words.");
-      }
+      Log.d(TAG, "DONE loading words.");
     }
 
     public void digestPackFromServer(Pack pack) throws IOException, URISyntaxException {
       Log.d(TAG, "digestPackFromServer(" + pack.getName() + ")");
       mDatabase = getWritableDatabase();
       // Don't add a pack if it's already there
-      int packId = packInstalled(pack.getName(), pack.getVersion(), mDatabase);
+      int packId = packInstalled(pack.getId(), pack.getVersion(), mDatabase);
       if (packId == PACK_CURRENT) {
         return;
       }
@@ -568,7 +586,8 @@ public class Deck {
       }
       CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
       digestPackInternal(mDatabase, pack, cardItr);
-      mDatabase.close();
+      
+      Log.d(TAG, "DONE loading words.");
     }
 
     /**
@@ -680,10 +699,10 @@ public class Deck {
      * @param db
      * @return
      */
-    public static int packInstalled(String packName, int packVersion, SQLiteDatabase db) {
-      String[] packNames = {packName};
+    private static int packInstalled(int packId, int packVersion, SQLiteDatabase db) {
+      String[] packIds= {String.valueOf(packId)};
       Cursor res = db.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
-          PackColumns.NAME + " IN (?)", packNames, null, null, null);
+          PackColumns._ID + " = (?)", packIds, null, null, null);
       if (res.getCount() >= 1) {
         res.moveToFirst();
         int oldVersion = res.getInt(3);
