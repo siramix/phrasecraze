@@ -31,9 +31,7 @@ import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -52,7 +50,6 @@ public class PhrasePackPurchase extends Activity {
   // To be used for tooltips to help guide users
   private Toast mHelpToast = null;
 
-  List<ImageView> mPackViewList;
   List<View> mPackLineList;
 
   private SharedPreferences mPackPrefs;
@@ -234,7 +231,6 @@ public class PhrasePackPurchase extends Activity {
     
     
     // Instantiate all of our lists for programmatic adding of packs to view
-    mPackViewList = new LinkedList<ImageView>();
     mPackLineList = new LinkedList<View>();
     
     refreshAllPackLayouts();
@@ -318,87 +314,91 @@ public class PhrasePackPurchase extends Activity {
     
     for (Iterator<Pack> it = packlist.iterator(); it.hasNext();) {
       Pack curPack = it.next();
-      Boolean isPackLocal = curPack.isInstalled();
       
       Log.d(TAG, "Count: " + count + "\nPackname: " + curPack.getName());
-      LinearLayout line = (LinearLayout) LinearLayout.inflate(
-          this.getBaseContext(), R.layout.packpurchaserow, layout);
-      RelativeLayout packRowContents = (RelativeLayout) line.getChildAt(count);
-      LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) packRowContents.getLayoutParams();
-      margin.setMargins(0, 0, 0, -1);
-      packRowContents.setLayoutParams(margin);
-
+      
+      // Create a new row for this pack
+      LinearLayout line = (LinearLayout) LinearLayout.inflate(this.getBaseContext(), R.layout.packpurchaserow, layout);
+      RelativeLayout row = (RelativeLayout) line.getChildAt(count);
+      
       // Add the current pack object to the row so that the listener can get its
       // metadata
-      packRowContents.setTag(curPack);
+      row.setTag(curPack);
+      refreshPackRow(row);
+      
+      // Add pack rows to the list. Give margin so borders don't double up
+      LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) row.getLayoutParams();
+      final float DENSITY = this.getResources().getDisplayMetrics().density;
+      margin.setMargins(0, (int) (-2*DENSITY), 0, 0);
+      row.setLayoutParams(margin);
+      mPackLineList.add(row);
 
-      // Make every line alternating color
-      if (count % 2 == 0) {
-        View background = (View) packRowContents;
-        background.setBackgroundResource(R.color.genericBG_trim);
-      }
-      
-      // Set Pack Title
-      TextView packTitle = (TextView) packRowContents.getChildAt(1);
-      packTitle.setText(curPack.getName());
 
-      // Set Row end icon and Price
-      ImageView packIcon = (ImageView) packRowContents.getChildAt(2);
-      TextView packPrice = (TextView) packRowContents.getChildAt(3);
-      CheckBox checkBox = (CheckBox) packRowContents.getChildAt(4);
-      packIcon.setImageResource(R.drawable.turnsum_row_end_white);
-      if(isPackLocal)
-      {
-        setLocalRowStatus(packRowContents,getPackPref(curPack));  
-      }
-      else
-      {
-        packPrice.setVisibility(View.VISIBLE);
-        checkBox.setVisibility(View.INVISIBLE);
-        packIcon.setColorFilter(this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
-      }
-      
-      // Set pack price
-
-      //if( !isPackLocal )
-     // {
-
-     // }
-      
-      mPackViewList.add(packIcon);
-      mPackLineList.add(packRowContents);
-      
-      // Set fonts on text
-      Typeface antonFont = Typeface.createFromAsset(getAssets(),
-          "fonts/Anton.ttf");
-      packTitle.setTypeface(antonFont);
-      packPrice.setTypeface(antonFont);
-      
       // Bind Listener
       //TODO this will need to be more specific later (to just free social apps)
       if (curPack.getPath().equals("freepacks/twitter.json")) {
-        packRowContents.setOnClickListener(mTweetListener);
+        row.setOnClickListener(mTweetListener);
         mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
       }
       else if (curPack.getPath().equals("freepacks/facebook.json")) {
-        packRowContents.setOnClickListener(mFacebookListener);
+        row.setOnClickListener(mFacebookListener);
         mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
       }
       else if (curPack.getPath().equals("freepacks/googleplus.json")) {
-        packRowContents.setOnClickListener(mGoogleListener);
+        row.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       }
       else if (curPack.isInstalled()){
-        packRowContents.setOnClickListener(mInstalledPackListener);
+        row.setOnClickListener(mInstalledPackListener);
       }
       else {
-        packRowContents.setOnClickListener(mPremiumPackListener);
+        row.setOnClickListener(mPremiumPackListener);
       }
       
       count++;
     }
     insertionPoint.addView(layout);
   }
+  
+  
+  /**
+   * Refresh the view for a given row. This updates elements to represent
+   * the corresponding pack.
+   */
+  public void refreshPackRow(RelativeLayout row)
+  {
+    // Assign local references
+    Pack pack = (Pack) row.getTag();
+    Boolean isPackEnabled = getPackPref(pack);
+    TextView title = (TextView) row.getChildAt(1);
+    ImageView rowEndBG = (ImageView) row.getChildAt(2);
+    TextView price = (TextView) row.getChildAt(3);
+    CheckBox checkbox = (CheckBox) row.getChildAt(4);
+    
+    // Setup attributes
+    title.setText(pack.getName());
+    int rowEndColor;
+    if (pack.isInstalled()) {
+      if (isPackEnabled) {
+        checkbox.setChecked(true);
+        rowEndColor = R.color.teamA_primary;
+      } else {
+        checkbox.setChecked(false);
+        rowEndColor = R.color.teamA_complement;
+      }
+      price.setVisibility(View.INVISIBLE);
+
+    } else {
+      price.setVisibility(View.VISIBLE);
+      checkbox.setVisibility(View.INVISIBLE);
+      rowEndColor = R.color.genericBG_trim;
+    }
+    rowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
+    rowEndBG.setColorFilter(
+        this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
+    
+  }
+
   
   /**
    * This listener is specifically for packs that require tweeting to get.
@@ -522,7 +522,8 @@ public class PhrasePackPurchase extends Activity {
       Pack curPack = (Pack) v.getTag();
       Boolean newStatus = !getPackPref(curPack);
       setPackPref(curPack, newStatus);
-      setLocalRowStatus((RelativeLayout) v, newStatus);
+      
+      refreshPackRow((RelativeLayout) v);
       
       // play confirm sound when points are added
       SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this.getBaseContext());
@@ -653,31 +654,6 @@ public class PhrasePackPurchase extends Activity {
     }
 
     return result;
-  }
-
-  /**
-   * Updates the views for a pack purchase row to the specified state.
-   */
-  private void setLocalRowStatus(RelativeLayout row, Boolean isEnabled)
-  {
-    TextView packPrice = (TextView) row.getChildAt(3);
-    CheckBox checkBox = (CheckBox) row.getChildAt(4);
-    int rowEndColor;
-    if( isEnabled)
-    {
-      
-      checkBox.setChecked(true);
-      rowEndColor = R.color.teamA_primary;
-    }
-    else
-    {
-      checkBox.setChecked(false);
-      rowEndColor = R.color.teamA_complement;
-    }
-    ImageView rowEnd = (ImageView) row.getChildAt(2);
-    rowEnd.setColorFilter(this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
-    packPrice.setVisibility(View.INVISIBLE);  
-    
   }
   
   /**
