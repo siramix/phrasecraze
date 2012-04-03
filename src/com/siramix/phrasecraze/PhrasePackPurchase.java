@@ -27,7 +27,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
-import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,10 +34,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -319,12 +315,8 @@ public class PhrasePackPurchase extends Activity {
       
       // Create a new row for this pack
       LinearLayout line = (LinearLayout) LinearLayout.inflate(this.getBaseContext(), R.layout.packpurchaserow, layout);
-      RelativeLayout row = (RelativeLayout) line.getChildAt(count);
-      
-      // Add the current pack object to the row so that the listener can get its
-      // metadata
-      row.setTag(curPack);
-      refreshPackRow(row);
+      PackPurchaseRowLayout row = (PackPurchaseRowLayout) line.getChildAt(count);
+      row.setPack(curPack, getPackPref(curPack));
       
       // Add pack rows to the list. Give margin so borders don't double up
       LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) row.getLayoutParams();
@@ -332,7 +324,6 @@ public class PhrasePackPurchase extends Activity {
       margin.setMargins(0, (int) (-2*DENSITY), 0, 0);
       row.setLayoutParams(margin);
       mPackLineList.add(row);
-
 
       // Bind Listener
       //TODO this will need to be more specific later (to just free social apps)
@@ -359,46 +350,6 @@ public class PhrasePackPurchase extends Activity {
     }
     insertionPoint.addView(layout);
   }
-  
-  
-  /**
-   * Refresh the view for a given row. This updates elements to represent
-   * the corresponding pack.
-   */
-  public void refreshPackRow(RelativeLayout row)
-  {
-    // Assign local references
-    Pack pack = (Pack) row.getTag();
-    Boolean isPackEnabled = getPackPref(pack);
-    TextView title = (TextView) row.getChildAt(1);
-    ImageView rowEndBG = (ImageView) row.getChildAt(2);
-    TextView price = (TextView) row.getChildAt(3);
-    CheckBox checkbox = (CheckBox) row.getChildAt(4);
-    
-    // Setup attributes
-    title.setText(pack.getName());
-    int rowEndColor;
-    if (pack.isInstalled()) {
-      if (isPackEnabled) {
-        checkbox.setChecked(true);
-        rowEndColor = R.color.teamA_primary;
-      } else {
-        checkbox.setChecked(false);
-        rowEndColor = R.color.teamA_complement;
-      }
-      price.setVisibility(View.INVISIBLE);
-
-    } else {
-      price.setVisibility(View.VISIBLE);
-      checkbox.setVisibility(View.INVISIBLE);
-      rowEndColor = R.color.genericBG_trim;
-    }
-    rowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
-    rowEndBG.setColorFilter(
-        this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
-    
-  }
-
   
   /**
    * This listener is specifically for packs that require tweeting to get.
@@ -510,7 +461,7 @@ public class PhrasePackPurchase extends Activity {
   private final OnClickListener mPremiumPackListener = new OnClickListener() {    
     //Tweet button handler
     public void onClick(View v) {
-      Pack curPack = (Pack) v.getTag();
+      Pack curPack = ((PackPurchaseRowLayout)v).getPack();
       mBillingService.requestPurchase(curPack.getPath(), "payload_test");
     }
   };
@@ -519,11 +470,11 @@ public class PhrasePackPurchase extends Activity {
     
     @Override
     public void onClick(View v) {
-      Pack curPack = (Pack) v.getTag();
+      Pack curPack = ((PackPurchaseRowLayout)v).getPack();
       Boolean newStatus = !getPackPref(curPack);
       setPackPref(curPack, newStatus);
       
-      refreshPackRow((RelativeLayout) v);
+      ((PackPurchaseRowLayout)(v)).setPackStatus(newStatus);
       
       // play confirm sound when points are added
       SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this.getBaseContext());

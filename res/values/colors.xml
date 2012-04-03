@@ -84,7 +84,10 @@
   <color name="inactiveButton">
   	#2d2d2d
   </color>
-  <color name="cardreview_WordText">
-  	#141414
+  <color name="packPurchaseSelected">
+    #275877
+  </color>
+  <color name="packPurchaseUnSelected">
+    #42525c
   </color>
 </resources>
