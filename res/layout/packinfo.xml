@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+/*****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ****************************************************************************/
+ -->
+ 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:orientation="vertical" android:layout_height="wrap_content" android:background="@drawable/bg_generic">
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/PackInfo_Title">
+        <include android:layout_width="wrap_content" android:layout_height="wrap_content" layout="@layout/packpurchaserow" android:id="@+id/PackInfo_TitlePackRow"></include>
+        <View android:layout_width="wrap_content" android:background="@color/genericBG_trim" android:layout_height="4dp" android:id="@+id/PackInfo_Spacer"></View>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/PackInfo_ContentsGroup">
+        <TextView android:paddingRight="10dp" android:paddingLeft="10dp" android:textSize="18sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="A perfect cross-section of the English language. This pack is an essential part to any complete Phrasecraze deck." android:id="@+id/PackInfo_Description"></TextView>
+        <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginLeft="10dp" android:layout_marginTop="10dp">
+            <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="Phrases: 500" android:id="@+id/PackInfo_NumPhrases"></TextView>
+            <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="Easy: 100" android:id="@+id/TextView01"></TextView>
+            <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="Medium: 250" android:id="@+id/TextView02"></TextView>
+            <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:id="@+id/textView3" android:text="Hard: 150"></TextView>
+        </LinearLayout>
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:id="@+id/PackInfo_Buttons">
+            <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cancel" android:layout_weight="1" android:id="@+id/PackInfo_Buttons_Cancel"></Button>
+            <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Accept" android:layout_weight="1" android:id="@+id/PackInfo_Buttons_Accept"></Button>
+        </LinearLayout>
+    </LinearLayout>
+    <View android:layout_width="wrap_content" android:background="@color/genericBG_trim" android:layout_weight="1" android:layout_height="4dp" android:id="@+id/PackInfo_BottomSpacer"></View>
+        
+</LinearLayout>

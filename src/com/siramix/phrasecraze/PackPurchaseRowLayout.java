@@ -217,6 +217,14 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   }
   
   /**
+   * Get whether or not this row is considered "odd"
+   */
+  public Boolean isRowOdd()
+  {
+    return mIsRowOdd;
+  }
+  
+  /**
    * Refresh the view for a given row. This updates elements to represent
    * the corresponding pack.
    */
