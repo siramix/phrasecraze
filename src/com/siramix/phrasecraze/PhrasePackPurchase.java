@@ -316,7 +316,7 @@ public class PhrasePackPurchase extends Activity {
       // Create a new row for this pack
       LinearLayout line = (LinearLayout) LinearLayout.inflate(this.getBaseContext(), R.layout.packpurchaserow, layout);
       PackPurchaseRowLayout row = (PackPurchaseRowLayout) line.getChildAt(count);
-      row.setPack(curPack, getPackPref(curPack));
+      row.setPack(curPack, getPackPref(curPack), count % 2 == 0);
       
       // Add pack rows to the list. Give margin so borders don't double up
       LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) row.getLayoutParams();

@@ -52,6 +52,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
 
   private Pack mPack;
   private Boolean mIsPackEnabled;
+  private Boolean mIsRowOdd;
 
   /**
    * @param context
@@ -189,9 +190,10 @@ public class PackPurchaseRowLayout extends RelativeLayout {
    * @param isSelected
    *          Specify whether the pack is selected for the game
    */
-  public void setPack(Pack pack, Boolean isSelected) {
+  public void setPack(Pack pack, Boolean isSelected, Boolean isRowOdd) {
     mPack = pack;
     mIsPackEnabled = isSelected;
+    mIsRowOdd = isRowOdd;
     refresh();
   }
   
@@ -240,6 +242,19 @@ public class PackPurchaseRowLayout extends RelativeLayout {
       mRowEndBG.setColorFilter(
           this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
     }
+    int bgColor;
+    // Set background
+    if(mIsRowOdd)
+    {
+      bgColor = R.color.genericBG_trim;
+    }
+    else
+    {
+      bgColor = R.color.genericBG_trimDark;
+    }
+    mContents.setBackgroundColor(this.getResources().getColor(
+        bgColor));
+    
   }
 
 }
