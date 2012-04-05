@@ -143,13 +143,15 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
 
     RelativeLayout.LayoutParams checkboxParams = new RelativeLayout.LayoutParams(
-        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        (int) (DENSITY * 42 + 0.5f), LayoutParams.WRAP_CONTENT);
     checkboxParams.addRule(ALIGN_PARENT_RIGHT);
     checkboxParams.addRule(CENTER_VERTICAL);
     checkboxParams.rightMargin=(int) (DENSITY * 13 + 0.5f);
+    mCheckbox.setButtonDrawable(R.drawable.checkbox_packpurchase);
     mCheckbox.setLayoutParams(checkboxParams);
     mCheckbox.setClickable(false);
     mCheckbox.setFocusable(false);
+    mCheckbox.setChecked(true);
     
     // Set fonts - Wrap in isInEditMode so as not to break previewer
     if(!this.isInEditMode())
