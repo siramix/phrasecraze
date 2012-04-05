@@ -568,16 +568,7 @@ public class PhrasePackPurchase extends Activity {
     }
     // Store the pack's boolean in the preferences file for pack preferences
     SharedPreferences.Editor packPrefsEdit = mPackPrefs.edit();
-    
-    packPrefsEdit.putBoolean(String.valueOf(pack.getId()), onoff);
-    if (PhraseCrazeApplication.DEBUG && onoff == false) {
-      Log.d(TAG, "pref set to false");
-    } 
-    else if (PhraseCrazeApplication.DEBUG) {
-      Log.d(TAG, "pref set to true");
-    }
-    showToast(pack.getName() + " set to " + onoff);
-    
+    packPrefsEdit.putBoolean(String.valueOf(pack.getId()), onoff);    
     packPrefsEdit.commit();
   }
   
