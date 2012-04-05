@@ -22,9 +22,11 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -40,6 +42,8 @@ import android.widget.RelativeLayout;
  */
 public class PackPurchaseRowLayout extends RelativeLayout {
 
+  protected static final String TAG = "PackPurchaseRowLayout";
+
   private Context mContext;
 
   private FrameLayout mFrame;
@@ -51,9 +55,17 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   private ImageView mRowEndBG;
 
   private Pack mPack;
-  private Boolean mIsPackEnabled;
-  private Boolean mIsRowOdd;
-
+  private boolean mIsPackEnabled;
+  private boolean mIsRowOdd;
+  
+  /*
+   * Listeners for click events on this row
+   */
+  private OnPackSelectedListener mPackSelectedListener;
+  private OnPackInfoRequestedListener mPackInfoListener;
+  // Allow users to disable the Selection listener
+  private boolean mIsRowClickable; 
+  
   /**
    * @param context
    */
@@ -91,6 +103,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mEndGroup = new RelativeLayout(mContext);
     mRowEndBG = new ImageView(mContext);
     mCheckbox = new CheckBox(mContext);
+    mIsRowClickable = true;
   }
   
   @Override
@@ -128,6 +141,8 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mTitle.setEllipsize(TruncateAt.END);
     mTitle.setHorizontallyScrolling(true);
     mTitle.setTextColor(this.getResources().getColor(R.color.white));
+    // Make title clickable for info on the pack
+    mTitle.setOnClickListener(mPackInfoRequestedListener);
 
     // Initialize End Group and add contents
     mRowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
@@ -169,7 +184,8 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mEndGroup.addView(mRowEndBG);
     mEndGroup.addView(mPrice);
     mEndGroup.addView(mCheckbox);
-    
+    // Allow end piece to be clickable to select the pack
+    mEndGroup.setOnClickListener(mSelectPackListener);
 
     // Add views to the contents layout
     mContents.addView(mTitle);
@@ -178,8 +194,12 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     // Add the views to frame
     mFrame.addView(mContents);
 
+    // Enable clicking on the row by default
+    setRowClickable(true);
+    
     // Add groups to TeamSelectLayout
     this.addView(mFrame);
+
   }
 
   /**
@@ -207,6 +227,21 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     refresh();
   }
   
+  /*
+   * Assign a listener to receive the OnPackSelected callback
+   * @param listener Listener to receive the callback
+   */
+  public void setOnPackSelectedListener(OnPackSelectedListener listener) {
+    mPackSelectedListener = listener;
+  }
+
+  /*
+   * Assign a listener to receive the OnPackInfoRequested callback
+   * @param listener Listener to receive the callback
+   */
+  public void setOnPackInfoRequestedListener(OnPackInfoRequestedListener listener) {
+    mPackInfoListener = listener;
+  }
   
   /**
    * Get the pack that is associated with this layout
@@ -222,6 +257,17 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   public Boolean isRowOdd()
   {
     return mIsRowOdd;
+  }
+  
+  /*
+   * Set this row as unselectable, when the invoking classes don't need
+   * selection events
+   */
+  public void setRowClickable(boolean isClickable)
+  {
+    mIsRowClickable = isClickable;
+    mEndGroup.setClickable(mIsRowClickable);
+    mTitle.setClickable(mIsRowClickable);
   }
   
   /**
@@ -264,5 +310,39 @@ public class PackPurchaseRowLayout extends RelativeLayout {
         bgColor));
     
   }
+  
+  /**
+   * Watches the group that selects and deselects the pack on click
+   */
+  private final OnClickListener mSelectPackListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "SelectPackListener onClick()");
+      }
+      Boolean newSelectionStatus = !mIsPackEnabled;
+      setPackStatus(newSelectionStatus);
+
+      // Send event to any listeners
+      if (mPackSelectedListener != null) {
+        mPackSelectedListener.onPackSelected(mPack, newSelectionStatus);
+      }
+    }
+  };
+  
+  
+  /**
+   * Watches the group that shows pack Info
+   */
+  private final OnClickListener mPackInfoRequestedListener = new OnClickListener() {
+    public void onClick(View v) {
+      if (PhraseCrazeApplication.DEBUG) {
+        Log.d(TAG, "PackInfoRequestedListener onClick()");
+      }
+      // Send event to any listeners
+      if (mPackInfoListener != null) {
+        mPackInfoListener.onPackInfoRequested(mPack);
+      }
+    }
+  };
 
 }

@@ -17,11 +17,8 @@
  ****************************************************************************/
 package com.siramix.phrasecraze;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -165,6 +162,7 @@ public class PackInfo extends Activity {
   private void setupPackDataViews()
   {
     mPackTitle.setPack(mPack, mIsPackSelected, mIsPackRowOdd);
+    mPackTitle.setRowClickable(false);
     mPackDescription.setText(mPack.getDescription());
     mPackNumPhrases.setText("1 phrase!");
     //mPackNumPhrases.setText(mPack.getNumPlayablePhrases());

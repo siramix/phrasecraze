@@ -344,7 +344,8 @@ public class PhrasePackPurchase extends Activity {
         row.setOnClickListener(mGoogleListener);
         mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
       } else if (curPack.isInstalled()) {
-        row.setOnClickListener(mSelectPackListener);
+        row.setOnPackSelectedListener(mSelectPackListener);
+        row.setOnPackInfoRequestedListener(mPackInfoListener);
       } else {
         row.setOnClickListener(mPremiumPackListener);
       }
@@ -484,44 +485,37 @@ public class PhrasePackPurchase extends Activity {
    * Listener for the pack selection, which includes or excludes the pack
    * from the deck.
    */
-  private final OnClickListener mSelectPackListener = new OnClickListener() {
+  private final OnPackSelectedListener mSelectPackListener = new OnPackSelectedListener() {
 
     @Override
-    public void onClick(View v) {
-      Pack curPack = ((PackPurchaseRowLayout) v).getPack();
-      Boolean newStatus = !getPackPref(curPack);
-      setPackPref(curPack, newStatus);
-
-      ((PackPurchaseRowLayout) (v)).setPackStatus(newStatus);
+    public void onPackSelected(Pack pack, boolean selectionStatus) {
+      setPackPref(pack, selectionStatus);
 
       // play confirm sound when points are added
       SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this
           .getBaseContext());
-      if (newStatus) {
+      if (selectionStatus) {
         sm.playSound(SoundManager.Sound.CONFIRM);
       } else {
         sm.playSound(SoundManager.Sound.BACK);
       }
-      
-      showPackInfo((PackPurchaseRowLayout) v); 
     }
   };
-  
 
   /*
    * Listener that brings up pack info
    */
-  private final OnClickListener mPackInfoListener = new OnClickListener() {
+  private final OnPackInfoRequestedListener mPackInfoListener = new OnPackInfoRequestedListener() {
 
     @Override
-    public void onClick(View v) {
+    public void onPackInfoRequested(Pack pack) {
       // play confirm sound when points are added
       SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this
           .getBaseContext());
       sm.playSound(SoundManager.Sound.CONFIRM);
      
       // Show pack info activity
-      showPackInfo((PackPurchaseRowLayout) v); 
+      showPackInfo(pack); 
     }
   };
 
@@ -529,23 +523,24 @@ public class PhrasePackPurchase extends Activity {
    * Shows the packInfo activity. It takes a row that is to be displayed as
    * a parameter.
    */
-  private void showPackInfo(PackPurchaseRowLayout row)
+  private void showPackInfo(Pack pack)
   {
-    Pack curPack = row.getPack();
-    Boolean selectionStatus = getPackPref(curPack);
+    boolean selectionStatus = getPackPref(pack);
+    // For now, we don't care if the row background matches
+    boolean isPackRowOdd = true; 
 
     // Show Set Buzzed Team Dialog
     Intent intent = new Intent(getApplication().getString(
         R.string.IntentPackInfo), getIntent().getData());
     // Pass in that the choice is not required
     intent.putExtra(getApplication().getString(R.string.packBundleKey),
-        curPack);
+        pack);
     intent.putExtra(
         getApplication().getString(R.string.packInfoIsPackSelectedBundleKey),
         selectionStatus);
     intent.putExtra(
         getApplication().getString(R.string.packInfoIsPackRowOddBundleKey),
-        row.isRowOdd());
+        isPackRowOdd);
     startActivity(intent);
   }
   
