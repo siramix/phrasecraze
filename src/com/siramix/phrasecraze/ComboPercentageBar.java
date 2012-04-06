@@ -111,13 +111,27 @@ public class ComboPercentageBar extends LinearLayout {
       FrameLayout frame = new FrameLayout(mContext);
       LinearLayout.LayoutParams frameLayoutParams = new LinearLayout.LayoutParams(
           LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-      frameLayoutParams.weight = 0.75f;
-      int framepadding = (int) (DENSITY * 2 + 0.5f);
-      // Shift elements over to prevent from double up borders
-      if (i > 0) {
-        frameLayoutParams.leftMargin = -framepadding;
+      frameLayoutParams.weight = 0.6f;
+      int defaultPadding = (int) (DENSITY * 2 + 0.5f);
+      // framePadding in parameter order: left, top, right, down
+      int[] framepadding = {defaultPadding,defaultPadding,defaultPadding,defaultPadding};
+      if(i == 0)
+      {
+        // First segment has right padding reduced
+        framepadding[2] = (int) (DENSITY * 1 + 0.5f);
       }
-      frame.setPadding(framepadding, framepadding, framepadding, framepadding);
+      else if ( i < mBarSegments.length-1)
+      {
+        // Middle segments have left and right padding both reduced
+        framepadding[0] = (int) (DENSITY * 1 + 0.5f);
+        framepadding[2] = (int) (DENSITY * 1 + 0.5f);
+      }
+      else if ( i == mBarSegments.length-1)
+      {
+        // End segment has left padding reduced
+        framepadding[0] = (int) (DENSITY * 1 + 0.5f);
+      }
+      frame.setPadding(framepadding[0], framepadding[1], framepadding[2], framepadding[3]);
       frame.setBackgroundColor(this.getResources().getColor(R.color.black));
       frame.setLayoutParams(frameLayoutParams);
 
@@ -189,8 +203,8 @@ public class ComboPercentageBar extends LinearLayout {
       // Break out elements of the bar
       FrameLayout bar = (FrameLayout) mBarSegments[i].getChildAt(0);
       View barForeground = (View) bar.getChildAt(0);
-      TextView segmentLabel = (TextView) mBarSegments[i].getChildAt(1);
       TextView segmentValue = (TextView) bar.getChildAt(1);
+      TextView segmentLabel = (TextView) mBarSegments[i].getChildAt(1);
 
       // Get width of bar and text
       int barWidth = barForeground.getWidth();

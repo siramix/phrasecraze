@@ -353,6 +353,63 @@ public class PhrasePackPurchase extends Activity {
       count++;
     }
     insertionPoint.addView(layout);
+    
+    // Initially update the bar percentages to match the preferences
+    updateComboBarPercentages();
+  }
+  
+  /*
+   * Update the views that display the percentages for Selected, Unselected,
+   * and Locked phrases
+   */
+  private void updateComboBarPercentages() {
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
+        .getApplication();
+    GameManager game = application.getGameManager();
+    ComboPercentageBar bar = (ComboPercentageBar) this
+        .findViewById(R.id.PackPurchase_PhraseBars);
+
+    // Set bar title
+    bar.setTitle("Selected Phrases");
+
+    // ToDo: Get these getting the correct packs.
+    // Is this the best way to get installed packs?
+    LinkedList<Pack> localPacks = new LinkedList<Pack>();
+    localPacks = game.getInstalledPacks();
+
+    int numSelected = 0;
+    int numUnSelected = 0;
+    int numLocked = 3000;
+    for (int i = 0; i < localPacks.size(); i++) {
+      if (getPackPref(localPacks.get(i))) {
+        // numSelected += localPacks.get(i).getNumPlayablePhrases();
+        numSelected += 1000;
+      } else {
+        // numUnSelected += localPacks.get(i).getNumPlayablePhrases();
+        numUnSelected += 1000;
+      }
+    }
+
+    // Get color for the Unselected bar. This changes to red
+    // when no phrases are selected
+    int colorUnselected = this.getResources().getColor(
+        R.color.packPurchaseUnSelected);
+    if (numSelected == 0) {
+      colorUnselected = this.getResources().getColor(R.color.teamC_primary);
+    }
+
+    // Set bar elements
+    bar.setSegmentComponents(0, numSelected, "Selected", this.getResources()
+        .getColor(R.color.packPurchaseSelected),
+        this.getResources().getColor(R.color.text_subtext));
+    bar.setSegmentComponents(1, numUnSelected, "Unselected", colorUnselected,
+        this.getResources().getColor(R.color.text_subtext));
+    bar.setSegmentComponents(2, numLocked, "Locked", this.getResources()
+        .getColor(R.color.genericBG_trimDark),
+        this.getResources().getColor(R.color.text_subtext));
+
+    // ReRender bar
+    bar.updateSegmentWeights();
   }
 
   /**
@@ -490,6 +547,9 @@ public class PhrasePackPurchase extends Activity {
     @Override
     public void onPackSelected(Pack pack, boolean selectionStatus) {
       setPackPref(pack, selectionStatus);
+      
+      // Refresh weightings on the bars
+      updateComboBarPercentages();
 
       // play confirm sound when points are added
       SoundManager sm = SoundManager.getInstance(PhrasePackPurchase.this

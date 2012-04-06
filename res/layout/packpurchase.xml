@@ -126,36 +126,11 @@
         </LinearLayout>
     </ScrollView>
     <View android:id="@+id/view1" android:layout_height="4dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent"></View>
-    <LinearLayout android:layout_width="fill_parent" android:id="@+id/LinearLayout1" android:background="@color/genericBG" android:layout_height="90dp">
-        <RelativeLayout android:id="@+id/relativeLayout2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="center" android:layout_marginLeft="8dp">
-            <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_alignParentTop="true" android:text="Selected Packs" android:textSize="20sp"></TextView>
-            <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_below="@+id/textView1" android:layout_centerHorizontal="true" android:layout_width="200dp">
-                <LinearLayout android:id="@+id/linearLayout3" android:orientation="vertical" android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="fill_parent">
-                    <FrameLayout android:padding="2dp" android:id="@+id/frameLayout1" android:layout_height="wrap_content" android:background="@color/black" android:layout_width="fill_parent">
-                        <View android:layout_height="30dp" android:id="@+id/view2" android:background="@color/packPurchaseSelected" android:layout_width="fill_parent"></View>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="3000" android:id="@+id/textView2"></TextView>
-                    </FrameLayout>
-                    <TextView android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="Chosen"></TextView>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/linearLayout4" android:layout_height="fill_parent" android:orientation="vertical" android:layout_marginLeft="-2dp" android:layout_width="fill_parent" android:layout_weight="1">
-                    <FrameLayout android:padding="2dp" android:id="@+id/FrameLayout01" android:layout_height="wrap_content" android:background="@color/black" android:layout_width="fill_parent">
-                        <View android:layout_height="30dp" android:id="@+id/View01" android:background="@color/packPurchaseUnSelected" android:layout_width="fill_parent"></View>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="1500" android:id="@+id/TextView02"></TextView>
-                    </FrameLayout>
-                    <TextView android:id="@+id/textView4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="Un"></TextView>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/linearLayout5" android:layout_height="fill_parent" android:orientation="vertical" android:layout_marginLeft="-2dp" android:layout_weight="1" android:layout_width="fill_parent">
-                    <FrameLayout android:padding="2dp" android:id="@+id/FrameLayout02" android:layout_height="wrap_content" android:background="@color/black" android:layout_width="fill_parent">
-                        <View android:layout_height="30dp" android:id="@+id/View02" android:background="@color/genericBG_trimDark" android:layout_width="fill_parent"></View>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="4500" android:id="@+id/TextView03"></TextView>
-                    </FrameLayout>
-                    <TextView android:id="@+id/textView5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="Locked"></TextView>
-                </LinearLayout>
-            </LinearLayout>
-        </RelativeLayout>
-        <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="wrap_content" android:layout_gravity="center" android:layout_marginRight="8dp">
-            <TextView android:textSize="40sp" android:layout_width="wrap_content" android:text="40%" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/PackPurchase_Percent" android:layout_gravity="center_horizontal"></TextView>
-            <TextView android:textSize="16sp" android:layout_width="wrap_content" android:text="UNLOCKED" android:layout_marginTop="-10dp" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/TextView01" android:layout_gravity="center_horizontal"></TextView>
+    <LinearLayout android:layout_width="fill_parent" android:id="@+id/LinearLayout1" android:background="@color/genericBG" android:layout_height="100dp">
+        <com.siramix.phrasecraze.ComboPercentageBar android:padding="10dp" android:layout_width="fill_parent" android:id="@+id/PackPurchase_PhraseBars" android:layout_weight="1" android:layout_height="fill_parent"></com.siramix.phrasecraze.ComboPercentageBar>
+        <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginRight="8dp" android:id="@+id/PackPurchase_PercentUnlockedGroup" android:layout_width="wrap_content" android:baselineAligned="false">
+            <TextView android:textSize="40sp" android:layout_width="wrap_content" android:text="40%" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/PackPurchase_Percent" android:layout_gravity="center_horizontal" android:textColor="@color/white"></TextView>
+            <TextView android:textSize="16sp" android:layout_width="wrap_content" android:text="UNLOCKED" android:layout_marginTop="-10dp" android:layout_height="wrap_content" android:textStyle="bold" android:layout_gravity="center_horizontal" android:id="@+id/PackPurchase_PercentUnlockedLabel" android:textColor="@color/text_subtext"></TextView>
         </LinearLayout>
     </LinearLayout>
 
