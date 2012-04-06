@@ -172,6 +172,42 @@ public class ComboPercentageBar extends LinearLayout {
     this.addView(mBarLayout);
   }
 
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+    checkTextBounds();
+  }
+
+  /*
+   * Adjust visibility of the label and value when they need more room
+   * than allowed.
+   */
+  private void checkTextBounds() {
+    final int NUM_SEGMENTS = mBarSegments.length;
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
+      // Break out elements of the bar
+      FrameLayout bar = (FrameLayout) mBarSegments[i].getChildAt(0);
+      View barForeground = (View) bar.getChildAt(0);
+      TextView segmentLabel = (TextView) mBarSegments[i].getChildAt(1);
+      TextView segmentValue = (TextView) bar.getChildAt(1);
+
+      // Get width of bar and text
+      int barWidth = barForeground.getWidth();
+      float valueTextWidth = segmentValue.getPaint().measureText(
+          segmentValue.getText().toString());
+
+      // If the value is bigger than the bar, hide it and the label
+      if (valueTextWidth > barWidth) {
+        segmentLabel.setVisibility(View.INVISIBLE);
+        segmentValue.setVisibility(View.INVISIBLE);
+      } else {
+        segmentLabel.setVisibility(View.VISIBLE);
+        segmentValue.setVisibility(View.VISIBLE);
+      }
+    }
+  }
+
   /*
    * Set the title of this percentage bar
    */
