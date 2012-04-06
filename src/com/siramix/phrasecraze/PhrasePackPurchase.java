@@ -167,26 +167,25 @@ public class PhrasePackPurchase extends Activity {
 
     @Override
     public void onRequestPurchaseResponse(RequestPurchase request,
-        ResponseCode responseCode) {
+          ResponseCode responseCode) {
       if (Consts.DEBUG) {
-        Log.d(TAG, request.mProductId + ": " + responseCode);
+          Log.d(TAG, request.mProductId + ": " + responseCode);
       }
       if (responseCode == ResponseCode.RESULT_OK) {
-        if (Consts.DEBUG) {
-          Log.i(TAG, "purchase was successfully sent to server");
-        }
-        // logProductActivity(request.mProductId, "sending purchase request");
+          if (Consts.DEBUG) {
+              Log.i(TAG, "Purchase of " + request.mProductId + " was successfully sent to server");
+          }
+          //logProductActivity(request.mProductId, "sending purchase request");
       } else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
-        if (Consts.DEBUG) {
-          Log.i(TAG, "user canceled purchase");
-        }
-        // logProductActivity(request.mProductId, "dismissed purchase dialog");
+          if (Consts.DEBUG) {
+              Log.i(TAG, "User canceled purchase of " + request.mProductId);
+          }
+          //logProductActivity(request.mProductId, "dismissed purchase dialog");
       } else {
-        if (Consts.DEBUG) {
-          Log.i(TAG, "purchase failed");
-        }
-        // logProductActivity(request.mProductId, "request purchase returned " +
-        // responseCode);
+          if (Consts.DEBUG) {
+              Log.i(TAG, "purchase of " + request.mProductId + " failed");
+          }
+          //logProductActivity(request.mProductId, "request purchase returned " + responseCode);
       }
     }
 
