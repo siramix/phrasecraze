@@ -49,7 +49,7 @@ public class PackInfo extends Activity {
    */
   private PackPurchaseRowLayout mPackTitle;
   private TextView mPackDescription;
-  private TextView mPackNumPhrases;
+  private ComboPercentageBar mPhraseCountBar;
   
   /*
    * Reference to the pack this activity is displaying
@@ -67,8 +67,8 @@ public class PackInfo extends Activity {
     mButtonAccept = (Button) this
         .findViewById(R.id.PackInfo_Buttons_Accept);
     mPackDescription = (TextView) this.findViewById(R.id.PackInfo_Description);
-    mPackNumPhrases = (TextView) this.findViewById(R.id.PackInfo_NumPhrases);
     mPackTitle = (PackPurchaseRowLayout) this.findViewById(R.id.PackInfo_TitlePackRow);
+    mPhraseCountBar = (ComboPercentageBar) this.findViewById(R.id.PackInfo_PhraseCountBar);
   }
 
   /**
@@ -164,7 +164,19 @@ public class PackInfo extends Activity {
     mPackTitle.setPack(mPack, mIsPackSelected, mIsPackRowOdd);
     mPackTitle.setRowClickable(false);
     mPackDescription.setText(mPack.getDescription());
-    mPackNumPhrases.setText("1 phrase!");
-    //mPackNumPhrases.setText(mPack.getNumPlayablePhrases());
+    //mPhraseCountBar.setTitle(Integer.toString(mPack.getNumPlayablePhrases()));
+    mPhraseCountBar.setTitle("Phrases in Pack: 500");
+    int numEasyPhrases = 100;
+    int numMediumPhrases = 250;
+    int numHardPhrases = 150;
+    int rowAndLabelColor = this.getResources().getColor(R.color.teamB_primary);
+    mPhraseCountBar.setSegmentComponents(0, numEasyPhrases, "Easy", rowAndLabelColor, rowAndLabelColor);
+    rowAndLabelColor = this.getResources().getColor(R.color.teamD_primary);
+    mPhraseCountBar.setSegmentComponents(1, numMediumPhrases, "Medium", rowAndLabelColor, rowAndLabelColor);
+    rowAndLabelColor = this.getResources().getColor(R.color.teamC_primary);
+    mPhraseCountBar.setSegmentComponents(2, numHardPhrases, "Hard", rowAndLabelColor, rowAndLabelColor);
+
+    mPhraseCountBar.updateSegmentWeights();
   }
+
 }

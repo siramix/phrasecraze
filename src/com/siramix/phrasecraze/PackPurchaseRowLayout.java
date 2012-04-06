@@ -268,6 +268,14 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mIsRowClickable = isClickable;
     mEndGroup.setClickable(mIsRowClickable);
     mTitle.setClickable(mIsRowClickable);
+    if(isClickable)
+    {
+      mCheckbox.setVisibility(View.VISIBLE);
+    }
+    else
+    {
+      mCheckbox.setVisibility(View.INVISIBLE);
+    }
   }
   
   /**
