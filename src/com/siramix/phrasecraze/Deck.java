@@ -409,6 +409,8 @@ public class Deck {
       digestPackFromResource(mDatabase, pack1, R.raw.pack1);
       digestPackFromResource(mDatabase, pack2, R.raw.pack2);
       digestPackFromResource(mDatabase, pack3, R.raw.pack3);
+      
+      mDatabase.close();
     }
     
     /**
@@ -420,6 +422,7 @@ public class Deck {
       Log.d(TAG, "countPhrases()");
       mDatabase = getReadableDatabase();
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PhraseColumns.TABLE_NAME);
+      mDatabase.close();
       return ret;
     }
     
@@ -430,12 +433,13 @@ public class Deck {
      */
     public int countPlayablePhrases(LinkedList<Pack> packs) {
       Log.d(TAG, "countPlayablePhrases(LinkedList<String>)");
+      mDatabase = getWritableDatabase();
+      
       String[] args = new String[2];
-
+      
       args[0] = buildPackIdString(packs);
       args[1] = buildDifficultyString();
       
-      mDatabase = getWritableDatabase();
       
       //TODO WHy the HELL didn't that work?
 //      Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
@@ -448,6 +452,8 @@ public class Deck {
       int count = countQuery.getCount();
       
       countQuery.close();
+      
+      mDatabase.close();
       return count;
     }
 
@@ -458,12 +464,12 @@ public class Deck {
      */
     public int countPlayablePhrases(Pack pack) {
       Log.d(TAG, "countPlayablePhrases(" + pack.getName() + ")");
+      mDatabase = getWritableDatabase();      
+      
       String[] args = new String[2];
-
+      
       args[0] = String.valueOf(pack.getId());
       args[1] = buildDifficultyString();
-      
-      mDatabase = getWritableDatabase();
       
       //TODO WHy the HELL didn't that work?
 //      Cursor countQuery = mDatabase.query(PhraseColumns.TABLE_NAME, PhraseColumns.COLUMNS,
@@ -476,6 +482,7 @@ public class Deck {
       int count = countQuery.getCount();
       
       countQuery.close();
+      mDatabase.close();
       return count;
     }
     
@@ -486,9 +493,10 @@ public class Deck {
      */
     public int countPacks() {
       Log.d(TAG, "countPacks()");
-
       mDatabase = getReadableDatabase();
+      
       int ret = (int) DatabaseUtils.queryNumEntries(mDatabase, PackColumns.TABLE_NAME);
+      
       mDatabase.close();
       return ret;
     }
@@ -528,6 +536,7 @@ public class Deck {
     public Pack getPackFromDB(String packId) {
       Log.d(TAG, "getPackFromDB(" + String.valueOf(packId) + ")");
       mDatabase = getReadableDatabase();
+      
       String[] id = new String[] {packId};
       
       Cursor packQuery = mDatabase.query(PackColumns.TABLE_NAME,PackColumns.COLUMNS, 
@@ -588,6 +597,7 @@ public class Deck {
       digestPackInternal(mDatabase, pack, cardItr);
       
       Log.d(TAG, "DONE loading words.");
+      mDatabase.close();
     }
 
     /**
@@ -754,7 +764,7 @@ public class Deck {
       mDatabase.execSQL("UPDATE " + PhraseColumns.TABLE_NAME
                       + " SET " + PhraseColumns.PLAY_DATE + " = datetime('now')"
                       + " WHERE " + PhraseColumns._ID + " in(" + ids + ");");
-      close();
+      mDatabase.close();
     }
 
     /**
@@ -822,6 +832,7 @@ public class Deck {
       Log.d(TAG, "**" + removeCount + " phrases removed.");
       
       res.close();
+      mDatabase.close();
       return returnCards;
     }
     
