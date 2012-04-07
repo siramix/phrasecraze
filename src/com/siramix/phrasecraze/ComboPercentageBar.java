@@ -20,6 +20,7 @@ package com.siramix.phrasecraze;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -40,7 +41,7 @@ public class ComboPercentageBar extends LinearLayout {
    * Elements contained in this Layout
    */
   private LinearLayout mBarLayout;
-  private LinearLayout[] mBarSegments;
+  private BarSegment[] mBarSegments;
   private TextView mTitle;
 
   /**
@@ -64,9 +65,9 @@ public class ComboPercentageBar extends LinearLayout {
   private void initializeMembers(Context context) {
     mContext = context;
     mBarLayout = new LinearLayout(mContext);
-    mBarSegments = new LinearLayout[3];
+    mBarSegments = new BarSegment[3];
     for (int i = 0; i < mBarSegments.length; i++) {
-      mBarSegments[i] = new LinearLayout(mContext);
+      mBarSegments[i] = new BarSegment(mContext);
     }
     mTitle = new TextView(mContext);
   }
@@ -185,43 +186,7 @@ public class ComboPercentageBar extends LinearLayout {
     this.addView(mTitle);
     this.addView(mBarLayout);
   }
-
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-    checkTextBounds();
-  }
-
-  /*
-   * Adjust visibility of the label and value when they need more room
-   * than allowed.
-   */
-  private void checkTextBounds() {
-    final int NUM_SEGMENTS = mBarSegments.length;
-    for (int i = 0; i < NUM_SEGMENTS; i++) {
-      // Break out elements of the bar
-      FrameLayout bar = (FrameLayout) mBarSegments[i].getChildAt(0);
-      View barForeground = (View) bar.getChildAt(0);
-      TextView segmentValue = (TextView) bar.getChildAt(1);
-      TextView segmentLabel = (TextView) mBarSegments[i].getChildAt(1);
-
-      // Get width of bar and text
-      int barWidth = barForeground.getWidth();
-      float valueTextWidth = segmentValue.getPaint().measureText(
-          segmentValue.getText().toString());
-
-      // If the value is bigger than the bar, hide it and the label
-      if (valueTextWidth > barWidth) {
-        segmentLabel.setVisibility(View.INVISIBLE);
-        segmentValue.setVisibility(View.INVISIBLE);
-      } else {
-        segmentLabel.setVisibility(View.VISIBLE);
-        segmentValue.setVisibility(View.VISIBLE);
-      }
-    }
-  }
-
+ 
   /*
    * Set the title of this percentage bar
    */
@@ -299,5 +264,67 @@ public class ComboPercentageBar extends LinearLayout {
 
     // Force the view to redraw itself
     this.invalidate();
+  }
+  
+  /**
+   * Bar Segment class lets us override the onSizeChange to hide or display
+   * the label at the proper time.
+   */
+  public class BarSegment extends LinearLayout
+  {
+
+    public BarSegment(Context context) {
+      super(context);
+    }
+
+    /*
+     * Adjust values and labels when they don't fit in the view
+     * (non-Javadoc)
+     * @see android.view.View#onSizeChanged(int, int, int, int)
+     */
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+      super.onSizeChanged(w, h, oldw, oldh);
+      
+      // Sizes are 0 when this view is added to another
+      if(oldw == 0 && oldh == 0)
+      {
+        return;
+      }
+      
+      // Break out elements of the bar
+      FrameLayout bar = (FrameLayout) this.getChildAt(0);
+      TextView segmentValue = (TextView) bar.getChildAt(1);
+      TextView segmentLabel = (TextView) this.getChildAt(1);
+
+      // Get width of bar and text
+      int barWidth = w;
+      float valueTextWidth = segmentValue.getPaint().measureText(
+          segmentValue.getText().toString());
+      
+      // Debugging Logs
+      if (PhraseCrazeApplication.DEBUG) {
+      Log.d("ComboBar",
+          "__________ checkTextBounds() _____" + segmentLabel.getText());
+      Log.d(
+          "ComboBar",
+          "w: " + Integer.toString(w) + " " + "h: " + Integer.toString(h) + " "
+              + "oldw: " + Integer.toString(oldw) + " " + "oldh: "
+              + Integer.toString(oldh));
+      Log.d("ComboBar", "   Barwidth: " + Integer.toString(barWidth));
+      Log.d("ComboBar", "   Value: " + segmentValue.getText() + " Width: "
+          + Float.toString(valueTextWidth));
+      }
+
+      // If the value is bigger than the bar, hide it and the label
+      if (valueTextWidth > barWidth) {
+        segmentLabel.setVisibility(View.INVISIBLE);
+        segmentValue.setVisibility(View.INVISIBLE);
+      } else {
+        segmentLabel.setVisibility(View.VISIBLE);
+        segmentValue.setVisibility(View.VISIBLE);
+      }
+    } 
+    
   }
 }
