@@ -38,6 +38,10 @@ package com.siramix.phrasecraze;
  * to support in-app billing.
  */
 public class Consts {
+
+    public static final boolean DEBUG = true;
+    public static final String PREF_PACK_SELECTIONS = "PACK_SELECTIONS";
+  
     // The response codes for a request, defined by Android Market.
     public enum ResponseCode {
         RESULT_OK,
@@ -118,6 +122,4 @@ public class Consts {
     public static final String BILLING_RESPONSE_REQUEST_ID = "REQUEST_ID";
     public static long BILLING_RESPONSE_INVALID_REQUEST_ID = -1;
 
-    public static final boolean DEBUG = false;
-    public static final String PREF_PACK_SELECTIONS = "PACK_SELECTIONS";
 }

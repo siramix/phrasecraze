@@ -16,7 +16,7 @@ public class PackColumns implements BaseColumns {
 
   public static final String VERSION = "version";
 
-  public static final String[] COLUMNS = {_ID, NAME, DESCRIPTION, SIZE, PATH, VERSION};
+  public static final String[] COLUMNS = {_ID, NAME, PATH, DESCRIPTION, SIZE, VERSION};
 
   public static final String TABLE_CREATE = "CREATE TABLE " 
       + TABLE_NAME + "( " +

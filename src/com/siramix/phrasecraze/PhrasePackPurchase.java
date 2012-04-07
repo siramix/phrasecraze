@@ -158,8 +158,13 @@ public class PhrasePackPurchase extends Activity {
         }
 
         if (purchaseState == PurchaseState.PURCHASED) {
+          // TODO DEBUG CODE REMOVE BEFORE PRODUCTION
+          if (itemId.contains("android")) {
+            installPackByName(itemId);
+          } else{
             installPackById(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
+          }
         }
         //mCatalogAdapter.setOwnedItems(mOwnedItems);
         //mOwnedItemsCursor.requery();
@@ -363,6 +368,10 @@ public class PhrasePackPurchase extends Activity {
           .getChildAt(count);
       row.setPack(curPack, getPackPref(curPack), count % 2 == 0);
 
+      // Add the current pack object to the row so that the listener can get its
+      // metadata
+      row.setTag(curPack);
+      
       // Add pack rows to the list. Give margin so borders don't double up
       LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) row
           .getLayoutParams();
@@ -392,6 +401,7 @@ public class PhrasePackPurchase extends Activity {
         row.setOnPackInfoRequestedListener(mPackInfoListener);
       } else {
         row.setOnClickListener(mPayPackListener);
+        row.setRowClickable(false);
       }
 
       count++;
@@ -407,6 +417,29 @@ public class PhrasePackPurchase extends Activity {
   private void installPackById(int id) {
     for (Pack curPack : mPayPacks) {
       if (curPack.getId() == id) {
+        mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
+        PhraseCrazeApplication application = (PhraseCrazeApplication) this
+            .getApplication();
+        GameManager game = application.getGameManager();
+        // TODO: Catch the runtime exception correctly
+        try {
+          game.installPack(curPack, mInstallDialog);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+      }
+    }
+  }
+  
+  // TODO: DEBUG CODE, THIS SHOULD NOT GO TO PRODUCTION
+  /**
+   * The market sends us the Product ID of a purchased item.  With that we 
+   * can infer which pack the user is requesting and get it from the server.
+   * @param id The pack Id of the pack that should be installed.
+   */
+  private void installPackByName(String name) {
+    for (Pack curPack : mPayPacks) {
+      if (curPack.getName().equals(name)) {
         mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
         PhraseCrazeApplication application = (PhraseCrazeApplication) this
             .getApplication();
@@ -546,7 +579,18 @@ public class PhrasePackPurchase extends Activity {
     //Tweet button handler
     public void onClick(View v) {
       Pack curPack = (Pack) v.getTag();
-      mBillingService.requestPurchase(String.valueOf(curPack.getId()), "payload_test");
+      
+      // TODO: REMOVE THIS CODE ITS FOR DEBUGGING
+      if (Consts.DEBUG) {
+        if (curPack.getId() >= 1010 && curPack.getId() <= 1013) {
+          mBillingService.requestPurchase(String.valueOf(curPack.getName()), "payload_test");
+        }  else {
+          mBillingService.requestPurchase(String.valueOf(curPack.getId()), "payload_test");
+        }
+      }
+      else {
+        mBillingService.requestPurchase(String.valueOf(curPack.getId()), "payload_test");
+      }
     }
   };
 
@@ -555,7 +599,6 @@ public class PhrasePackPurchase extends Activity {
    * from the deck.
    */
   private final OnPackSelectedListener mSelectPackListener = new OnPackSelectedListener() {
-
     @Override
     public void onPackSelected(Pack pack, boolean selectionStatus) {
       setPackPref(pack, selectionStatus);
