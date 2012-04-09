@@ -76,11 +76,11 @@ public class SplashScreen extends Activity {
       // this operation will occur in a threaded manner (hot, I know).
       mInstallThread = new Thread(new Runnable() {
 
-        public void run() {
-          Deck.DeckOpenHelper helper = new Deck.DeckOpenHelper(
-              SplashScreen.this);
-          helper.countAllPhrases();
-          helper.close();
+      public void run() {
+          GameManager gm = new GameManager(SplashScreen.this);
+          //TODO This used to be done in Deck database onCreate which meant it 
+          // did NOT get run every time like this does.  
+          gm.installLocalPacks();
         }
       });
       mInstallThread.start();

@@ -62,10 +62,11 @@ public class Pack implements Serializable {
 
   /**
    * Standard constructor
+   * @param id
    * @param name
-   * @param updateMessage
-   * @param description 
    * @param path
+   * @param description 
+   * @param updateMessage
    * @param version
    * @param size
    * @param installed (whether the pack has been installed yet)
