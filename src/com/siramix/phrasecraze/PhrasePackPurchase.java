@@ -423,45 +423,47 @@ public class PhrasePackPurchase extends Activity {
     ComboPercentageBar bar = (ComboPercentageBar) this
         .findViewById(R.id.PackPurchase_PhraseBars);
 
-    // Set bar title
-    bar.setTitle("Selected Phrases");
-
     // ToDo: Get these getting the correct packs.
     // Is this the best way to get installed packs?
     LinkedList<Pack> localPacks = new LinkedList<Pack>();
     localPacks = game.getInstalledPacks();
 
-    int numSelected = 0;
-    int numUnSelected = 0;
-    int numLocked = 3000;
+    int numEasyPhrases = 0;
+    int numMediumPhrases = 0;
+    int numHardPhrases = 0;
+    int totalPhrases = 0;
     for (int i = 0; i < localPacks.size(); i++) {
       if (getPackPref(localPacks.get(i))) {
         // numSelected += localPacks.get(i).getNumPlayablePhrases();
-        numSelected += 1000;
-      } else {
-        // numUnSelected += localPacks.get(i).getNumPlayablePhrases();
-        numUnSelected += 1000;
-      }
+        numEasyPhrases += 200+(i*200);
+        numMediumPhrases += 400;
+        numHardPhrases += 100;
+      } 
     }
+    totalPhrases = numEasyPhrases + numMediumPhrases + numHardPhrases;
 
-    // Get color for the Unselected bar. This changes to red
-    // when no phrases are selected
-    int colorUnselected = this.getResources().getColor(
-        R.color.packPurchaseUnSelected);
-    if (numSelected == 0) {
-      colorUnselected = this.getResources().getColor(R.color.teamC_primary);
+    // Set bar title
+    bar.setTitle("Selected Phrases: " + Integer.toString(totalPhrases));
+
+    if(totalPhrases == 0)
+    {
+      int rowColor = this.getResources().getColor(R.color.packPurchaseNoneSelected);
+      int labelColor = this.getResources().getColor(R.color.white);
+      bar.setSegmentComponents(0, 0, "No Phrases Selected!", rowColor, labelColor);
+      bar.setSegmentComponents(1, 0, "", rowColor, labelColor);
+      bar.setSegmentComponents(2, 0, "", rowColor, labelColor);
     }
-
-    // Set bar elements
-    bar.setSegmentComponents(0, numSelected, "Selected", this.getResources()
-        .getColor(R.color.packPurchaseSelected),
-        this.getResources().getColor(R.color.text_subtext));
-    bar.setSegmentComponents(1, numUnSelected, "Unselected", colorUnselected,
-        this.getResources().getColor(R.color.text_subtext));
-    bar.setSegmentComponents(2, numLocked, "Locked", this.getResources()
-        .getColor(R.color.genericBG_trimDark),
-        this.getResources().getColor(R.color.text_subtext));
-
+    else
+    {
+      totalPhrases = numEasyPhrases + numMediumPhrases + numHardPhrases;
+      int rowAndLabelColor = this.getResources().getColor(R.color.packInfo_EasyPhrases);
+      bar.setSegmentComponents(0, numEasyPhrases, "Easy", rowAndLabelColor, rowAndLabelColor);
+      rowAndLabelColor = this.getResources().getColor(R.color.packInfo_MediumPhrases);
+      bar.setSegmentComponents(1, numMediumPhrases, "Medium", rowAndLabelColor, rowAndLabelColor);
+      rowAndLabelColor = this.getResources().getColor(R.color.packInfo_HardPhrases);
+      bar.setSegmentComponents(2, numHardPhrases, "Hard", rowAndLabelColor, rowAndLabelColor);
+    }
+    
     // ReRender bar
     bar.updateSegmentWeights();
   }

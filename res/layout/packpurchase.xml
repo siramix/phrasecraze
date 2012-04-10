@@ -128,10 +128,6 @@
     <View android:id="@+id/view1" android:layout_height="4dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent"></View>
     <LinearLayout android:layout_width="fill_parent" android:id="@+id/LinearLayout1" android:background="@color/genericBG" android:layout_height="100dp">
         <com.siramix.phrasecraze.ComboPercentageBar android:padding="10dp" android:layout_width="fill_parent" android:id="@+id/PackPurchase_PhraseBars" android:layout_weight="1" android:layout_height="fill_parent"></com.siramix.phrasecraze.ComboPercentageBar>
-        <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginRight="8dp" android:id="@+id/PackPurchase_PercentUnlockedGroup" android:layout_width="wrap_content" android:baselineAligned="false">
-            <TextView android:textSize="40sp" android:layout_width="wrap_content" android:text="40%" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/PackPurchase_Percent" android:layout_gravity="center_horizontal" android:textColor="@color/white"></TextView>
-            <TextView android:textSize="16sp" android:layout_width="wrap_content" android:text="UNLOCKED" android:layout_marginTop="-10dp" android:layout_height="wrap_content" android:textStyle="bold" android:layout_gravity="center_horizontal" android:id="@+id/PackPurchase_PercentUnlockedLabel" android:textColor="@color/text_subtext"></TextView>
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

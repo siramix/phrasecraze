@@ -26,7 +26,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -137,10 +136,10 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mTitle.setLayoutParams(titleTextParams);
     mTitle.setPadding((int) (DENSITY * 10 + 0.5f), 0, 0, 0);
     mTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-    mTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
+    mTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
     mTitle.setEllipsize(TruncateAt.END);
     mTitle.setHorizontallyScrolling(true);
-    mTitle.setTextColor(this.getResources().getColor(R.color.white));
+    mTitle.setTextColor(this.getResources().getColor(R.color.text_default));
     // Make title clickable for info on the pack
     mTitle.setOnClickListener(mPackInfoRequestedListener);
 
@@ -153,13 +152,14 @@ public class PackPurchaseRowLayout extends RelativeLayout {
         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     priceParams.addRule(ALIGN_PARENT_RIGHT);
     priceParams.addRule(CENTER_VERTICAL);
-    priceParams.rightMargin=(int) (DENSITY * 8 + 0.5f);
+    priceParams.rightMargin=(int) (DENSITY * 6 + 0.5f);
     mPrice.setLayoutParams(priceParams);
     mPrice.setIncludeFontPadding(false);
-    mPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
+    mPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+    mPrice.setTextColor(this.getResources().getColor(R.color.text_default));
 
     RelativeLayout.LayoutParams checkboxParams = new RelativeLayout.LayoutParams(
-        (int) (DENSITY * 42 + 0.5f), LayoutParams.WRAP_CONTENT);
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     checkboxParams.addRule(ALIGN_PARENT_RIGHT);
     checkboxParams.addRule(CENTER_VERTICAL);
     checkboxParams.rightMargin=(int) (DENSITY * 13 + 0.5f);
@@ -279,14 +279,14 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   }
   
   /**
-   * Refresh the view for a given row. This updates elements to represent
-   * the corresponding pack.
+   * Backup method to refresh the view with a checkbox and end piece
    */
-  public void refresh()
+  public void refresh1()
   {
     mTitle.setText(mPack.getName());
-    int rowEndColor;
+    int bgColor;
     if (mPack.isInstalled()) {
+      int rowEndColor;
       if (mIsPackEnabled) {
         mCheckbox.setChecked(true);
         rowEndColor = R.color.packPurchaseSelected;
@@ -294,28 +294,100 @@ public class PackPurchaseRowLayout extends RelativeLayout {
         mCheckbox.setChecked(false);
         rowEndColor = R.color.packPurchaseUnSelected;
       }
-      mRowEndBG.setColorFilter(this.getResources().getColor(rowEndColor),
-          Mode.MULTIPLY);
+      mRowEndBG.setColorFilter(
+          this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
       mPrice.setVisibility(View.INVISIBLE);
-
     } else {
       mPrice.setVisibility(View.VISIBLE);
       mCheckbox.setVisibility(View.INVISIBLE);
+      mRowEndBG.setVisibility(View.VISIBLE);
       mRowEndBG.setColorFilter(
           this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
     }
-    int bgColor;
     // Set background
-    if(mIsRowOdd)
-    {
+    if (mIsRowOdd) {
       bgColor = R.color.genericBG_trim;
-    }
-    else
-    {
+    } else {
       bgColor = R.color.genericBG_trimDark;
     }
-    mContents.setBackgroundColor(this.getResources().getColor(
-        bgColor));
+    mContents.setBackgroundColor(this.getResources().getColor(bgColor));
+    
+  }
+  
+  /**
+   * Backup method to refresh the row with just a checkbox
+   */
+  public void refresh2()
+  {
+    mTitle.setText(mPack.getName());
+    int bgColor;
+    if (mPack.isInstalled()) {
+      if (mIsPackEnabled) {
+        mCheckbox.setChecked(true);
+      } else {
+        mCheckbox.setChecked(false);
+      }
+      mPrice.setVisibility(View.INVISIBLE);
+      mRowEndBG.setVisibility(View.INVISIBLE);
+      // Set background
+      if (mIsRowOdd) {
+        bgColor = R.color.packPurchaseSelected;
+      } else {
+        bgColor = R.color.packPurchaseUnSelected;
+      }
+      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
+    } else {
+      mPrice.setVisibility(View.VISIBLE);
+      mCheckbox.setVisibility(View.INVISIBLE);
+      mRowEndBG.setVisibility(View.VISIBLE);
+      mRowEndBG.setColorFilter(
+          this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
+      // Set background
+      if (mIsRowOdd) {
+        bgColor = R.color.genericBG_trim;
+      } else {
+        bgColor = R.color.genericBG_trimDark;
+      }
+      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
+    }
+    
+  }
+  
+  /**
+   * Refresh the view for a given row. This updates elements to represent
+   * the corresponding pack.
+   */
+  public void refresh()
+  {
+    mTitle.setText(mPack.getName());
+    mCheckbox.setVisibility(View.INVISIBLE);
+    
+    int bgColor;
+    if (mPack.isInstalled()) {
+      if (mIsPackEnabled) {
+        bgColor = R.color.packPurchaseSelected;
+        mTitle.setTextColor(this.getResources().getColor(R.color.white));
+      } else {
+        bgColor = R.color.packPurchaseUnSelected2;
+        mTitle.setTextColor(this.getResources().getColor(R.color.genericBG_trim));
+      }
+      // Set background
+      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
+      mPrice.setVisibility(View.INVISIBLE);
+      mRowEndBG.setVisibility(View.INVISIBLE);
+    } else {
+      mPrice.setVisibility(View.VISIBLE);
+      mRowEndBG.setVisibility(View.VISIBLE);
+      mRowEndBG.setColorFilter(
+          this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
+      // Set background
+      if (mIsRowOdd) {
+        bgColor = R.color.genericBG_trim;
+      } else {
+        bgColor = R.color.genericBG_trimDark;
+      }
+      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
+    }
     
   }
   

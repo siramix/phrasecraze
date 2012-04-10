@@ -15,6 +15,9 @@
   <color name="text_subtext">
   	#999999
   </color>
+    <color name="text_default">
+    #e1e1e1
+  </color>
   <color name="teamA_primary">
     #317695
   </color>
@@ -85,9 +88,24 @@
   	#2d2d2d
   </color>
   <color name="packPurchaseSelected">
-    #275877
+    #4a6071
   </color>
   <color name="packPurchaseUnSelected">
-    #42525c
+    #2f4350
+  </color>
+    <color name="packPurchaseUnSelected2">
+    #292929
+  </color>
+  <color name="packInfo_EasyPhrases">
+    #4a6071
+  </color>
+    <color name="packInfo_MediumPhrases">
+    #364753
+  </color>
+    <color name="packInfo_HardPhrases">
+    #28323b
+  </color>
+  <color name="packPurchaseNoneSelected">
+    #AC2D20
   </color>
 </resources>

@@ -169,11 +169,11 @@ public class PackInfo extends Activity {
     int numEasyPhrases = 150;
     int numMediumPhrases = 250;
     int numHardPhrases = 50;
-    int rowAndLabelColor = this.getResources().getColor(R.color.teamB_primary);
+    int rowAndLabelColor = this.getResources().getColor(R.color.packInfo_EasyPhrases);
     mPhraseCountBar.setSegmentComponents(0, numEasyPhrases, "Easy", rowAndLabelColor, rowAndLabelColor);
-    rowAndLabelColor = this.getResources().getColor(R.color.teamD_primary);
+    rowAndLabelColor = this.getResources().getColor(R.color.packInfo_MediumPhrases);
     mPhraseCountBar.setSegmentComponents(1, numMediumPhrases, "Medium", rowAndLabelColor, rowAndLabelColor);
-    rowAndLabelColor = this.getResources().getColor(R.color.teamC_primary);
+    rowAndLabelColor = this.getResources().getColor(R.color.packInfo_HardPhrases);
     mPhraseCountBar.setSegmentComponents(2, numHardPhrases, "Hard", rowAndLabelColor, rowAndLabelColor);
 
     mPhraseCountBar.updateSegmentWeights();
