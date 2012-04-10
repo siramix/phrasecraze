@@ -26,6 +26,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -50,21 +51,20 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   private TextView mTitle;
   private TextView mPrice;
   private RelativeLayout mEndGroup;
-  private CheckBox mCheckbox;
   private ImageView mRowEndBG;
 
   private Pack mPack;
   private boolean mIsPackEnabled;
   private boolean mIsRowOdd;
-  
+
   /*
    * Listeners for click events on this row
    */
   private OnPackSelectedListener mPackSelectedListener;
   private OnPackInfoRequestedListener mPackInfoListener;
   // Allow users to disable the Selection listener
-  private boolean mIsRowClickable; 
-  
+  private boolean mIsRowClickable;
+
   /**
    * @param context
    */
@@ -91,9 +91,8 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     super(context, attrs, defStyle);
     initializeMembers(context);
   }
-  
-  private void initializeMembers(Context context)
-  {
+
+  private void initializeMembers(Context context) {
     mContext = context;
     mFrame = new FrameLayout(mContext);
     mTitle = new TextView(mContext);
@@ -101,10 +100,9 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mPrice = new TextView(mContext);
     mEndGroup = new RelativeLayout(mContext);
     mRowEndBG = new ImageView(mContext);
-    mCheckbox = new CheckBox(mContext);
     mIsRowClickable = true;
   }
-  
+
   @Override
   public void onFinishInflate() {
     super.onFinishInflate();
@@ -141,39 +139,27 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mTitle.setHorizontallyScrolling(true);
     mTitle.setTextColor(this.getResources().getColor(R.color.text_default));
     // Make title clickable for info on the pack
-    mTitle.setOnClickListener(mPackInfoRequestedListener);
+    // mTitle.setOnClickListener(mPackInfoRequestedListener);
 
     // Initialize End Group and add contents
     mRowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
-    
+
     // Initialize Price
     mPrice.setText("$1.99");
     RelativeLayout.LayoutParams priceParams = new RelativeLayout.LayoutParams(
         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     priceParams.addRule(ALIGN_PARENT_RIGHT);
     priceParams.addRule(CENTER_VERTICAL);
-    priceParams.rightMargin=(int) (DENSITY * 6 + 0.5f);
+    priceParams.rightMargin = (int) (DENSITY * 6 + 0.5f);
     mPrice.setLayoutParams(priceParams);
     mPrice.setIncludeFontPadding(false);
     mPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
     mPrice.setTextColor(this.getResources().getColor(R.color.text_default));
 
-    RelativeLayout.LayoutParams checkboxParams = new RelativeLayout.LayoutParams(
-        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    checkboxParams.addRule(ALIGN_PARENT_RIGHT);
-    checkboxParams.addRule(CENTER_VERTICAL);
-    checkboxParams.rightMargin=(int) (DENSITY * 13 + 0.5f);
-    mCheckbox.setButtonDrawable(R.drawable.checkbox_packpurchase);
-    mCheckbox.setLayoutParams(checkboxParams);
-    mCheckbox.setClickable(false);
-    mCheckbox.setFocusable(false);
-    mCheckbox.setChecked(true);
-    
     // Set fonts - Wrap in isInEditMode so as not to break previewer
-    if(!this.isInEditMode())
-    { 
-      Typeface antonFont =
-          Typeface.createFromAsset(mContext.getAssets(), "fonts/Anton.ttf");
+    if (!this.isInEditMode()) {
+      Typeface antonFont = Typeface.createFromAsset(mContext.getAssets(),
+          "fonts/Anton.ttf");
       mPrice.setTypeface(antonFont);
       mTitle.setTypeface(antonFont);
     }
@@ -183,9 +169,9 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mEndGroup.setLayoutParams(mEndGroupParams);
     mEndGroup.addView(mRowEndBG);
     mEndGroup.addView(mPrice);
-    mEndGroup.addView(mCheckbox);
-    // Allow end piece to be clickable to select the pack
+    // Set elements that will cause pack selection
     mEndGroup.setOnClickListener(mSelectPackListener);
+    mTitle.setOnClickListener(mSelectPackListener);
 
     // Add views to the contents layout
     mContents.addView(mTitle);
@@ -193,10 +179,20 @@ public class PackPurchaseRowLayout extends RelativeLayout {
 
     // Add the views to frame
     mFrame.addView(mContents);
+    
+    // Add single pixel bar of lightened color to give depth
+    View lightBar = new View(mContext);
+    lightBar.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+        (int) (DENSITY * 1 + 0.5f)));
+    lightBar.setBackgroundColor(getResources().getColor(R.color.white));
+    AlphaAnimation alpha = new AlphaAnimation(0.2f, 0.2f);
+    alpha.setFillAfter(true);
+    lightBar.startAnimation(alpha);
+    mFrame.addView(lightBar);
 
     // Enable clicking on the row by default
     setRowClickable(true);
-    
+
     // Add groups to TeamSelectLayout
     this.addView(mFrame);
 
@@ -216,9 +212,10 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mIsRowOdd = isRowOdd;
     refresh();
   }
-  
+
   /**
    * Set the status of a layout while keeping pack the same
+   * 
    * @param isSelected
    *          Specify whether the pack is selected for the game
    */
@@ -226,9 +223,10 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mIsPackEnabled = isSelected;
     refresh();
   }
-  
+
   /*
    * Assign a listener to receive the OnPackSelected callback
+   * 
    * @param listener Listener to receive the callback
    */
   public void setOnPackSelectedListener(OnPackSelectedListener listener) {
@@ -237,131 +235,49 @@ public class PackPurchaseRowLayout extends RelativeLayout {
 
   /*
    * Assign a listener to receive the OnPackInfoRequested callback
+   * 
    * @param listener Listener to receive the callback
    */
-  public void setOnPackInfoRequestedListener(OnPackInfoRequestedListener listener) {
+  public void setOnPackInfoRequestedListener(
+      OnPackInfoRequestedListener listener) {
     mPackInfoListener = listener;
   }
-  
+
   /**
    * Get the pack that is associated with this layout
    */
-  public Pack getPack()
-  {
+  public Pack getPack() {
     return mPack;
   }
-  
+
   /**
    * Get whether or not this row is considered "odd"
    */
-  public Boolean isRowOdd()
-  {
+  public Boolean isRowOdd() {
     return mIsRowOdd;
   }
-  
+
   /*
    * Set this row as unselectable, when the invoking classes don't need
    * selection events
    */
-  public void setRowClickable(boolean isClickable)
-  {
+  public void setRowClickable(boolean isClickable) {
     mIsRowClickable = isClickable;
     mEndGroup.setClickable(mIsRowClickable);
     mTitle.setClickable(mIsRowClickable);
-    if(isClickable)
-    {
-      mCheckbox.setVisibility(View.VISIBLE);
-    }
-    else
-    {
-      mCheckbox.setVisibility(View.INVISIBLE);
-    }
+    // Need to set PackInfo Bar to something generic without affecting
+    // other uses
+    // int bgColor = R.color.packPurchaseSelected;
+    // mContents.setBackgroundColor(this.getResources().getColor(bgColor));
   }
-  
+
   /**
-   * Backup method to refresh the view with a checkbox and end piece
+   * Refresh the view for a given row. This updates elements to represent the
+   * corresponding pack.
    */
-  public void refresh1()
-  {
+  public void refresh() {
     mTitle.setText(mPack.getName());
-    int bgColor;
-    if (mPack.isInstalled()) {
-      int rowEndColor;
-      if (mIsPackEnabled) {
-        mCheckbox.setChecked(true);
-        rowEndColor = R.color.packPurchaseSelected;
-      } else {
-        mCheckbox.setChecked(false);
-        rowEndColor = R.color.packPurchaseUnSelected;
-      }
-      mRowEndBG.setColorFilter(
-          this.getResources().getColor(rowEndColor), Mode.MULTIPLY);
-      mPrice.setVisibility(View.INVISIBLE);
-    } else {
-      mPrice.setVisibility(View.VISIBLE);
-      mCheckbox.setVisibility(View.INVISIBLE);
-      mRowEndBG.setVisibility(View.VISIBLE);
-      mRowEndBG.setColorFilter(
-          this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
-    }
-    // Set background
-    if (mIsRowOdd) {
-      bgColor = R.color.genericBG_trim;
-    } else {
-      bgColor = R.color.genericBG_trimDark;
-    }
-    mContents.setBackgroundColor(this.getResources().getColor(bgColor));
-    
-  }
-  
-  /**
-   * Backup method to refresh the row with just a checkbox
-   */
-  public void refresh2()
-  {
-    mTitle.setText(mPack.getName());
-    int bgColor;
-    if (mPack.isInstalled()) {
-      if (mIsPackEnabled) {
-        mCheckbox.setChecked(true);
-      } else {
-        mCheckbox.setChecked(false);
-      }
-      mPrice.setVisibility(View.INVISIBLE);
-      mRowEndBG.setVisibility(View.INVISIBLE);
-      // Set background
-      if (mIsRowOdd) {
-        bgColor = R.color.packPurchaseSelected;
-      } else {
-        bgColor = R.color.packPurchaseUnSelected;
-      }
-      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
-    } else {
-      mPrice.setVisibility(View.VISIBLE);
-      mCheckbox.setVisibility(View.INVISIBLE);
-      mRowEndBG.setVisibility(View.VISIBLE);
-      mRowEndBG.setColorFilter(
-          this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
-      // Set background
-      if (mIsRowOdd) {
-        bgColor = R.color.genericBG_trim;
-      } else {
-        bgColor = R.color.genericBG_trimDark;
-      }
-      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
-    }
-    
-  }
-  
-  /**
-   * Refresh the view for a given row. This updates elements to represent
-   * the corresponding pack.
-   */
-  public void refresh()
-  {
-    mTitle.setText(mPack.getName());
-    mCheckbox.setVisibility(View.INVISIBLE);
-    
+
     int bgColor;
     if (mPack.isInstalled()) {
       if (mIsPackEnabled) {
@@ -369,7 +285,8 @@ public class PackPurchaseRowLayout extends RelativeLayout {
         mTitle.setTextColor(this.getResources().getColor(R.color.white));
       } else {
         bgColor = R.color.packPurchaseUnSelected2;
-        mTitle.setTextColor(this.getResources().getColor(R.color.genericBG_trim));
+        mTitle.setTextColor(this.getResources()
+            .getColor(R.color.genericBG_trim));
       }
       // Set background
       mContents.setBackgroundColor(this.getResources().getColor(bgColor));
@@ -388,9 +305,9 @@ public class PackPurchaseRowLayout extends RelativeLayout {
       }
       mContents.setBackgroundColor(this.getResources().getColor(bgColor));
     }
-    
+
   }
-  
+
   /**
    * Watches the group that selects and deselects the pack on click
    */
@@ -408,8 +325,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
       }
     }
   };
-  
-  
+
   /**
    * Watches the group that shows pack Info
    */

@@ -376,7 +376,11 @@ public class PhrasePackPurchase extends Activity {
       LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) row
           .getLayoutParams();
       final float DENSITY = this.getResources().getDisplayMetrics().density;
-      margin.setMargins(0, (int) (-2 * DENSITY), 0, 0);
+      if(count > 0)
+      {
+        margin.setMargins(0, (int) (-2 * DENSITY), 0, 0);
+
+      }
       row.setLayoutParams(margin);
       mPackLineList.add(row);
       
@@ -442,11 +446,11 @@ public class PhrasePackPurchase extends Activity {
     }
     totalPhrases = numEasyPhrases + numMediumPhrases + numHardPhrases;
 
-    // Set bar title
-    bar.setTitle("Selected Phrases: " + Integer.toString(totalPhrases));
-
     if(totalPhrases == 0)
-    {
+    {   
+      // Set bar title
+      bar.setTitle("No Phrases Selected!");
+      
       int rowColor = this.getResources().getColor(R.color.packPurchaseNoneSelected);
       int labelColor = this.getResources().getColor(R.color.white);
       bar.setSegmentComponents(0, 0, "No Phrases Selected!", rowColor, labelColor);
@@ -455,6 +459,9 @@ public class PhrasePackPurchase extends Activity {
     }
     else
     {
+      // Set bar title
+      bar.setTitle("Selected Phrases: " + Integer.toString(totalPhrases));
+
       totalPhrases = numEasyPhrases + numMediumPhrases + numHardPhrases;
       int rowAndLabelColor = this.getResources().getColor(R.color.packInfo_EasyPhrases);
       bar.setSegmentComponents(0, numEasyPhrases, "Easy", rowAndLabelColor, rowAndLabelColor);
