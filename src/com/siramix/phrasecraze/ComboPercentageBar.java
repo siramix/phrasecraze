@@ -121,13 +121,13 @@ public class ComboPercentageBar extends LinearLayout {
         // First segment has right padding reduced
         framepadding[2] = (int) (DENSITY * 1 + 0.5f);
       }
-      else if ( i < mBarSegments.length-1)
+      else if ( i < (mBarSegments.length-1))
       {
         // Middle segments have left and right padding both reduced
         framepadding[0] = (int) (DENSITY * 1 + 0.5f);
         framepadding[2] = (int) (DENSITY * 1 + 0.5f);
       }
-      else if ( i == mBarSegments.length-1)
+      else if ( i == (mBarSegments.length-1))
       {
         // End segment has left padding reduced
         framepadding[0] = (int) (DENSITY * 1 + 0.5f);
@@ -286,22 +286,15 @@ public class ComboPercentageBar extends LinearLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
       
-      // Sizes are 0 when this view is added to another
-      if(oldw == 0 && oldh == 0)
-      {
-        return;
-      }
-      
       // Break out elements of the bar
       FrameLayout bar = (FrameLayout) this.getChildAt(0);
       TextView segmentValue = (TextView) bar.getChildAt(1);
       TextView segmentLabel = (TextView) this.getChildAt(1);
 
       // Get width of bar and text
-      int barWidth = w;
+      int barWidth = w - (bar.getPaddingLeft()+ bar.getPaddingRight()); 
       float valueTextWidth = segmentValue.getPaint().measureText(
           segmentValue.getText().toString());
-      
       // Debugging Logs
       if (PhraseCrazeApplication.DEBUG) {
       Log.d("ComboBar",
@@ -317,7 +310,8 @@ public class ComboPercentageBar extends LinearLayout {
       }
 
       // If the value is bigger than the bar, hide it and the label
-      if (valueTextWidth > barWidth) {
+      // Also hide it if the value is 0
+      if (valueTextWidth > barWidth || Integer.valueOf(segmentValue.getText().toString()) == 0) {
         segmentLabel.setVisibility(View.INVISIBLE);
         segmentValue.setVisibility(View.INVISIBLE);
       } else {
