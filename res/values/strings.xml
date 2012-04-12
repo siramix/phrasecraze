@@ -57,8 +57,8 @@
   
   <!-- Pack Purchasing dialog strings -->
   <string name="packpurchase_title">Phrase Packs</string>
-  <string name="packpurchase_unlockedheader">Unlocked</string>
-  <string name="packpurchase_lockedheader">Locked</string>
+  <string name="packpurchase_unlockedheader">Your Packs</string>
+  <string name="packpurchase_lockedheader">Purchasable Packs</string>
   <string name="packpurchase_button">Confirm</string>
   
   <!-- Game Setup dialog strings -->  
@@ -126,8 +126,8 @@
   
   <!--  Pack Info dialog -->
   <string name="packInfo_confirm_nobuy">OK</string>
-  <string name="packInfo_confirm_buy">BUY</string>
-  <string name="packInfo_cancel">CANCEL</string>
+  <string name="packInfo_confirm_buy">Buy</string>
+  <string name="packInfo_cancel">Cancel</string>
   <string name="packInfo_alreadyOwned">You already have this pack!</string>
   
   <!--  Rate Us URI for app store -->

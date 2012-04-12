@@ -112,9 +112,12 @@
         </LinearLayout>
     </ScrollView>
     <View android:id="@+id/view1" android:layout_height="4dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent"></View>
-    <LinearLayout android:layout_width="fill_parent" android:id="@+id/LinearLayout1" android:background="@color/genericBG" android:layout_height="100dp">
-        <com.siramix.phrasecraze.ComboPercentageBar android:padding="10dp" android:layout_width="fill_parent" android:id="@+id/PackPurchase_PhraseBars" android:layout_weight="1" android:layout_height="fill_parent"></com.siramix.phrasecraze.ComboPercentageBar>
-    </LinearLayout>
+
+    <com.siramix.phrasecraze.ComboPercentageBar
+        android:id="@+id/PackPurchase_PhraseBars"
+        android:layout_height="100dp"
+        android:padding="10dp" android:layout_width="fill_parent">
+    </com.siramix.phrasecraze.ComboPercentageBar>
 
     <LinearLayout
         android:id="@+id/PackPurchase_Buttons"
