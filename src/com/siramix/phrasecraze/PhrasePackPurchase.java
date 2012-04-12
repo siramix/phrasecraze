@@ -62,9 +62,6 @@ public class PhrasePackPurchase extends Activity {
   // Our pack lists as retrieved from the server
   private LinkedList<Pack> mFreePacks;
   private LinkedList<Pack> mPayPacks;
-  
-  // A map of request codes and their corresponding packs
-  private HashMap<Integer, Pack> mSocialPacks;
 
   /**
    * This block of maps stores our lists of clients
@@ -82,6 +79,7 @@ public class PhrasePackPurchase extends Activity {
   private static final int TWITTER_REQUEST_CODE = 11;
   private static final int FACEBOOK_REQUEST_CODE = 12;
   private static final int GOOGLEPLUS_REQUEST_CODE = 13;
+  private static final int PACKINFO_REQUEST_CODE = 14;
 
   /**
    * Supports in-app billing
@@ -289,7 +287,6 @@ public class PhrasePackPurchase extends Activity {
     LinkedList<Pack> lockedPacks = new LinkedList<Pack>();
     LinkedList<Pack> localPacks = new LinkedList<Pack>();
     localPacks = game.getInstalledPacks();
-    mSocialPacks = new HashMap<Integer, Pack>();
 
     // First try to get the online packs, if no internet, just use local packs
     try {
@@ -363,16 +360,14 @@ public class PhrasePackPurchase extends Activity {
       // Create a new row for this pack
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
           this.getBaseContext(), R.layout.packpurchaserow, layout);
-
       PackPurchaseRowLayout row = (PackPurchaseRowLayout) line
           .getChildAt(count);
+      
+      // Assign the pack to the row. This should maybe be done in
+      // a constructor
       row.setPack(curPack, getPackPref(curPack), count % 2 == 0);
 
-      // Add the current pack object to the row so that the listener can get its
-      // metadata
-      row.setTag(curPack);
-      
-      // Add pack rows to the list. Give margin so borders don't double up
+      // Add pack rows to the list. Give margin so borders don't double up.
       LinearLayout.LayoutParams margin = (LinearLayout.LayoutParams) row
           .getLayoutParams();
       final float DENSITY = this.getResources().getDisplayMetrics().density;
@@ -383,15 +378,15 @@ public class PhrasePackPurchase extends Activity {
       }
       row.setLayoutParams(margin);
       mPackLineList.add(row);
-      
-      if (curPack.isInstalled()) {
-        row.setOnPackSelectedListener(mSelectPackListener);
-        row.setOnPackInfoRequestedListener(mPackInfoListener);
-      } else {
-        row.setOnClickListener(mPayPackListener);
-        row.setRowClickable(false);
-      }
 
+      // Set listeners for the row's click events
+      row.setOnPackSelectedListener(mSelectPackListener);
+      row.setOnPackInfoRequestedListener(mPackInfoListener);
+      
+      // Add the current pack object to the row so that the listener can get its
+      // metadata
+      row.setTag(curPack);
+      
       count++;
     }
     insertionPoint.addView(layout);
@@ -505,85 +500,75 @@ public class PhrasePackPurchase extends Activity {
   }
   
   /**
-   * This listener is specifically for packs that require tweeting to get.
+   * Opens the twitter client for promotional packs
    */
-  private final OnClickListener mTweetListener = new OnClickListener() {
-    // Tweet button handler
-    public void onClick(View v) {
-      ComponentName targetComponent = getClientComponentName(mFoundTwitterClients);
+  private void openTwitterClient()
+  {
+    ComponentName targetComponent = getClientComponentName(mFoundTwitterClients);
 
-      if (targetComponent != null) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setComponent(targetComponent);
+    if (targetComponent != null) {
+      Intent shareIntent = new Intent(Intent.ACTION_SEND);
+      shareIntent.setComponent(targetComponent);
 
-        String intentType = (targetComponent.getClassName()
-            .contains("com.twidroid")) ? "application/twitter" : "text/plain";
+      String intentType = (targetComponent.getClassName()
+          .contains("com.twidroid")) ? "application/twitter" : "text/plain";
 
-        shareIntent.setType(intentType);
-        shareIntent
-            .putExtra(Intent.EXTRA_TEXT,
-                "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
-        Pack curPack = (Pack) v.getTag();
-        shareIntent.putExtra(getString(R.string.packBundleKey), curPack);
-        startActivityForResult(shareIntent, TWITTER_REQUEST_CODE);
-      } else {
-        showToast(getString(R.string.toast_packpurchase_notwitter));
-      }
+      shareIntent.setType(intentType);
+      shareIntent
+          .putExtra(Intent.EXTRA_TEXT,
+              "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
+      startActivityForResult(shareIntent, TWITTER_REQUEST_CODE);
+    } else {
+      showToast(getString(R.string.toast_packpurchase_notwitter));
     }
   };
 
   /**
-   * This listener is specifically for packs that require posting on facebook to
-   * get.
+   * Opens the Facebook client for promotional packs
    */
-  private final OnClickListener mFacebookListener = new OnClickListener() {
-    // Tweet button handler
-    public void onClick(View v) {
-      ComponentName targetComponent = getClientComponentName(mFoundFacebookClients);
+  private void openFacebookClient()
+  {
+    ComponentName targetComponent = getClientComponentName(mFoundFacebookClients);
 
-      // TODO intent is a stupid name
-      if (targetComponent != null) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setComponent(targetComponent);
-        String intentType = ("text/plain");
-        intent.setType(intentType);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n"
-            + "TESTING");
-        intent
-            .putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
-        intent.putExtra(Intent.EXTRA_TEXT,
-            "https://market.android.com/details?id=com.buzzwords");
-        startActivityForResult(intent, FACEBOOK_REQUEST_CODE);
-      } else {
-        showToast(getString(R.string.toast_packpurchase_nofacebook));
-      }
+    // TODO intent is a stupid name
+    if (targetComponent != null) {
+      Intent intent = new Intent(Intent.ACTION_SEND);
+      intent.setComponent(targetComponent);
+      String intentType = ("text/plain");
+      intent.setType(intentType);
+      intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n"
+          + "TESTING");
+      intent
+          .putExtra(Intent.EXTRA_TEXT, "TESTING TESTING" + "\n" + "TESTING");
+      intent.putExtra(Intent.EXTRA_TEXT,
+          "https://market.android.com/details?id=com.buzzwords");
+      startActivityForResult(intent, FACEBOOK_REQUEST_CODE);
+    } else {
+      showToast(getString(R.string.toast_packpurchase_nofacebook));
     }
   };
 
   /**
-   * This listener is specifically for packs that require google+ posting to
-   * get.
+   * Opens the Google client for promotional packs
    */
-  private final OnClickListener mGoogleListener = new OnClickListener() {
-    // Tweet button handler
-    public void onClick(View v) {
-      ComponentName targetComponent = getClientComponentName(mFoundGoogleClients);
+  private void openGoogleClient()
+  {
+    ComponentName targetComponent = getClientComponentName(mFoundGoogleClients);
 
-      // TODO intent is a stupid name
-      if (targetComponent != null) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setComponent(targetComponent);
-        String intentType = ("text/plain");
-        intent.setType(intentType);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n"
-            + "TESTING");
-        intent
-            .putExtra(Intent.EXTRA_TEXT,
-                "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
-        startActivityForResult(intent, GOOGLEPLUS_REQUEST_CODE);
-      } else {
-        showToast(getString(R.string.toast_packpurchase_nogoogleplus));
-      }
+    // TODO intent is a stupid name
+    if (targetComponent != null) {
+      Intent intent = new Intent(Intent.ACTION_SEND);
+      intent.setComponent(targetComponent);
+      String intentType = ("text/plain");
+      intent.setType(intentType);
+      intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n"
+          + "TESTING");
+      intent
+          .putExtra(Intent.EXTRA_TEXT,
+              "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
+      startActivityForResult(intent, GOOGLEPLUS_REQUEST_CODE);
+    } else {
+      showToast(getString(R.string.toast_packpurchase_nogoogleplus));
     }
   };
 
@@ -594,57 +579,86 @@ public class PhrasePackPurchase extends Activity {
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     Log.d(TAG, "****** ACTIVITY RESULT RESULTCODE = " + resultCode);
 
-    // TODO obviously handle this better
-    if (resultCode == 0) {
-      PhraseCrazeApplication application = (PhraseCrazeApplication) this
-          .getApplication();
-      GameManager game = application.getGameManager();
-      Pack curPack = mSocialPacks.get(requestCode);
-      // TODO: Catch the runtime exception
-      try {
-        mInstallDialog = ProgressDialog.show(this, "WORKING", "CHANGEME");
-        game.installPack(curPack, mInstallDialog);
-      } catch (RuntimeException e) {
-        e.printStackTrace();
+    if(requestCode == PACKINFO_REQUEST_CODE)
+    {
+      if(resultCode == RESULT_CANCELED)
+      {
+        // Do nothing
+        return;
+      }
+        
+      // Get the pack
+      Pack curPack = (Pack) data.getExtras().get(getString(R.string.packBundleKey));
+      
+      switch(resultCode)
+      {
+        case PackInfo.RESULT_OK:
+          purchasePack(curPack);
+          break;
+        case PackInfo.RESULT_TWITTER:
+          openTwitterClient();
+          // TODO: This should not occur until they RETURN from the Tweet
+          //   but we would have trouble getting to the Pack they just tweeted ABOUT
+          // returning from Tweet etc.
+          installPack(curPack);
+          break;
+        case PackInfo.RESULT_FACEBOOK:
+          openFacebookClient();
+          // TODO: This should not occur until they RETURN
+          installPack(curPack);
+          break;
+        case PackInfo.RESULT_GOOGLE:
+          openGoogleClient();
+          // TODO: This should not occur until they RETURN
+          installPack(curPack);
+          break;
       }
 
-      showToast(mSocialPacks.get(requestCode).getName());
-      if (getPackPref(curPack)) {
-        setPackPref(curPack, false);
-      } else {
-        setPackPref(curPack, true);
-      }
     }
-
-    /*
-     * if (data != null) { // launch the application that we just picked
-     * startActivity(data); }
-     */
+    else if(requestCode == TWITTER_REQUEST_CODE)
+    {
+      // TODO: Here is where we really want to install the pack, but we 
+      // can't get to the pack from here...
+    }
   }
-
-  /**
-   * This listener is specifically for packs that require purchasing to get.
-   */
-  private final OnClickListener mPayPackListener = new OnClickListener() {    
-    //Tweet button handler
-    public void onClick(View v) {
-      Pack curPack = (Pack) v.getTag();
-      
-      showPackInfo(curPack);
-      
-      // TODO: REMOVE THIS CODE ITS FOR DEBUGGING
-      if (Consts.DEBUG) {
-        if (curPack.getId() >= 1010 && curPack.getId() <= 1013) {
-          mBillingService.requestPurchase(String.valueOf(curPack.getName()), "payload_test");
-        }  else {
-          mBillingService.requestPurchase(String.valueOf(curPack.getId()), "payload_test");
-        }
-      }
-      else {
-        mBillingService.requestPurchase(String.valueOf(curPack.getId()), "payload_test");
+  
+  private void installPack(Pack packToInstall)
+  {
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
+        .getApplication();
+    GameManager game = application.getGameManager();
+    // TODO: Catch the runtime exception
+    try {
+      mInstallDialog = ProgressDialog.show(this, "WORKING", "CHANGEME");
+      game.installPack(packToInstall, mInstallDialog);
+    } catch (RuntimeException e) {
+      e.printStackTrace();
+    }
+    
+    showToast(packToInstall.getName());
+    if (getPackPref(packToInstall)) {
+      setPackPref(packToInstall, false);
+    } else {
+      setPackPref(packToInstall, true);
+    }
+  }
+  
+  private void purchasePack(Pack packToPurchase)
+  {  
+    showPackInfo(packToPurchase);
+    
+    // TODO: REMOVE THIS CODE ITS FOR DEBUGGING
+    if (Consts.DEBUG) {
+      if (packToPurchase.getId() >= 1010 && packToPurchase.getId() <= 1013) {
+        mBillingService.requestPurchase(String.valueOf(packToPurchase.getName()), "payload_test");
+      }  else {
+        mBillingService.requestPurchase(String.valueOf(packToPurchase.getId()), "payload_test");
       }
     }
-  };
+    else {
+      mBillingService.requestPurchase(String.valueOf(packToPurchase.getId()), "payload_test");
+    }
+  }
 
   /*
    * Listener for the pack selection, which includes or excludes the pack
@@ -711,7 +725,24 @@ public class PhrasePackPurchase extends Activity {
     intent.putExtra(
         getApplication().getString(R.string.packInfoIsPackPurchased),
         pack.isInstalled());
-    startActivity(intent);
+    // TODO Add PurchaseType to packs to read from server so we don't have
+    // to pass it in
+    int purchaseType = 0;
+    switch(pack.getId())
+    {
+    case 4:
+      purchaseType = 1;
+      break;
+    case 5:
+      purchaseType = 2;
+      break;
+    case 6:
+      purchaseType = 3;
+      break;
+    }
+    intent.putExtra("HACK_PurchaseType", purchaseType);
+    
+    startActivityForResult(intent, PACKINFO_REQUEST_CODE);
   }
   
   /**

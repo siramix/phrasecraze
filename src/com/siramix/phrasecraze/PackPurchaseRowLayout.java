@@ -55,6 +55,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   private Pack mPack;
   private boolean mIsPackEnabled;
   private boolean mIsRowOdd;
+  private boolean mIsPackPurchased;
 
   /*
    * Listeners for click events on this row
@@ -137,7 +138,6 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mTitle.setEllipsize(TruncateAt.END);
     mTitle.setHorizontallyScrolling(true);
     mTitle.setTextColor(this.getResources().getColor(R.color.text_default));
-    // Make title clickable for info on the pack
 
     // Initialize End Group and add contents
     mRowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
@@ -187,12 +187,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
 
     // Add groups to TeamSelectLayout
     this.addView(mFrame);
-    
-    // Set elements that will cause pack selection
-    mEndGroup.setOnClickListener(mSelectPackListener);
-    // mTitle.setOnClickListener(mPackInfoRequestedListener);
-    mTitle.setOnClickListener(mSelectPackListener);
-
+ 
     // Enable clicking on the row by default
     setRowClickable(true);
   }
@@ -206,9 +201,24 @@ public class PackPurchaseRowLayout extends RelativeLayout {
    *          Specify whether the pack is selected for the game
    */
   public void setPack(Pack pack, Boolean isSelected, Boolean isRowOdd) {
+    // Setup new members
     mPack = pack;
     mIsPackEnabled = isSelected;
     mIsRowOdd = isRowOdd;
+    mIsPackPurchased = mPack.isInstalled();
+    
+    // Assign click listeners based on the pack's purchase state
+    if(mIsPackPurchased)
+    {
+      mEndGroup.setOnClickListener(mSelectPackListener);
+      mTitle.setOnClickListener(mSelectPackListener);
+    }
+    else
+    {
+      mEndGroup.setOnClickListener(mPackInfoRequestedListener);
+      mTitle.setOnClickListener(mPackInfoRequestedListener);
+    }  
+    
     refresh();
   }
 
@@ -278,7 +288,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mTitle.setText(mPack.getName());
 
     int bgColor;
-    if (mPack.isInstalled()) {
+    if (mIsPackPurchased) {
       if (mIsPackEnabled) {
         bgColor = R.color.packPurchaseSelected;
         mTitle.setTextColor(this.getResources().getColor(R.color.white));
@@ -339,5 +349,6 @@ public class PackPurchaseRowLayout extends RelativeLayout {
       }
     }
   };
+
 
 }

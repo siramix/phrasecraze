@@ -59,7 +59,15 @@ public class PackInfo extends Activity {
   private boolean mIsPackSelected;
   private boolean mIsPackRowOdd;
   private boolean mIsPackPurchased;
-
+  private int mPurchaseType;
+  
+  /*
+   * Results that can be returned from this activity
+   */
+  public static final int RESULT_TWITTER = 2;
+  public static final int RESULT_FACEBOOK = 3;
+  public static final int RESULT_GOOGLE = 4;
+  
   /**
    * Set the references to the elements from the layout file
    */
@@ -93,50 +101,19 @@ public class PackInfo extends Activity {
   };
 
   /**
-   * Watches the button that handles generic OK
+   * Watches the button that handles pack purchase
    */
   private final OnClickListener mAcceptListener = new OnClickListener() {
     public void onClick(View v) {
       if (PhraseCrazeApplication.DEBUG) {
-        Log.d(TAG, "Confirm onClick()");
-      }
-      
-      // play confirm sound
-      SoundManager sm = SoundManager.getInstance(PackInfo.this.getBaseContext());
-      sm.playSound(SoundManager.Sound.CONFIRM);
-      
-      finish();
-    }
-  };
-  
-
-  /**
-   * Watches the button that handles pack purchase
-   */
-  private final OnClickListener mBuyListener = new OnClickListener() {
-    public void onClick(View v) {
-      if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Buy onClick()");
-      }
-      /*
-      // Bind Listener
-      //TODO this will need to be more specific later (to just free social apps)
-      // Attach Twitter Listener
-      if (mPack.getId() == 4 && mPack.isInstalled() == false) {
-        row.setOnClickListener(mTweetListener);
-        mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
-      }
-      // Attach Facebook Listener
-      else if (curPack.getId() == 5 && curPack.isInstalled() == false) {
-        row.setOnClickListener(mFacebookListener);
-        mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
-      }
-      // Attach Google + Listener
-      else if (curPack.getId() == 6 && curPack.isInstalled() == false) {
-        row.setOnClickListener(mGoogleListener);
-        mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
-      }
-      */
+      }  
+
+      Intent outIntent = new Intent();
+      outIntent.putExtra(getString(R.string.packBundleKey), mPack);
+      // Set result
+      PackInfo.this.setResult((Integer) v.getTag(), outIntent);
+      
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(PackInfo.this.getBaseContext());
       sm.playSound(SoundManager.Sound.CONFIRM);
@@ -170,6 +147,7 @@ public class PackInfo extends Activity {
     mIsPackPurchased = inIntent.getBooleanExtra(
         getApplication().getString(R.string.packInfoIsPackPurchased),
         false);
+    mPurchaseType = inIntent.getExtras().getInt("HACK_PurchaseType");
 
     setupViewReferences();
 
@@ -207,13 +185,34 @@ public class PackInfo extends Activity {
    */
   private void setupButtons()
   {
+    
+    mButtonAccept.setOnClickListener(mAcceptListener);
     if(!mIsPackPurchased)
     {
       mButtonCancel.setVisibility(View.VISIBLE);
-      mPackIsOwnedText.setVisibility(View.GONE);
-      mButtonAccept.setText(this.getResources().getString(R.string.packInfo_confirm_buy));
-      mButtonAccept.setOnClickListener(mBuyListener);
       mButtonCancel.setOnClickListener(mCancelListener);
+      mPackIsOwnedText.setVisibility(View.GONE);
+      
+      // Set Accept Button text and return result based on the purchase type
+      switch (mPurchaseType)
+      {
+      case 0:
+        mButtonAccept.setText(this.getResources().getString(R.string.packInfo_confirm_buy));
+        mButtonAccept.setTag(RESULT_OK);
+        break;
+      case 1:
+        mButtonAccept.setText("Tweet");
+        mButtonAccept.setTag(RESULT_TWITTER);
+        break;
+      case 2:
+        mButtonAccept.setText("Post");
+        mButtonAccept.setTag(RESULT_FACEBOOK);
+        break;
+      case 3:
+        mButtonAccept.setText("Plus+1");
+        mButtonAccept.setTag(RESULT_GOOGLE);
+        break;
+      }
     }
     else
     {
@@ -221,6 +220,8 @@ public class PackInfo extends Activity {
       mPackIsOwnedText.setVisibility(View.VISIBLE);
       mButtonAccept.setText(this.getResources().getString(R.string.packInfo_confirm_nobuy));
       mButtonAccept.setOnClickListener(mAcceptListener);
+      // Set the result to return for the button
+      mButtonAccept.setTag(RESULT_CANCELED);
     }
   }
 }
