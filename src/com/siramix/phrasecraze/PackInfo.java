@@ -50,13 +50,15 @@ public class PackInfo extends Activity {
   private PackPurchaseRowLayout mPackTitle;
   private TextView mPackDescription;
   private ComboPercentageBar mPhraseCountBar;
+  private TextView mPackIsOwnedText;
   
   /*
    * Reference to the pack this activity is displaying
    */
   private Pack mPack;
-  private Boolean mIsPackSelected;
-  private Boolean mIsPackRowOdd;
+  private boolean mIsPackSelected;
+  private boolean mIsPackRowOdd;
+  private boolean mIsPackPurchased;
 
   /**
    * Set the references to the elements from the layout file
@@ -69,6 +71,7 @@ public class PackInfo extends Activity {
     mPackDescription = (TextView) this.findViewById(R.id.PackInfo_Description);
     mPackTitle = (PackPurchaseRowLayout) this.findViewById(R.id.PackInfo_TitlePackRow);
     mPhraseCountBar = (ComboPercentageBar) this.findViewById(R.id.PackInfo_PhraseCountBar);
+    mPackIsOwnedText = (TextView) this.findViewById(R.id.PackInfo_AlreadyOwnedText);
   }
 
   /**
@@ -115,7 +118,25 @@ public class PackInfo extends Activity {
       if (PhraseCrazeApplication.DEBUG) {
         Log.d(TAG, "Buy onClick()");
       }
-      
+      /*
+      // Bind Listener
+      //TODO this will need to be more specific later (to just free social apps)
+      // Attach Twitter Listener
+      if (mPack.getId() == 4 && mPack.isInstalled() == false) {
+        row.setOnClickListener(mTweetListener);
+        mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
+      }
+      // Attach Facebook Listener
+      else if (curPack.getId() == 5 && curPack.isInstalled() == false) {
+        row.setOnClickListener(mFacebookListener);
+        mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
+      }
+      // Attach Google + Listener
+      else if (curPack.getId() == 6 && curPack.isInstalled() == false) {
+        row.setOnClickListener(mGoogleListener);
+        mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
+      }
+      */
       // play confirm sound
       SoundManager sm = SoundManager.getInstance(PackInfo.this.getBaseContext());
       sm.playSound(SoundManager.Sound.CONFIRM);
@@ -146,14 +167,15 @@ public class PackInfo extends Activity {
     mIsPackRowOdd = inIntent.getBooleanExtra(
         getApplication().getString(R.string.packInfoIsPackRowOddBundleKey),
         false);
+    mIsPackPurchased = inIntent.getBooleanExtra(
+        getApplication().getString(R.string.packInfoIsPackPurchased),
+        false);
 
     setupViewReferences();
 
     setupPackDataViews();
-
-    // Set listeners for buttons
-    mButtonCancel.setOnClickListener(mCancelListener);
-    mButtonAccept.setOnClickListener(mAcceptListener);
+    
+    setupButtons();
   }
   
   /*
@@ -179,4 +201,26 @@ public class PackInfo extends Activity {
     mPhraseCountBar.updateSegmentWeights();
   }
 
+ 
+  /* 
+   * Setup the view and buttons based on the purchasability of the pack
+   */
+  private void setupButtons()
+  {
+    if(!mIsPackPurchased)
+    {
+      mButtonCancel.setVisibility(View.VISIBLE);
+      mPackIsOwnedText.setVisibility(View.GONE);
+      mButtonAccept.setText(this.getResources().getString(R.string.packInfo_confirm_buy));
+      mButtonAccept.setOnClickListener(mBuyListener);
+      mButtonCancel.setOnClickListener(mCancelListener);
+    }
+    else
+    {
+      mButtonCancel.setVisibility(View.GONE);
+      mPackIsOwnedText.setVisibility(View.VISIBLE);
+      mButtonAccept.setText(this.getResources().getString(R.string.packInfo_confirm_nobuy));
+      mButtonAccept.setOnClickListener(mAcceptListener);
+    }
+  }
 }

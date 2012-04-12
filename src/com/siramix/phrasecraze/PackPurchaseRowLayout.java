@@ -27,7 +27,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -139,7 +138,6 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mTitle.setHorizontallyScrolling(true);
     mTitle.setTextColor(this.getResources().getColor(R.color.text_default));
     // Make title clickable for info on the pack
-    // mTitle.setOnClickListener(mPackInfoRequestedListener);
 
     // Initialize End Group and add contents
     mRowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
@@ -169,9 +167,6 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mEndGroup.setLayoutParams(mEndGroupParams);
     mEndGroup.addView(mRowEndBG);
     mEndGroup.addView(mPrice);
-    // Set elements that will cause pack selection
-    mEndGroup.setOnClickListener(mSelectPackListener);
-    mTitle.setOnClickListener(mSelectPackListener);
 
     // Add views to the contents layout
     mContents.addView(mTitle);
@@ -190,12 +185,16 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     lightBar.startAnimation(alpha);
     mFrame.addView(lightBar);
 
-    // Enable clicking on the row by default
-    setRowClickable(true);
-
     // Add groups to TeamSelectLayout
     this.addView(mFrame);
+    
+    // Set elements that will cause pack selection
+    mEndGroup.setOnClickListener(mSelectPackListener);
+    // mTitle.setOnClickListener(mPackInfoRequestedListener);
+    mTitle.setOnClickListener(mSelectPackListener);
 
+    // Enable clicking on the row by default
+    setRowClickable(true);
   }
 
   /**

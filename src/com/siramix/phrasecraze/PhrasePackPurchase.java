@@ -384,23 +384,7 @@ public class PhrasePackPurchase extends Activity {
       row.setLayoutParams(margin);
       mPackLineList.add(row);
       
-      // Bind Listener
-      //TODO this will need to be more specific later (to just free social apps)
-      // Attach Twitter Listener
-      if (curPack.getId() == 4 && curPack.isInstalled() == false) {
-        row.setOnClickListener(mTweetListener);
-        mSocialPacks.put(TWITTER_REQUEST_CODE, curPack);
-      }
-      // Attach Facebook Listener
-      else if (curPack.getId() == 5 && curPack.isInstalled() == false) {
-        row.setOnClickListener(mFacebookListener);
-        mSocialPacks.put(FACEBOOK_REQUEST_CODE, curPack);
-      }
-      // Attach Google + Listener
-      else if (curPack.getId() == 6 && curPack.isInstalled() == false) {
-        row.setOnClickListener(mGoogleListener);
-        mSocialPacks.put(GOOGLEPLUS_REQUEST_CODE, curPack);
-      } else if (curPack.isInstalled()) {
+      if (curPack.isInstalled()) {
         row.setOnPackSelectedListener(mSelectPackListener);
         row.setOnPackInfoRequestedListener(mPackInfoListener);
       } else {
@@ -646,6 +630,8 @@ public class PhrasePackPurchase extends Activity {
     public void onClick(View v) {
       Pack curPack = (Pack) v.getTag();
       
+      showPackInfo(curPack);
+      
       // TODO: REMOVE THIS CODE ITS FOR DEBUGGING
       if (Consts.DEBUG) {
         if (curPack.getId() >= 1010 && curPack.getId() <= 1013) {
@@ -722,6 +708,9 @@ public class PhrasePackPurchase extends Activity {
     intent.putExtra(
         getApplication().getString(R.string.packInfoIsPackRowOddBundleKey),
         isPackRowOdd);
+    intent.putExtra(
+        getApplication().getString(R.string.packInfoIsPackPurchased),
+        pack.isInstalled());
     startActivity(intent);
   }
   

@@ -53,6 +53,7 @@
   <string name="buzzedTeamBundleKey">com.siramix.phrasecraze.newBuzzedTeam</string>
   <string name="packInfoIsPackSelectedBundleKey">com.siramix.phrasecraze.isPackSelected</string>
   <string name="packInfoIsPackRowOddBundleKey">com.siramix.phrasecraze.isPackRowOdd</string>
+  <string name="packInfoIsPackPurchased">com.siramix.phrasecraze.isPackPurchased</string>
   
   <!-- Pack Purchasing dialog strings -->
   <string name="packpurchase_title">Phrase Packs</string>
@@ -108,11 +109,9 @@
   <string name="rateUsFirstDialog_title">We want your feedback!</string>
   <string name="rateUsFirstDialog_text">It looks like you\'ve played a few games.  
      Would you mind taking a minute to provide some feedback?</string>
-  
   <string name="rateUsSecondDialog_title">We still want your feedback!</string>
   <string name="rateUsSecondDialog_text">Wow you\'ve played a LOT, which means your opinion is especially valuable to us!
      We won\'t bug you again but would you mind providing some feedback?</string>
-  
   <string name="rateUsDialog_positiveBtn">Rate</string>
   <string name="rateUsDialog_neutralBtn">Later</string>
   <string name="rateUsDialog_negativeBtn">Never</string>
@@ -124,6 +123,13 @@
   <string name="toast_packpurchase_nointerneterror">No internet connection detected.  We can only show your purchased packs.</string>
   <string name="toast_packpurchase_siramixdownerror">Sorry, there were problems connecting to our store.  We can only show your purchased packs.</string>
   <string name="toast_packpurchase_nopackselected">Please select at least one pack to play.</string>
+  
+  <!--  Pack Info dialog -->
+  <string name="packInfo_confirm_nobuy">OK</string>
+  <string name="packInfo_confirm_buy">BUY</string>
+  <string name="packInfo_cancel">CANCEL</string>
+  <string name="packInfo_alreadyOwned">You already have this pack!</string>
+  
   <!--  Rate Us URI for app store -->
   <string name="rateUs_URI">http://www.siramix.com/phrasecrazeappstore</string>
 

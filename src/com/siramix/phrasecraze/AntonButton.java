@@ -27,11 +27,14 @@ public class AntonButton extends Button {
    */
   private void setCustomFont()
   {
-    // Wrap in isEditMode so that xml previwer doesn't break.
+    // Wrap in isEditMode so that xml previewer doesn't break.
     if (!this.isInEditMode()) {
       Typeface typeface = Typeface.createFromAsset(this.getContext()
           .getAssets(), "fonts/Anton.ttf");
       setTypeface(typeface);
     }
+    
+    // Set buttons to always use upper case
+    this.setText(this.getText().toString().toUpperCase());
   }
 }
