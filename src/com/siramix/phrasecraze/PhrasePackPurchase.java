@@ -622,6 +622,9 @@ public class PhrasePackPurchase extends Activity {
     }
   }
   
+  /*
+   * Helper function to install a purchased pack
+   */
   private void installPack(Pack packToInstall)
   {
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
@@ -643,6 +646,9 @@ public class PhrasePackPurchase extends Activity {
     }
   }
   
+  /*
+   * Helper function to submit the request to the billing service
+   */
   private void purchasePack(Pack packToPurchase)
   {  
     showPackInfo(packToPurchase);
@@ -726,18 +732,18 @@ public class PhrasePackPurchase extends Activity {
         getApplication().getString(R.string.packInfoIsPackPurchased),
         pack.isInstalled());
     // TODO Add PurchaseType to packs to read from server so we don't have
-    // to pass it in
-    int purchaseType = 0;
+    // to pass it in, or check against ID
+    int purchaseType = Pack.PURCHASETYPE_BUY;
     switch(pack.getId())
     {
     case 4:
-      purchaseType = 1;
+      purchaseType = Pack.PURCHASETYPE_TWEET;
       break;
     case 5:
-      purchaseType = 2;
+      purchaseType = Pack.PURCHASETYPE_FACEBOOK;
       break;
     case 6:
-      purchaseType = 3;
+      purchaseType = Pack.PURCHASETYPE_GOOGLE;
       break;
     }
     intent.putExtra("HACK_PurchaseType", purchaseType);

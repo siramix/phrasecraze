@@ -196,19 +196,19 @@ public class PackInfo extends Activity {
       // Set Accept Button text and return result based on the purchase type
       switch (mPurchaseType)
       {
-      case 0:
+      case Pack.PURCHASETYPE_BUY:
         mButtonAccept.setText(this.getResources().getString(R.string.packInfo_confirm_buy));
         mButtonAccept.setTag(RESULT_OK);
         break;
-      case 1:
+      case Pack.PURCHASETYPE_TWEET:
         mButtonAccept.setText("Tweet");
         mButtonAccept.setTag(RESULT_TWITTER);
         break;
-      case 2:
+      case Pack.PURCHASETYPE_FACEBOOK:
         mButtonAccept.setText("Post");
         mButtonAccept.setTag(RESULT_FACEBOOK);
         break;
-      case 3:
+      case Pack.PURCHASETYPE_GOOGLE:
         mButtonAccept.setText("Plus+1");
         mButtonAccept.setTag(RESULT_GOOGLE);
         break;

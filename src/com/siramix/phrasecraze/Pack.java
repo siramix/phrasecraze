@@ -50,6 +50,11 @@ public class Pack implements Serializable {
   private int mNumToPullNext;
   private boolean mInstalled;
   
+  public static final int PURCHASETYPE_BUY = 0;
+  public static final int PURCHASETYPE_TWEET = 1;
+  public static final int PURCHASETYPE_FACEBOOK = 2;
+  public static final int PURCHASETYPE_GOOGLE = 3;
+  
   private static final String TAG = "Pack";
   
   /**
