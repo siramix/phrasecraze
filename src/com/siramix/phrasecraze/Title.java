@@ -152,7 +152,6 @@ public class Title extends Activity {
       Uri uri = Uri.parse("http://www.siramix.com/");
       Intent intent = new Intent(Intent.ACTION_VIEW, uri);
       startActivity(intent);
-
     }
   }; // End AboutUsListener
 
@@ -170,8 +169,7 @@ public class Title extends Activity {
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
     // Capture our play count to decide whether to show the Rate Us dialog
-    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this
-        .getBaseContext());
+    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
     int playCount = sp.getInt(getResources().getString(R.string.PREFKEY_PLAYCOUNT), 0);
     boolean showReminder = sp.getBoolean(getResources().getString(R.string.PREFKEY_SHOWREMINDER), false);
     

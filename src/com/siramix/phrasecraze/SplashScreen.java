@@ -24,7 +24,9 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,10 +79,15 @@ public class SplashScreen extends Activity {
       mInstallThread = new Thread(new Runnable() {
 
       public void run() {
-          GameManager gm = new GameManager(SplashScreen.this);
           //TODO This used to be done in Deck database onCreate which meant it 
-          // did NOT get run every time like this does.  
-          gm.installLocalPacks();
+          // did NOT get run every time like this does.
+          SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
+              SplashScreen.this.getBaseContext());
+          int playCount = sp.getInt(getResources().getString(R.string.PREFKEY_PLAYCOUNT), 0);
+          if (playCount == 0) {
+            GameManager gm = new GameManager(SplashScreen.this);
+            gm.installStarterPacks();
+          }
         }
       });
       mInstallThread.start();

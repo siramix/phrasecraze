@@ -427,15 +427,15 @@ public class GameManager {
     mUpdateThread.start();
   }
   
-  public void installLocalPacks() {
-    mDeck.digestLocalPacks();
+  public void installStarterPacks() {
+    mDeck.installStarterPacks();
   }
   
   public void installPack(final Pack pack, final ProgressDialog installDialog) {
     // TODO This should probably be in a thread (mInstallThread)
     // Though I ran into problems with the database state 
     try {
-      mDeck.digestPack(pack);
+      mDeck.installPack(pack);
     } catch (RuntimeException e) {
       Log.e(TAG, "Unable to install pack: " + pack.getName());
       e.printStackTrace();
