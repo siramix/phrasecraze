@@ -321,15 +321,16 @@ public class PhrasePackPurchase extends Activity {
    * @return
    */
   private LinkedList<Pack> removeLocalPacks(LinkedList<Pack> lockedPacks, LinkedList<Pack> localPacks) {
-    LinkedList<Pack> lockedPacksSubset = lockedPacks;
-    for (int i=0; i<lockedPacks.size(); ++i) {
-      for (int j=0; j<localPacks.size(); ++j) {
-        if (lockedPacks.get(i).getId() == localPacks.get(j).getId()) {
-          lockedPacksSubset.remove(i);
+    Log.d(TAG, "removeLocalPacks");
+    for (Pack localPack : localPacks) {
+      for (int lockedIndex=0; lockedIndex<lockedPacks.size(); ++lockedIndex) {
+        if (localPack.getId() == lockedPacks.get(lockedIndex).getId()) {
+          lockedPacks.remove(lockedIndex);
         }
       }
     }
-    return lockedPacksSubset;
+    
+    return lockedPacks;
   }
   
   /**
