@@ -401,11 +401,11 @@ public class Deck {
     public void installLocalPacks() {
       mDatabase = getWritableDatabase();
       Pack pack1 = new Pack(1, "pack1", "freepacks/pack1.json", 
-                                  "Description of pack1", "first install", 0, 500, true);
+                                  "Description of pack1", "first install", R.drawable.pack0_icon, 0, 500, true);
       Pack pack2 = new Pack(2, "pack2", "freepacks/pack2.json", 
-          "Description of pack2", "first install", 0, 500, true);
+          "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
       Pack pack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
-          "Description of pack3", "first install", 0, 250, true);
+          "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
       digestPackFromResource(mDatabase, pack1, R.raw.pack1);
       digestPackFromResource(mDatabase, pack2, R.raw.pack2);
       digestPackFromResource(mDatabase, pack3, R.raw.pack3);
@@ -517,7 +517,7 @@ public class Deck {
       if (packQuery.moveToFirst()) {
         while (!packQuery.isAfterLast()) {
           pack = new Pack(packQuery.getInt(0), packQuery.getString(1), packQuery.getString(2),
-              packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5), true);
+              packQuery.getString(3), null, R.drawable.pack0_icon, packQuery.getInt(4), packQuery.getInt(5), true);
           ret.add(pack);
           packQuery.moveToNext();
         }
@@ -545,7 +545,7 @@ public class Deck {
       Pack pack = null;
       if (packQuery.moveToFirst()) {
         pack = new Pack(packQuery.getInt(0), packQuery.getString(1), packQuery.getString(2),
-                        packQuery.getString(3), null, packQuery.getInt(4), packQuery.getInt(5), true);
+                        packQuery.getString(3), null, R.drawable.pack0_icon, packQuery.getInt(4), packQuery.getInt(5), true);
       }
       packQuery.close();
       mDatabase.close();

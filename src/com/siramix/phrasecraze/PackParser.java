@@ -71,10 +71,11 @@ public class PackParser {
     String curPath = curPack.getString("path");
     String curUpdateMessage = curPack.getString("update_message");
     String curDescription = curPack.getString("description");
+    int iconID = R.drawable.pack1_icon;
     int curVersion = curPack.getInt("version");
     int curSize = curPack.getInt("size");
     Pack pack = new Pack(curId, curName, curPath, curDescription, 
-                         curUpdateMessage, curVersion, curSize, false);
+                         curUpdateMessage, iconID, curVersion, curSize, false);
     return pack;
   }
 

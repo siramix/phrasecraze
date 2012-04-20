@@ -18,6 +18,7 @@
 package com.siramix.phrasecraze;
 
 import android.content.Context;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
 import android.text.TextUtils.TruncateAt;
@@ -47,10 +48,12 @@ public class PackPurchaseRowLayout extends RelativeLayout {
 
   private FrameLayout mFrame;
   private LinearLayout mContents;
+  private ImageView mIcon;
   private TextView mTitle;
   private TextView mPrice;
   private RelativeLayout mEndGroup;
   private ImageView mRowEndBG;
+  
 
   private Pack mPack;
   private boolean mIsPackEnabled;
@@ -95,6 +98,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   private void initializeMembers(Context context) {
     mContext = context;
     mFrame = new FrameLayout(mContext);
+    mIcon = new ImageView(mContext);
     mTitle = new TextView(mContext);
     mContents = new LinearLayout(mContext);
     mPrice = new TextView(mContext);
@@ -125,12 +129,25 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     mContents.setOrientation(LinearLayout.HORIZONTAL);
     mContents.setBackgroundColor(this.getResources().getColor(
         R.color.gameend_blankrow));
+    
+    // Add a placeholder for the icon
+    mIcon.setImageDrawable(this.getResources().getDrawable(R.drawable.pack0_icon));
+    LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+        LayoutParams.WRAP_CONTENT);
+    iconParams.weight = 1.0f;
+    iconParams.gravity = Gravity.CENTER;
+    mIcon.setLayoutParams(iconParams);
+    int iconPadding = (int) (DENSITY * 5 + 0.5f);
+    mIcon.setPadding(iconPadding, iconPadding, iconPadding, iconPadding);
+    mIcon.setLayoutParams(new LinearLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
     // Initialize Pack Title
     mTitle.setText("Generic Pack Title");
     LinearLayout.LayoutParams titleTextParams = new LinearLayout.LayoutParams(
-        LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     titleTextParams.weight = 1.0f;
+    titleTextParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
     mTitle.setLayoutParams(titleTextParams);
     mTitle.setPadding((int) (DENSITY * 10 + 0.5f), 0, 0, 0);
     mTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
@@ -141,6 +158,8 @@ public class PackPurchaseRowLayout extends RelativeLayout {
 
     // Initialize End Group and add contents
     mRowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
+    mRowEndBG.setLayoutParams(new LinearLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
     // Initialize Price
     mPrice.setText("$1.99");
@@ -162,13 +181,15 @@ public class PackPurchaseRowLayout extends RelativeLayout {
       mTitle.setTypeface(antonFont);
     }
 
-    RelativeLayout.LayoutParams mEndGroupParams = new RelativeLayout.LayoutParams(
+    LinearLayout.LayoutParams mEndGroupParams = new LinearLayout.LayoutParams(
         (int) (DENSITY * 109 + 0.5f), LayoutParams.WRAP_CONTENT);
+    //mEndGroupParams.weight = 1.0f;
     mEndGroup.setLayoutParams(mEndGroupParams);
     mEndGroup.addView(mRowEndBG);
     mEndGroup.addView(mPrice);
 
     // Add views to the contents layout
+    mContents.addView(mIcon);
     mContents.addView(mTitle);
     mContents.addView(mEndGroup);
 
@@ -285,17 +306,22 @@ public class PackPurchaseRowLayout extends RelativeLayout {
    * corresponding pack.
    */
   public void refresh() {
+    
+    // Set attributes that don't care about the state of the pack
     mTitle.setText(mPack.getName());
-
+    mIcon.setImageDrawable(this.getResources().getDrawable(mPack.getIconID()));
+    
     int bgColor;
     if (mIsPackPurchased) {
       if (mIsPackEnabled) {
         bgColor = R.color.packPurchaseSelected;
         mTitle.setTextColor(this.getResources().getColor(R.color.white));
+        mIcon.setColorFilter(null);
       } else {
         bgColor = R.color.packPurchaseUnSelected2;
         mTitle.setTextColor(this.getResources()
             .getColor(R.color.genericBG_trim));
+        mIcon.setColorFilter(this.getResources().getColor(R.color.genericBG_trimDark), Mode.MULTIPLY);
       }
       // Set background
       mContents.setBackgroundColor(this.getResources().getColor(bgColor));
