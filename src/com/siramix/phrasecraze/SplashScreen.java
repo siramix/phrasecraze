@@ -79,15 +79,18 @@ public class SplashScreen extends Activity {
       mInstallThread = new Thread(new Runnable() {
 
       public void run() {
-          //TODO This used to be done in Deck database onCreate which meant it 
-          // did NOT get run every time like this does.
-          SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
-              SplashScreen.this.getBaseContext());
-          int playCount = sp.getInt(getResources().getString(R.string.PREFKEY_PLAYCOUNT), 0);
-          if (playCount == 0) {
-            GameManager gm = new GameManager(SplashScreen.this);
-            gm.installStarterPacks();
-          }
+        //TODO This used to be done in Deck database onCreate which meant it 
+        // did NOT get run every time like this does.
+        
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        boolean initialized = prefs.getBoolean(Consts.PREFKEY_DB_INITIALIZED, false);
+        if (!initialized) {
+          GameManager gm = new GameManager(SplashScreen.this);
+          gm.installStarterPacks();
+          edit.putBoolean(Consts.PREFKEY_DB_INITIALIZED, true);
+          edit.commit();
+        }
         }
       });
       mInstallThread.start();

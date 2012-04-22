@@ -631,7 +631,7 @@ public class GameManager {
    * @return
    */
   public LinkedList<Pack> getInstalledPacks() {
-    return mDeck.retrieveLocalPacks();
+    return mDeck.getLocalPacks();
   }
   
   /**

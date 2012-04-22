@@ -40,7 +40,9 @@ package com.siramix.phrasecraze;
 public class Consts {
 
     public static final boolean DEBUG = true;
-    public static final String PREF_PACK_SELECTIONS = "PACK_SELECTIONS";
+    public static final String PREFKEY_PACK_SELECTIONS = "PACK_SELECTIONS";
+    public static final String PREFKEY_DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALIZED";
+    public static final String PREFKEY_PACKS_INITIALIZED = "com.siramix.phrasecraze.PACKS_INITIALIZED";
   
     // The response codes for a request, defined by Android Market.
     public enum ResponseCode {

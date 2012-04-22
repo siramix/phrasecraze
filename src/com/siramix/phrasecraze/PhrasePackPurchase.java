@@ -2,8 +2,6 @@ package com.siramix.phrasecraze;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,20 +10,10 @@ import java.util.Map;
 
 import org.json.JSONException;
 
-import com.siramix.phrasecraze.Consts;
-import com.siramix.phrasecraze.PurchaseObserver;
-import com.siramix.phrasecraze.BillingService.RequestPurchase;
-import com.siramix.phrasecraze.BillingService.RestoreTransactions;
-import com.siramix.phrasecraze.Consts.PurchaseState;
-import com.siramix.phrasecraze.Consts.ResponseCode;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -35,8 +23,6 @@ import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,10 +31,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.siramix.phrasecraze.BillingService.RequestPurchase;
+import com.siramix.phrasecraze.BillingService.RestoreTransactions;
+import com.siramix.phrasecraze.Consts.PurchaseState;
+import com.siramix.phrasecraze.Consts.ResponseCode;
+
 public class PhrasePackPurchase extends Activity {
 
-  private static final String TAG = "CardPackPurchase";
-  public static final String DB_INITIALIZED = "com.siramix.phrasecraze.DB_INITIALIZED";
+  private static final String TAG = "PhrasePackPurchase";
   
   private ProgressDialog mInstallDialog;
   
@@ -132,11 +122,10 @@ public class PhrasePackPurchase extends Activity {
 
     @Override
     public void onBillingSupported(boolean supported) {
-      if (Consts.DEBUG) {
-        Log.i(TAG, "supported: " + supported);
-      }
+      Log.d(TAG, "supported: " + supported);
+
       if (supported) {
-        // restoreDatabase();
+        restorePacks();
       } else {
         showToast("Billing not Supported");
       }
@@ -145,10 +134,8 @@ public class PhrasePackPurchase extends Activity {
     @Override
     public void onPurchaseStateChange(PurchaseState purchaseState, String itemId,
             int quantity, long purchaseTime, String developerPayload) {
-        if (Consts.DEBUG) {
-            Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " " + purchaseState);
-        }
-
+        Log.d(TAG, "onPurchaseStateChange() itemId: " + itemId + " " + purchaseState);
+        
         if (developerPayload == null) {
             //logProductActivity(itemId, purchaseState.toString());
         } else {
@@ -164,6 +151,13 @@ public class PhrasePackPurchase extends Activity {
             //mOwnedItems.add(itemId);
           }
         }
+        else if (purchaseState == PurchaseState.CANCELED) {
+          // TODO remove pack if purchase is cancelled
+        }
+        else if (purchaseState == PurchaseState.REFUNDED) {
+          // TODO remove pack if purchase is refunded
+        }
+        
         //mCatalogAdapter.setOwnedItems(mOwnedItems);
         //mOwnedItemsCursor.requery();
     }
@@ -171,9 +165,8 @@ public class PhrasePackPurchase extends Activity {
     @Override
     public void onRequestPurchaseResponse(RequestPurchase request,
           ResponseCode responseCode) {
-      if (Consts.DEBUG) {
-          Log.d(TAG, request.mProductId + ": " + responseCode);
-      }
+      Log.d(TAG, request.mProductId + ": " + responseCode);
+
       if (responseCode == ResponseCode.RESULT_OK) {
           if (Consts.DEBUG) {
               Log.i(TAG, "Purchase of " + request.mProductId + " was successfully sent to server");
@@ -202,7 +195,7 @@ public class PhrasePackPurchase extends Activity {
           // a RestoreTransactions again.
           SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
           SharedPreferences.Editor edit = prefs.edit();
-          edit.putBoolean(DB_INITIALIZED, true);
+          edit.putBoolean(Consts.PREFKEY_PACKS_INITIALIZED, true);
           edit.commit();
       } else {
           if (Consts.DEBUG) {
@@ -228,7 +221,7 @@ public class PhrasePackPurchase extends Activity {
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
     // Get our pack preferences
-    mPackPrefs = getSharedPreferences(Consts.PREF_PACK_SELECTIONS,
+    mPackPrefs = getSharedPreferences(Consts.PREFKEY_PACK_SELECTIONS,
         Context.MODE_PRIVATE);
 
     // Setup the view
@@ -245,7 +238,9 @@ public class PhrasePackPurchase extends Activity {
     
     // Check if billing is supported.
     ResponseHandler.register(mPurchaseObserver);
-
+    if (!mBillingService.checkBillingSupported()) {
+        showToast(getString(R.string.toast_packpurchase_nointerneterror));
+    }
     // set fonts on titles
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
         "fonts/Anton.ttf");
@@ -267,9 +262,11 @@ public class PhrasePackPurchase extends Activity {
   public void onResume() {
     super.onResume();
     refreshAllPackLayouts();
+    ResponseHandler.register(mPurchaseObserver);
   }
 
   private void refreshAllPackLayouts() {
+    Log.d(TAG, "refreshAllPackLayouts");
     // Get our current context
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
@@ -355,8 +352,6 @@ public class PhrasePackPurchase extends Activity {
 
     for (Iterator<Pack> it = packlist.iterator(); it.hasNext();) {
       Pack curPack = it.next();
-
-      Log.d(TAG, "Count: " + count + "\nPackname: " + curPack.getName());
 
       // Create a new row for this pack
       LinearLayout line = (LinearLayout) LinearLayout.inflate(
@@ -652,18 +647,14 @@ public class PhrasePackPurchase extends Activity {
    */
   private void purchasePack(Pack packToPurchase)
   {  
-    showPackInfo(packToPurchase);
-    
+    //showPackInfo(packToPurchase);
+    Log.d(TAG, "purchasePack(" + packToPurchase.getName() + ")");
     // TODO: REMOVE THIS CODE ITS FOR DEBUGGING
-    if (Consts.DEBUG) {
-      if (packToPurchase.getId() >= 1010 && packToPurchase.getId() <= 1013) {
-        mBillingService.requestPurchase(String.valueOf(packToPurchase.getName()), "payload_test");
-      }  else {
-        mBillingService.requestPurchase(String.valueOf(packToPurchase.getId()), "payload_test");
-      }
+    if (packToPurchase.getId() >= 1010 && packToPurchase.getId() <= 1013) {
+      mBillingService.requestPurchase(String.valueOf(packToPurchase.getName()), packToPurchase.getName());
     }
     else {
-      mBillingService.requestPurchase(String.valueOf(packToPurchase.getId()), "payload_test");
+      mBillingService.requestPurchase(String.valueOf(packToPurchase.getId()), packToPurchase.getName());
     }
   }
 
@@ -822,7 +813,6 @@ public class PhrasePackPurchase extends Activity {
    * @return
    */
   public boolean getPackPref(Pack pack) {
-    Log.d(TAG, "getPackPref(" + pack.getName() + ")");
     return mPackPrefs.getBoolean(String.valueOf(pack.getId()), false);
   }
 
@@ -873,6 +863,28 @@ public class PhrasePackPurchase extends Activity {
   }
 
   /**
+   * If the database has not been initialized, we send a
+   * RESTORE_TRANSACTIONS request to Android Market to get the list of purchased items
+   * for this user. This happens if the application has just been installed
+   * or the user wiped data. We do not want to do this on every startup, rather, we want to do
+   * only when the database needs to be initialized.
+   */
+  private void restorePacks() {
+    Log.d(TAG, "restorePacks");
+    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+    boolean initialized = prefs.getBoolean(
+        Consts.PREFKEY_PACKS_INITIALIZED, false);
+    if (!initialized) {
+      Log.d(TAG, "restoring transactions...");
+      mBillingService.restoreTransactions();
+      Toast.makeText(this, R.string.packpurchase_restoring_packs, Toast.LENGTH_LONG).show();
+    }
+    else {
+      Log.d(TAG, "restore not necessary");
+    }
+  }
+  
+  /**
    * Handle showing a toast or refreshing an existing toast
    */
   private void showToast(String text) {
@@ -891,4 +903,18 @@ public class PhrasePackPurchase extends Activity {
     mHelpToast.show();
   }
 
+  /**
+   * Called when this activity is no longer visible.
+   */
+  @Override
+  protected void onStop() {
+      super.onStop();
+      ResponseHandler.unregister(mPurchaseObserver);
+  }
+
+  @Override
+  protected void onDestroy() {
+      super.onDestroy();
+      mBillingService.unbind();
+  }
 }

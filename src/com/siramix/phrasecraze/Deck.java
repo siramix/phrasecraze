@@ -163,7 +163,7 @@ public class Deck {
    * Retrieve a Linked List of all Packs that a user has installed in their database.
    * @return Linked List of all local Packs
    */
-  public LinkedList<Pack> retrieveLocalPacks() {
+  public LinkedList<Pack> getLocalPacks() {
     return mDatabaseOpenHelper.getAllPacksFromDB();
   }
   
@@ -298,7 +298,7 @@ public class Deck {
   private void instantiateSelectedPacks() {
     Log.d(TAG, "instantiateSelectedPacks()");
     SharedPreferences packPrefs = mContext.getSharedPreferences(
-            Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+            Consts.PREFKEY_PACK_SELECTIONS, Context.MODE_PRIVATE);
     Map<String, ?> packSelections = new HashMap<String, Boolean>();
     packSelections = packPrefs.getAll();
     
