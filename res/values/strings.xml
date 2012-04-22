@@ -27,7 +27,8 @@
   <string name="PREFKEY_PLAYCOUNT">com.siramix.phrasecraze.prefkey.PREFKEY_PLAYCOUNT</string>
   <string name="PREFKEY_SCORELIMIT">com.siramix.phrasecraze.prefkey.SCORELIMIT</string>
   <string name="PREFKEY_AUTOSCORINGENABLED">com.siramix.phrasecraze.prefkey.AUTOSCORING</string>
-  
+	<!-- other prefkeys exist in Consts that needed to be retrieved from Deck -->
+
   <!-- Menu Designations -->
   <string name="menu_EndGame">MENU_ENDGAME</string>
   <string name="menu_Rules">MENU_RULES</string>
@@ -60,6 +61,7 @@
   <string name="packpurchase_unlockedheader">Your Packs</string>
   <string name="packpurchase_lockedheader">Purchasable Packs</string>
   <string name="packpurchase_button">Confirm</string>
+  <string name="packpurchase_restoring_packs">Restoring your purchases&#8230;</string>
   
   <!-- Game Setup dialog strings -->  
   <string name="gamesetup_title">Game Setup</string>

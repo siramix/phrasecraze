@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
+import org.json.JSONException;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -161,7 +163,7 @@ public class Deck {
    * Retrieve a Linked List of all Packs that a user has installed in their database.
    * @return Linked List of all local Packs
    */
-  public LinkedList<Pack> retrieveLocalPacks() {
+  public LinkedList<Pack> getLocalPacks() {
     return mDatabaseOpenHelper.getAllPacksFromDB();
   }
   
@@ -171,10 +173,10 @@ public class Deck {
    * @throws IOException
    * @throws URISyntaxException
    */
-  public synchronized void digestPack(Pack pack) throws RuntimeException {
+  public synchronized void installPack(Pack pack) throws RuntimeException {
     Log.d(TAG, "INSTALLING PACK: \n" + pack.toString());
     try {
-      mDatabaseOpenHelper.digestPackFromServer(pack);
+      mDatabaseOpenHelper.installPackFromServer(pack);
     } catch (IOException e) {
       RuntimeException userException = new RuntimeException(e);
       throw userException;
@@ -185,12 +187,26 @@ public class Deck {
   }
   
   /**
-   * Install all of the packs that are in the app's local resources
-   * These packs **MUST** stay in sync with the server.
+   * Install all of the packs that the app comes with.  This ultimately
+   * will be just one pack.
    */
-  public synchronized void digestLocalPacks() {
+  public synchronized void installStarterPacks() {
+    Log.d(TAG, "INSTALLING STARTER PACKS");
+    mDatabaseOpenHelper.installStarterPacks();
+  }
+  
+  /**
+   * Update all packs that user has already installed.  Only call this
+   * after licenses have been looked at. 
+   * @throws JSONException 
+   * @throws URISyntaxException 
+   * @throws IOException 
+   */
+  public synchronized void updateLocalPacks() throws IOException, URISyntaxException, JSONException {
     Log.d(TAG, "INSTALLING ALL LOCAL PACKS");
-    mDatabaseOpenHelper.installLocalPacks();
+    LinkedList<Pack> payPacks = PackClient.getInstance().getPayPacks();
+    LinkedList<Pack> freePacks = PackClient.getInstance().getFreePacks();
+    LinkedList<Pack> localPacks = mDatabaseOpenHelper.getAllPacksFromDB();
   }
   
   private void topOffFrontCache() {
@@ -282,7 +298,7 @@ public class Deck {
   private void instantiateSelectedPacks() {
     Log.d(TAG, "instantiateSelectedPacks()");
     SharedPreferences packPrefs = mContext.getSharedPreferences(
-            Consts.PREF_PACK_SELECTIONS, Context.MODE_PRIVATE);
+            Consts.PREFKEY_PACK_SELECTIONS, Context.MODE_PRIVATE);
     Map<String, ?> packSelections = new HashMap<String, Boolean>();
     packSelections = packPrefs.getAll();
     
@@ -378,7 +394,13 @@ public class Deck {
 
     private final Context mHelperContext;
     private SQLiteDatabase mDatabase;
-
+    private Pack mPack1 = new Pack(1, "pack1", "freepacks/pack1.json", 
+        "Description of pack1", "first install", R.drawable.pack0_icon, 0, 500, true);
+    private Pack mPack2 = new Pack(2, "pack2", "freepacks/pack2.json", 
+        "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
+    private Pack mPack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
+        "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
+    
     /**
      * Default Constructor from superclass
      * 
@@ -398,17 +420,19 @@ public class Deck {
       db.execSQL(PhraseColumns.TABLE_CREATE);
     }
 
-    public void installLocalPacks() {
+    public void installStarterPacks() {
+      Log.d(TAG, "installStarterPacks()");
       mDatabase = getWritableDatabase();
-      Pack pack1 = new Pack(1, "pack1", "freepacks/pack1.json", 
-                                  "Description of pack1", "first install", R.drawable.pack0_icon, 0, 500, true);
-      Pack pack2 = new Pack(2, "pack2", "freepacks/pack2.json", 
-          "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
-      Pack pack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
-          "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
-      digestPackFromResource(mDatabase, pack1, R.raw.pack1);
-      digestPackFromResource(mDatabase, pack2, R.raw.pack2);
-      digestPackFromResource(mDatabase, pack3, R.raw.pack3);
+      
+      if (packInstalled(mPack1.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mPack1, R.raw.pack1);
+      }
+      if (packInstalled(mPack2.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mPack2, R.raw.pack2);
+      }
+      if (packInstalled(mPack3.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mPack3, R.raw.pack3);
+      }
       
       mDatabase.close();
     }
@@ -560,8 +584,8 @@ public class Deck {
      * @param packName the name of the file to digest
      * @param resId the resource of the pack file to digest
      */
-    private void digestPackFromResource(SQLiteDatabase db, Pack pack, int resId) {
-      Log.d(TAG, "Digesting pack from resource " + String.valueOf(resId));
+    public void installPackFromResource(SQLiteDatabase db, Pack pack, int resId) {
+      Log.d(TAG, "Installing pack from resource " + String.valueOf(resId));
 
       BufferedReader packJSON = new BufferedReader(new InputStreamReader(
           mHelperContext.getResources().openRawResource(resId)));
@@ -577,29 +601,28 @@ public class Deck {
       }
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       
-      digestPackInternal(db, pack, cardItr);
+      installPack(db, pack, cardItr);
 
       Log.d(TAG, "DONE loading words.");
     }
 
-    public void digestPackFromServer(Pack pack) throws IOException, URISyntaxException {
-      Log.d(TAG, "digestPackFromServer(" + pack.getName() + ")");
+    public void installPackFromServer(Pack serverPack) throws IOException, URISyntaxException {
+      Log.d(TAG, "installPackFromServer(" + serverPack.getName() + ")");
       mDatabase = getWritableDatabase();
       // Don't add a pack if it's already there
-      int packId = packInstalled(pack.getId(), pack.getVersion(), mDatabase);
+      int packId = packInstalled(serverPack.getId(), serverPack.getVersion(), mDatabase);
       if (packId == PACK_CURRENT) {
         return;
       }
-      if(packId != PACK_NOT_PRESENT) { 
-        clearPack(packId, mDatabase);
+      if(packId == PACK_NOT_PRESENT) { 
+        CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(serverPack);
+        installPack(mDatabase, serverPack, cardItr);
       }
-      CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(pack);
-      digestPackInternal(mDatabase, pack, cardItr);
       
       Log.d(TAG, "DONE loading words.");
       mDatabase.close();
     }
-
+    
     /**
      * Replaces or inserts a new row into the Packs table and then replaces or inserts
      * rows into the Phrases table for each phrase in that pack.
@@ -609,8 +632,8 @@ public class Deck {
      * @param packVersion
      * @param cardItr
      */
-    private static void digestPackInternal(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
-      Log.d(TAG, "digestPackInternal: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
+    private static void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
+      Log.d(TAG, "installPack: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
  
       // Add the pack and all cards in a single transaction.
       try {
