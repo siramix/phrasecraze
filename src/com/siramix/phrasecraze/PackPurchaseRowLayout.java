@@ -40,21 +40,20 @@ import android.widget.RelativeLayout;
  * @author The PhraseCraze Team
  * 
  */
-public class PackPurchaseRowLayout extends RelativeLayout {
+public class PackPurchaseRowLayout extends FrameLayout {
 
   protected static final String TAG = "PackPurchaseRowLayout";
 
   private Context mContext;
 
-  private FrameLayout mFrame;
-  private LinearLayout mContents;
+  // View members
+  private RelativeLayout mContents;
   private ImageView mIcon;
   private TextView mTitle;
   private TextView mPrice;
-  private RelativeLayout mEndGroup;
   private ImageView mRowEndBG;
   
-
+  // Data members
   private Pack mPack;
   private boolean mIsPackEnabled;
   private boolean mIsRowOdd;
@@ -96,14 +95,17 @@ public class PackPurchaseRowLayout extends RelativeLayout {
   }
 
   private void initializeMembers(Context context) {
+    int id = 0;
     mContext = context;
-    mFrame = new FrameLayout(mContext);
+    mContents = new RelativeLayout(mContext);
     mIcon = new ImageView(mContext);
+    mIcon.setId(++id);
     mTitle = new TextView(mContext);
-    mContents = new LinearLayout(mContext);
+    mTitle.setId(++id);
     mPrice = new TextView(mContext);
-    mEndGroup = new RelativeLayout(mContext);
+    mPrice.setId(++id);
     mRowEndBG = new ImageView(mContext);
+    mRowEndBG.setId(++id);
     mIsRowClickable = true;
   }
 
@@ -117,56 +119,57 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     // Create the views
 
     // Initialize the group for the frame
-    mFrame.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+    this.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
         LayoutParams.WRAP_CONTENT));
     int padding = (int) (DENSITY * 1 + 0.5f);
-    mFrame.setPadding(0, padding, 0, padding);
-    mFrame.setBackgroundColor(R.color.black);
+    this.setPadding(0, padding, 0, padding);
+    this.setBackgroundColor(R.color.black);
 
     // Initialize Layout that stores the contents
     mContents.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
         LayoutParams.WRAP_CONTENT));
-    mContents.setOrientation(LinearLayout.HORIZONTAL);
     mContents.setBackgroundColor(this.getResources().getColor(
         R.color.gameend_blankrow));
     
     // Add a placeholder for the icon
     mIcon.setImageDrawable(this.getResources().getDrawable(R.drawable.pack0_icon));
-    LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+    RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
         LayoutParams.WRAP_CONTENT);
-    iconParams.weight = 1.0f;
-    iconParams.gravity = Gravity.CENTER;
+    iconParams.addRule(RelativeLayout.CENTER_VERTICAL);
+    iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
     mIcon.setLayoutParams(iconParams);
     int iconPadding = (int) (DENSITY * 5 + 0.5f);
     mIcon.setPadding(iconPadding, iconPadding, iconPadding, iconPadding);
-    mIcon.setLayoutParams(new LinearLayout.LayoutParams(
-        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
     // Initialize Pack Title
     mTitle.setText("Generic Pack Title");
-    LinearLayout.LayoutParams titleTextParams = new LinearLayout.LayoutParams(
-        LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-    titleTextParams.weight = 1.0f;
-    titleTextParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+    RelativeLayout.LayoutParams titleTextParams = new RelativeLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    titleTextParams.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
+    titleTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
     mTitle.setLayoutParams(titleTextParams);
-    mTitle.setPadding((int) (DENSITY * 10 + 0.5f), 0, 0, 0);
+    mTitle.setPadding((int) (DENSITY * 5 + 0.5f), 0, 0, 0);
     mTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
     mTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+    mTitle.setWidth((int) (DENSITY * 190 + 0.5f));
     mTitle.setEllipsize(TruncateAt.END);
     mTitle.setHorizontallyScrolling(true);
     mTitle.setTextColor(this.getResources().getColor(R.color.text_default));
 
     // Initialize End Group and add contents
     mRowEndBG.setImageResource(R.drawable.turnsum_row_end_white);
-    mRowEndBG.setLayoutParams(new LinearLayout.LayoutParams(
-        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    RelativeLayout.LayoutParams rowEndParams = new RelativeLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    rowEndParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+    mRowEndBG.setLayoutParams(rowEndParams);
+    // Old values: 109, wrap_content
 
     // Initialize Price
     mPrice.setText("$1.99");
     RelativeLayout.LayoutParams priceParams = new RelativeLayout.LayoutParams(
         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    priceParams.addRule(ALIGN_PARENT_RIGHT);
-    priceParams.addRule(CENTER_VERTICAL);
+    priceParams.addRule(RelativeLayout.ALIGN_RIGHT, mRowEndBG.getId());
+    priceParams.addRule(RelativeLayout.CENTER_VERTICAL);
     priceParams.rightMargin = (int) (DENSITY * 6 + 0.5f);
     mPrice.setLayoutParams(priceParams);
     mPrice.setIncludeFontPadding(false);
@@ -181,20 +184,14 @@ public class PackPurchaseRowLayout extends RelativeLayout {
       mTitle.setTypeface(antonFont);
     }
 
-    LinearLayout.LayoutParams mEndGroupParams = new LinearLayout.LayoutParams(
-        (int) (DENSITY * 109 + 0.5f), LayoutParams.WRAP_CONTENT);
-    //mEndGroupParams.weight = 1.0f;
-    mEndGroup.setLayoutParams(mEndGroupParams);
-    mEndGroup.addView(mRowEndBG);
-    mEndGroup.addView(mPrice);
-
     // Add views to the contents layout
     mContents.addView(mIcon);
     mContents.addView(mTitle);
-    mContents.addView(mEndGroup);
+    mContents.addView(mRowEndBG);
+    mContents.addView(mPrice);
 
     // Add the views to frame
-    mFrame.addView(mContents);
+    this.addView(mContents);
     
     // Add single pixel bar of lightened color to give depth
     View lightBar = new View(mContext);
@@ -204,10 +201,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     AlphaAnimation alpha = new AlphaAnimation(0.2f, 0.2f);
     alpha.setFillAfter(true);
     lightBar.startAnimation(alpha);
-    mFrame.addView(lightBar);
-
-    // Add groups to TeamSelectLayout
-    this.addView(mFrame);
+    this.addView(lightBar);
  
     // Enable clicking on the row by default
     setRowClickable(true);
@@ -231,13 +225,11 @@ public class PackPurchaseRowLayout extends RelativeLayout {
     // Assign click listeners based on the pack's purchase state
     if(mIsPackPurchased)
     {
-      mEndGroup.setOnClickListener(mSelectPackListener);
-      mTitle.setOnClickListener(mSelectPackListener);
+      mContents.setOnClickListener(mSelectPackListener);
     }
     else
     {
-      mEndGroup.setOnClickListener(mPackInfoRequestedListener);
-      mTitle.setOnClickListener(mPackInfoRequestedListener);
+      mContents.setOnClickListener(mPackInfoRequestedListener);
     }  
     
     refresh();
@@ -293,8 +285,7 @@ public class PackPurchaseRowLayout extends RelativeLayout {
    */
   public void setRowClickable(boolean isClickable) {
     mIsRowClickable = isClickable;
-    mEndGroup.setClickable(mIsRowClickable);
-    mTitle.setClickable(mIsRowClickable);
+    mContents.setClickable(mIsRowClickable);
     // Need to set PackInfo Bar to something generic without affecting
     // other uses
     // int bgColor = R.color.packPurchaseSelected;
