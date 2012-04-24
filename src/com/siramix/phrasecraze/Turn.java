@@ -104,7 +104,7 @@ public class Turn extends Activity {
   private ImageView mCardStatus;
 
   private RelativeLayout mTimerGroup;
-  private RelativeLayout mButtonGroup;
+  private LinearLayout mButtonGroup;
 
   /**
    * Tracks the current state of the Turn as a boolean. Set to true when time
@@ -872,7 +872,7 @@ public class Turn extends Activity {
     mPauseTextLayout = (LinearLayout) this.findViewById(R.id.Turn_PauseText);
 
     mTimerGroup = (RelativeLayout) this.findViewById(R.id.Turn_TimerBar);
-    mButtonGroup = (RelativeLayout) this.findViewById(R.id.Turn_LowBar);
+    mButtonGroup = (LinearLayout) this.findViewById(R.id.Turn_LowBar);
   }
 
   /**
@@ -943,7 +943,15 @@ public class Turn extends Activity {
     text.setTypeface(font);
     text = (TextView) this.findViewById(R.id.Turn_PausedSubText);
     text.setTypeface(font);
-
+    
+    // Set fonts on scoreboard
+    font = Typeface.createFromAsset(getAssets(),
+        "fonts/Anton.ttf");
+    text = (TextView) this.findViewById(R.id.Turn_ScoreA);
+    text.setTypeface(font);
+    text = (TextView) this.findViewById(R.id.Turn_ScoreB);
+    text.setTypeface(font);
+    
     // Only change team color in assisted scoring mode
     if (mAssistedScoringEnabled) {
       updateTeamColoring();

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- 
+<!--
 /*****************************************************************************
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,114 +13,391 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- ****************************************************************************/
- -->
+ ****************************************************************************/
+-->
 
-<RelativeLayout android:id="@+id/Turn_Root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Turn_Root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:background="@drawable/bg_freeplaygradient">
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_freeplaygradient" >
 
-    <TextView android:id="@+id/Turn_TimesUp"
+    <TextView
+        android:id="@+id/Turn_TimesUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="Time&apos;s Up!"
+        android:textColor="@color/white"
         android:textSize="60dp"
         android:textStyle="bold"
-        android:text="Time's Up!"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:textColor="@color/white"
-        />
+        android:visibility="invisible" />
 
-    <LinearLayout android:id="@+id/Turn_MasterLayout"
-        android:layout_height="fill_parent"
+    <LinearLayout
+        android:id="@+id/Turn_MasterLayout"
         android:layout_width="fill_parent"
-        android:orientation="vertical">
-        <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/Turn_MenuBar" android:orientation="vertical">
-            <LinearLayout android:background="@color/genericBG_trimDark" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/Turn_MenuItems">
-                <FrameLayout android:layout_gravity="center" android:layout_width="110dp" android:id="@+id/Turn_ScoreA_Frame" android:background="@color/teamA_complement" android:padding="5dp" android:layout_margin="2dp" android:layout_height="37dp">
-                    <View android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/Turn_ScoreABG" android:background="@color/teamA_primary"></View>
-                    <TextView android:includeFontPadding="false" android:layout_width="wrap_content" android:text="5" android:layout_gravity="center" android:layout_height="wrap_content" android:id="@+id/Turn_ScoreA" android:textSize="20dp"></TextView>
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/Turn_MenuBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/Turn_MenuItems"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/genericBG_trimDark" >
+
+                <FrameLayout
+                    android:id="@+id/Turn_ScoreA_Frame"
+                    android:layout_width="110dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:background="@color/teamA_complement"
+                    android:padding="5dp" >
+
+                    <View
+                        android:id="@+id/Turn_ScoreABG"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@color/teamA_primary" >
+                    </View>
+
+                    <TextView
+                        android:id="@+id/Turn_ScoreA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="5"
+                        android:textSize="24dp" >
+                    </TextView>
                 </FrameLayout>
-                <LinearLayout android:layout_height="fill_parent" android:id="@+id/Turn_MenuItems_Buttons" android:layout_weight="1" android:layout_width="fill_parent">
-                    <View android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/Turn_MenuItem_SoundPlaceholder" android:layout_height="fill_parent"></View>
-                    <Button android:gravity="center" android:id="@+id/Turn_MenuBar_Menu" android:text="Menu" android:layout_gravity="center" android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_margin="2dp"></Button>
-                    <View android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/Turn_MenuItem_PausePlaceholder"></View>
+
+                <LinearLayout
+                    android:id="@+id/Turn_MenuItems_Buttons"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" >
+
+                    <View
+                        android:id="@+id/Turn_MenuItem_SoundPlaceholder"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1" >
+                    </View>
+
+                    <Button
+                        android:id="@+id/Turn_MenuBar_Menu"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Menu" >
+                    </Button>
+
+                    <View
+                        android:id="@+id/Turn_MenuItem_PausePlaceholder"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1" >
+                    </View>
                 </LinearLayout>
-                <FrameLayout android:padding="5dp" android:layout_gravity="center" android:layout_width="110dp" android:id="@+id/Turn_ScoreB_Frame" android:background="@color/teamC_complement" android:layout_height="37dp" android:layout_margin="2dp">
-                    <View android:layout_gravity="center" android:id="@+id/Turn_ScoreBBG" android:background="@color/teamC_primary" android:layout_height="fill_parent" android:layout_width="fill_parent"></View>
-                    <TextView android:includeFontPadding="false" android:layout_width="wrap_content" android:text="5" android:layout_gravity="center" android:layout_height="wrap_content" android:id="@+id/Turn_ScoreB" android:textSize="20dp"></TextView>
+
+                <FrameLayout
+                    android:id="@+id/Turn_ScoreB_Frame"
+                    android:layout_width="110dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="2dp"
+                    android:background="@color/teamC_complement"
+                    android:padding="5dp" >
+
+                    <View
+                        android:id="@+id/Turn_ScoreBBG"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:background="@color/teamC_primary" >
+                    </View>
+
+                    <TextView
+                        android:id="@+id/Turn_ScoreB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="5"
+                        android:textSize="24dp" >
+                    </TextView>
                 </FrameLayout>
             </LinearLayout>
-            <View android:layout_width="fill_parent" android:background="@color/genericBG_trim" android:id="@+id/Turn_MenuBar_Trim_Bottom" android:layout_height="3dp"></View>
+
+            <View
+                android:id="@+id/Turn_MenuBar_Trim_Bottom"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:background="@color/genericBG_trim" >
+            </View>
         </LinearLayout>
-        <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical" android:clipChildren="true" android:id="@+id/Turn_TimerBar_ClipContents">
-            <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/Turn_TimerBar">
-                <ImageView android:layout_width="fill_parent" android:layout_height="25dp" android:background="@color/genericBG" android:id="@+id/Turn_TimerBG"></ImageView>
-                <ImageView android:layout_marginTop="1dp" android:layout_width="fill_parent" android:layout_height="23dp" android:layout_marginRight="40dp" android:background="@color/white" android:layout_alignParentTop="true" android:id="@+id/Turn_TimerFill" android:layout_alignParentLeft="true"></ImageView>
-                <View android:layout_width="70dp" android:layout_height="25dp" android:id="@+id/Turn_TimerFrame" android:layout_alignParentRight="true" android:background="@drawable/turn_timer_frame"></View>
-                <TextView android:includeFontPadding="false" android:layout_height="24dp" android:textSize="22dp" android:id="@+id/Turn_Timer" android:paddingRight="5dp" android:textColor="#FFFFFF" android:layout_width="wrap_content" android:gravity="center" android:layout_alignParentRight="true"></TextView>
-                <View android:layout_width="fill_parent" android:background="@color/genericBG_trim" android:layout_below="@id/Turn_TimerFrame" android:id="@+id/Turn_TimerTrim_Bottom" android:layout_height="3dp"></View>
+
+        <LinearLayout
+            android:id="@+id/Turn_TimerBar_ClipContents"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="true"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/Turn_TimerBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/Turn_TimerBG"
+                    android:layout_width="fill_parent"
+                    android:layout_height="25dp"
+                    android:background="@color/genericBG" >
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/Turn_TimerFill"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/white" >
+                </ImageView>
+
+                <View
+                    android:id="@+id/Turn_TimerFrame"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/turn_timer_frame" >
+                </View>
+
+                <TextView
+                    android:id="@+id/Turn_Timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:paddingRight="5dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22dp" >
+                </TextView>
+
+                <View
+                    android:id="@+id/Turn_TimerTrim_Bottom"
+                    android:layout_width="fill_parent"
+                    android:layout_height="3dp"
+                    android:layout_below="@id/Turn_TimerFrame"
+                    android:background="@color/genericBG_trim" >
+                </View>
             </RelativeLayout>
         </LinearLayout>
-        <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1" android:id="@+id/Turn_PlayField">
-            <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/Turn_PauseTextGroup">
-                <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_centerInParent="true" android:id="@+id/Turn_PauseText" android:visibility="invisible">
-                    <TextView android:textSize="60dp" android:textStyle="bold" android:textColor="@color/white" android:text="Paused" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Turn_PausedHeaderText"></TextView>
-                    <TextView android:textSize="20dp" android:textStyle="bold" android:text="Tap to Unpause" android:id="@+id/Turn_PausedSubText" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+
+        <RelativeLayout
+            android:id="@+id/Turn_PlayField"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <RelativeLayout
+                android:id="@+id/Turn_PauseTextGroup"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <LinearLayout
+                    android:id="@+id/Turn_PauseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="invisible" >
+
+                    <TextView
+                        android:id="@+id/Turn_PausedHeaderText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Paused"
+                        android:textColor="@color/white"
+                        android:textSize="60dp"
+                        android:textStyle="bold" >
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/Turn_PausedSubText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Tap to Unpause"
+                        android:textSize="20dp"
+                        android:textStyle="bold" >
+                    </TextView>
                 </LinearLayout>
             </RelativeLayout>
-            <ViewFlipper android:layout_height="fill_parent" android:id="@+id/Turn_ViewFlipper" android:layout_width="fill_parent">
-                <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center" android:id="@+id/Turn_CardLayoutA">
-                    <ImageView android:layout_height="50dip" android:layout_alignParentRight="true" android:id="@+id/Turn_StatusImageA" android:layout_alignParentTop="true" android:layout_width="50dip"></ImageView>
+
+            <ViewFlipper
+                android:id="@+id/Turn_ViewFlipper"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <RelativeLayout
+                    android:id="@+id/Turn_CardLayoutA"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center" >
+
+                    <ImageView
+                        android:id="@+id/Turn_StatusImageA"
+                        android:layout_width="50dip"
+                        android:layout_height="50dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true" >
+                    </ImageView>
 
                     <TextView
                         android:id="@+id/Turn_DifficultyA"
-                        android:layout_alignParentLeft="true" 
-                        android:text="difficulty" 
-                        style="@style/CardTitle" 
-                        android:textSize="14dp" 
-                        android:layout_width="wrap_content" 
-                        android:layout_height="wrap_content" android:layout_marginLeft="10dp"/>
+                        style="@style/CardTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="difficulty"
+                        android:textSize="14dp" />
 
-                    <LinearLayout android:layout_height="wrap_content" android:id="@+id/Turn_CardA_Words" android:layout_centerInParent="true" android:layout_width="wrap_content" android:orientation="vertical">
-                        <TextView android:id="@+id/Turn_CardTitleA" style="@style/CardTitle"></TextView>
+                    <LinearLayout
+                        android:id="@+id/Turn_CardA_Words"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/Turn_CardTitleA"
+                            style="@style/CardTitle" >
+                        </TextView>
                     </LinearLayout>
-
                 </RelativeLayout>
-                <RelativeLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_gravity="center" android:id="@+id/Turn_CardLayoutB">
-                    <ImageView android:layout_height="50dip" android:layout_alignParentRight="true" android:id="@+id/Turn_StatusImageB" android:layout_alignParentTop="true" android:layout_width="50dip"></ImageView>
+
+                <RelativeLayout
+                    android:id="@+id/Turn_CardLayoutB"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center" >
+
+                    <ImageView
+                        android:id="@+id/Turn_StatusImageB"
+                        android:layout_width="50dip"
+                        android:layout_height="50dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true" >
+                    </ImageView>
 
                     <TextView
                         android:id="@+id/Turn_DifficultyB"
                         style="@style/CardTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
                         android:text="difficulty"
-                        android:textSize="14dp" android:layout_marginLeft="10dp" android:layout_alignParentLeft="true"/>
+                        android:textSize="14dp" />
 
-                    <LinearLayout android:layout_height="wrap_content" android:id="@+id/Turn_CardB_Words" android:layout_centerInParent="true" android:layout_width="wrap_content" android:orientation="vertical">
-                        <TextView android:id="@+id/Turn_CardTitleB" style="@style/CardTitle"></TextView>
+                    <LinearLayout
+                        android:id="@+id/Turn_CardB_Words"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/Turn_CardTitleB"
+                            style="@style/CardTitle" >
+                        </TextView>
                     </LinearLayout>
-
                 </RelativeLayout>
             </ViewFlipper>
         </RelativeLayout>
-        <RelativeLayout android:id="@+id/Turn_LowBar" android:layout_width="fill_parent" android:layout_height="86dp">
-            <View android:layout_height="fill_parent" android:background="@color/genericBG" android:layout_width="fill_parent" android:id="@+id/Turn_LowBarBG"></View>
-            <View android:layout_height="3dp" android:background="@color/genericBG_trim" android:layout_width="fill_parent" android:id="@+id/Turn_LowBarTrim"></View>
-            <LinearLayout android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:id="@+id/Turn_LowBar_Buttons" android:layout_width="fill_parent" android:orientation="horizontal">
-                <ImageButton android:layout_weight="1" android:layout_width="fill_parent" android:background="@drawable/button_skip" android:id="@+id/Turn_ButtonSkip" android:layout_height="wrap_content" android:soundEffectsEnabled="false" android:layout_margin="2dp"></ImageButton>
-                <ImageButton android:layout_weight="1" android:layout_width="fill_parent" android:background="@drawable/button_right" android:id="@+id/Turn_ButtonCorrect" android:layout_height="wrap_content" android:soundEffectsEnabled="false" android:layout_margin="2dp"></ImageButton>
+
+        <LinearLayout
+            android:id="@+id/Turn_LowBar"
+            android:layout_width="fill_parent"
+            android:layout_height="68dp"
+            android:background="@color/genericBG"
+            android:orientation="vertical" >
+
+            <View
+                android:id="@+id/Turn_LowBarTrim"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:background="@color/genericBG_trim" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <View
+                    android:id="@+id/View01"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/Turn_LowBar_Buttons"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight=".25"
+                    android:orientation="horizontal" >
+
+                    <ImageButton
+                        android:id="@+id/Turn_ButtonSkip"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="3dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_skip"
+                        android:soundEffectsEnabled="false" />
+
+                    <ImageButton
+                        android:id="@+id/Turn_ButtonCorrect"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="3dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_right"
+                        android:soundEffectsEnabled="false"/>
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
             </LinearLayout>
-        </RelativeLayout>
-        
+        </LinearLayout>
+
         <!-- Grouping for buttons on the bottom -->
-        
+
     </LinearLayout>
 
-    <!--  View to unpause game on touch -->
+    <!-- View to unpause game on touch -->
 
 </RelativeLayout>
