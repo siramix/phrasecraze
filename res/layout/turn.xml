@@ -349,10 +349,10 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+                android:layout_height="fill_parent" android:id="Turn_LowBar_ButtonAndSpacers">
 
                 <View
-                    android:id="@+id/View01"
+                    android:id="@+id/Turn_LowBar_Spacer0"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_weight="1" />
@@ -387,7 +387,7 @@
                 </LinearLayout>
 
                 <View
-                    android:id="@+id/view1"
+                    android:id="@+id/Turn_LowBar_Spacer1"
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_weight="1" />
