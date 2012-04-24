@@ -30,7 +30,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 /**
  * This is the activity class that kicks off PhraseCraze and displays a nice title
@@ -155,6 +159,18 @@ public class Title extends Activity {
     }
   }; // End AboutUsListener
 
+  /*
+   * Returns the rotation animation for the starburst
+   */
+  private RotateAnimation rotateStarburst()
+  {
+    RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+    rotate.setDuration(60000);
+    rotate.setInterpolator(new LinearInterpolator());
+    rotate.setRepeatCount(Animation.INFINITE);
+    return rotate;
+  }
+  
   /**
    * Initializes a welcome screen that starts the game.
    */
@@ -206,6 +222,10 @@ public class Title extends Activity {
     ImageButton aboutusButton = (ImageButton) this
         .findViewById(R.id.Title_AboutUs);
     aboutusButton.setOnClickListener(mAboutUsListener);
+    
+    // Rotate the starburst
+    ImageView starburst = (ImageView) this.findViewById(R.id.Title_Starburst);
+    starburst.startAnimation(rotateStarburst());
   }
 
   /**
