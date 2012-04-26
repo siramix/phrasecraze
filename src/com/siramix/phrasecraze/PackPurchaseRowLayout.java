@@ -29,6 +29,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
   private TextView mTitle;
   private TextView mPrice;
   private ImageView mRowEndBG;
+  private ImageButton mInfoButton;
   
   // Data members
   private Pack mPack;
@@ -106,6 +108,8 @@ public class PackPurchaseRowLayout extends FrameLayout {
     mPrice.setId(++id);
     mRowEndBG = new ImageView(mContext);
     mRowEndBG.setId(++id);
+    mInfoButton = new ImageButton(mContext);
+    mInfoButton.setId(++id);
     mIsRowClickable = true;
   }
 
@@ -138,7 +142,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
     iconParams.addRule(RelativeLayout.CENTER_VERTICAL);
     iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
     mIcon.setLayoutParams(iconParams);
-    int iconPadding = (int) (DENSITY * 5 + 0.5f);
+    int iconPadding = (int) (DENSITY * 8 + 0.5f);
     mIcon.setPadding(iconPadding, iconPadding, iconPadding, iconPadding);
 
     // Initialize Pack Title
@@ -175,6 +179,15 @@ public class PackPurchaseRowLayout extends FrameLayout {
     mPrice.setIncludeFontPadding(false);
     mPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
     mPrice.setTextColor(this.getResources().getColor(R.color.text_default));
+    
+    // Initialize Price
+    RelativeLayout.LayoutParams infoButtonParams = new RelativeLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    infoButtonParams.addRule(RelativeLayout.ALIGN_RIGHT, mRowEndBG.getId());
+    infoButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
+    infoButtonParams.rightMargin = (int) (DENSITY * 8 + 0.5f);
+    mInfoButton.setLayoutParams(infoButtonParams);    // Initialize End Group and add contents
+    mInfoButton.setBackgroundResource(R.drawable.button_info);
 
     // Set fonts - Wrap in isInEditMode so as not to break previewer
     if (!this.isInEditMode()) {
@@ -189,6 +202,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
     mContents.addView(mTitle);
     mContents.addView(mRowEndBG);
     mContents.addView(mPrice);
+    mContents.addView(mInfoButton);
 
     // Add the views to frame
     this.addView(mContents);
@@ -226,10 +240,12 @@ public class PackPurchaseRowLayout extends FrameLayout {
     if(mIsPackPurchased)
     {
       mContents.setOnClickListener(mSelectPackListener);
+      mInfoButton.setOnClickListener(mPackInfoRequestedListener);
     }
     else
     {
       mContents.setOnClickListener(mPackInfoRequestedListener);
+      mInfoButton.setOnClickListener(null);
     }  
     
     refresh();
@@ -286,10 +302,12 @@ public class PackPurchaseRowLayout extends FrameLayout {
   public void setRowClickable(boolean isClickable) {
     mIsRowClickable = isClickable;
     mContents.setClickable(mIsRowClickable);
+    mInfoButton.setClickable(mIsRowClickable);
+    mInfoButton.setVisibility(View.GONE);
     // Need to set PackInfo Bar to something generic without affecting
     // other uses
-    // int bgColor = R.color.packPurchaseSelected;
-    // mContents.setBackgroundColor(this.getResources().getColor(bgColor));
+    //int bgColor = R.color.packPurchaseSelected;
+    //mContents.setBackgroundColor(this.getResources().getColor(bgColor));
   }
 
   /**
@@ -308,21 +326,25 @@ public class PackPurchaseRowLayout extends FrameLayout {
         bgColor = R.color.packPurchaseSelected;
         mTitle.setTextColor(this.getResources().getColor(R.color.white));
         mIcon.setColorFilter(null);
+        mInfoButton.setBackgroundResource(R.drawable.button_info_blue);
       } else {
         bgColor = R.color.packPurchaseUnSelected2;
         mTitle.setTextColor(this.getResources()
             .getColor(R.color.genericBG_trim));
         mIcon.setColorFilter(this.getResources().getColor(R.color.genericBG_trimDark), Mode.MULTIPLY);
+        mInfoButton.setBackgroundResource(R.drawable.button_info);
       }
       // Set background
       mContents.setBackgroundColor(this.getResources().getColor(bgColor));
       mPrice.setVisibility(View.INVISIBLE);
       mRowEndBG.setVisibility(View.INVISIBLE);
+      mInfoButton.setVisibility(View.VISIBLE);
     } else {
       mPrice.setVisibility(View.VISIBLE);
       mRowEndBG.setVisibility(View.VISIBLE);
       mRowEndBG.setColorFilter(
           this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
+      mInfoButton.setVisibility(View.GONE);
       // Set background
       if (mIsRowOdd) {
         bgColor = R.color.genericBG_trim;
