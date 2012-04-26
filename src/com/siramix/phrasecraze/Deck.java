@@ -201,6 +201,9 @@ public class Deck {
     if (mDatabaseOpenHelper.getPackFromDB(packIdStr) != null) {
         mDatabaseOpenHelper.removePack(packIdStr);
     }
+    else {
+      Log.d(TAG, "PackId " + String.valueOf(packId) + " not found in database.");
+    }
   }
   
   /**
@@ -406,9 +409,10 @@ public class Deck {
         "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
     private Pack mPack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
         "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
-    private Pack mRefundedPack = new Pack(1012, "android.refunded", "premiumpacks/refunded.json", 
-        "This pack should be deleted on first run as it has been refuned.", "refunded pack", 
-        R.drawable.pack2_icon, 0, 500, true);
+    private Pack mRefundedPack = new Pack(1012, "android.test.refunded", "premiumpacks/refunded.json", 
+        "This pack should be deleted on first run as it has been refuned.", "refunded pack", R.drawable.pack2_icon, 0, 500, true);
+    private Pack mCanceledPack = new Pack(1011, "android.test.canceled", "premiumpacks/canceled.json", 
+        "This pack should be deleted on first run as it has been canceled.", "canceled pack", R.drawable.pack2_icon, 0, 500, true);
     
     /**
      * Default Constructor from superclass
@@ -444,6 +448,9 @@ public class Deck {
       }
       if (packInstalled(mRefundedPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mRefundedPack, R.raw.refunded);
+      }
+      if (packInstalled(mCanceledPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mCanceledPack, R.raw.canceled);
       }
       
       mDatabase.close();
@@ -670,6 +677,7 @@ public class Deck {
       // Add the pack and all cards in a single transaction.
       try {
         mDatabase.beginTransaction();
+        mDatabase.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
         mDatabase.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
         mDatabase.setTransactionSuccessful();
       } finally {

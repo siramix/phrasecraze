@@ -141,7 +141,10 @@ public class PhrasePackPurchase extends Activity {
         } else {
             //logProductActivity(itemId, purchaseState + "\n\t" + developerPayload);
         }
-
+        // TODO DEBUG CODE REMOVE BEFORE PRODUCTION
+        if (itemId.contentEquals("hott.json")) {
+          itemId = "1001";
+        }
         if (purchaseState == PurchaseState.PURCHASED) {
           // TODO DEBUG CODE REMOVE BEFORE PRODUCTION
           if (itemId.contains("android")) {
@@ -775,7 +778,7 @@ public class PhrasePackPurchase extends Activity {
         isPackRowOdd);
     intent.putExtra(
         getApplication().getString(R.string.packInfoIsPackPurchased),
-        pack.isInstalled());
+        false);//pack.isInstalled());
     // TODO Add PurchaseType to packs to read from server so we don't have
     // to pass it in, or check against ID
     int purchaseType = Pack.PURCHASETYPE_BUY;
