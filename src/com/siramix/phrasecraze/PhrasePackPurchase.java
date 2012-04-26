@@ -153,9 +153,21 @@ public class PhrasePackPurchase extends Activity {
         }
         else if (purchaseState == PurchaseState.CANCELED) {
           // TODO remove pack if purchase is cancelled
+          if (itemId.contains("android")) {
+            removePackByName(itemId);
+          } else{
+            removePackById(Integer.parseInt(itemId));
+            //mOwnedItems.add(itemId);
+          }
         }
         else if (purchaseState == PurchaseState.REFUNDED) {
-          // TODO remove pack if purchase is refunded
+          // TODO remove pack if purchase is cancelled
+          if (itemId.contains("android")) {
+            removePackByName(itemId);
+          } else{
+            removePackById(Integer.parseInt(itemId));
+            //mOwnedItems.add(itemId);
+          }
         }
         
         //mCatalogAdapter.setOwnedItems(mOwnedItems);
@@ -490,6 +502,47 @@ public class PhrasePackPurchase extends Activity {
           game.installPack(curPack, mInstallDialog);
         } catch (RuntimeException e) {
             e.printStackTrace();
+        }
+      }
+    }
+  }
+  
+  /**
+   * The market sends us the Product ID of a purchased item.  With that we 
+   * can infer which pack the user is requesting and get it from the server.
+   * @param id The pack Id of the pack that should be removed if possible.
+   */
+  private void removePackById(int id) {
+    mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
+        .getApplication();
+    GameManager game = application.getGameManager();
+    // TODO: Catch the runtime exception correctly
+    try {
+      game.removePack(id, mInstallDialog);
+    } catch (RuntimeException e) {
+        e.printStackTrace();
+    }
+  }
+  
+  // TODO: DEBUG CODE, THIS SHOULD NOT GO TO PRODUCTION
+  /**
+   * The market sends us the Product ID of a purchased item.  With that we 
+   * can infer which pack the user is requesting and get it from the server.
+   * @param id The pack Id of the pack that should be installed.
+   */
+  private void removePackByName(String name) {
+    for (Pack curPack : mPayPacks) {
+      if (curPack.getName().equals(name)) {    
+        mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
+        PhraseCrazeApplication application = (PhraseCrazeApplication) this
+            .getApplication();
+        GameManager game = application.getGameManager();
+        //TODO: Catch the runtime exception correctly
+        try {
+          game.removePack(curPack.getId(), mInstallDialog);
+        } catch (RuntimeException e) {
+          e.printStackTrace();
         }
       }
     }

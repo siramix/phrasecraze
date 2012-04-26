@@ -195,6 +195,14 @@ public class Deck {
     mDatabaseOpenHelper.installStarterPacks();
   }
   
+  public synchronized void removePack(int packId) throws RuntimeException {
+    Log.d(TAG, "REMOVING PACK: " + packId);
+    String packIdStr = String.valueOf(packId);
+    if (mDatabaseOpenHelper.getPackFromDB(packIdStr) != null) {
+        mDatabaseOpenHelper.removePack(packIdStr);
+    }
+  }
+  
   /**
    * Update all packs that user has already installed.  Only call this
    * after licenses have been looked at. 
@@ -202,10 +210,8 @@ public class Deck {
    * @throws URISyntaxException 
    * @throws IOException 
    */
-  public synchronized void updateLocalPacks() throws IOException, URISyntaxException, JSONException {
+  public synchronized void updateLocalPacks(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) throws IOException, URISyntaxException, JSONException {
     Log.d(TAG, "INSTALLING ALL LOCAL PACKS");
-    LinkedList<Pack> payPacks = PackClient.getInstance().getPayPacks();
-    LinkedList<Pack> freePacks = PackClient.getInstance().getFreePacks();
     LinkedList<Pack> localPacks = mDatabaseOpenHelper.getAllPacksFromDB();
   }
   
@@ -400,6 +406,9 @@ public class Deck {
         "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
     private Pack mPack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
         "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
+    private Pack mRefundedPack = new Pack(1012, "android.refunded", "premiumpacks/refunded.json", 
+        "This pack should be deleted on first run as it has been refuned.", "refunded pack", 
+        R.drawable.pack2_icon, 0, 500, true);
     
     /**
      * Default Constructor from superclass
@@ -432,6 +441,9 @@ public class Deck {
       }
       if (packInstalled(mPack3.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack3, R.raw.pack3);
+      }
+      if (packInstalled(mRefundedPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mRefundedPack, R.raw.refunded);
       }
       
       mDatabase.close();
@@ -555,7 +567,7 @@ public class Deck {
     /**
      * Return a Pack instantiated using the entry in the Pack database.
      * @param packId of the pack you wish to instantiate
-     * @return
+     * @return Instantiated Pack object if exists, null otherwise 
      */
     public Pack getPackFromDB(String packId) {
       Log.d(TAG, "getPackFromDB(" + String.valueOf(packId) + ")");
@@ -632,7 +644,7 @@ public class Deck {
      * @param packVersion
      * @param cardItr
      */
-    private static void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
+    private void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
       Log.d(TAG, "installPack: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
  
       // Add the pack and all cards in a single transaction.
@@ -649,7 +661,22 @@ public class Deck {
         db.endTransaction();
       }
     }
+    
+    private void removePack(String packId) {
+      Log.d(TAG, "removePack: " + String.valueOf(packId));
+      mDatabase = getWritableDatabase();
 
+      String[] whereArgs = new String[] { packId };
+      // Add the pack and all cards in a single transaction.
+      try {
+        mDatabase.beginTransaction();
+        mDatabase.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
+        mDatabase.setTransactionSuccessful();
+      } finally {
+        mDatabase.endTransaction();
+      }
+    }
+    
     /**
      * Replaces existing phrase if it exists, otherwise inserts the phrase in the Phrases table.
      * 
