@@ -18,6 +18,8 @@
 package com.siramix.phrasecraze;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
@@ -54,7 +56,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
   private TextView mPrice;
   private ImageView mRowEndBG;
   private ImageButton mInfoButton;
-  
+
   // Data members
   private Pack mPack;
   private boolean mIsPackEnabled;
@@ -134,11 +136,12 @@ public class PackPurchaseRowLayout extends FrameLayout {
         LayoutParams.WRAP_CONTENT));
     mContents.setBackgroundColor(this.getResources().getColor(
         R.color.gameend_blankrow));
-    
+
     // Add a placeholder for the icon
-    mIcon.setImageDrawable(this.getResources().getDrawable(R.drawable.pack0_icon));
-    RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-        LayoutParams.WRAP_CONTENT);
+    mIcon.setImageDrawable(this.getResources().getDrawable(
+        R.drawable.pack0_icon));
+    RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     iconParams.addRule(RelativeLayout.CENTER_VERTICAL);
     iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
     mIcon.setLayoutParams(iconParams);
@@ -166,7 +169,9 @@ public class PackPurchaseRowLayout extends FrameLayout {
         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     rowEndParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
     mRowEndBG.setLayoutParams(rowEndParams);
-    // Old values: 109, wrap_content
+    mRowEndBG
+    .setColorFilter(this.getResources()
+        .getColor(R.color.genericBG_trim), Mode.MULTIPLY);
 
     // Initialize Price
     mPrice.setText("$1.99");
@@ -179,14 +184,15 @@ public class PackPurchaseRowLayout extends FrameLayout {
     mPrice.setIncludeFontPadding(false);
     mPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
     mPrice.setTextColor(this.getResources().getColor(R.color.text_default));
-    
+
     // Initialize Price
     RelativeLayout.LayoutParams infoButtonParams = new RelativeLayout.LayoutParams(
         LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     infoButtonParams.addRule(RelativeLayout.ALIGN_RIGHT, mRowEndBG.getId());
     infoButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
     infoButtonParams.rightMargin = (int) (DENSITY * 8 + 0.5f);
-    mInfoButton.setLayoutParams(infoButtonParams);    // Initialize End Group and add contents
+    mInfoButton.setLayoutParams(infoButtonParams); // Initialize End Group and
+                                                   // add contents
     mInfoButton.setBackgroundResource(R.drawable.button_info);
 
     // Set fonts - Wrap in isInEditMode so as not to break previewer
@@ -206,7 +212,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
 
     // Add the views to frame
     this.addView(mContents);
-    
+
     // Add single pixel bar of lightened color to give depth
     View lightBar = new View(mContext);
     lightBar.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
@@ -216,9 +222,80 @@ public class PackPurchaseRowLayout extends FrameLayout {
     alpha.setFillAfter(true);
     lightBar.startAnimation(alpha);
     this.addView(lightBar);
- 
+
     // Enable clicking on the row by default
     setRowClickable(true);
+  }
+
+  @Override
+  protected void onDraw(Canvas canvas) {
+    int bgColor;
+
+    if (mIsRowClickable && mIsPackPurchased) {
+      // Render a purchased pack that is not in PackInfo
+      if (mIsPackEnabled) {
+        // Purchased pack is chosen
+        setViewAttributes(
+            getResources().getColor(R.color.packPurchaseSelected), 0,
+            getResources().getColor(R.color.white),
+            R.drawable.button_info_blue, false);
+      } else {
+        // Purchased pack is not chosen
+        setViewAttributes(
+            getResources().getColor(R.color.packPurchaseUnSelected2),
+            getResources().getColor(R.color.genericBG_trimDark), getResources()
+                .getColor(R.color.genericBG_trim), R.drawable.button_info,
+            false);
+      }
+    } else {
+      // Render a generic PackInfo row
+      if (mIsPackPurchased) {
+        bgColor = R.color.packPurchaseSelected;
+      }
+      else if (mIsRowOdd) {
+        bgColor = R.color.genericBG_trim;
+      } else {
+        bgColor = R.color.genericBG_trimDark;
+      }
+      setViewAttributes(getResources().getColor(bgColor), 0, getResources()
+          .getColor(R.color.white), 0, !mIsPackPurchased);
+    }
+  }
+
+  /**
+   * Sets the visuals of the view according to the specified parameters.
+   * @param backgroundColor The color resource for the background.
+   * @param iconFilterColor The color resource to multiply with the icon. Specify 0 to remove the filter.
+   * @param titleTextColor The color resource for the Title text.
+   * @param infoIconDrawableId The DrawableId for the info Icon. Specify 0 to hide the info icon.
+   * @param isPriceVisible False to hide the price and price background. True otherwise.
+   */
+  private void setViewAttributes(int backgroundColor, int iconFilterColor, int titleTextColor, int infoIconDrawableId, boolean isPriceVisible)
+  {
+    // Set background
+    mContents.setBackgroundColor(backgroundColor);
+    
+    // Set icon color
+    if (iconFilterColor != 0) {
+      mIcon.setColorFilter(iconFilterColor, Mode.MULTIPLY);
+    } else {
+      mIcon.setColorFilter(null);
+    }
+    
+    // Set Title text color
+    mTitle.setTextColor(titleTextColor);
+
+    // Set info button drawable
+    mInfoButton.setBackgroundResource(infoIconDrawableId); 
+    
+    // Set price visibility
+    int priceVisibility = isPriceVisible ? View.VISIBLE : View.INVISIBLE;
+    mPrice.setVisibility(priceVisibility);
+    mRowEndBG.setVisibility(priceVisibility);
+    
+    // Set info button visibility
+    int infoButtonVisibility = infoIconDrawableId != 0 ? View.VISIBLE : View.INVISIBLE;   
+    mInfoButton.setVisibility(infoButtonVisibility);
   }
 
   /**
@@ -235,20 +312,21 @@ public class PackPurchaseRowLayout extends FrameLayout {
     mIsPackEnabled = isSelected;
     mIsRowOdd = isRowOdd;
     mIsPackPurchased = mPack.isInstalled();
-    
+
+    // Set new pack attributes
+    mTitle.setText(mPack.getName());
+    mIcon.setImageDrawable(this.getResources().getDrawable(mPack.getIconID()));
+
     // Assign click listeners based on the pack's purchase state
-    if(mIsPackPurchased)
-    {
+    if (mIsPackPurchased) {
       mContents.setOnClickListener(mSelectPackListener);
       mInfoButton.setOnClickListener(mPackInfoRequestedListener);
-    }
-    else
-    {
+    } else {
       mContents.setOnClickListener(mPackInfoRequestedListener);
       mInfoButton.setOnClickListener(null);
-    }  
-    
-    refresh();
+    }
+
+    invalidate();
   }
 
   /**
@@ -259,7 +337,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
    */
   public void setPackStatus(Boolean isSelected) {
     mIsPackEnabled = isSelected;
-    refresh();
+    invalidate();
   }
 
   /*
@@ -303,57 +381,7 @@ public class PackPurchaseRowLayout extends FrameLayout {
     mIsRowClickable = isClickable;
     mContents.setClickable(mIsRowClickable);
     mInfoButton.setClickable(mIsRowClickable);
-    mInfoButton.setVisibility(View.GONE);
-    // Need to set PackInfo Bar to something generic without affecting
-    // other uses
-    //int bgColor = R.color.packPurchaseSelected;
-    //mContents.setBackgroundColor(this.getResources().getColor(bgColor));
-  }
-
-  /**
-   * Refresh the view for a given row. This updates elements to represent the
-   * corresponding pack.
-   */
-  public void refresh() {
-    
-    // Set attributes that don't care about the state of the pack
-    mTitle.setText(mPack.getName());
-    mIcon.setImageDrawable(this.getResources().getDrawable(mPack.getIconID()));
-    
-    int bgColor;
-    if (mIsPackPurchased) {
-      if (mIsPackEnabled) {
-        bgColor = R.color.packPurchaseSelected;
-        mTitle.setTextColor(this.getResources().getColor(R.color.white));
-        mIcon.setColorFilter(null);
-        mInfoButton.setBackgroundResource(R.drawable.button_info_blue);
-      } else {
-        bgColor = R.color.packPurchaseUnSelected2;
-        mTitle.setTextColor(this.getResources()
-            .getColor(R.color.genericBG_trim));
-        mIcon.setColorFilter(this.getResources().getColor(R.color.genericBG_trimDark), Mode.MULTIPLY);
-        mInfoButton.setBackgroundResource(R.drawable.button_info);
-      }
-      // Set background
-      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
-      mPrice.setVisibility(View.INVISIBLE);
-      mRowEndBG.setVisibility(View.INVISIBLE);
-      mInfoButton.setVisibility(View.VISIBLE);
-    } else {
-      mPrice.setVisibility(View.VISIBLE);
-      mRowEndBG.setVisibility(View.VISIBLE);
-      mRowEndBG.setColorFilter(
-          this.getResources().getColor(R.color.genericBG_trim), Mode.MULTIPLY);
-      mInfoButton.setVisibility(View.GONE);
-      // Set background
-      if (mIsRowOdd) {
-        bgColor = R.color.genericBG_trim;
-      } else {
-        bgColor = R.color.genericBG_trimDark;
-      }
-      mContents.setBackgroundColor(this.getResources().getColor(bgColor));
-    }
-
+    invalidate();
   }
 
   /**
@@ -388,6 +416,5 @@ public class PackPurchaseRowLayout extends FrameLayout {
       }
     }
   };
-
 
 }
