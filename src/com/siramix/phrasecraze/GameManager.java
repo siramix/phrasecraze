@@ -454,11 +454,11 @@ public class GameManager {
    * @param packId the id of the pack to remove
    * @param removeDialog a dialog that is shown to users during removal
    */
-  public void removePack(final int packId, final ProgressDialog removeDialog) {
+  public void uninstallPack(final int packId, final ProgressDialog removeDialog) {
     // TODO This should probably be in a thread (mInstallThread)
     // Though I ran into problems with the database state
     try {
-      mDeck.removePack(packId);
+      mDeck.uninstallPack(packId);
     } catch (RuntimeException e) {
       Log.e(TAG, "Unable to install pack: " +String.valueOf(packId));
       e.printStackTrace();

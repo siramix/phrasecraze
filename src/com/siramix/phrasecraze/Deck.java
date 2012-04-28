@@ -195,11 +195,16 @@ public class Deck {
     mDatabaseOpenHelper.installStarterPacks();
   }
   
-  public synchronized void removePack(int packId) throws RuntimeException {
+  /** 
+   * Delete the pack and phrases associated with a given Pack Id.  Will first
+   * check that the pack exists before attempting to perform any deletions.
+   * @param packId to remove
+   */
+  public synchronized void uninstallPack(int packId) {
     Log.d(TAG, "REMOVING PACK: " + packId);
     String packIdStr = String.valueOf(packId);
     if (mDatabaseOpenHelper.getPackFromDB(packIdStr) != null) {
-        mDatabaseOpenHelper.removePack(packIdStr);
+        mDatabaseOpenHelper.uninstallPack(packIdStr);
     }
     else {
       Log.d(TAG, "PackId " + String.valueOf(packId) + " not found in database.");
@@ -651,7 +656,7 @@ public class Deck {
      * @param packVersion
      * @param cardItr
      */
-    private void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
+    private synchronized void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
       Log.d(TAG, "installPack: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
  
       // Add the pack and all cards in a single transaction.
@@ -669,7 +674,12 @@ public class Deck {
       }
     }
     
-    private void removePack(String packId) {
+    /** 
+     * Delete the pack and phrases associated with a given Pack Id.  Will first
+     * check that the pack exists before attempting to perform any deletions.
+     * @param packId to remove
+     */
+    private synchronized void uninstallPack(String packId) {
       Log.d(TAG, "removePack: " + String.valueOf(packId));
       mDatabase = getWritableDatabase();
 
@@ -690,7 +700,7 @@ public class Deck {
      * 
      * @return rowId or -1 if failed
      */
-    public static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
+    public synchronized static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       Log.d(TAG, "upsertPhrase(" + phrase + ")");
       long ret;
       String[] whereArgs = new String[] { String.valueOf(phrase.getId()) };

@@ -145,6 +145,7 @@ public class PhrasePackPurchase extends Activity {
         if (itemId.contentEquals("hott.json")) {
           itemId = "1001";
         }
+        
         if (purchaseState == PurchaseState.PURCHASED) {
           // TODO DEBUG CODE REMOVE BEFORE PRODUCTION
           if (itemId.contains("android")) {
@@ -152,23 +153,24 @@ public class PhrasePackPurchase extends Activity {
           } else{
             installPackById(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
+            
           }
         }
         else if (purchaseState == PurchaseState.CANCELED) {
           // TODO remove pack if purchase is cancelled
           if (itemId.contains("android")) {
-            removePackByName(itemId);
+            uninstallPackByName(itemId);
           } else{
-            removePackById(Integer.parseInt(itemId));
+            uninstallPackById(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
           }
         }
         else if (purchaseState == PurchaseState.REFUNDED) {
-          // TODO remove pack if purchase is cancelled
+          // TODO remove pack if purchase is refunded
           if (itemId.contains("android")) {
-            removePackByName(itemId);
+            uninstallPackByName(itemId);
           } else{
-            removePackById(Integer.parseInt(itemId));
+            uninstallPackById(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
           }
         }
@@ -184,17 +186,17 @@ public class PhrasePackPurchase extends Activity {
 
       if (responseCode == ResponseCode.RESULT_OK) {
           if (Consts.DEBUG) {
-              Log.i(TAG, "Purchase of " + request.mProductId + " was successfully sent to server");
+            Log.i(TAG, "Purchase of " + request.mProductId + " was successfully sent to server");
           }
           //logProductActivity(request.mProductId, "sending purchase request");
       } else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
           if (Consts.DEBUG) {
-              Log.i(TAG, "User canceled purchase of " + request.mProductId);
+            Log.i(TAG, "User canceled purchase of " + request.mProductId);
           }
           //logProductActivity(request.mProductId, "dismissed purchase dialog");
       } else {
           if (Consts.DEBUG) {
-              Log.i(TAG, "purchase of " + request.mProductId + " failed");
+            Log.i(TAG, "purchase of " + request.mProductId + " failed");
           }
           //logProductActivity(request.mProductId, "request purchase returned " + responseCode);
       }
@@ -515,14 +517,14 @@ public class PhrasePackPurchase extends Activity {
    * can infer which pack the user is requesting and get it from the server.
    * @param id The pack Id of the pack that should be removed if possible.
    */
-  private void removePackById(int id) {
+  private void uninstallPackById(int id) {
     mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
         .getApplication();
     GameManager game = application.getGameManager();
     // TODO: Catch the runtime exception correctly
     try {
-      game.removePack(id, mInstallDialog);
+      game.uninstallPack(id, mInstallDialog);
     } catch (RuntimeException e) {
         e.printStackTrace();
     }
@@ -534,7 +536,7 @@ public class PhrasePackPurchase extends Activity {
    * can infer which pack the user is requesting and get it from the server.
    * @param id The pack Id of the pack that should be installed.
    */
-  private void removePackByName(String name) {
+  private void uninstallPackByName(String name) {
     for (Pack curPack : mPayPacks) {
       if (curPack.getName().equals(name)) {    
         mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
@@ -543,7 +545,7 @@ public class PhrasePackPurchase extends Activity {
         GameManager game = application.getGameManager();
         //TODO: Catch the runtime exception correctly
         try {
-          game.removePack(curPack.getId(), mInstallDialog);
+          game.uninstallPack(curPack.getId(), mInstallDialog);
         } catch (RuntimeException e) {
           e.printStackTrace();
         }
@@ -609,16 +611,16 @@ public class PhrasePackPurchase extends Activity {
 
     // TODO intent is a stupid name
     if (targetComponent != null) {
-      Intent intent = new Intent(Intent.ACTION_SEND);
-      intent.setComponent(targetComponent);
+      Intent gplusIntent = new Intent(Intent.ACTION_SEND);
+      gplusIntent.setComponent(targetComponent);
       String intentType = ("text/plain");
-      intent.setType(intentType);
-      intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n"
+      gplusIntent.setType(intentType);
+      gplusIntent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT SUBJECT" + "\n"
           + "TESTING");
-      intent
+      gplusIntent
           .putExtra(Intent.EXTRA_TEXT,
               "TESTING TESTING \n https://market.android.com/details?id=com.buzzwords");
-      startActivityForResult(intent, GOOGLEPLUS_REQUEST_CODE);
+      startActivityForResult(gplusIntent, GOOGLEPLUS_REQUEST_CODE);
     } else {
       showToast(getString(R.string.toast_packpurchase_nogoogleplus));
     }
