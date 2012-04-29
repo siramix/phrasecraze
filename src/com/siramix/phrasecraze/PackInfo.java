@@ -214,6 +214,7 @@ public class PackInfo extends Activity {
         break;
       }
     }
+    //TODO Edward we need to handle the case where billing service is not available
     else
     {
       mButtonCancel.setVisibility(View.GONE);

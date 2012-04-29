@@ -55,8 +55,6 @@ public class SplashScreen extends Activity {
   // Flag prevents double calls to open the next activity
   private boolean mSplashDone = false;
 
-  private Thread mInstallThread;
-
   /**
    * Called on creation of splash screen activity
    * 
@@ -73,27 +71,6 @@ public class SplashScreen extends Activity {
     // prompt
     if (shouldApplicationLaunch()) {
       setContentView(R.layout.splashscreen);
-
-      // Create a Deck so we load the cards into the SQL DB on first run
-      // this operation will occur in a threaded manner (hot, I know).
-      mInstallThread = new Thread(new Runnable() {
-
-      public void run() {
-        //TODO This used to be done in Deck database onCreate which meant it 
-        // did NOT get run every time like this does.
-        
-        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-        boolean initialized = prefs.getBoolean(Consts.PREFKEY_DB_INITIALIZED, false);
-        if (!initialized) {
-          GameManager gm = new GameManager(SplashScreen.this);
-          gm.installStarterPacks();
-          edit.putBoolean(Consts.PREFKEY_DB_INITIALIZED, true);
-          edit.commit();
-        }
-        }
-      });
-      mInstallThread.start();
 
       // Initialize the soundManager during splash
       SoundManager.getInstance(this.getBaseContext());

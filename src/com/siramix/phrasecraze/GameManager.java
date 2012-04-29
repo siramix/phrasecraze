@@ -427,11 +427,15 @@ public class GameManager {
     mUpdateThread.start();
   }
   
+  /**
+   * Call the Deck function that installs all 'starter' decks.  This
+   * should only get called on first run.
+   */
   public void installStarterPacks() {
     mDeck.installStarterPacks();
   }
   
-  public void installPack(final Pack pack, final ProgressDialog installDialog) {
+  public void installPack(final Pack pack) {
     // TODO This should probably be in a thread (mInstallThread)
     // Though I ran into problems with the database state 
     try {
@@ -440,8 +444,21 @@ public class GameManager {
       Log.e(TAG, "Unable to install pack: " + pack.getName());
       e.printStackTrace();
     }
-    if (installDialog != null) {
-      installDialog.dismiss();
+  }
+  
+  /**
+   * Attempt to remove the pack with _id == packId
+   * @param packId the id of the pack to remove
+   * @param removeDialog a dialog that is shown to users during removal
+   */
+  public void uninstallPack(final int packId) {
+    // TODO This should probably be in a thread (mInstallThread)
+    // Though I ran into problems with the database state
+    try {
+      mDeck.uninstallPack(packId);
+    } catch (RuntimeException e) {
+      Log.e(TAG, "Unable to install pack: " +String.valueOf(packId));
+      e.printStackTrace();
     }
   }
   

@@ -195,18 +195,51 @@ public class Deck {
     mDatabaseOpenHelper.installStarterPacks();
   }
   
-  /**
-   * Update all packs that user has already installed.  Only call this
-   * after licenses have been looked at. 
-   * @throws JSONException 
-   * @throws URISyntaxException 
-   * @throws IOException 
+  /** 
+   * Delete the pack and phrases associated with a given Pack Id.  Will first
+   * check that the pack exists before attempting to perform any deletions.
+   * @param packId to remove
    */
-  public synchronized void updateLocalPacks() throws IOException, URISyntaxException, JSONException {
-    Log.d(TAG, "INSTALLING ALL LOCAL PACKS");
-    LinkedList<Pack> payPacks = PackClient.getInstance().getPayPacks();
-    LinkedList<Pack> freePacks = PackClient.getInstance().getFreePacks();
+  public synchronized void uninstallPack(int packId) {
+    Log.d(TAG, "REMOVING PACK: " + packId);
+    String packIdStr = String.valueOf(packId);
+    if (mDatabaseOpenHelper.getPackFromDB(packIdStr) != null) {
+        mDatabaseOpenHelper.uninstallPack(packIdStr);
+    }
+    else {
+      Log.d(TAG, "PackId " + String.valueOf(packId) + " not found in database.");
+    }
+  }
+  
+  /**
+   * Check the version numbers for all local packs.
+   * @param payPacks All the server's pay packs
+   * @param freePacks All the server's free packs
+   * @return LinkedList of pack IDs for all packs that need to be updated, 
+   *            null if no packs need updating
+   */
+  public LinkedList<Integer> checkLocalPackVersions(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) {    
+    Log.d(TAG, "Checking local pack status...");
     LinkedList<Pack> localPacks = mDatabaseOpenHelper.getAllPacksFromDB();
+    HashMap<Integer, Integer> idAndCurrentVersion = new HashMap<Integer, Integer>();
+    
+    LinkedList<Pack> allPacks = new LinkedList<Pack>();
+    allPacks.addAll(payPacks);
+    allPacks.addAll(freePacks);
+    for (Pack pack : allPacks) {
+      idAndCurrentVersion.put(pack.getId(), pack.getVersion());
+    }
+    
+    LinkedList<Integer> packsToUpdate = new LinkedList<Integer>();
+    for (Pack pack : localPacks) {
+      int curId = pack.getId();
+      int oldVsn = pack.getVersion();
+      
+      if (oldVsn < idAndCurrentVersion.get(curId)) {
+        packsToUpdate.add(curId);
+      }
+    }
+    return packsToUpdate;
   }
   
   private void topOffFrontCache() {
@@ -400,6 +433,10 @@ public class Deck {
         "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
     private Pack mPack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
         "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
+    private Pack mRefundedPack = new Pack(1012, "android.test.refunded", "premiumpacks/refunded.json", 
+        "This pack should be deleted on first run as it has been refuned.", "refunded pack", R.drawable.pack2_icon, 0, 500, true);
+    private Pack mCanceledPack = new Pack(1011, "android.test.canceled", "premiumpacks/canceled.json", 
+        "This pack should be deleted on first run as it has been canceled.", "canceled pack", R.drawable.pack2_icon, 0, 500, true);
     
     /**
      * Default Constructor from superclass
@@ -420,19 +457,29 @@ public class Deck {
       db.execSQL(PhraseColumns.TABLE_CREATE);
     }
 
+    /**
+     * Install all the packs that come with the app into the database.
+     * Since the pack
+     */
     public void installStarterPacks() {
       Log.d(TAG, "installStarterPacks()");
       mDatabase = getWritableDatabase();
       
-      if (packInstalled(mPack1.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      if (packInstalled(mPack1.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack1, R.raw.pack1);
-      }
-      if (packInstalled(mPack2.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      }
+//      if (packInstalled(mPack2.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack2, R.raw.pack2);
-      }
-      if (packInstalled(mPack3.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      }
+//      if (packInstalled(mPack3.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack3, R.raw.pack3);
-      }
+//      }
+//      if (packInstalled(mRefundedPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mRefundedPack, R.raw.refunded);
+//      }
+//      if (packInstalled(mCanceledPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+        installPackFromResource(mDatabase, mCanceledPack, R.raw.canceled);
+//      }
       
       mDatabase.close();
     }
@@ -555,7 +602,7 @@ public class Deck {
     /**
      * Return a Pack instantiated using the entry in the Pack database.
      * @param packId of the pack you wish to instantiate
-     * @return
+     * @return Instantiated Pack object if exists, null otherwise 
      */
     public Pack getPackFromDB(String packId) {
       Log.d(TAG, "getPackFromDB(" + String.valueOf(packId) + ")");
@@ -602,7 +649,7 @@ public class Deck {
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       
       installPack(db, pack, cardItr);
-
+      
       Log.d(TAG, "DONE loading words.");
     }
 
@@ -610,7 +657,7 @@ public class Deck {
       Log.d(TAG, "installPackFromServer(" + serverPack.getName() + ")");
       mDatabase = getWritableDatabase();
       // Don't add a pack if it's already there
-      int packId = packInstalled(serverPack.getId(), serverPack.getVersion(), mDatabase);
+      int packId = packInstalled(serverPack.getId(), serverPack.getVersion());
       if (packId == PACK_CURRENT) {
         return;
       }
@@ -632,30 +679,54 @@ public class Deck {
      * @param packVersion
      * @param cardItr
      */
-    private static void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
+    private synchronized void installPack(SQLiteDatabase db, Pack pack, CardJSONIterator cardItr) {
       Log.d(TAG, "installPack: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
  
       // Add the pack and all cards in a single transaction.
+      db.beginTransaction();
       try {
-        db.beginTransaction();
-        upsertPack(pack, db);
+        // Clear our pack in case it exists (transactions can be nested)
+        uninstallPack(String.valueOf(pack.getId()));
+        
         Card curCard = null;
         while(cardItr.hasNext()) {
           curCard = cardItr.next();
           upsertPhrase(curCard, pack.getId(), db);
         }
+        upsertPack(pack, db);
         db.setTransactionSuccessful();
       } finally {
         db.endTransaction();
       }
     }
+    
+    /** 
+     * Delete the pack and phrases associated with a given Pack Id.  Will first
+     * check that the pack exists before attempting to perform any deletions.
+     * @param packId to remove
+     */
+    private synchronized void uninstallPack(String packId) {
+      Log.d(TAG, "removePack: " + String.valueOf(packId));
+      mDatabase = getWritableDatabase();
 
+      String[] whereArgs = new String[] { packId };
+      // Add the pack and all cards in a single transaction.
+      mDatabase.beginTransaction();
+      try {
+        mDatabase.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
+        mDatabase.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
+        mDatabase.setTransactionSuccessful();
+      } finally {
+        mDatabase.endTransaction();
+      }
+    }
+    
     /**
      * Replaces existing phrase if it exists, otherwise inserts the phrase in the Phrases table.
      * 
      * @return rowId or -1 if failed
      */
-    public static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
+    public synchronized static long upsertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       Log.d(TAG, "upsertPhrase(" + phrase + ")");
       long ret;
       String[] whereArgs = new String[] { String.valueOf(phrase.getId()) };
@@ -732,9 +803,10 @@ public class Deck {
      * @param db
      * @return
      */
-    private static int packInstalled(int packId, int packVersion, SQLiteDatabase db) {
+    private int packInstalled(int packId, int packVersion) {
+      mDatabase = getReadableDatabase();
       String[] packIds= {String.valueOf(packId)};
-      Cursor res = db.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
+      Cursor res = mDatabase.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
           PackColumns._ID + " = (?)", packIds, null, null, null);
       if (res.getCount() >= 1) {
         res.moveToFirst();

@@ -20,11 +20,14 @@ package com.siramix.phrasecraze;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -183,7 +186,10 @@ public class Title extends Activity {
 
     // Force volume controls to affect Media volume
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+    
+    setupTitleUI();
+    new InstallerAndAnimator().execute();
+    
     // Capture our play count to decide whether to show the Rate Us dialog
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
     int playCount = sp.getInt(getResources().getString(R.string.PREFKEY_PLAYCOUNT), 0);
@@ -198,7 +204,12 @@ public class Title extends Activity {
         showDialog(DIALOG_RATEUS_SECOND);
       }
     }
-
+  }
+  
+  /**
+   * Set up all the UI elements for the Title Screen
+   */
+  private void setupTitleUI() {
     // Setup the Main Title Screen view
     this.setContentView(R.layout.title);
 
@@ -223,9 +234,59 @@ public class Title extends Activity {
         .findViewById(R.id.Title_AboutUs);
     aboutusButton.setOnClickListener(mAboutUsListener);
     
-    // Rotate the starburst
-    ImageView starburst = (ImageView) this.findViewById(R.id.Title_Starburst);
-    starburst.startAnimation(rotateStarburst());
+  }
+  
+  /** 
+   * Run the installation in an Async Task.  This puts the intensive task of installing
+   * on a separate thread that once complete will dismiss the progress dialog and start
+   * the title screen's animation.  After the first run this task will only be used
+   * for animating the title screen.
+   */
+  private class InstallerAndAnimator extends AsyncTask <Void, Void, Boolean>
+  {
+      private ProgressDialog dialog;
+      private SharedPreferences prefs;
+      private boolean initialized;
+      
+      @Override
+      protected void onPreExecute()
+      {
+        prefs = getPreferences(Context.MODE_PRIVATE);
+        initialized = prefs.getBoolean(Consts.PREFKEY_DB_INITIALIZED, false);
+        if (!initialized) {
+          dialog = ProgressDialog.show(
+            Title.this,
+            null,
+            getString(R.string.progressDialog_install_text), 
+            true);
+        }
+      }
+
+      @Override
+      protected Boolean doInBackground(Void... params)
+      {
+        if (!initialized) {
+          GameManager gm = new GameManager(Title.this);
+          gm.installStarterPacks();
+        }
+        return true;
+        
+      }
+
+      @Override
+      protected void onPostExecute(Boolean result)
+      {
+        if (!initialized) {
+          SharedPreferences.Editor edit = prefs.edit();
+          edit.putBoolean(Consts.PREFKEY_DB_INITIALIZED, true);
+          edit.commit();
+          dialog.dismiss();
+        }
+        
+        // Rotate the starburst which would have slowed down the install process
+        ImageView starburst = (ImageView) findViewById(R.id.Title_Starburst);
+        starburst.startAnimation(rotateStarburst());
+      }
   }
 
   /**
