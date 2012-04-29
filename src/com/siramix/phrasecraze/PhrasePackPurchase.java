@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +79,8 @@ public class PhrasePackPurchase extends Activity {
   private PhrasePackPurchaseObserver mPurchaseObserver;
   private Handler mHandler;
   private BillingService mBillingService;
+  boolean mBillingSupported;
+  
 
   /**
    * PlayGameListener plays an animation on the view that will result in
@@ -126,8 +130,10 @@ public class PhrasePackPurchase extends Activity {
 
       if (supported) {
         restorePacks();
+        mBillingSupported = true;
       } else {
         showToast("Billing not Supported");
+        mBillingSupported = false;
       }
     }
 
@@ -149,9 +155,9 @@ public class PhrasePackPurchase extends Activity {
         if (purchaseState == PurchaseState.PURCHASED) {
           // TODO DEBUG CODE REMOVE BEFORE PRODUCTION
           if (itemId.contains("android")) {
-            installPackByName(itemId);
+            installPack(itemId);
           } else{
-            installPackById(Integer.parseInt(itemId));
+            installPack(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
             
           }
@@ -159,18 +165,18 @@ public class PhrasePackPurchase extends Activity {
         else if (purchaseState == PurchaseState.CANCELED) {
           // TODO remove pack if purchase is cancelled
           if (itemId.contains("android")) {
-            uninstallPackByName(itemId);
+            uninstallPack(itemId);
           } else{
-            uninstallPackById(Integer.parseInt(itemId));
+            uninstallPack(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
           }
         }
         else if (purchaseState == PurchaseState.REFUNDED) {
           // TODO remove pack if purchase is refunded
           if (itemId.contains("android")) {
-            uninstallPackByName(itemId);
+            uninstallPack(itemId);
           } else{
-            uninstallPackById(Integer.parseInt(itemId));
+            uninstallPack(Integer.parseInt(itemId));
             //mOwnedItems.add(itemId);
           }
         }
@@ -256,7 +262,7 @@ public class PhrasePackPurchase extends Activity {
     // Check if billing is supported.
     ResponseHandler.register(mPurchaseObserver);
     if (!mBillingService.checkBillingSupported()) {
-        showToast(getString(R.string.toast_packpurchase_nointerneterror));
+      showToast(getString(R.string.toast_packpurchase_nointerneterror));
     }
     // set fonts on titles
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
@@ -282,7 +288,7 @@ public class PhrasePackPurchase extends Activity {
     ResponseHandler.register(mPurchaseObserver);
   }
 
-  private void refreshAllPackLayouts() {
+  protected void refreshAllPackLayouts() {
     Log.d(TAG, "refreshAllPackLayouts");
     // Get our current context
     PhraseCrazeApplication application = (PhraseCrazeApplication) this
@@ -310,6 +316,7 @@ public class PhrasePackPurchase extends Activity {
       lockedPacks.addAll(mFreePacks);
       lockedPacks = removeLocalPacks(lockedPacks, localPacks);
       populatePackLayout(localPacks, unlockedPackLayout);
+      //TODO maybe we want to put this on the purchase button isntead
       populatePackLayout(lockedPacks, paidPackLayout);
     } catch (IOException e1) {
       populatePackLayout(localPacks, unlockedPackLayout);
@@ -326,6 +333,7 @@ public class PhrasePackPurchase extends Activity {
     
     Button btn = (Button) this.findViewById(R.id.PackPurchase_Button_Next);
     btn.setOnClickListener(mGameSetupListener);
+    
   }
 
   /**
@@ -466,22 +474,39 @@ public class PhrasePackPurchase extends Activity {
     // ReRender bar
     bar.updateSegmentWeights();
   }
-
+  
+  
+  /*
+   * Helper function to install a purchased pack
+   */
+  private void installPack(Pack packToInstall)
+  {
+    // TODO: Catch the runtime exception
+    try {
+      new PackInstaller().execute(packToInstall);
+    } catch (RuntimeException e) {
+      e.printStackTrace();
+    }
+    
+    showToast(packToInstall.getName());
+    if (getPackPref(packToInstall)) {
+      setPackPref(packToInstall, false);
+    } else {
+      setPackPref(packToInstall, true);
+    }
+  }
+  
   /**
    * The market sends us the Product ID of a purchased item.  With that we 
    * can infer which pack the user is requesting and get it from the server.
    * @param id The pack Id of the pack that should be installed.
    */
-  private void installPackById(int id) {
+  private void installPack(int id) {
     for (Pack curPack : mPayPacks) {
       if (curPack.getId() == id) {
-        mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
-        PhraseCrazeApplication application = (PhraseCrazeApplication) this
-            .getApplication();
-        GameManager game = application.getGameManager();
         // TODO: Catch the runtime exception correctly
         try {
-          game.installPack(curPack, mInstallDialog);
+          installPack(curPack);
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
@@ -495,16 +520,12 @@ public class PhrasePackPurchase extends Activity {
    * can infer which pack the user is requesting and get it from the server.
    * @param id The pack Id of the pack that should be installed.
    */
-  private void installPackByName(String name) {
+  private void installPack(String name) {
     for (Pack curPack : mPayPacks) {
       if (curPack.getName().equals(name)) {
-        mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
-        PhraseCrazeApplication application = (PhraseCrazeApplication) this
-            .getApplication();
-        GameManager game = application.getGameManager();
         // TODO: Catch the runtime exception correctly
         try {
-          game.installPack(curPack, mInstallDialog);
+          installPack(curPack);
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
@@ -517,14 +538,10 @@ public class PhrasePackPurchase extends Activity {
    * can infer which pack the user is requesting and get it from the server.
    * @param id The pack Id of the pack that should be removed if possible.
    */
-  private void uninstallPackById(int id) {
-    mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    GameManager game = application.getGameManager();
+  private void uninstallPack(int id) {
     // TODO: Catch the runtime exception correctly
     try {
-      game.uninstallPack(id, mInstallDialog);
+      new PackUninstaller().execute(id);
     } catch (RuntimeException e) {
         e.printStackTrace();
     }
@@ -534,18 +551,16 @@ public class PhrasePackPurchase extends Activity {
   /**
    * The market sends us the Product ID of a purchased item.  With that we 
    * can infer which pack the user is requesting and get it from the server.
+   * THIS METHOD DOES NOT NEED TO EXIST AS IN THE FUTURE ID IS ALL WE NEED
+   * THE ONLY REASON WE HAVE THIS IS BECAUSE OF THE android.test PACKAGES
    * @param id The pack Id of the pack that should be installed.
    */
-  private void uninstallPackByName(String name) {
+  private void uninstallPack(String name) {
     for (Pack curPack : mPayPacks) {
       if (curPack.getName().equals(name)) {    
-        mInstallDialog = ProgressDialog.show(this, "INSTALLING", "CHANGEME");
-        PhraseCrazeApplication application = (PhraseCrazeApplication) this
-            .getApplication();
-        GameManager game = application.getGameManager();
         //TODO: Catch the runtime exception correctly
         try {
-          game.uninstallPack(curPack.getId(), mInstallDialog);
+          new PackUninstaller().execute(curPack.getId());
         } catch (RuntimeException e) {
           e.printStackTrace();
         }
@@ -675,31 +690,7 @@ public class PhrasePackPurchase extends Activity {
       // can't get to the pack from here...
     }
   }
-  
-  /*
-   * Helper function to install a purchased pack
-   */
-  private void installPack(Pack packToInstall)
-  {
-    PhraseCrazeApplication application = (PhraseCrazeApplication) this
-        .getApplication();
-    GameManager game = application.getGameManager();
-    // TODO: Catch the runtime exception
-    try {
-      mInstallDialog = ProgressDialog.show(this, "WORKING", "CHANGEME");
-      game.installPack(packToInstall, mInstallDialog);
-    } catch (RuntimeException e) {
-      e.printStackTrace();
-    }
-    
-    showToast(packToInstall.getName());
-    if (getPackPref(packToInstall)) {
-      setPackPref(packToInstall, false);
-    } else {
-      setPackPref(packToInstall, true);
-    }
-  }
-  
+
   /*
    * Helper function to submit the request to the billing service
    */
@@ -716,6 +707,78 @@ public class PhrasePackPurchase extends Activity {
     }
   }
 
+  /** 
+   * Run installations in an Async Task.  This puts the intensive task of installing
+   * on a separate thread that once complete will dismiss the progress dialog and refresh
+   * the layout.
+   */
+  private class PackInstaller extends AsyncTask <Pack, Void, String>
+  {
+      private ProgressDialog dialog;
+
+      @Override
+      protected void onPreExecute()
+      {
+        dialog = ProgressDialog.show(
+          PhrasePackPurchase.this,
+          null,
+          getString(R.string.progressDialog_install_text), 
+          true);
+      }
+
+      @Override
+      protected String doInBackground(Pack... pack)
+      {
+        GameManager gm = new GameManager(PhrasePackPurchase.this);
+        gm.installPack(pack[0]);
+        return "";
+      }
+
+      @Override
+      protected void onPostExecute(String result)
+      {
+        dialog.dismiss();
+        refreshAllPackLayouts();
+        findViewById(R.id.PackPurchase_ScrollView).scrollTo(0, 0);
+      }
+  }
+  
+  /** 
+   * Run uninstalls in an Async Task.  This puts the intensive task of db deletions
+   * on a separate thread that once complete will dismiss the progress dialog and refresh
+   * the layout.
+   */
+  private class PackUninstaller extends AsyncTask <Integer, Void, String>
+  {
+      private ProgressDialog dialog;
+
+      @Override
+      protected void onPreExecute()
+      {
+        dialog = ProgressDialog.show(
+          PhrasePackPurchase.this,
+          null,
+          getString(R.string.progressDialog_uninstall_text), 
+          true);
+      }
+
+      @Override
+      protected String doInBackground(Integer... packIds)
+      {
+        GameManager gm = new GameManager(PhrasePackPurchase.this);
+        gm.uninstallPack(packIds[0]);
+        return "";
+      }
+
+      @Override
+      protected void onPostExecute(String result)
+      {
+        dialog.dismiss();
+        refreshAllPackLayouts();
+        findViewById(R.id.PackPurchase_ScrollView).scrollTo(0, 0);
+      }
+  }
+  
   /*
    * Listener for the pack selection, which includes or excludes the pack
    * from the deck.

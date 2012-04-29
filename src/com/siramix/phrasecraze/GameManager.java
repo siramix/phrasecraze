@@ -435,7 +435,7 @@ public class GameManager {
     mDeck.installStarterPacks();
   }
   
-  public void installPack(final Pack pack, final ProgressDialog installDialog) {
+  public void installPack(final Pack pack) {
     // TODO This should probably be in a thread (mInstallThread)
     // Though I ran into problems with the database state 
     try {
@@ -444,9 +444,6 @@ public class GameManager {
       Log.e(TAG, "Unable to install pack: " + pack.getName());
       e.printStackTrace();
     }
-    if (installDialog != null) {
-      installDialog.dismiss();
-    }
   }
   
   /**
@@ -454,7 +451,7 @@ public class GameManager {
    * @param packId the id of the pack to remove
    * @param removeDialog a dialog that is shown to users during removal
    */
-  public void uninstallPack(final int packId, final ProgressDialog removeDialog) {
+  public void uninstallPack(final int packId) {
     // TODO This should probably be in a thread (mInstallThread)
     // Though I ran into problems with the database state
     try {
@@ -462,9 +459,6 @@ public class GameManager {
     } catch (RuntimeException e) {
       Log.e(TAG, "Unable to install pack: " +String.valueOf(packId));
       e.printStackTrace();
-    }
-    if (removeDialog != null) {
-      removeDialog.dismiss();
     }
   }
   

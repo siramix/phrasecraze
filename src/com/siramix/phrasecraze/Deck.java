@@ -212,15 +212,34 @@ public class Deck {
   }
   
   /**
-   * Update all packs that user has already installed.  Only call this
-   * after licenses have been looked at. 
-   * @throws JSONException 
-   * @throws URISyntaxException 
-   * @throws IOException 
+   * Check the version numbers for all local packs.
+   * @param payPacks All the server's pay packs
+   * @param freePacks All the server's free packs
+   * @return LinkedList of pack IDs for all packs that need to be updated, 
+   *            null if no packs need updating
    */
-  public synchronized void updateLocalPacks(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) throws IOException, URISyntaxException, JSONException {
-    Log.d(TAG, "INSTALLING ALL LOCAL PACKS");
+  public LinkedList<Integer> checkLocalPackVersions(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) {    
+    Log.d(TAG, "Checking local pack status...");
     LinkedList<Pack> localPacks = mDatabaseOpenHelper.getAllPacksFromDB();
+    HashMap<Integer, Integer> idAndCurrentVersion = new HashMap<Integer, Integer>();
+    
+    LinkedList<Pack> allPacks = new LinkedList<Pack>();
+    allPacks.addAll(payPacks);
+    allPacks.addAll(freePacks);
+    for (Pack pack : allPacks) {
+      idAndCurrentVersion.put(pack.getId(), pack.getVersion());
+    }
+    
+    LinkedList<Integer> packsToUpdate = new LinkedList<Integer>();
+    for (Pack pack : localPacks) {
+      int curId = pack.getId();
+      int oldVsn = pack.getVersion();
+      
+      if (oldVsn < idAndCurrentVersion.get(curId)) {
+        packsToUpdate.add(curId);
+      }
+    }
+    return packsToUpdate;
   }
   
   private void topOffFrontCache() {
@@ -438,25 +457,29 @@ public class Deck {
       db.execSQL(PhraseColumns.TABLE_CREATE);
     }
 
+    /**
+     * Install all the packs that come with the app into the database.
+     * Since the pack
+     */
     public void installStarterPacks() {
       Log.d(TAG, "installStarterPacks()");
       mDatabase = getWritableDatabase();
       
-      if (packInstalled(mPack1.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      if (packInstalled(mPack1.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack1, R.raw.pack1);
-      }
-      if (packInstalled(mPack2.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      }
+//      if (packInstalled(mPack2.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack2, R.raw.pack2);
-      }
-      if (packInstalled(mPack3.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      }
+//      if (packInstalled(mPack3.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mPack3, R.raw.pack3);
-      }
-      if (packInstalled(mRefundedPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      }
+//      if (packInstalled(mRefundedPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mRefundedPack, R.raw.refunded);
-      }
-      if (packInstalled(mCanceledPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
+//      }
+//      if (packInstalled(mCanceledPack.getId(), 0, mDatabase) == PACK_NOT_PRESENT) {
         installPackFromResource(mDatabase, mCanceledPack, R.raw.canceled);
-      }
+//      }
       
       mDatabase.close();
     }
@@ -626,7 +649,7 @@ public class Deck {
       CardJSONIterator cardItr = PackParser.parseCards(packBuilder);
       
       installPack(db, pack, cardItr);
-
+      
       Log.d(TAG, "DONE loading words.");
     }
 
@@ -634,7 +657,7 @@ public class Deck {
       Log.d(TAG, "installPackFromServer(" + serverPack.getName() + ")");
       mDatabase = getWritableDatabase();
       // Don't add a pack if it's already there
-      int packId = packInstalled(serverPack.getId(), serverPack.getVersion(), mDatabase);
+      int packId = packInstalled(serverPack.getId(), serverPack.getVersion());
       if (packId == PACK_CURRENT) {
         return;
       }
@@ -660,14 +683,17 @@ public class Deck {
       Log.d(TAG, "installPack: " + pack.getName() + "v" + String.valueOf(pack.getVersion()));
  
       // Add the pack and all cards in a single transaction.
+      db.beginTransaction();
       try {
-        db.beginTransaction();
-        upsertPack(pack, db);
+        // Clear our pack in case it exists (transactions can be nested)
+        uninstallPack(String.valueOf(pack.getId()));
+        
         Card curCard = null;
         while(cardItr.hasNext()) {
           curCard = cardItr.next();
           upsertPhrase(curCard, pack.getId(), db);
         }
+        upsertPack(pack, db);
         db.setTransactionSuccessful();
       } finally {
         db.endTransaction();
@@ -685,8 +711,8 @@ public class Deck {
 
       String[] whereArgs = new String[] { packId };
       // Add the pack and all cards in a single transaction.
+      mDatabase.beginTransaction();
       try {
-        mDatabase.beginTransaction();
         mDatabase.delete(PhraseColumns.TABLE_NAME, PhraseColumns.PACK_ID + "=?", whereArgs);
         mDatabase.delete(PackColumns.TABLE_NAME, PackColumns._ID + "=?", whereArgs);
         mDatabase.setTransactionSuccessful();
@@ -777,9 +803,10 @@ public class Deck {
      * @param db
      * @return
      */
-    private static int packInstalled(int packId, int packVersion, SQLiteDatabase db) {
+    private int packInstalled(int packId, int packVersion) {
+      mDatabase = getReadableDatabase();
       String[] packIds= {String.valueOf(packId)};
-      Cursor res = db.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
+      Cursor res = mDatabase.query(PackColumns.TABLE_NAME, PackColumns.COLUMNS,
           PackColumns._ID + " = (?)", packIds, null, null, null);
       if (res.getCount() >= 1) {
         res.moveToFirst();

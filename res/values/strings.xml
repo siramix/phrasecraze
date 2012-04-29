@@ -107,6 +107,11 @@
   <string name="pauseGameDialog_title">Game Paused</string>
   <string name="pauseGameDialog_text">Paused</string>
 
+  <!--  Install dialogs -->
+  <string name="progressDialog_install_text">Installing Phrases&#8230;</string>
+  <string name="progressDialog_uninstall_text">Syncing Phrases with market&#8230;</string>
+  <string name="progressDialog_update_text">Updating Phrases&#8230;</string>
+  
   <!-- Rate Us dialogs -->
   <string name="rateUsFirstDialog_title">We want your feedback!</string>
   <string name="rateUsFirstDialog_text">It looks like you\'ve played a few games.  
