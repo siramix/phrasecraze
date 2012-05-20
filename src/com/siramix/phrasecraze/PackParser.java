@@ -75,7 +75,7 @@ public class PackParser {
     int curVersion = curPack.getInt("version");
     int curSize = curPack.getInt("size");
     Pack pack = new Pack(curId, curName, curPath, curDescription, 
-                         curUpdateMessage, iconID, curVersion, curSize, false);
+                         curUpdateMessage, iconID, curSize, curVersion, false);
     return pack;
   }
 

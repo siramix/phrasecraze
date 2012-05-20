@@ -78,7 +78,7 @@ public class Pack implements Serializable {
    * @param installed (whether the pack has been installed yet)
    */
   public Pack(int id, String name, String path, String description,
-                      String updateMessage, int iconID, int version, int size, boolean installed) {
+                      String updateMessage, int iconID, int size, int version, boolean installed) {
     Log.d(TAG, "constructor Pack(args)");
     mId = id;
     mName = name;
@@ -86,8 +86,8 @@ public class Pack implements Serializable {
     mDescription = description;
     mUpdateMessage = updateMessage;
     mIconID = iconID;
-    mVersion = version;
     mSize = size;
+    mVersion = version;
     mWeight = -1;
     mNumPlayablePhrases = -1;
     mInstalled = installed;
@@ -223,6 +223,7 @@ public class Pack implements Serializable {
     ret += "   pack.Weight: " + String.valueOf(mWeight) + "\n";
     ret += "   pack.NumPlayablePhrases: " + String.valueOf(mNumPlayablePhrases) + "\n";
     ret += "   pack.NumToPullNext: " + String.valueOf(mNumToPullNext) + "\n";
+    ret += "   pack.mInstalled: " + String.valueOf(mInstalled) + "\n";
     return ret;
   }
 }

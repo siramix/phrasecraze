@@ -50,9 +50,6 @@ public class GameManager {
   // Create a thread for updating the playcount for each card
   private Thread mUpdateThread;
   
-  // A thread for installing new packs
-  private Thread mInstallThread;
-  
   /**
    * The position in the list of card ids (where we are in the "deck")
    */
@@ -618,6 +615,15 @@ public class GameManager {
   }
   
   /**
+   * Returns whether or not a pack is installed in the database
+   * @param packId to check for installation status
+   * @return true if installed - false if not
+   */
+  public boolean isPackInstalled(int packId) {
+    return mDeck.isPackInstalled(packId);
+  }
+  
+  /**
    * Returns true if the game is using assisted scoring
    */
   public boolean isAssistedScoringEnabled()
@@ -649,6 +655,16 @@ public class GameManager {
    */
   public LinkedList<Pack> getInstalledPacks() {
     return mDeck.getLocalPacks();
+  }
+  
+  /**
+   * Return a list of all Packs that need to be updated
+   * @param payPacks
+   * @param freePacks
+   * @return
+   */
+  public LinkedList<Pack> getPacksForUpdate(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) {
+    return mDeck.getPacksForUpdate(payPacks, freePacks);
   }
   
   /**
