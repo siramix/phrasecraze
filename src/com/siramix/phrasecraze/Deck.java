@@ -27,8 +27,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
-import org.json.JSONException;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -212,31 +210,47 @@ public class Deck {
   }
   
   /**
-   * Check the version numbers for all local packs.
+   * Returns whether or not a pack is installed in the database
+   * @param packId to check for installation status
+   * @return true if installed - false if not
+   */
+  public boolean isPackInstalled(int packId) {
+    Log.d(TAG, "isPackInstalled(" + String.valueOf(packId) + ")");
+    if (mDatabaseOpenHelper.packInstalled(packId, 0)  == PACK_NOT_PRESENT ) {
+      return false;
+    }
+    return true;
+  }
+  
+  /**
+   * Take the packs from the server and compare version numbers against installed
+   * pack versions.  Return a list of pack ids that need to be udpated.
    * @param payPacks All the server's pay packs
    * @param freePacks All the server's free packs
-   * @return LinkedList of pack IDs for all packs that need to be updated, 
+   * @return LinkedList of packs that need to be updated, 
    *            null if no packs need updating
    */
-  public LinkedList<Integer> checkLocalPackVersions(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) {    
+  public LinkedList<Pack> getPacksForUpdate(LinkedList<Pack> payPacks, LinkedList<Pack> freePacks) {
     Log.d(TAG, "Checking local pack status...");
     LinkedList<Pack> localPacks = mDatabaseOpenHelper.getAllPacksFromDB();
-    HashMap<Integer, Integer> idAndCurrentVersion = new HashMap<Integer, Integer>();
-    
     LinkedList<Pack> allPacks = new LinkedList<Pack>();
     allPacks.addAll(payPacks);
     allPacks.addAll(freePacks);
+    
+    HashMap<Integer, Pack> allPacksMap= new HashMap<Integer, Pack>();
     for (Pack pack : allPacks) {
-      idAndCurrentVersion.put(pack.getId(), pack.getVersion());
+      allPacksMap.put(pack.getId(), pack);
     }
     
-    LinkedList<Integer> packsToUpdate = new LinkedList<Integer>();
+    LinkedList<Pack> packsToUpdate = new LinkedList<Pack>();
     for (Pack pack : localPacks) {
       int curId = pack.getId();
       int oldVsn = pack.getVersion();
+      int newVsn = allPacksMap.get(curId).getVersion();
+      Log.d(TAG, "pack: " + pack.getName() + " oldvsn: " + oldVsn + " newvsn: " + newVsn);
       
-      if (oldVsn < idAndCurrentVersion.get(curId)) {
-        packsToUpdate.add(curId);
+      if (oldVsn < newVsn) {
+        packsToUpdate.add(allPacksMap.get(curId));
       }
     }
     return packsToUpdate;
@@ -428,15 +442,15 @@ public class Deck {
     private final Context mHelperContext;
     private SQLiteDatabase mDatabase;
     private Pack mPack1 = new Pack(1, "pack1", "freepacks/pack1.json", 
-        "Description of pack1", "first install", R.drawable.pack0_icon, 0, 500, true);
+        "Description of pack1", "first install", R.drawable.pack0_icon, 500, 0, true);
     private Pack mPack2 = new Pack(2, "pack2", "freepacks/pack2.json", 
-        "Description of pack2", "first install", R.drawable.pack1_icon, 0, 500, true);
+        "Description of pack2", "first install", R.drawable.pack1_icon, 500, 0, true);
     private Pack mPack3 = new Pack(3, "pack3", "freepacks/pack3.json", 
-        "Description of pack3", "first install", R.drawable.pack2_icon, 0, 250, true);
+        "Description of pack3", "first install", R.drawable.pack2_icon, 250, 0, true);
     private Pack mRefundedPack = new Pack(1012, "android.test.refunded", "premiumpacks/refunded.json", 
-        "This pack should be deleted on first run as it has been refuned.", "refunded pack", R.drawable.pack2_icon, 0, 500, true);
+        "This pack should be deleted on first run as it has been refuned.", "refunded pack", R.drawable.pack2_icon, 500, 0, true);
     private Pack mCanceledPack = new Pack(1011, "android.test.canceled", "premiumpacks/canceled.json", 
-        "This pack should be deleted on first run as it has been canceled.", "canceled pack", R.drawable.pack2_icon, 0, 500, true);
+        "This pack should be deleted on first run as it has been canceled.", "canceled pack", R.drawable.pack2_icon, 500, 0, true);
     
     /**
      * Default Constructor from superclass
@@ -665,7 +679,10 @@ public class Deck {
         CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(serverPack);
         installPack(mDatabase, serverPack, cardItr);
       }
-      
+      else {
+        CardJSONIterator cardItr = PackClient.getInstance().getCardsForPack(serverPack);
+        installPack(mDatabase, serverPack, cardItr);
+      }
       Log.d(TAG, "DONE loading words.");
       mDatabase.close();
     }
@@ -748,7 +765,7 @@ public class Deck {
      * @param db The database to insert the card into
      * @return The new id of the row where the phrase was inserted, -1 if error
      */
-    private static long insertPhrase(Card phrase, int packId, SQLiteDatabase db) {
+    private synchronized static long insertPhrase(Card phrase, int packId, SQLiteDatabase db) {
       ContentValues initialValues = new ContentValues();
       initialValues.put(PhraseColumns._ID, phrase.getId());
       initialValues.put(PhraseColumns.PHRASE, phrase.getTitle());
@@ -765,7 +782,7 @@ public class Deck {
      * @param db The database where the phrase exists
      * @return The number of rows affected
      */
-    private static long updatePhrase(Card phrase, int packId, SQLiteDatabase db) {
+    private synchronized static long updatePhrase(Card phrase, int packId, SQLiteDatabase db) {
       String[] whereArgs = new String[] { String.valueOf(phrase.getId()) };
       ContentValues initialValues = new ContentValues();
       initialValues.put(PhraseColumns.PHRASE, phrase.getTitle());
@@ -782,7 +799,7 @@ public class Deck {
      * @param db The db in which to insert the new pack
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public static long upsertPack(Pack pack, SQLiteDatabase db) {
+    public synchronized static long upsertPack(Pack pack, SQLiteDatabase db) {
       Log.d(TAG, "upsertPack(" + pack.getName() + ")");
       
       ContentValues packValues = new ContentValues();

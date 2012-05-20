@@ -264,6 +264,7 @@ public class PhrasePackPurchase extends Activity {
     if (!mBillingService.checkBillingSupported()) {
       showToast(getString(R.string.toast_packpurchase_nointerneterror));
     }
+    
     // set fonts on titles
     Typeface antonFont = Typeface.createFromAsset(getAssets(),
         "fonts/Anton.ttf");
@@ -276,9 +277,24 @@ public class PhrasePackPurchase extends Activity {
 
     // Instantiate all of our lists for programmatic adding of packs to view
     mPackLineList = new LinkedList<View>();
-
+    
     refreshAllPackLayouts();
     // mBillingService.requestPurchase("test_pack", "payload_test");
+    
+    PhraseCrazeApplication application = (PhraseCrazeApplication) this
+        .getApplication();
+
+    GameManager game = application.getGameManager();
+
+    // Update installed packs only after we've performed restore purchases
+    if (mBillingSupported) {
+      LinkedList<Pack> packsList = game.getPacksForUpdate(mPayPacks, mFreePacks);
+      if (packsList.isEmpty() == false) {
+        Pack[] packsToInstall = new Pack[packsList.size()];
+        packsList.toArray(packsToInstall);
+        updatePacks(packsToInstall);
+      }
+    }
   }
 
   @Override
@@ -308,6 +324,7 @@ public class PhrasePackPurchase extends Activity {
     LinkedList<Pack> localPacks = new LinkedList<Pack>();
     localPacks = game.getInstalledPacks();
 
+    //TODO these http pack requests should be in their own methods (getLockedPacksFromServer...)
     // First try to get the online packs, if no internet, just use local packs
     try {
       mFreePacks = client.getFreePacks();
@@ -333,7 +350,6 @@ public class PhrasePackPurchase extends Activity {
     
     Button btn = (Button) this.findViewById(R.id.PackPurchase_Button_Next);
     btn.setOnClickListener(mGameSetupListener);
-    
   }
 
   /**
@@ -342,9 +358,9 @@ public class PhrasePackPurchase extends Activity {
    * @param localPacks
    * @return
    */
-  private LinkedList<Pack> removeLocalPacks(LinkedList<Pack> lockedPacks, LinkedList<Pack> localPacks) {
+  private LinkedList<Pack> removeLocalPacks(LinkedList<Pack> lockedPacks, LinkedList<Pack> installedPacks) {
     Log.d(TAG, "removeLocalPacks");
-    for (Pack localPack : localPacks) {
+    for (Pack localPack : installedPacks) {
       for (int lockedIndex=0; lockedIndex<lockedPacks.size(); ++lockedIndex) {
         if (localPack.getId() == lockedPacks.get(lockedIndex).getId()) {
           lockedPacks.remove(lockedIndex);
@@ -427,7 +443,7 @@ public class PhrasePackPurchase extends Activity {
     ComboPercentageBar bar = (ComboPercentageBar) this
         .findViewById(R.id.PackPurchase_PhraseBars);
 
-    // ToDo: Get these getting the correct packs.
+    // TODO: Get these getting the correct packs.
     // Is this the best way to get installed packs?
     LinkedList<Pack> localPacks = new LinkedList<Pack>();
     localPacks = game.getInstalledPacks();
@@ -542,6 +558,19 @@ public class PhrasePackPurchase extends Activity {
     // TODO: Catch the runtime exception correctly
     try {
       new PackUninstaller().execute(id);
+    } catch (RuntimeException e) {
+        e.printStackTrace();
+    }
+  }
+  
+  /**
+   * This will update all packs needing updates in a separate thread from the UI.
+   * @param id The pack Id of the pack that should be removed if possible.
+   */
+  private void updatePacks(Pack[] packToUpdate) {
+    // TODO: Catch the runtime exception correctly
+    try {
+      new PackUpdater().execute(packToUpdate);
     } catch (RuntimeException e) {
         e.printStackTrace();
     }
@@ -715,7 +744,8 @@ public class PhrasePackPurchase extends Activity {
   private class PackInstaller extends AsyncTask <Pack, Void, String>
   {
       private ProgressDialog dialog;
-
+      private Pack packToInstall;
+      
       @Override
       protected void onPreExecute()
       {
@@ -729,8 +759,9 @@ public class PhrasePackPurchase extends Activity {
       @Override
       protected String doInBackground(Pack... pack)
       {
+        packToInstall = pack[0];
         GameManager gm = new GameManager(PhrasePackPurchase.this);
-        gm.installPack(pack[0]);
+        gm.installPack(packToInstall);
         return "";
       }
 
@@ -779,6 +810,38 @@ public class PhrasePackPurchase extends Activity {
       }
   }
   
+  private class PackUpdater extends AsyncTask <Pack, Void, String>
+  {
+      private ProgressDialog dialog;
+
+      @Override
+      protected void onPreExecute()
+      {
+        dialog = ProgressDialog.show(
+          PhrasePackPurchase.this,
+          null,
+          getString(R.string.progressDialog_uninstall_text), 
+          true);
+      }
+
+      @Override
+      protected String doInBackground(Pack... packsToInstall)
+      {
+        GameManager gm = new GameManager(PhrasePackPurchase.this);
+        for (Pack pack : packsToInstall) {
+          gm.installPack(pack);
+        }
+        return "";
+      }
+
+      @Override
+      protected void onPostExecute(String result)
+      {
+        dialog.dismiss();
+        refreshAllPackLayouts();
+        findViewById(R.id.PackPurchase_ScrollView).scrollTo(0, 0);
+      }
+  }
   /*
    * Listener for the pack selection, which includes or excludes the pack
    * from the deck.
@@ -1031,11 +1094,13 @@ public class PhrasePackPurchase extends Activity {
   protected void onStop() {
       super.onStop();
       ResponseHandler.unregister(mPurchaseObserver);
+      mBillingService.unbind();
   }
 
   @Override
   protected void onDestroy() {
       super.onDestroy();
+      ResponseHandler.unregister(mPurchaseObserver);
       mBillingService.unbind();
   }
 }
